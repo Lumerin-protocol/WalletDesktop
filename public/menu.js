@@ -1,7 +1,7 @@
 'use strict'
 
 const { app, shell, Menu } = require('electron')
-const APP_NAME = 'Metronome Wallet'
+const APP_NAME = 'Lumerin Wallet'
 
 const template = [
   {
@@ -56,7 +56,7 @@ const template = [
       {
         label: 'Learn More',
         click () {
-          return shell.openExternal('https://metronome.io')
+          return shell.openExternal('https://lumerin.io')
         }
       }
     ]

@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import theme from 'metronome-wallet-ui-logic/src/theme'
-import React from 'react'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import theme from 'lumerin-wallet-ui-logic/src/theme';
+import React from 'react';
 
-import ConverterIcon from '../../../icons/ConverterIcon'
-import AuctionIcon from '../../../icons/AuctionIcon'
-import ImportIcon from '../../../icons/ImportIcon'
-import ExportIcon from '../../../icons/ExportIcon'
-import TxIcon from '../../../icons/TxIcon'
+import ConverterIcon from '../../../icons/ConverterIcon';
+import AuctionIcon from '../../../icons/AuctionIcon';
+import ImportIcon from '../../../icons/ImportIcon';
+import ExportIcon from '../../../icons/ExportIcon';
+import TxIcon from '../../../icons/TxIcon';
 
 const Pending = styled.div`
   color: #ababab;
@@ -18,7 +18,7 @@ const Pending = styled.div`
   line-height: 2.2rem;
   text-align: center;
   font-size: 1.2rem;
-`
+`;
 
 export default class Icon extends React.Component {
   static propTypes = {
@@ -36,29 +36,29 @@ export default class Icon extends React.Component {
       'unknown',
       'sent'
     ]).isRequired
-  }
+  };
 
   render() {
     const color = this.props.isFailed
       ? theme.colors.danger
-      : theme.colors.primary
+      : theme.colors.primary;
 
     if (this.props.txType === 'unknown' || this.props.isPending) {
-      return <Pending>{this.props.confirmations}</Pending>
+      return <Pending>{this.props.confirmations}</Pending>;
     }
 
     switch (this.props.txType) {
       case 'converted':
-        return <ConverterIcon color={color} />
+        return <ConverterIcon color={color} />;
       case 'auction':
-        return <AuctionIcon color={color} />
+        return <AuctionIcon color={color} />;
       case 'import-requested':
       case 'imported':
-        return <ImportIcon color={color} />
+        return <ImportIcon color={color} />;
       case 'exported':
-        return <ExportIcon color={color} />
+        return <ExportIcon color={color} />;
       default:
-        return <TxIcon color={color} />
+        return <TxIcon color={color} />;
     }
   }
 }

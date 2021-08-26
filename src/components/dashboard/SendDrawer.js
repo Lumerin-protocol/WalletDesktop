@@ -1,10 +1,10 @@
-import withSendDrawerState from 'metronome-wallet-ui-logic/src/hocs/withSendDrawerState'
-import PropTypes from 'prop-types'
-import React from 'react'
+import withSendDrawerState from 'lumerin-wallet-ui-logic/src/hocs/withSendDrawerState';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { Drawer, Tabs } from '../common'
-import SendCoinForm from './SendCoinForm'
-import SendMETForm from './SendMETForm'
+import { Drawer, Tabs } from '../common';
+import SendCoinForm from './SendCoinForm';
+import SendMETForm from './SendMETForm';
 
 class SendDrawer extends React.Component {
   static propTypes = {
@@ -13,17 +13,17 @@ class SendDrawer extends React.Component {
     onRequestClose: PropTypes.func.isRequired,
     coinSymbol: PropTypes.string.isRequired,
     isOpen: PropTypes.bool.isRequired
-  }
+  };
 
-  state = { activeTab: 'coin' }
+  state = { activeTab: 'coin' };
 
   componentDidUpdate(prevProps) {
     if (this.props.isOpen && prevProps.isOpen !== this.props.isOpen) {
-      this.setState({ activeTab: 'coin' })
+      this.setState({ activeTab: 'coin' });
     }
   }
 
-  onTabChange = activeTab => this.setState({ activeTab })
+  onTabChange = activeTab => this.setState({ activeTab });
 
   render() {
     const tabs = (
@@ -40,7 +40,7 @@ class SendDrawer extends React.Component {
           { id: 'coin', label: this.props.coinSymbol }
         ]}
       />
-    )
+    );
 
     return (
       <Drawer
@@ -52,8 +52,8 @@ class SendDrawer extends React.Component {
         {this.state.activeTab === 'coin' && <SendCoinForm tabs={tabs} />}
         {this.state.activeTab === 'met' && <SendMETForm tabs={tabs} />}
       </Drawer>
-    )
+    );
   }
 }
 
-export default withSendDrawerState(SendDrawer)
+export default withSendDrawerState(SendDrawer);

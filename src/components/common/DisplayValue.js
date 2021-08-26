@@ -1,8 +1,8 @@
-import withDisplayValueState from 'metronome-wallet-ui-logic/src/hocs/withDisplayValueState'
-import { sanitize } from 'metronome-wallet-ui-logic/src/utils'
-import smartRounder from 'smart-round'
-import PropTypes from 'prop-types'
-import React from 'react'
+import withDisplayValueState from 'lumerin-wallet-ui-logic/src/hocs/withDisplayValueState';
+import { sanitize } from 'lumerin-wallet-ui-logic/src/utils';
+import smartRounder from 'smart-round';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 class DisplayValue extends React.Component {
   static propTypes = {
@@ -19,7 +19,7 @@ class DisplayValue extends React.Component {
     toWei: PropTypes.bool,
     post: PropTypes.string,
     pre: PropTypes.string
-  }
+  };
 
   static defaultProps = {
     shouldFormat: true,
@@ -27,13 +27,13 @@ class DisplayValue extends React.Component {
     minDecimals: 0,
     maxDecimals: 6,
     maxSize: 'inherit'
-  }
+  };
 
   round = smartRounder(
     this.props.maxPrecision,
     this.props.minDecimals,
     this.props.maxDecimals
-  )
+  );
 
   render() {
     const {
@@ -47,17 +47,17 @@ class DisplayValue extends React.Component {
       value,
       post,
       pre
-    } = this.props
+    } = this.props;
 
-    let formattedValue
+    let formattedValue;
 
     try {
       formattedValue = this.round(
         toWei ? sanitize(value) : fromWei(value),
         shouldFormat
-      )
+      );
     } catch (e) {
-      formattedValue = null
+      formattedValue = null;
     }
 
     return (
@@ -72,8 +72,8 @@ class DisplayValue extends React.Component {
         {formattedValue || '?'}
         {isCoin ? ` ${coinSymbol}` : post}
       </div>
-    )
+    );
   }
 }
 
-export default withDisplayValueState(DisplayValue)
+export default withDisplayValueState(DisplayValue);

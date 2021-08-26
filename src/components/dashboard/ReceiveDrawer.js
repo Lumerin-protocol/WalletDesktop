@@ -1,11 +1,11 @@
-import withReceiveDrawerState from 'metronome-wallet-ui-logic/src/hocs/withReceiveDrawerState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import QRCode from 'qrcode.react'
-import React from 'react'
+import withReceiveDrawerState from 'lumerin-wallet-ui-logic/src/hocs/withReceiveDrawerState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import QRCode from 'qrcode.react';
+import React from 'react';
 
-import { BaseBtn, Drawer, Flex } from '../common'
-import CopyIcon from '../icons/CopyIcon'
+import { BaseBtn, Drawer, Flex } from '../common';
+import CopyIcon from '../icons/CopyIcon';
 
 const Body = styled.div`
   padding: 3.2rem 1.6rem;
@@ -13,14 +13,14 @@ const Body = styled.div`
   @media (min-height: 700px) {
     padding: 6.4rem 1.6rem;
   }
-`
+`;
 
 const Title = styled.div`
   line-height: 2rem;
   font-size: 1.6rem;
   font-weight: 600;
   text-shadow: 0 1px 1px ${p => p.theme.colors.darkShade};
-`
+`;
 
 const Address = styled.div`
   margin-top: 1.6rem;
@@ -33,7 +33,7 @@ const Address = styled.div`
   font-weight: 600;
   text-shadow: 0 1px 1px ${p => p.theme.colors.darkShade};
   letter-spacing: normal;
-`
+`;
 
 const CopyBtn = styled(BaseBtn)`
   margin-top: 2.4rem;
@@ -50,7 +50,7 @@ const CopyBtn = styled(BaseBtn)`
   &:hover {
     background-color: rgba(126, 97, 248, 1);
   }
-`
+`;
 
 const BtnLabel = styled.div`
   opacity: ${p => (p.isCopied ? '1' : '0.5')};
@@ -59,7 +59,7 @@ const BtnLabel = styled.div`
   font-size: 1.3rem;
   font-weight: 600;
   text-shadow: 0 2px 0 ${p => p.theme.colors.darkShade};
-`
+`;
 
 const Footer = styled.div`
   background-image: linear-gradient(to bottom, #272727, #323232);
@@ -73,7 +73,7 @@ const Footer = styled.div`
   @media (min-height: 700px) {
     padding: 6.4rem 2.4rem;
   }
-`
+`;
 
 const QRContainer = styled.div`
   background: white;
@@ -82,7 +82,7 @@ const QRContainer = styled.div`
   & canvas {
     display: block;
   }
-`
+`;
 
 const QRmsg = styled.div`
   text-align: center;
@@ -93,7 +93,7 @@ const QRmsg = styled.div`
   font-weight: 600;
   letter-spacing: 0.5px;
   text-shadow: 0 1px 1px ${p => p.theme.colors.darkShade};
-`
+`;
 
 class ReceiveDrawer extends React.Component {
   static propTypes = {
@@ -102,7 +102,7 @@ class ReceiveDrawer extends React.Component {
     copyBtnLabel: PropTypes.string.isRequired,
     address: PropTypes.string.isRequired,
     isOpen: PropTypes.bool.isRequired
-  }
+  };
 
   render() {
     return (
@@ -139,8 +139,8 @@ class ReceiveDrawer extends React.Component {
           </Footer>
         </Flex.Column>
       </Drawer>
-    )
+    );
   }
 }
 
-export default withReceiveDrawerState(ReceiveDrawer)
+export default withReceiveDrawerState(ReceiveDrawer);

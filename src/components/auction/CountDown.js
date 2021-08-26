@@ -1,14 +1,14 @@
-import CountDownProvider from 'metronome-wallet-ui-logic/src/hocs/CountDownProvider'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import CountDownProvider from 'lumerin-wallet-ui-logic/src/hocs/CountDownProvider';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
 const Row = styled.div`
   margin-top: 1.6rem;
   display: flex;
   border-radius: 4px;
   background-color: ${p => p.theme.colors.lightShade};
-`
+`;
 
 const Cell = styled.div`
   opacity: ${({ isFaded }) => (isFaded ? '0.5' : '1')};
@@ -32,15 +32,15 @@ const Cell = styled.div`
     padding: 3rem;
     font-size: 4.8rem;
   }
-`
+`;
 
 export default class CountDown extends React.Component {
   static propTypes = {
     targetTimestamp: PropTypes.number.isRequired
-  }
+  };
 
   render() {
-    const { targetTimestamp } = this.props
+    const { targetTimestamp } = this.props;
 
     return (
       <CountDownProvider targetTimestamp={targetTimestamp}>
@@ -61,6 +61,6 @@ export default class CountDown extends React.Component {
           )
         }
       </CountDownProvider>
-    )
+    );
   }
 }

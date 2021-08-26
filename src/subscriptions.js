@@ -1,7 +1,7 @@
 export const subscribeToMainProcessMessages = function(store) {
   const ipcMessages = [
     'indexer-connection-status-changed',
-    'metronome-token-status-updated',
+    'lumerin-token-status-updated',
     'web3-connection-status-changed',
     'attestation-threshold-updated',
     'chain-hop-start-time-updated',
@@ -15,7 +15,7 @@ export const subscribeToMainProcessMessages = function(store) {
     'create-wallet',
     'open-wallets',
     'coin-block'
-  ]
+  ];
 
   // Subscribe to every IPC message defined above and dispatch a
   // Redux action of type { type: MSG_NAME, payload: MSG_ARG }
@@ -23,5 +23,5 @@ export const subscribeToMainProcessMessages = function(store) {
     window.ipcRenderer.on(msgName, (_, payload) =>
       store.dispatch({ type: msgName, payload })
     )
-  )
-}
+  );
+};

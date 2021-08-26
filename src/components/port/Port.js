@@ -1,15 +1,15 @@
-import { toChecksumAddress } from 'web3-utils'
-import withPortState from 'metronome-wallet-ui-logic/src/hocs/withPortState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import { toChecksumAddress } from 'web3-utils';
+import withPortState from 'lumerin-wallet-ui-logic/src/hocs/withPortState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { DarkLayout, Flex, Btn } from '../common'
-import RetryImportDrawer from './RetryImportDrawer'
-import OngoingImports from './OngoingImports'
-import FailedImports from './FailedImports'
-import PortDrawer from './PortDrawer'
-import PortIcon from '../icons/PortIcon'
+import { DarkLayout, Flex, Btn } from '../common';
+import RetryImportDrawer from './RetryImportDrawer';
+import OngoingImports from './OngoingImports';
+import FailedImports from './FailedImports';
+import PortDrawer from './PortDrawer';
+import PortIcon from '../icons/PortIcon';
 
 const Container = styled.div`
   display: flex;
@@ -22,13 +22,13 @@ const Container = styled.div`
     align-items: flex-start;
     flex-direction: row;
   }
-`
+`;
 
 const Title = styled.h2`
   font-size: 2rem;
   font-weight: 600;
   margin: 0;
-`
+`;
 
 const Description = styled.p`
   font-size: 1.3rem;
@@ -42,7 +42,7 @@ const Description = styled.p`
     font-size: 1.3rem;
     font-weight: 600;
   }
-`
+`;
 
 const BtnContainer = styled.div`
   margin-bottom: 3.2rem;
@@ -57,11 +57,11 @@ const BtnContainer = styled.div`
     order: 0;
     align-self: flex-start;
   }
-`
+`;
 
 const PortBtn = styled(Btn)`
   min-width: 200px;
-`
+`;
 const NoPortsContainer = styled.div`
   margin-top: 3.2rem;
   max-width: 32rem;
@@ -72,7 +72,7 @@ const NoPortsContainer = styled.div`
   @media (min-width: 1000px) {
     margin-top: -5rem;
   }
-`
+`;
 
 const NoPortsTitle = styled.div`
   margin-top: 3.4rem;
@@ -81,7 +81,7 @@ const NoPortsTitle = styled.div`
   line-height: 3.2rem;
   text-align: center;
   opacity: 0.75;
-`
+`;
 
 const NoPortsMessage = styled.div`
   margin-top: 0.8rem;
@@ -89,7 +89,7 @@ const NoPortsMessage = styled.div`
   font-size: 1.6rem;
   line-height: 2.4rem;
   text-align: center;
-`
+`;
 
 class Port extends React.Component {
   static propTypes = {
@@ -109,29 +109,29 @@ class Port extends React.Component {
     failedImports: PropTypes.array.isRequired,
     retryDisabled: PropTypes.bool.isRequired,
     portDisabled: PropTypes.bool.isRequired
-  }
+  };
 
   state = {
     retryCandidate: null,
     activeModal: null
-  }
+  };
 
-  onOpenModal = e => this.setState({ activeModal: e.target.dataset.modal })
+  onOpenModal = e => this.setState({ activeModal: e.target.dataset.modal });
 
-  onCloseModal = () => this.setState({ activeModal: null })
+  onCloseModal = () => this.setState({ activeModal: null });
 
   onRetryClick = hash => {
     const retryCandidate = this.props.failedImports
       .concat(this.props.ongoingImports)
-      .find(({ currentBurnHash }) => currentBurnHash === hash)
+      .find(({ currentBurnHash }) => currentBurnHash === hash);
     this.setState({
       activeModal: 'retry-import',
       retryCandidate: {
         ...retryCandidate,
         from: toChecksumAddress(retryCandidate.from)
       }
-    })
-  }
+    });
+  };
 
   // eslint-disable-next-line complexity
   render() {
@@ -188,8 +188,7 @@ class Port extends React.Component {
                   <PortIcon size="5.9rem" />
                   <NoPortsTitle>You have no pending ports</NoPortsTitle>
                   <NoPortsMessage>
-                    Port your Metronome between any of the other supported
-                    chains.
+                    Port your Lumerin between any of the other supported chains.
                   </NoPortsMessage>
                 </NoPortsContainer>
               )}
@@ -222,8 +221,8 @@ class Port extends React.Component {
           />
         )}
       </DarkLayout>
-    )
+    );
   }
 }
 
-export default withPortState(Port)
+export default withPortState(Port);

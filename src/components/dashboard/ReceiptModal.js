@@ -1,10 +1,10 @@
-import withReceiptState from 'metronome-wallet-ui-logic/src/hocs/withReceiptState'
-import PropTypes from 'prop-types'
-import React from 'react'
+import withReceiptState from 'lumerin-wallet-ui-logic/src/hocs/withReceiptState';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import Modal, { HeaderButton } from '../common/Modal'
-import { ToastsContext } from '../toasts'
-import Receipt from '../common/receipt/Receipt'
+import Modal, { HeaderButton } from '../common/Modal';
+import { ToastsContext } from '../toasts';
+import Receipt from '../common/receipt/Receipt';
 
 class ReceiptModal extends React.Component {
   static propTypes = {
@@ -14,21 +14,21 @@ class ReceiptModal extends React.Component {
       .isRequired,
     isOpen: PropTypes.bool.isRequired,
     hash: PropTypes.string
-  }
+  };
 
-  static contextType = ToastsContext
+  static contextType = ToastsContext;
 
   componentDidUpdate(prevProps) {
     if (
       this.props.refreshStatus !== prevProps.refreshStatus &&
       this.props.refreshStatus === 'failure'
     ) {
-      this.context.toast('error', 'Could not refresh')
+      this.context.toast('error', 'Could not refresh');
     }
   }
 
   render() {
-    if (!this.props.hash) return null
+    if (!this.props.hash) return null;
 
     return (
       <Modal
@@ -47,8 +47,8 @@ class ReceiptModal extends React.Component {
       >
         <Receipt {...this.props} />
       </Modal>
-    )
+    );
   }
 }
 
-export default withReceiptState(ReceiptModal)
+export default withReceiptState(ReceiptModal);

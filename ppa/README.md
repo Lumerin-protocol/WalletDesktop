@@ -15,7 +15,7 @@ npm run ppa
 VER=0.8.0
 cd ppa
 debsign *.changes *.dsc
-dput ppa:metronome/metronome-desktop-wallet metronome-desktop-wallet_$VER-1xenial_source.changes
-dput ppa:metronome/metronome-desktop-wallet metronome-desktop-wallet_$VER-1artful_source.changes
-dput ppa:metronome/metronome-desktop-wallet metronome-desktop-wallet_$VER-1bionic_source.changes
+dput ppa:lumerin/lumerin-wallet-desktop lumerin-wallet-desktop_$VER-1xenial_source.changes
+dput ppa:lumerin/lumerin-wallet-desktop lumerin-wallet-desktop_$VER-1artful_source.changes
+dput ppa:lumerin/lumerin-wallet-desktop lumerin-wallet-desktop_$VER-1bionic_source.changes
 ```

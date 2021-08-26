@@ -1,10 +1,10 @@
-import ReactModal from 'react-modal'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import theme from 'metronome-wallet-ui-logic/src/theme'
-import React from 'react'
+import ReactModal from 'react-modal';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import theme from 'lumerin-wallet-ui-logic/src/theme';
+import React from 'react';
 
-import CloseIcon from '../icons/CloseIcon'
+import CloseIcon from '../icons/CloseIcon';
 
 const Container = styled(ReactModal)`
   &.ReactModal__Content {
@@ -22,7 +22,7 @@ const Container = styled(ReactModal)`
     opacity: 0;
     transform: translate3d(-50%, -10%, 0);
   }
-`
+`;
 
 const Header = styled.header`
   padding: 1.6rem;
@@ -31,7 +31,7 @@ const Header = styled.header`
     p.variant === 'primary' ? p.theme.colors.primary : 'transparent'};
   justify-content: ${p => (p.hasTitle ? 'space-between' : 'flex-end')};
   flex-shrink: 0;
-`
+`;
 
 const Title = styled.h1`
   font-size: 1.8rem;
@@ -41,7 +41,7 @@ const Title = styled.h1`
     p.variant === 'primary' ? p.theme.colors.light : p.theme.colors.copy};
   margin: 0;
   flex-grow: 1;
-`
+`;
 
 export const HeaderButton = styled.button`
   margin-left: 2rem;
@@ -61,7 +61,7 @@ export const HeaderButton = styled.button`
   &:hover {
     opacity: 0.5;
   }
-`
+`;
 
 export default class Modal extends React.Component {
   static propTypes = {
@@ -72,7 +72,7 @@ export default class Modal extends React.Component {
     isOpen: PropTypes.bool.isRequired,
     title: PropTypes.string,
     styleOverrides: PropTypes.object
-  }
+  };
 
   render() {
     const {
@@ -84,7 +84,7 @@ export default class Modal extends React.Component {
       isOpen,
       title,
       ...other
-    } = this.props
+    } = this.props;
 
     return (
       <Container
@@ -131,6 +131,6 @@ export default class Modal extends React.Component {
         </Header>
         {children}
       </Container>
-    )
+    );
   }
 }

@@ -1,16 +1,16 @@
 /* eslint-disable require-path-exists/exists */
 /* eslint-disable import/no-unresolved */
-import { Provider as ClientProvider } from 'metronome-wallet-ui-logic/src/hocs/clientContext'
-import { Provider, createStore } from 'metronome-wallet-ui-logic/src/store'
-import { render, Simulate } from 'react-testing-library'
-import { ThemeProvider } from 'styled-components'
-import { MemoryRouter } from 'react-router'
-import createClient from './client'
-import { merge } from 'lodash'
-import theme from 'metronome-wallet-ui-logic/src/theme'
-import React from 'react'
+import { Provider as ClientProvider } from 'lumerin-wallet-ui-logic/src/hocs/clientContext';
+import { Provider, createStore } from 'lumerin-wallet-ui-logic/src/store';
+import { render, Simulate } from 'react-testing-library';
+import { ThemeProvider } from 'styled-components';
+import { MemoryRouter } from 'react-router';
+import createClient from './client';
+import { merge } from 'lodash';
+import theme from 'lumerin-wallet-ui-logic/src/theme';
+import React from 'react';
 
-import config from '../config'
+import config from '../config';
 
 /*
  * The same render method of 'react-testing-library' but wrapped with
@@ -23,7 +23,7 @@ import config from '../config'
  * property useful for dispatching actions inside your tests.
  */
 export function reduxRender(element, initialState) {
-  const client = createClient(config, createStore, initialState)
+  const client = createClient(config, createStore, initialState);
 
   const renderResult = render(
     <ClientProvider value={client}>
@@ -33,8 +33,8 @@ export function reduxRender(element, initialState) {
         </ThemeProvider>
       </Provider>
     </ClientProvider>
-  )
-  return { ...renderResult, store: client.store }
+  );
+  return { ...renderResult, store: client.store };
 }
 
 /*
@@ -47,7 +47,7 @@ export function routerRender(element, initialState, initialRoute = '/') {
   return reduxRender(
     <MemoryRouter initialEntries={[initialRoute]}>{element}</MemoryRouter>,
     initialState
-  )
+  );
 }
 
 /*
@@ -61,20 +61,20 @@ export function routerRender(element, initialState, initialRoute = '/') {
 export function testValidation(getter, formId, { formData, errors }) {
   // Populate the specified form fields
   Object.keys(formData).forEach((fieldId, i) => {
-    const field = getter(fieldId)
-    field.value = formData[fieldId]
-    Simulate.change(field)
-  })
+    const field = getter(fieldId);
+    field.value = formData[fieldId];
+    Simulate.change(field);
+  });
 
   // Submit the form
-  Simulate.submit(getter(formId))
+  Simulate.submit(getter(formId));
 
   // Check expected errors
   Object.keys(errors).forEach((fieldId, i) => {
     expect(getter(`${fieldId}-error`).textContent).toEqual(
       expect.stringContaining(errors[fieldId])
-    )
-  })
+    );
+  });
 }
 
 /*
@@ -96,20 +96,20 @@ export function testValidation(getter, formId, { formData, errors }) {
  */
 export function withDataset(element, ...dataAttrs) {
   element.dataset = dataAttrs.reduce((acc, attr) => {
-    acc[attr] = element.getAttribute(`data-${attr}`)
-    return acc
-  }, {})
-  return element
+    acc[attr] = element.getAttribute(`data-${attr}`);
+    return acc;
+  }, {});
+  return element;
 }
 
 /**
  * Return UTC timestamps relative to the current time
  * Useful for setting up different auction scenarios.
  */
-export const twoWeeksAgo = () => Date.now() / 1000 - 60 * 60 * 24 * 7 * 2
-export const oneHourAgo = () => Date.now() / 1000 - 60 * 60
-export const inOneHour = () => Date.now() / 1000 + 60 * 60
-export const inOneWeek = () => Date.now() / 1000 + 60 * 60 * 24 * 7
+export const twoWeeksAgo = () => Date.now() / 1000 - 60 * 60 * 24 * 7 * 2;
+export const oneHourAgo = () => Date.now() / 1000 - 60 * 60;
+export const inOneHour = () => Date.now() / 1000 + 60 * 60;
+export const inOneWeek = () => Date.now() / 1000 + 60 * 60 * 24 * 7;
 
 /*
  * Returns a common initial state for Redux store that is useful for most tests
@@ -157,8 +157,8 @@ export function getInitialState(overrides = {}) {
         }
       }
     }
-  }
-  return merge({}, baseState, overrides)
+  };
+  return merge({}, baseState, overrides);
 }
 
 /*
@@ -167,7 +167,7 @@ export function getInitialState(overrides = {}) {
 export function getDummyTransaction() {
   return {
     meta: {
-      metronome: {},
+      lumerin: {},
       tokens: {
         [config.MET_TOKEN_ADDR]: {
           event: 'Transfer',
@@ -196,5 +196,5 @@ export function getDummyTransaction() {
       from: '0x15dd2028C976beaA6668E286b496A518F457b5Cf',
       to: '0xde806D6efD432CDeE42573760682D99eDEdC1d89'
     }
-  }
+  };
 }

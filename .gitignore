@@ -21,12 +21,12 @@ npm-debug.log*
 # deb building
 ppa/app/debian/debhelper-build-stamp
 ppa/app/debian/files
-ppa/app/debian/metronome-desktop-wallet.debhelper.log
-ppa/app/debian/metronome-desktop-wallet.substvars
-ppa/app/debian/metronome-desktop-wallet/
+ppa/app/debian/lumerin-wallet-desktop.debhelper.log
+ppa/app/debian/lumerin-wallet-desktop.substvars
+ppa/app/debian/lumerin-wallet-desktop/
 ppa/app/opt/
 ppa/app/usr/
-ppa/metronome-desktop-walle*
+ppa/lumerin-wallet-desktop*
 
 # ESLint
 .eslintcache

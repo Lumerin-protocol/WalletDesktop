@@ -1,11 +1,11 @@
-import { withRouter, NavLink } from 'react-router-dom'
-import withToolsState from 'metronome-wallet-ui-logic/src/hocs/withToolsState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import { withRouter, NavLink } from 'react-router-dom';
+import withToolsState from 'lumerin-wallet-ui-logic/src/hocs/withToolsState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import ConfirmModal from './ConfirmModal'
-import WalletStatus from './WalletStatus'
+import ConfirmModal from './ConfirmModal';
+import WalletStatus from './WalletStatus';
 import {
   ConfirmationWizard,
   DarkLayout,
@@ -13,19 +13,19 @@ import {
   Flex,
   Btn,
   Sp
-} from '../common'
+} from '../common';
 
 const Confirmation = styled.div`
   color: ${p => p.theme.colors.danger};
   background-color: ${p => p.theme.colors.darkShade};
   border-radius: 4px;
   padding: 0.8rem 1.6rem;
-`
+`;
 const ValidationMsg = styled.div`
   font-size: 1.4rem;
   margin-left: 1.6rem;
   opacity: 0.75;
-`
+`;
 
 class Tools extends React.Component {
   static propTypes = {
@@ -41,34 +41,34 @@ class Tools extends React.Component {
     errors: PropTypes.shape({
       mnemonic: PropTypes.string
     }).isRequired
-  }
+  };
 
   state = {
     activeModal: null
-  }
+  };
 
   onCloseModal = () => {
-    this.setState({ activeModal: null })
-  }
+    this.setState({ activeModal: null });
+  };
 
   onRescanTransactionsClick = () => {
-    this.setState({ activeModal: 'confirm-rescan' })
-  }
+    this.setState({ activeModal: 'confirm-rescan' });
+  };
 
   onWizardSubmit = password =>
     this.props
       .onSubmit(password)
-      .then(() => this.props.history.push('/wallets'))
+      .then(() => this.props.history.push('/wallets'));
 
   renderConfirmation = () => (
     <Confirmation data-testid="confirmation">
       <h3>Are you sure?</h3>
       <p>This operation will overwrite and restart the current wallet!</p>
     </Confirmation>
-  )
+  );
 
   renderForm = goToReview => {
-    const { onInputChange, mnemonic, errors } = this.props
+    const { onInputChange, mnemonic, errors } = this.props;
 
     return (
       <Sp mt={-2}>
@@ -134,8 +134,8 @@ class Tools extends React.Component {
           <WalletStatus />
         </Sp>
       </Sp>
-    )
-  }
+    );
+  };
 
   render() {
     return (
@@ -164,8 +164,8 @@ class Tools extends React.Component {
           />
         </Sp>
       </DarkLayout>
-    )
+    );
   }
 }
 
-export default withToolsState(withRouter(Tools))
+export default withToolsState(withRouter(Tools));

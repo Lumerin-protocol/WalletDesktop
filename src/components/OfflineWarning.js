@@ -1,10 +1,10 @@
-import withOfflineWarningState from 'metronome-wallet-ui-logic/src/hocs/withOfflineWarningState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withOfflineWarningState from 'lumerin-wallet-ui-logic/src/hocs/withOfflineWarningState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { BaseBtn } from './common'
-import CloseIcon from './icons/CloseIcon'
+import { BaseBtn } from './common';
+import CloseIcon from './icons/CloseIcon';
 
 const Container = styled.div`
   position: fixed;
@@ -17,19 +17,19 @@ const Container = styled.div`
   text-align: center;
   font-size: 1.2rem;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-`
+`;
 
 const DismissBtn = styled(BaseBtn)`
   position: relative;
   top: 1px;
   left: 6px;
-`
+`;
 
 class OfflineWarning extends React.Component {
   static propTypes = {
     handleDismissClick: PropTypes.func.isRequired,
     isVisible: PropTypes.bool.isRequired
-  }
+  };
 
   render() {
     return (
@@ -42,8 +42,8 @@ class OfflineWarning extends React.Component {
           </DismissBtn>
         </Container>
       )
-    )
+    );
   }
 }
 
-export default withOfflineWarningState(OfflineWarning)
+export default withOfflineWarningState(OfflineWarning);

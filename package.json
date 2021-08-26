@@ -1,17 +1,17 @@
 {
-  "name": "metronome-desktop-wallet",
-  "version": "1.4.3",
+  "name": "lumerin-wallet-desktop",
+  "version": "0.0.0",
   "author": {
-    "name": "Autonomous Software",
-    "email": "info@autonomous.sh",
-    "url": "https://autonomous.sh"
+    "name": "Kodee McIntosh",
+    "email": "kodee@titan.io",
+    "url": "https://titan.io"
   },
-  "description": "Metronome Wallet for desktop devices",
-  "repository": "autonomoussoftware/metronome-wallet-desktop",
+  "description": "Lumerin Wallet for desktop devices",
+  "repository": "TitanInd/lumerin-wallet-desktop",
   "license": "MIT",
   "homepage": "./",
   "main": "public/electron.js",
-  "copyright": "Copyright © 2019 ${author}",
+  "copyright": "Copyright © 2021 Titan Industries",
   "scripts": {
     "debug": "concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . --inspect\"",
     "dev": "concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron .\"",
@@ -46,8 +46,6 @@
     "json-stringify-safe": "5.0.1",
     "lodash": "4.17.21",
     "metronome-contracts": "2.5.0",
-    "metronome-wallet-core": "3.0.0",
-    "metronome-wallet-ui-logic": "3.5.2",
     "nedb": "1.8.0",
     "p-timeout": "4.1.0",
     "patch-package": "5.1.1",
@@ -59,10 +57,12 @@
     "react-hint": "3.2.1",
     "react-modal": "3.5.1",
     "react-motion": "0.5.2",
+    "react-redux": "5.0.7",
     "react-router": "4.3.1",
     "react-router-dom": "4.3.1",
-    "react-scripts": "4.0.3",
+    "react-scripts": "4.0.1",
     "react-virtualized": "9.20.1",
+    "redux": "3.7.2",
     "smart-round": "1.0.0",
     "styled-components": "4.1.2",
     "universal-analytics": "0.4.20",
@@ -95,8 +95,8 @@
     "wait-on": "6.0.0"
   },
   "build": {
-    "appId": "sh.autonomous.metronome.wallet.desktop",
-    "productName": "Metronome Wallet",
+    "appId": "io.titan.lumerin.wallet.desktop",
+    "productName": "Lumerin Wallet",
     "files": [
       ".env",
       "build/**/*",
@@ -123,7 +123,7 @@
       "entitlementsInherit": "./entitlements.mac.plist"
     },
     "dmg": {
-      "backgroundColor": "#7e61f8",
+      "backgroundColor": "#04D0D8",
       "contents": [
         {
           "x": 110,

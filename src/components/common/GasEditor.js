@@ -1,24 +1,24 @@
-import withGasEditorState from 'metronome-wallet-ui-logic/src/hocs/withGasEditorState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withGasEditorState from 'lumerin-wallet-ui-logic/src/hocs/withGasEditorState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { FieldBtn } from './Btn'
-import TextInput from './TextInput'
-import Flex from './Flex'
-import Sp from './Spacing'
+import { FieldBtn } from './Btn';
+import TextInput from './TextInput';
+import Flex from './Flex';
+import Sp from './Spacing';
 
 const GasLabel = styled.span`
   opacity: 0.5;
   font-size: 1.3rem;
   white-space: nowrap;
   margin-right: 1em;
-`
+`;
 
 const ErrorMsg = styled.div`
   margin-top: 1em;
   color: ${p => p.theme.colors.danger};
-`
+`;
 
 class GasEditor extends React.Component {
   static propTypes = {
@@ -33,7 +33,7 @@ class GasEditor extends React.Component {
       gasPrice: PropTypes.string,
       gasLimit: PropTypes.string
     }).isRequired
-  }
+  };
 
   render() {
     return (
@@ -86,8 +86,8 @@ class GasEditor extends React.Component {
           <ErrorMsg>Gas limit could not be estimated. Using default.</ErrorMsg>
         )}
       </React.Fragment>
-    )
+    );
   }
 }
 
-export default withGasEditorState(GasEditor)
+export default withGasEditorState(GasEditor);

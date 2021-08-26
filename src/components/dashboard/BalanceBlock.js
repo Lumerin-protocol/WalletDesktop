@@ -1,11 +1,11 @@
-import withBalanceBlockState from 'metronome-wallet-ui-logic/src/hocs/withBalanceBlockState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withBalanceBlockState from 'lumerin-wallet-ui-logic/src/hocs/withBalanceBlockState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { DisplayValue } from '../common'
+import { DisplayValue } from '../common';
 
-const relSize = ratio => `calc(100vw / ${ratio})`
+const relSize = ratio => `calc(100vw / ${ratio})`;
 
 const Balance = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ const Balance = styled.div`
   @media (min-width: 1040px) {
     padding: 0.95em 0;
   }
-`
+`;
 
 const CoinSymbol = styled.div`
   border-radius: 14.1px;
@@ -33,7 +33,7 @@ const CoinSymbol = styled.div`
     width: 6.3rem;
     font-size: 2rem;
   }
-`
+`;
 
 const Value = styled.div`
   line-height: 1.5;
@@ -57,7 +57,7 @@ const Value = styled.div`
   @media (min-width: 1440px) {
     font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
   }
-`
+`;
 
 const USDValue = styled.div`
   line-height: 1.5;
@@ -76,7 +76,7 @@ const USDValue = styled.div`
   @media (min-width: 1440px) {
     font-size: 2.2rem;
   }
-`
+`;
 
 class BalanceBlock extends React.Component {
   static propTypes = {
@@ -84,7 +84,7 @@ class BalanceBlock extends React.Component {
     coinBalanceWei: PropTypes.string.isRequired,
     metBalanceWei: PropTypes.string.isRequired,
     coinSymbol: PropTypes.string.isRequired
-  }
+  };
 
   render() {
     return (
@@ -108,8 +108,8 @@ class BalanceBlock extends React.Component {
           </USDValue>
         </Balance>
       </React.Fragment>
-    )
+    );
   }
 }
 
-export default withBalanceBlockState(BalanceBlock)
+export default withBalanceBlockState(BalanceBlock);

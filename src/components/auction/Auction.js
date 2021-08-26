@@ -1,25 +1,25 @@
-import withAuctionState from 'metronome-wallet-ui-logic/src/hocs/withAuctionState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withAuctionState from 'lumerin-wallet-ui-logic/src/hocs/withAuctionState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { DarkLayout, LastUpdated, LoadingBar, Text, Btn, Sp } from '../common'
-import BuyMETDrawer from './BuyMETDrawer'
-import CountDown from './CountDown'
-import Stats from './Stats'
+import { DarkLayout, LastUpdated, LoadingBar, Text, Btn, Sp } from '../common';
+import BuyMETDrawer from './BuyMETDrawer';
+import CountDown from './CountDown';
+import Stats from './Stats';
 
 const Container = styled.div`
   padding: 3.2rem 2.4rem;
   @media (min-width: 800px) {
     padding: 3.2rem 4.8rem;
   }
-`
+`;
 
 const LoadingContainer = styled.div`
   text-align: center;
   max-width: 400px;
   margin: 0 auto;
-`
+`;
 
 const Body = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const Body = styled.div`
     margin-top: 4.8rem;
     flex-direction: row;
   }
-`
+`;
 
 const BuyBtn = styled(Btn)`
   order: 0;
@@ -45,14 +45,14 @@ const BuyBtn = styled(Btn)`
     order: 1;
     min-width: auto;
   }
-`
+`;
 
 const LastUpdatedContainer = styled.div`
   padding: 0 2.4rem 3.2rem;
   @media (min-width: 800px) {
     padding: 0 4.8rem 3.2rem;
   }
-`
+`;
 
 class Auction extends React.Component {
   static propTypes = {
@@ -63,19 +63,19 @@ class Auction extends React.Component {
     buyDisabled: PropTypes.bool.isRequired,
     lastUpdated: PropTypes.number,
     title: PropTypes.string
-  }
+  };
 
   state = {
     activeModal: null
-  }
+  };
 
-  onOpenModal = e => this.setState({ activeModal: e.target.dataset.modal })
+  onOpenModal = e => this.setState({ activeModal: e.target.dataset.modal });
 
-  onCloseModal = () => this.setState({ activeModal: null })
+  onCloseModal = () => this.setState({ activeModal: null });
 
   render() {
     return (
-      <DarkLayout title="Metronome Auction" data-testid="auction-container">
+      <DarkLayout title="Lumerin Auction" data-testid="auction-container">
         {this.props.auctionStatus ? (
           <Container>
             <Text data-testid="title">{this.props.title}</Text>
@@ -91,7 +91,7 @@ class Auction extends React.Component {
                 onClick={this.props.buyDisabled ? null : this.onOpenModal}
                 data-rh={this.props.buyDisabledReason}
               >
-                Buy Metronome
+                Buy Lumerin
               </BuyBtn>
 
               <Stats
@@ -119,8 +119,8 @@ class Auction extends React.Component {
           <LastUpdated timestamp={this.props.lastUpdated} />
         </LastUpdatedContainer>
       </DarkLayout>
-    )
+    );
   }
 }
 
-export default withAuctionState(Auction)
+export default withAuctionState(Auction);

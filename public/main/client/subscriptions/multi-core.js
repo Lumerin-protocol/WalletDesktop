@@ -9,8 +9,8 @@ const listeners = {
   'recover-from-mnemonic': handlers.recoverFromMnemonic,
   'onboarding-completed': handlers.onboardingCompleted,
   'get-import-gas-limit': handlers.getImportMetGas,
-  'port-metronome': handlers.portMetronome,
-  'retry-import': handlers.importMetronome,
+  'port-lumerin': handlers.portLumerin,
+  'retry-import': handlers.importLumerin,
   'login-submit': handlers.onLoginSubmit,
   'get-port-fees': handlers.getPortFees
 }

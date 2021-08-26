@@ -1,13 +1,13 @@
 <h1 align="center">
-  <img src="./public/images/banner.png" alt="Metronome Wallet Desktop" width="50%">
+  <img src="./public/images/banner.png" alt="Lumerin Wallet Desktop" width="50%">
 </h1>
 
-💻💰 Metronome Wallet for desktop computers
+💻💰 Lumerin Wallet for desktop computers
 
-[![Build Status](https://travis-ci.com/autonomoussoftware/metronome-wallet-desktop.svg?branch=master)](https://travis-ci.com/autonomoussoftware/metronome-wallet-desktop)
+[![Build Status](https://travis-ci.com/TitanInd/lumerin-wallet-desktop.svg?branch=master)](https://travis-ci.com/TitanInd/lumerin-wallet-desktop)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-![Metronome Desktop Wallet](https://metronome.io/images/metronome-apps-demo@2x.png)
+![Lumerin Desktop Wallet](https://lumerin.io/images/lumerin-apps-demo@2x.png)
 
 ## Development
 
@@ -55,9 +55,9 @@ More info [github.com/megahertz/electron-log](https://github.com/megahertz/elect
 
 ### Settings
 
-* **Linux**: `~/.config/metronome-desktop-wallet/Settings`
-* **macOS**: `~/Library/Application Support/metronome-desktop-wallet/Settings`
-* **Windows**: `%APPDATA%\\metronome-desktop-wallet\\Settings`
+* **Linux**: `~/.config/lumerin-wallet-desktop/Settings`
+* **macOS**: `~/Library/Application Support/lumerin-wallet-desktop/Settings`
+* **Windows**: `%APPDATA%\\lumerin-wallet-desktop\\Settings`
 
 To completely remove the application and start over, remove the settings file too.
 
@@ -111,10 +111,10 @@ In order to verify that the application has been successfully signed and notariz
 
 ```sh
 # Verifies the app has been signed
-codesign --verify --verbose ./dist/mac/Metronome\ Wallet.app
+codesign --verify --verbose ./dist/mac/Lumerin\ Wallet.app
 
 # Verifies the app has been notarized
-spctl -a -t exec -vvv ./dist/mac/Metronome\ Wallet.app
+spctl -a -t exec -vvv ./dist/mac/Lumerin\ Wallet.app
 ```
 
 #### Windows

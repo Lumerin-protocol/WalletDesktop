@@ -15,7 +15,7 @@ const listeners = {
   'get-tokens-gas-limit': handlers.getTokensGasLimit,
   'refresh-transaction': handlers.refreshTransaction,
   'get-export-gas-limit': handlers.getExportMetGas,
-  'buy-metronome': handlers.buyMetronome,
+  'buy-lumerin': handlers.buyLumerin,
   'get-gas-limit': handlers.getGasLimit,
   'get-gas-price': handlers.getGasPrice,
   'convert-coin': handlers.convertCoin,

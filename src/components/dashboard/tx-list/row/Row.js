@@ -1,11 +1,11 @@
-import withTxRowState from 'metronome-wallet-ui-logic/src/hocs/withTxRowState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withTxRowState from 'lumerin-wallet-ui-logic/src/hocs/withTxRowState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import Details from './Details'
-import Amount from './Amount'
-import Icon from './Icon'
+import Details from './Details';
+import Amount from './Amount';
+import Icon from './Icon';
 
 const Container = styled.div`
   margin-left: 1.6rem;
@@ -16,15 +16,15 @@ const Container = styled.div`
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   cursor: pointer;
   height: 66px;
-`
+`;
 
 class Row extends React.Component {
   static propTypes = {
     tx: PropTypes.any
-  }
+  };
 
   render() {
-    const { tx, ...other } = this.props
+    const { tx, ...other } = this.props;
 
     return (
       <Container {...other}>
@@ -34,8 +34,8 @@ class Row extends React.Component {
           <Details {...this.props} />
         </div>
       </Container>
-    )
+    );
   }
 }
 
-export default withTxRowState(Row)
+export default withTxRowState(Row);

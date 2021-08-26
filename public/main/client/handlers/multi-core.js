@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const { flatten } = require('lodash')
 
@@ -32,33 +32,36 @@ const onboardingCompleted = (data, cores) =>
   )
 
 const recoverFromMnemonic = function (data, cores) {
-  if (auth.isValidPassword(data.password)) {
-    wallet.clearWallets()
-    return createWallets(
-      { seed: keys.mnemonicToSeedHex(data.mnemonic), password: data.password },
-      cores,
-      false
-    ).then(noCore.clearCache)
+  if (!auth.isValidPassword(data.password)) {
+    return null;
   }
+
+  wallet.clearWallets();
+
+  return createWallets(
+    { seed: keys.mnemonicToSeedHex(data.mnemonic), password: data.password },
+    cores,
+    false
+  ).then(noCore.clearCache);
 }
 
 function onLoginSubmit (data, cores) {
   return auth.isValidPassword(data.password).then(function (isValid) {
     if (!isValid) {
-      return { error: new WalletError('Invalid password') }
+      return { error: new WalletError('Invalid password') };
     }
-    cores.forEach(singleCore.openWallet)
-    return isValid
+    cores.forEach(singleCore.openWallet);
+    return isValid;
   })
 }
 
-const findCoreByChainName = (cores, chain) => cores.find(e => e.chain === chain)
+const findCoreByChainName = (cores, chain) => cores.find(e => e.chain === chain);
 
 const findCoreBySymbol = (cores, ticker) =>
-  cores.find(e => e.config.symbol === ticker)
+  cores.find(e => e.config.symbol === ticker);
 
 function getPortFees (data, cores) {
-  const exportCore = findCoreByChainName(cores, data.chain)
+  const exportCore = findCoreByChainName(cores, data.chain);
   return singleCore
     .getExportMetFee(data, exportCore)
     .then(fee =>
@@ -80,13 +83,13 @@ const withMerkleRoot = fn =>
       })
   }
 
-const importMetronome = (data, cores) =>
-  withMerkleRoot(singleCore.importMetronome)(data, cores)
+const importLumerin = (data, cores) =>
+  withMerkleRoot(singleCore.importLumerin)(data, cores)
 
 const getImportMetGas = (data, cores) =>
   withMerkleRoot(singleCore.getImportGasLimit)(data, cores)
 
-function portMetronome (data, cores) {
+function portLumerin (data, cores) {
   const exportCore = findCoreByChainName(cores, data.chain)
   const exportData = Object.assign({}, data, {
     destinationChain: config.chains[data.destinationChain].symbol,
@@ -94,7 +97,7 @@ function portMetronome (data, cores) {
     extraData: '0x00'
   })
   return singleCore
-    .exportMetronome(exportData, exportCore)
+    .exportLumerin(exportData, exportCore)
     .then(function ({ receipt }) {
       const parsedExportReceipt = flatten(
         Object.keys(receipt.events)
@@ -116,7 +119,7 @@ function portMetronome (data, cores) {
         currentTick: returnValues.currentTick,
         dailyMintable: returnValues.dailyMintable,
         destinationChain: config.chains[data.destinationChain].symbol,
-        destinationMetAddress: returnValues.destinationMetronomeAddr,
+        destinationMetAddress: returnValues.destinationLumerinAddr,
         extraData: returnValues.extraData,
         fee: returnValues.fee,
         from: data.from,
@@ -134,7 +137,7 @@ function portMetronome (data, cores) {
           return singleCore
             .getImportGasLimit(importData, importCore)
             .then(({ gasLimit }) =>
-              singleCore.importMetronome(
+              singleCore.importLumerin(
                 Object.assign({}, importData, { gas: gasLimit }),
                 importCore
               )
@@ -147,9 +150,9 @@ function portMetronome (data, cores) {
 module.exports = {
   onboardingCompleted,
   recoverFromMnemonic,
-  importMetronome,
+  importLumerin,
   getImportMetGas,
-  portMetronome,
+  portLumerin,
   onLoginSubmit,
   getPortFees
 }

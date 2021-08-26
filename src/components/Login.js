@@ -1,9 +1,9 @@
-import withLoginState from 'metronome-wallet-ui-logic/src/hocs/withLoginState'
-import * as utils from 'metronome-wallet-ui-logic/src/utils'
-import PropTypes from 'prop-types'
-import React from 'react'
+import withLoginState from 'lumerin-wallet-ui-logic/src/hocs/withLoginState';
+import * as utils from 'lumerin-wallet-ui-logic/src/utils';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { TextInput, AltLayout, Btn, Sp } from './common'
+import { TextInput, AltLayout, Btn, Sp } from './common';
 
 class Login extends React.Component {
   static propTypes = {
@@ -13,7 +13,7 @@ class Login extends React.Component {
     errors: utils.errorPropTypes('password'),
     status: utils.statusPropTypes,
     error: PropTypes.string
-  }
+  };
 
   render() {
     return (
@@ -38,8 +38,8 @@ class Login extends React.Component {
           </Sp>
         </form>
       </AltLayout>
-    )
+    );
   }
 }
 
-export default withLoginState(Login)
+export default withLoginState(Login);

@@ -34,6 +34,6 @@
     "complexity": ["warn", { "max": 10 }],
     "no-console": "warn",
     "no-shadow": ["error", { "allow": ["status", "Text"] }],
-    "import/no-unresolved": ["error", { "ignore": [".*test.js$"] }]
+    "import/no-unresolved": [2, { "caseSensitive": false }]
   }
 }

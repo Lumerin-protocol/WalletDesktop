@@ -78,7 +78,7 @@ exports[`<BuyMETDrawer/> should match its snapshot 1`] = `
       class="sc-cvbbAY ewAxGX"
       data-testid="drawer-title"
     >
-      Buy Metronome
+      Buy Lumerin
     </h1>
     <button
       class="sc-jWBwVP litTlT"

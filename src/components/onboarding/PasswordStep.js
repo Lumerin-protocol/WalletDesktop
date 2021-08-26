@@ -1,19 +1,19 @@
-import * as utils from 'metronome-wallet-ui-logic/src/utils'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import * as utils from 'lumerin-wallet-ui-logic/src/utils';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { EntropyMeter, TextInput, AltLayout, Btn, Sp } from '../common'
-import Message from './Message'
+import { EntropyMeter, TextInput, AltLayout, Btn, Sp } from '../common';
+import Message from './Message';
 
 const PasswordMessage = styled(Message)`
   text-align: center;
-`
+`;
 
 const Green = styled.div`
   display: inline-block;
   color: ${p => p.theme.colors.success};
-`
+`;
 
 export default class PasswordStep extends React.Component {
   static propTypes = {
@@ -23,12 +23,12 @@ export default class PasswordStep extends React.Component {
     passwordAgain: PropTypes.string,
     password: PropTypes.string,
     errors: utils.errorPropTypes('passwordAgain', 'password')
-  }
+  };
 
   onPasswordSubmit = e => {
-    e.preventDefault()
-    this.props.onPasswordSubmit({ clearOnError: false })
-  }
+    e.preventDefault();
+    this.props.onPasswordSubmit({ clearOnError: false });
+  };
 
   render() {
     return (
@@ -74,6 +74,6 @@ export default class PasswordStep extends React.Component {
           </Sp>
         </form>
       </AltLayout>
-    )
+    );
   }
 }

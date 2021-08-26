@@ -1,7 +1,7 @@
 'use strict'
 
 const { ipcMain } = require('electron')
-const createCore = require('metronome-wallet-core')
+const createCore = require('lumerin-wallet-core')
 const stringify = require('json-stringify-safe')
 
 const logger = require('../../logger')

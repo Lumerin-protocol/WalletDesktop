@@ -1,10 +1,10 @@
-import withScanIndicatorState from 'metronome-wallet-ui-logic/src/hocs/withScanIndicatorState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withScanIndicatorState from 'lumerin-wallet-ui-logic/src/hocs/withScanIndicatorState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { ToastsContext } from '../../toasts'
-import Spinner from '../../common/Spinner'
+import { ToastsContext } from '../../toasts';
+import Spinner from '../../common/Spinner';
 
 const Container = styled.div`
   display: flex;
@@ -19,7 +19,7 @@ const Container = styled.div`
     background-color: ${({ theme, isDisabled }) =>
       theme.colors[isDisabled ? 'lightShade' : 'darkShade']};
   }
-`
+`;
 
 const Label = styled.div`
   font-size: 1.3rem;
@@ -27,7 +27,7 @@ const Label = styled.div`
   font-weight: 600;
   letter-spacing: 0.5px;
   margin-left: 7px;
-`
+`;
 
 const IndicatorLed = styled.div`
   width: 10px;
@@ -41,7 +41,7 @@ const IndicatorLed = styled.div`
   border: 1px solid white;
   border-radius: 10px;
   margin: 3px;
-`
+`;
 
 class ScanIndicator extends React.Component {
   static propTypes = {
@@ -50,16 +50,16 @@ class ScanIndicator extends React.Component {
     isOnline: PropTypes.bool.isRequired,
     tooltip: PropTypes.string,
     label: PropTypes.string.isRequired
-  }
+  };
 
-  static contextType = ToastsContext
+  static contextType = ToastsContext;
 
   componentDidUpdate(prevProps) {
     if (
       this.props.syncStatus !== prevProps.syncStatus &&
       this.props.syncStatus === 'failed'
     ) {
-      this.context.toast('error', 'Could not refresh')
+      this.context.toast('error', 'Could not refresh');
     }
   }
 
@@ -80,8 +80,8 @@ class ScanIndicator extends React.Component {
         )}
         <Label>{this.props.label}</Label>
       </Container>
-    )
+    );
   }
 }
 
-export default withScanIndicatorState(ScanIndicator)
+export default withScanIndicatorState(ScanIndicator);

@@ -1,10 +1,10 @@
-'use strict'
+'use strict';
 
-const MetronomeContracts = require('metronome-contracts')
-const contracts = MetronomeContracts['mordor']
+const LumerinContracts = require('metronome-contracts');
+const contracts = LumerinContracts.mordor;
 
-const indexerUrl = process.env.MORDOR_INDEXER_URL || 'http://localhost:3015'
-const wsApiUrl = process.env.MORDOR_NODE_URL || 'ws://localhost:8556'
+const indexerUrl = process.env.MORDOR_INDEXER_URL || 'http://localhost:3015';
+const wsApiUrl = process.env.MORDOR_NODE_URL || 'ws://localhost:8556';
 
 module.exports = {
   displayName: 'Mordor',

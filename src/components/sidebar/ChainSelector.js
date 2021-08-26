@@ -1,12 +1,12 @@
-import styled, { createGlobalStyle, css } from 'styled-components'
-import withChainSelectorState from 'metronome-wallet-ui-logic/src/hocs/withChainSelectorState'
-import * as ReachUI from '@reach/menu-button'
-import PropTypes from 'prop-types'
-import React from 'react'
+import styled, { createGlobalStyle, css } from 'styled-components';
+import withChainSelectorState from 'lumerin-wallet-ui-logic/src/hocs/withChainSelectorState';
+import * as ReachUI from '@reach/menu-button';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { DisplayValue, Flex } from '../common'
-import CaretIcon from '../icons/CaretIcon'
-import CoinIcon from '../icons/CoinIcon'
+import { DisplayValue, Flex } from '../common';
+import CaretIcon from '../icons/CaretIcon';
+import CoinIcon from '../icons/CoinIcon';
 
 const wideOrHover = styles => ({ parent }) =>
   css`
@@ -16,7 +16,7 @@ const wideOrHover = styles => ({ parent }) =>
     @media (min-width: 800px) {
       ${styles};
     }
-  `
+  `;
 
 const GlobalStyles = createGlobalStyle`
   [data-reach-menu] {
@@ -25,7 +25,7 @@ const GlobalStyles = createGlobalStyle`
     z-index: 4;
     width: 168px;
   }
-`
+`;
 
 const Title = styled.div`
   color: ${({ theme }) => theme.colors.light};
@@ -35,7 +35,7 @@ const Title = styled.div`
   opacity: 0.5;
   margin-bottom: 0.8rem;
   margin-left: 0.6rem;
-`
+`;
 
 const MenuButton = styled(ReachUI.MenuButton)`
   background-color: ${({ theme }) => theme.colors.lightShade};
@@ -67,7 +67,7 @@ const MenuButton = styled(ReachUI.MenuButton)`
     justify-content: center;
     padding: 1.6rem 1.2rem;
   `};
-`
+`;
 
 const MenuList = styled(ReachUI.MenuList)`
   box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.4);
@@ -78,7 +78,7 @@ const MenuList = styled(ReachUI.MenuList)`
   overflow: hidden;
   border-radius: 1.2rem;
   transform: translateY(-56px);
-`
+`;
 
 const MenuItem = styled(ReachUI.MenuItem)`
   background-color: ${({ theme }) => theme.colors.lightShade};
@@ -97,7 +97,7 @@ const MenuItem = styled(ReachUI.MenuItem)`
   @media (min-width: 800px) {
     justify-content: center;
   }
-`
+`;
 
 const Icon = styled(CoinIcon)`
   opacity: 0.5;
@@ -115,7 +115,7 @@ const Icon = styled(CoinIcon)`
   ${wideOrHover`
     width: 2.4rem;
   `};
-`
+`;
 
 const ItemBody = styled(Flex.Item)`
   overflow: hidden;
@@ -134,7 +134,7 @@ const ItemBody = styled(Flex.Item)`
     margin-left: 0.8rem;
     margin-right: 0.4rem;
   `};
-`
+`;
 
 const ChainName = styled.div`
   color: ${({ theme }) => theme.colors.light};
@@ -146,7 +146,7 @@ const ChainName = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-`
+`;
 
 const Balance = styled.div`
   color: ${({ theme }) => theme.colors.primary};
@@ -158,7 +158,7 @@ const Balance = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-`
+`;
 
 const Caret = styled(CaretIcon)`
   transform: scaleY(${({ caret }) => (caret === 'up' ? -1 : 1)});
@@ -170,7 +170,7 @@ const Caret = styled(CaretIcon)`
   ${MenuButton}:hover & {
     opacity: ${({ caret }) => (caret === 'none' ? 0 : 1)};
   }
-`
+`;
 
 class ChainSelector extends React.Component {
   static propTypes = {
@@ -186,12 +186,12 @@ class ChainSelector extends React.Component {
     ).isRequired,
     handleMouseEnter: PropTypes.func,
     handleMouseLeave: PropTypes.func
-  }
+  };
 
   render() {
     const activeItem = this.props.chains.find(
       ({ id }) => id === this.props.activeChain
-    )
+    );
 
     return (
       <React.Fragment>
@@ -224,7 +224,7 @@ class ChainSelector extends React.Component {
         </ReachUI.Menu>
         <GlobalStyles />
       </React.Fragment>
-    )
+    );
   }
 }
 
@@ -243,7 +243,7 @@ const Item = ({ displayName, balance, id, caret, parent }) => (
       <Caret caret={caret} />
     </Flex.Item>
   </React.Fragment>
-)
+);
 
 Item.propTypes = {
   displayName: PropTypes.string.isRequired,
@@ -251,6 +251,6 @@ Item.propTypes = {
   parent: PropTypes.object,
   caret: PropTypes.oneOf(['up', 'down', 'none']).isRequired,
   id: PropTypes.string.isRequired
-}
+};
 
-export default withChainSelectorState(ChainSelector)
+export default withChainSelectorState(ChainSelector);

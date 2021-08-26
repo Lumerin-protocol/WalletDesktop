@@ -1,16 +1,16 @@
-import TermsAndConditions from 'metronome-wallet-ui-logic/src/components/TermsAndConditions'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import TermsAndConditions from 'lumerin-wallet-ui-logic/src/components/TermsAndConditions';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { AltLayout, Btn, Sp } from '../common'
-import Message from './Message'
+import { AltLayout, Btn, Sp } from '../common';
+import Message from './Message';
 
 const DisclaimerWarning = styled.div`
   text-align: center;
   font-size: 16px;
   margin-top: 16px;
-`
+`;
 
 const DisclaimerMessge = styled.div`
   width: 288px;
@@ -21,7 +21,7 @@ const DisclaimerMessge = styled.div`
   font-size: 12px;
   padding: 10px 16px 0 16px;
   margin: 16px 0;
-`
+`;
 
 export default class TermsStep extends React.Component {
   static propTypes = {
@@ -30,11 +30,11 @@ export default class TermsStep extends React.Component {
     licenseCheckbox: PropTypes.bool.isRequired,
     termsCheckbox: PropTypes.bool.isRequired,
     onInputChange: PropTypes.func.isRequired
-  }
+  };
 
   onCheckboxToggle = e => {
-    this.props.onInputChange({ id: e.target.id, value: e.target.checked })
-  }
+    this.props.onInputChange({ id: e.target.id, value: e.target.checked });
+  };
 
   render() {
     return (
@@ -84,6 +84,6 @@ export default class TermsStep extends React.Component {
           </Btn>
         </Sp>
       </AltLayout>
-    )
+    );
   }
 }

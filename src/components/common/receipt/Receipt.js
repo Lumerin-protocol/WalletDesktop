@@ -1,23 +1,23 @@
-import { toChecksumAddress } from 'web3-utils'
-import PropTypes from 'prop-types'
-import TimeAgo from 'metronome-wallet-ui-logic/src/components/TimeAgo'
-import styled from 'styled-components'
-import React from 'react'
+import { toChecksumAddress } from 'web3-utils';
+import PropTypes from 'prop-types';
+import TimeAgo from 'lumerin-wallet-ui-logic/src/components/TimeAgo';
+import styled from 'styled-components';
+import React from 'react';
 
-import { BaseBtn, Btn } from '../Btn'
-import DisplayValue from '../DisplayValue'
-import AmountRow from './AmountRow'
-import TypeRow from './TypeRow'
+import { BaseBtn, Btn } from '../Btn';
+import DisplayValue from '../DisplayValue';
+import AmountRow from './AmountRow';
+import TypeRow from './TypeRow';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.medium};
-`
+`;
 
 const Scroller = styled.div`
   box-shadow: 0 -1.6rem 1.6rem -1.6rem ${p => p.theme.colors.darkShade} inset;
   overflow-y: auto;
   max-height: 60vh;
-`
+`;
 
 const Row = styled.div`
   padding: 1.6rem 0;
@@ -27,7 +27,7 @@ const Row = styled.div`
   align-items: center;
   border-top: ${p =>
     p.first ? 'none' : `1px solid ${p.theme.colors.lightShade}`};
-`
+`;
 
 const Label = styled.div`
   line-height: 1.4rem;
@@ -37,7 +37,7 @@ const Label = styled.div`
   color: ${p => p.theme.colors.copy};
   margin-right: 1.6rem;
   white-space: nowrap;
-`
+`;
 
 const Value = styled.div`
   color: ${p => p.theme.colors.copy};
@@ -48,19 +48,19 @@ const Value = styled.div`
   &[data-rh] {
     border-bottom: 1px dotted ${p => p.theme.colors.darkShade};
   }
-`
+`;
 
 const Address = styled(Value)`
   word-wrap: break-word;
   word-break: break-word;
   font-size: 1.2rem;
-`
+`;
 
 const Hash = styled(Value)`
   word-wrap: break-word;
   word-break: break-word;
   font-size: 1.2rem;
-`
+`;
 
 const ExplorerBtn = styled(Btn)`
   line-height: 1.5rem;
@@ -68,7 +68,7 @@ const ExplorerBtn = styled(Btn)`
   font-size: 1.4rem;
   letter-spacing: 1.4px;
   border-radius: 0;
-`
+`;
 
 const InspectBtn = styled(BaseBtn)`
   letter-spacing: 1.4px;
@@ -79,7 +79,7 @@ const InspectBtn = styled(BaseBtn)`
   padding: 0 1rem;
   margin: -1rem 0 1rem;
   text-transform: uppercase;
-`
+`;
 
 export default class Receipt extends React.Component {
   static propTypes = {
@@ -94,11 +94,11 @@ export default class Receipt extends React.Component {
     isPending: PropTypes.bool.isRequired,
     tx: PropTypes.object.isRequired,
     hash: PropTypes.string.isRequired
-  }
+  };
 
   // eslint-disable-next-line complexity
   render() {
-    const { isPending, coinSymbol, tx } = this.props
+    const { isPending, coinSymbol, tx } = this.props;
 
     return (
       <Container data-testid="receipt-modal">
@@ -230,6 +230,6 @@ export default class Receipt extends React.Component {
           VIEW IN EXPLORER
         </ExplorerBtn>
       </Container>
-    )
+    );
   }
 }

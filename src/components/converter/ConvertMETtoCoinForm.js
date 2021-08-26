@@ -1,10 +1,10 @@
-import withConvertMETtoCoinState from 'metronome-wallet-ui-logic/src/hocs/withConvertMETtoCoinState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withConvertMETtoCoinState from 'lumerin-wallet-ui-logic/src/hocs/withConvertMETtoCoinState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import ConverterEstimates from './ConverterEstimates'
-import MinReturnCheckbox from './MinReturnCheckbox'
+import ConverterEstimates from './ConverterEstimates';
+import MinReturnCheckbox from './MinReturnCheckbox';
 import {
   ConfirmationWizard,
   DisplayValue,
@@ -14,7 +14,7 @@ import {
   Flex,
   Btn,
   Sp
-} from '../common'
+} from '../common';
 
 const ConfirmationContainer = styled.div`
   font-size: 1.3rem;
@@ -24,14 +24,14 @@ const ConfirmationContainer = styled.div`
   & > div {
     color: ${p => p.theme.colors.primary};
   }
-`
+`;
 
 const Footer = styled.div`
   background-image: linear-gradient(to bottom, #272727, #323232);
   padding: 3.2rem 2.4rem;
   flex-grow: 1;
   height: 100%;
-`
+`;
 
 class ConvertMETtoCoinForm extends React.Component {
   static propTypes = {
@@ -56,10 +56,10 @@ class ConvertMETtoCoinForm extends React.Component {
     }).isRequired,
     tabs: PropTypes.node.isRequired,
     rate: PropTypes.string
-  }
+  };
 
   renderConfirmation = () => {
-    const { metAmount, estimate, rate } = this.props
+    const { metAmount, estimate, rate } = this.props;
     return (
       <ConfirmationContainer data-testid="confirmation">
         You will convert{' '}
@@ -73,8 +73,8 @@ class ConvertMETtoCoinForm extends React.Component {
         />
         .
       </ConfirmationContainer>
-    )
-  }
+    );
+  };
 
   renderForm = goToReview => (
     <Flex.Column grow="1">
@@ -137,7 +137,7 @@ class ConvertMETtoCoinForm extends React.Component {
         </Btn>
       </Footer>
     </Flex.Column>
-  )
+  );
 
   render() {
     return (
@@ -150,8 +150,8 @@ class ConvertMETtoCoinForm extends React.Component {
         editLabel="Edit this conversion"
         validate={this.props.validate}
       />
-    )
+    );
   }
 }
 
-export default withConvertMETtoCoinState(ConvertMETtoCoinForm)
+export default withConvertMETtoCoinState(ConvertMETtoCoinForm);

@@ -1,16 +1,16 @@
-import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized'
-import withTxListState from 'metronome-wallet-ui-logic/src/hocs/withTxListState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
+import withTxListState from 'lumerin-wallet-ui-logic/src/hocs/withTxListState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import ScanningTxPlaceholder from './ScanningTxPlaceholder'
-import NoTxPlaceholder from './NoTxPlaceholder'
-import { ItemFilter } from '../../common'
-import ReceiptModal from '../ReceiptModal'
-import LogoIcon from '../../icons/LogoIcon'
-import Header from './Header'
-import TxRow from './row/Row'
+import ScanningTxPlaceholder from './ScanningTxPlaceholder';
+import NoTxPlaceholder from './NoTxPlaceholder';
+import { ItemFilter } from '../../common';
+import ReceiptModal from '../ReceiptModal';
+import LogoIcon from '../../icons/LogoIcon';
+import Header from './Header';
+import TxRow from './row/Row';
 
 const Container = styled.div`
   margin-top: 2.4rem;
@@ -18,25 +18,25 @@ const Container = styled.div`
   @media (min-width: 960px) {
     margin-top: 4.8rem;
   }
-`
+`;
 
 const ListContainer = styled.div`
   border-radius: 2px;
   background-color: #ffffff;
   box-shadow: 0 4px 8px 0 ${p => p.theme.colors.darkShade};
-`
+`;
 
 const TxRowContainer = styled.div`
   &:hover {
     background-color: rgba(126, 97, 248, 0.1);
   }
-`
+`;
 
 const FooterLogo = styled.div`
   padding: 4.8rem 0;
   width: 3.2rem;
   margin: 0 auto;
-`
+`;
 
 class TxList extends React.Component {
   static propTypes = {
@@ -50,36 +50,36 @@ class TxList extends React.Component {
         hash: PropTypes.string.isRequired
       })
     ).isRequired
-  }
+  };
 
   state = {
     displayAttestations: false,
     activeModal: null,
     selectedTx: null,
     isReady: false
-  }
+  };
 
   componentDidMount() {
     // We need to grab the scrolling div (in <Router/>) to sync with react-virtualized scroll
-    const element = document.querySelector('[data-scrollelement]')
+    const element = document.querySelector('[data-scrollelement]');
     if (!element && process.env.NODE_ENV !== 'test') {
       throw new Error(
         "react-virtualized in transactions list requires the scrolling parent to have a 'data-scrollelement' attribute."
-      )
+      );
     }
     // For tests, where this component is rendered in isolation, we default to window
-    this.scrollElement = element || window
-    this.setState({ isReady: true })
+    this.scrollElement = element || window;
+    this.setState({ isReady: true });
   }
 
   onTxClicked = ({ currentTarget }) => {
     this.setState({
       activeModal: 'receipt',
       selectedTx: currentTarget.dataset.hash
-    })
-  }
+    });
+  };
 
-  onCloseModal = () => this.setState({ activeModal: null })
+  onCloseModal = () => this.setState({ activeModal: null });
 
   rowRenderer = items => ({ key, style, index }) => (
     <TxRowContainer style={style} key={`${key}-${items[index].hash}`}>
@@ -90,23 +90,23 @@ class TxList extends React.Component {
         tx={items[index]}
       />
     </TxRowContainer>
-  )
+  );
 
   filterExtractValue = ({ txType }) =>
     ['import-requested', 'imported', 'exported', 'attestation'].includes(txType)
       ? 'ported'
-      : txType
+      : txType;
 
   handleClick = e => {
-    if (!window.isDev || !e.shiftKey || !e.altKey) return
+    if (!window.isDev || !e.shiftKey || !e.altKey) return;
     this.setState(state => ({
       ...state,
       displayAttestations: !state.displayAttestations
-    }))
-  }
+    }));
+  };
 
   render() {
-    if (!this.state.isReady) return null
+    if (!this.state.isReady) return null;
     return (
       <Container data-testid="tx-list">
         <ItemFilter
@@ -140,7 +140,7 @@ class TxList extends React.Component {
                   scrollElement={this.scrollElement}
                 >
                   {({ height, isScrolling, onChildScroll, scrollTop }) => {
-                    if (!height) return null
+                    if (!height) return null;
                     return (
                       // AutoSizer is required to make virtualized rows have responsive width
                       <AutoSizer disableHeight>
@@ -158,7 +158,7 @@ class TxList extends React.Component {
                           />
                         )}
                       </AutoSizer>
-                    )
+                    );
                   }}
                 </WindowScroller>
                 <FooterLogo>
@@ -174,8 +174,8 @@ class TxList extends React.Component {
           hash={this.state.selectedTx}
         />
       </Container>
-    )
+    );
   }
 }
 
-export default withTxListState(TxList)
+export default withTxListState(TxList);

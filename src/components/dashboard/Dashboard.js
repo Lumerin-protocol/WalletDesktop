@@ -1,14 +1,14 @@
-import withDashboardState from 'metronome-wallet-ui-logic/src/hocs/withDashboardState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withDashboardState from 'lumerin-wallet-ui-logic/src/hocs/withDashboardState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import DashboardHeader from './DashboardHeader'
-import ReceiveDrawer from './ReceiveDrawer'
-import BalanceBlock from './BalanceBlock'
-import SendDrawer from './SendDrawer'
-import { Btn } from '../common'
-import TxList from './tx-list/TxList'
+import DashboardHeader from './DashboardHeader';
+import ReceiveDrawer from './ReceiveDrawer';
+import BalanceBlock from './BalanceBlock';
+import SendDrawer from './SendDrawer';
+import { Btn } from '../common';
+import TxList from './tx-list/TxList';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.primary};
@@ -19,7 +19,7 @@ const Container = styled.div`
   @media (min-width: 800px) {
     padding: 0 4.8rem 4.8rem;
   }
-`
+`;
 
 const FixedContainer = styled.div`
   background-color: ${p => p.theme.colors.primary};
@@ -30,7 +30,7 @@ const FixedContainer = styled.div`
   right: 0;
   left: 0;
   top: 0;
-`
+`;
 
 const Hero = styled.div`
   margin-top: 2.4rem;
@@ -38,7 +38,7 @@ const Hero = styled.div`
     margin-top: 4.8rem;
     display: flex;
   }
-`
+`;
 
 const Left = styled.div`
   display: flex;
@@ -51,7 +51,7 @@ const Left = styled.div`
   @media (min-width: 1040px) {
     padding: 0 2.4rem;
   }
-`
+`;
 
 const Right = styled.div`
   display: flex;
@@ -64,7 +64,7 @@ const Right = styled.div`
     margin-left: 1.6rem;
     flex-direction: column;
   }
-`
+`;
 
 const ReceiveBtn = styled(Btn)`
   margin-left: 3.2rem;
@@ -73,7 +73,7 @@ const ReceiveBtn = styled(Btn)`
     margin-left: 0;
     margin-top: 1.6rem;
   }
-`
+`;
 
 class Dashboard extends React.Component {
   static propTypes = {
@@ -84,15 +84,15 @@ class Dashboard extends React.Component {
     sendDisabled: PropTypes.bool.isRequired,
     syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
     address: PropTypes.string.isRequired
-  }
+  };
 
   state = {
     activeModal: null
-  }
+  };
 
-  onOpenModal = e => this.setState({ activeModal: e.target.dataset.modal })
+  onOpenModal = e => this.setState({ activeModal: e.target.dataset.modal });
 
-  onCloseModal = () => this.setState({ activeModal: null })
+  onCloseModal = () => this.setState({ activeModal: null });
 
   render() {
     return (
@@ -146,8 +146,8 @@ class Dashboard extends React.Component {
           isOpen={this.state.activeModal === 'send'}
         />
       </Container>
-    )
+    );
   }
 }
 
-export default withDashboardState(Dashboard)
+export default withDashboardState(Dashboard);

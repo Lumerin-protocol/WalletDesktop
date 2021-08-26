@@ -1,10 +1,10 @@
-import withPortFormState from 'metronome-wallet-ui-logic/src/hocs/withPortFormState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withPortFormState from 'lumerin-wallet-ui-logic/src/hocs/withPortFormState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import ReadOnlyField from './ReadOnlyField'
-import FeeEstimates from './FeeEstimates'
+import ReadOnlyField from './ReadOnlyField';
+import FeeEstimates from './FeeEstimates';
 import {
   ConfirmationWizard,
   DisplayValue,
@@ -15,7 +15,7 @@ import {
   Drawer,
   Btn,
   Sp
-} from '../common'
+} from '../common';
 
 const ConfirmationContainer = styled.div`
   font-size: 1.3rem;
@@ -27,12 +27,12 @@ const ConfirmationContainer = styled.div`
   & > div {
     color: ${p => p.theme.colors.primary};
   }
-`
+`;
 
 const BtnContainer = styled.div`
   background-image: linear-gradient(to bottom, #272727, #323232);
   padding: 3.2rem 2.4rem;
-`
+`;
 
 class PortDrawer extends React.Component {
   static propTypes = {
@@ -60,18 +60,18 @@ class PortDrawer extends React.Component {
     errors: PropTypes.object.isRequired,
     isOpen: PropTypes.bool.isRequired,
     fee: PropTypes.string
-  }
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.isOpen && prevProps.isOpen !== this.props.isOpen) {
-      this.props.resetForm()
+      this.props.resetForm();
     }
   }
 
   renderConfirmation = () => {
     const destination = this.props.availableDestinations.find(
       ({ value }) => value === this.props.destination
-    )
+    );
     return (
       <ConfirmationContainer data-testid="confirmation">
         <React.Fragment>
@@ -83,8 +83,8 @@ class PortDrawer extends React.Component {
           <DisplayValue inline value={this.props.fee} post=" MET" />.
         </React.Fragment>
       </ConfirmationContainer>
-    )
-  }
+    );
+  };
 
   renderForm = goToReview => (
     <form onSubmit={goToReview} noValidate data-testid="port-form">
@@ -147,7 +147,7 @@ class PortDrawer extends React.Component {
         </Btn>
       </BtnContainer>
     </form>
-  )
+  );
 
   render() {
     return (
@@ -155,7 +155,7 @@ class PortDrawer extends React.Component {
         onRequestClose={this.props.onRequestClose}
         data-testid="port-drawer"
         isOpen={this.props.isOpen}
-        title="Port Metronome"
+        title="Port Lumerin"
       >
         <ConfirmationWizard
           renderConfirmation={this.renderConfirmation}
@@ -166,8 +166,8 @@ class PortDrawer extends React.Component {
           validate={this.props.validate}
         />
       </Drawer>
-    )
+    );
   }
 }
 
-export default withPortFormState(PortDrawer)
+export default withPortFormState(PortDrawer);

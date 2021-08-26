@@ -1,20 +1,20 @@
-import FilteredMessage from 'metronome-wallet-ui-logic/src/components/FilteredMessage'
-import * as validators from 'metronome-wallet-ui-logic/src/validators'
-import { withClient } from 'metronome-wallet-ui-logic/src/hocs/clientContext'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import theme from 'metronome-wallet-ui-logic/src/theme'
-import React from 'react'
+import FilteredMessage from 'lumerin-wallet-ui-logic/src/components/FilteredMessage';
+import * as validators from 'lumerin-wallet-ui-logic/src/validators';
+import { withClient } from 'lumerin-wallet-ui-logic/src/hocs/clientContext';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import theme from 'lumerin-wallet-ui-logic/src/theme';
+import React from 'react';
 
-import { LoadingBar, TextInput, BaseBtn, Flex, Btn, Sp } from './index'
-import CheckIcon from '../icons/CheckIcon'
-import CloseIcon from '../icons/CloseIcon'
+import { LoadingBar, TextInput, BaseBtn, Flex, Btn, Sp } from './index';
+import CheckIcon from '../icons/CheckIcon';
+import CloseIcon from '../icons/CloseIcon';
 
 const ConfirmationTitle = styled.h1`
   font-size: 1.6rem;
   font-weight: 600;
   margin: 0 0 1.6rem 0;
-`
+`;
 
 const Title = styled.div`
   line-height: 3rem;
@@ -22,7 +22,7 @@ const Title = styled.div`
   font-weight: bold;
   text-align: center;
   text-shadow: 0 1px 1px ${p => p.theme.colors.darkShade};
-`
+`;
 
 const Message = styled.div`
   line-height: 1.6rem;
@@ -31,7 +31,7 @@ const Message = styled.div`
   letter-spacing: 0.5px;
   text-align: center;
   text-shadow: 0 1px 1px ${p => p.theme.colors.darkShade};
-`
+`;
 
 const EditBtn = styled(BaseBtn)`
   margin: 1.6rem auto;
@@ -42,18 +42,18 @@ const EditBtn = styled(BaseBtn)`
   letter-spacing: 1.4px;
   line-height: 1.8rem;
   text-transform: uppercase;
-`
+`;
 
 const TryAgainBtn = styled(BaseBtn)`
   color: ${p => p.theme.colors.primary};
   margin-top: 1.6rem;
   font-size: 1.4rem;
-`
+`;
 
 const BtnContainer = styled.div`
   background-image: linear-gradient(to bottom, #272727, #323232);
   padding: 3.2rem 2.4rem;
-`
+`;
 
 const Disclaimer = styled.div`
   font-size: 1.1rem;
@@ -62,7 +62,7 @@ const Disclaimer = styled.div`
   letter-spacing: 0.5px;
   opacity: 0.7;
   text-align: justify;
-`
+`;
 
 const Focusable = styled.div.attrs({
   tabIndex: '-1'
@@ -70,7 +70,7 @@ const Focusable = styled.div.attrs({
   &:focus {
     outline: none;
   }
-`
+`;
 
 class ConfirmationWizard extends React.Component {
   static propTypes = {
@@ -91,7 +91,7 @@ class ConfirmationWizard extends React.Component {
     client: PropTypes.shape({
       validatePassword: PropTypes.func.isRequired
     }).isRequired
-  }
+  };
 
   static defaultProps = {
     confirmationTitle: 'Transaction Preview',
@@ -102,75 +102,75 @@ class ConfirmationWizard extends React.Component {
     pendingTitle: 'Sending...',
     editLabel: 'Edit this transaction',
     styles: {}
-  }
+  };
 
   static initialState = {
     password: null,
     errors: {},
     status: 'init', // init | confirm | pending | success | failure
     error: null
-  }
+  };
 
-  state = ConfirmationWizard.initialState
+  state = ConfirmationWizard.initialState;
 
-  focusable = null
+  focusable = null;
 
   goToReview = ev => {
-    ev.preventDefault()
-    const isValid = !this.props.validate || this.props.validate()
-    if (isValid) this.setState({ status: 'confirm', password: null })
-  }
+    ev.preventDefault();
+    const isValid = !this.props.validate || this.props.validate();
+    if (isValid) this.setState({ status: 'confirm', password: null });
+  };
 
-  onCancelClick = () => this.setState(ConfirmationWizard.initialState)
+  onCancelClick = () => this.setState(ConfirmationWizard.initialState);
 
   onConfirmClick = ev => {
-    ev.preventDefault()
+    ev.preventDefault();
     this.validateConfirmation()
       .then(isValid => {
         if (isValid) {
-          this.submitWizard()
-          return
+          this.submitWizard();
+          return;
         }
         this.setState({
           errors: { password: 'Invalid password' }
-        })
+        });
       })
       .catch(err =>
         this.setState({
           errors: { password: err.message }
         })
-      )
-  }
+      );
+  };
 
   validateConfirmation = () => {
-    const errors = validators.validatePassword(this.state.password)
-    const hasErrors = Object.keys(errors).length > 0
+    const errors = validators.validatePassword(this.state.password);
+    const hasErrors = Object.keys(errors).length > 0;
     if (hasErrors) {
-      this.setState({ errors })
-      return Promise.reject(new Error(errors.password))
+      this.setState({ errors });
+      return Promise.reject(new Error(errors.password));
     }
-    return this.props.client.validatePassword(this.state.password)
-  }
+    return this.props.client.validatePassword(this.state.password);
+  };
 
   submitWizard = () => {
     this.setState({ status: 'pending' }, () =>
       this.focusable ? this.focusable.focus() : null
-    )
+    );
     this.props
       .onWizardSubmit(this.state.password)
       .then(result => this.setState({ status: 'success' }))
       .then(() => (this.focusable ? this.focusable.focus() : null))
-      .catch(err => this.setState({ status: 'failure', error: err.message }))
-  }
+      .catch(err => this.setState({ status: 'failure', error: err.message }));
+  };
 
   onPasswordChange = ({ value }) =>
-    this.setState({ password: value, errors: {} })
+    this.setState({ password: value, errors: {} });
 
   // eslint-disable-next-line complexity
   render() {
-    const { password, errors, status, error } = this.state
+    const { password, errors, status, error } = this.state;
 
-    if (status === 'init') return this.props.renderForm(this.goToReview)
+    if (status === 'init') return this.props.renderForm(this.goToReview);
     if (status === 'confirm') {
       return (
         <form onSubmit={this.onConfirmClick} data-testid="confirm-form">
@@ -208,7 +208,7 @@ class ConfirmationWizard extends React.Component {
             <Disclaimer>{this.props.disclaimer}</Disclaimer>
           )}
         </form>
-      )
+      );
     }
     if (status === 'success') {
       return (
@@ -225,7 +225,7 @@ class ConfirmationWizard extends React.Component {
             </Flex.Column>
           </Focusable>
         </Sp>
-      )
+      );
     }
     if (status === 'failure') {
       return (
@@ -245,7 +245,7 @@ class ConfirmationWizard extends React.Component {
             </TryAgainBtn>
           </Flex.Column>
         </Sp>
-      )
+      );
     }
     return (
       <Sp my={19} mx={12} data-testid="waiting">
@@ -263,8 +263,8 @@ class ConfirmationWizard extends React.Component {
           </Flex.Column>
         </Focusable>
       </Sp>
-    )
+    );
   }
 }
 
-export default withClient(ConfirmationWizard)
+export default withClient(ConfirmationWizard);

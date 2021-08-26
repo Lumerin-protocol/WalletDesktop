@@ -1,12 +1,12 @@
-import withChangePasswordState from 'metronome-wallet-ui-logic/src/hocs/withChangePasswordState'
-import { withRouter } from 'react-router-dom'
-import * as utils from 'metronome-wallet-ui-logic/src/utils'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withChangePasswordState from 'lumerin-wallet-ui-logic/src/hocs/withChangePasswordState';
+import { withRouter } from 'react-router-dom';
+import * as utils from 'lumerin-wallet-ui-logic/src/utils';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { EntropyMeter, DarkLayout, TextInput, Btn, Sp } from './common'
-import { ToastsContext } from '../components/toasts'
+import { EntropyMeter, DarkLayout, TextInput, Btn, Sp } from './common';
+import { ToastsContext } from '../components/toasts';
 
 const Container = styled.div`
   padding: 3.2rem 2.4rem;
@@ -15,26 +15,26 @@ const Container = styled.div`
   @media (min-width: 800px) {
     padding: 3.2rem 4.8rem;
   }
-`
+`;
 
 const PasswordMessage = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   line-height: 1.5;
   margin-top: 3.2rem;
-`
+`;
 
 const Green = styled.div`
   display: inline-block;
   color: ${p => p.theme.colors.success};
-`
+`;
 
 const ErrorMessage = styled.div`
   color: ${p => p.theme.colors.danger}
   font-size: 1.2rem;
   margin-top: 2.4rem;
   margin-bottom: -3.9rem;
-`
+`;
 
 class ChangePassword extends React.Component {
   static propTypes = {
@@ -54,19 +54,19 @@ class ChangePassword extends React.Component {
       'oldPassword'
     ),
     error: PropTypes.string
-  }
+  };
 
-  static contextType = ToastsContext
+  static contextType = ToastsContext;
 
   handleSubmitAndNavigate = e => {
-    e.preventDefault()
-    this.props.onSubmit()
-  }
+    e.preventDefault();
+    this.props.onSubmit();
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.status === 'success' && prevProps.status !== 'success') {
-      this.props.history.push('/tools')
-      this.context.toast('success', 'Password successfully changed')
+      this.props.history.push('/tools');
+      this.context.toast('success', 'Password successfully changed');
     }
   }
 
@@ -136,8 +136,8 @@ class ChangePassword extends React.Component {
           </form>
         </Container>
       </DarkLayout>
-    )
+    );
   }
 }
 
-export default withRouter(withChangePasswordState(ChangePassword))
+export default withRouter(withChangePasswordState(ChangePassword));

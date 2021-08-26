@@ -1,11 +1,11 @@
-import { withClient } from 'metronome-wallet-ui-logic/src/hocs/clientContext'
-import { NavLink } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import { withClient } from 'lumerin-wallet-ui-logic/src/hocs/clientContext';
+import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { BaseBtn } from '../common'
-import CogIcon from '../icons/CogIcon'
+import { BaseBtn } from '../common';
+import CogIcon from '../icons/CogIcon';
 
 const IconContainer = styled.div`
   padding: 1.2rem 0 1.6rem 1.9rem;
@@ -30,7 +30,7 @@ const IconContainer = styled.div`
     opacity: 1;
     transform: rotate(-90deg);
   }
-`
+`;
 
 const Button = styled(NavLink)`
   cursor: pointer;
@@ -112,7 +112,7 @@ const Button = styled(NavLink)`
       opacity: 1;
     }
   }
-`
+`;
 
 class SecondaryNav extends React.Component {
   static propTypes = {
@@ -120,7 +120,7 @@ class SecondaryNav extends React.Component {
     client: PropTypes.shape({
       onHelpLinkClick: PropTypes.func.isRequired
     }).isRequired
-  }
+  };
 
   render() {
     return (
@@ -146,8 +146,8 @@ class SecondaryNav extends React.Component {
           <CogIcon size="2.4rem" />
         </IconContainer>
       </React.Fragment>
-    )
+    );
   }
 }
 
-export default withClient(SecondaryNav)
+export default withClient(SecondaryNav);

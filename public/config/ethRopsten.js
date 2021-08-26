@@ -1,10 +1,10 @@
 'use strict'
 
-const MetronomeContracts = require('metronome-contracts')
-const contracts = MetronomeContracts['ropsten']
+const LumerinContracts = require('metronome-contracts');
+const contracts = LumerinContracts.ropsten;
 
-const indexerUrl = process.env.ROPSTEN_INDEXER_URL || 'http://localhost:3005'
-const wsApiUrl = process.env.ROPSTEN_NODE_URL || 'ws://localhost:8546'
+const indexerUrl = process.env.ROPSTEN_INDEXER_URL || 'http://localhost:3005';
+const wsApiUrl = process.env.ROPSTEN_NODE_URL || 'ws://localhost:8546';
 
 module.exports = {
   displayName: 'Ropsten',

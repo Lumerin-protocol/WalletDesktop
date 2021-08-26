@@ -1,7 +1,7 @@
-import withBuyMETFormState from 'metronome-wallet-ui-logic/src/hocs/withBuyMETFormState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withBuyMETFormState from 'lumerin-wallet-ui-logic/src/hocs/withBuyMETFormState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
 import {
   ConfirmationWizard,
@@ -11,7 +11,7 @@ import {
   Drawer,
   Btn,
   Sp
-} from '../common'
+} from '../common';
 
 const ConfirmationContainer = styled.div`
   font-size: 1.3rem;
@@ -21,17 +21,17 @@ const ConfirmationContainer = styled.div`
   & > div {
     color: ${p => p.theme.colors.primary};
   }
-`
+`;
 
 const ExpectedMsg = styled.div`
   font-size: 1.3rem;
   color: ${p => (p.error ? p.theme.colors.danger : 'inherit')};
-`
+`;
 
 const BtnContainer = styled.div`
   background-image: linear-gradient(to bottom, #272727, #323232);
   padding: 3.2rem 2.4rem;
-`
+`;
 
 class BuyMETDrawer extends React.Component {
   static propTypes = {
@@ -57,11 +57,11 @@ class BuyMETDrawer extends React.Component {
     excedes: PropTypes.bool,
     errors: PropTypes.object.isRequired,
     isOpen: PropTypes.bool.isRequired
-  }
+  };
 
   componentDidUpdate(prevProps) {
     if (prevProps.isOpen && prevProps.isOpen !== this.props.isOpen) {
-      this.props.resetForm()
+      this.props.resetForm();
     }
   }
 
@@ -96,7 +96,7 @@ class BuyMETDrawer extends React.Component {
         </React.Fragment>
       )}
     </ConfirmationContainer>
-  )
+  );
 
   renderForm = goToReview => (
     <form onSubmit={goToReview} noValidate data-testid="buy-form">
@@ -163,7 +163,7 @@ class BuyMETDrawer extends React.Component {
         </Btn>
       </BtnContainer>
     </form>
-  )
+  );
 
   render() {
     return (
@@ -171,7 +171,7 @@ class BuyMETDrawer extends React.Component {
         onRequestClose={this.props.onRequestClose}
         data-testid="buy-drawer"
         isOpen={this.props.isOpen}
-        title="Buy Metronome"
+        title="Buy Lumerin"
       >
         <ConfirmationWizard
           renderConfirmation={this.renderConfirmation}
@@ -182,8 +182,8 @@ class BuyMETDrawer extends React.Component {
           validate={this.props.validate}
         />
       </Drawer>
-    )
+    );
   }
 }
 
-export default withBuyMETFormState(BuyMETDrawer)
+export default withBuyMETFormState(BuyMETDrawer);

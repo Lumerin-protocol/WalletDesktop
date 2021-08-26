@@ -1,10 +1,10 @@
-import withRetryImportFormState from 'metronome-wallet-ui-logic/src/hocs/withRetryImportFormState'
-import PropTypes from 'prop-types'
-import TimeAgo from 'metronome-wallet-ui-logic/src/components/TimeAgo'
-import styled from 'styled-components'
-import React from 'react'
+import withRetryImportFormState from 'lumerin-wallet-ui-logic/src/hocs/withRetryImportFormState';
+import PropTypes from 'prop-types';
+import TimeAgo from 'lumerin-wallet-ui-logic/src/components/TimeAgo';
+import styled from 'styled-components';
+import React from 'react';
 
-import ReadOnlyField from './ReadOnlyField'
+import ReadOnlyField from './ReadOnlyField';
 import {
   ConfirmationWizard,
   DisplayValue,
@@ -13,7 +13,7 @@ import {
   Flex,
   Btn,
   Sp
-} from '../common'
+} from '../common';
 
 const Message = styled.div`
   font-size: 1.3rem;
@@ -23,7 +23,7 @@ const Message = styled.div`
   & span {
     color: ${p => p.theme.colors.light};
   }
-`
+`;
 
 const ConfirmationContainer = styled.div`
   font-size: 1.3rem;
@@ -35,12 +35,12 @@ const ConfirmationContainer = styled.div`
   & > div {
     color: ${p => p.theme.colors.primary};
   }
-`
+`;
 
 const BtnContainer = styled.div`
   background-image: linear-gradient(to bottom, #272727, #323232);
   padding: 3.2rem 2.4rem;
-`
+`;
 
 class RetryImportDrawer extends React.Component {
   static propTypes = {
@@ -61,11 +61,11 @@ class RetryImportDrawer extends React.Component {
     isOpen: PropTypes.bool.isRequired,
     value: PropTypes.string.isRequired,
     fee: PropTypes.string.isRequired
-  }
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.isOpen && prevProps.isOpen !== this.props.isOpen) {
-      this.props.resetForm()
+      this.props.resetForm();
     }
   }
 
@@ -78,7 +78,7 @@ class RetryImportDrawer extends React.Component {
         <span>{this.props.destinationDisplayName}</span> blockchain.
       </React.Fragment>
     </ConfirmationContainer>
-  )
+  );
 
   renderForm = goToReview => (
     <form onSubmit={goToReview} noValidate data-testid="port-form">
@@ -131,7 +131,7 @@ class RetryImportDrawer extends React.Component {
         </Btn>
       </BtnContainer>
     </form>
-  )
+  );
 
   render() {
     return (
@@ -139,7 +139,7 @@ class RetryImportDrawer extends React.Component {
         onRequestClose={this.props.onRequestClose}
         data-testid="retry-import-drawer"
         isOpen={this.props.isOpen}
-        title="Retry Metronome Import"
+        title="Retry Lumerin Import"
       >
         <ConfirmationWizard
           renderConfirmation={this.renderConfirmation}
@@ -150,8 +150,8 @@ class RetryImportDrawer extends React.Component {
           validate={this.props.validate}
         />
       </Drawer>
-    )
+    );
   }
 }
 
-export default withRetryImportFormState(RetryImportDrawer)
+export default withRetryImportFormState(RetryImportDrawer);

@@ -1,11 +1,11 @@
-import withConverterState from 'metronome-wallet-ui-logic/src/hocs/withConverterState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withConverterState from 'lumerin-wallet-ui-logic/src/hocs/withConverterState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { DarkLayout, LastUpdated, LoadingBar, Text, Btn, Sp } from '../common'
-import ConvertDrawer from './ConvertDrawer'
-import Stats from './Stats'
+import { DarkLayout, LastUpdated, LoadingBar, Text, Btn, Sp } from '../common';
+import ConvertDrawer from './ConvertDrawer';
+import Stats from './Stats';
 
 const Container = styled.div`
   padding: 3.2rem 2.4rem;
@@ -18,7 +18,7 @@ const Container = styled.div`
     align-items: flex-start;
     flex-direction: row;
   }
-`
+`;
 
 const ConvertBtn = styled(Btn)`
   margin-top: 3.2rem;
@@ -28,20 +28,20 @@ const ConvertBtn = styled(Btn)`
     min-width: 200px;
     margin-top: 0;
   }
-`
+`;
 
 const LoadingContainer = styled.div`
   text-align: center;
   max-width: 400px;
   margin: 0 auto;
-`
+`;
 
 const LastUpdatedContainer = styled.div`
   padding: 0 2.4rem 3.2rem;
   @media (min-width: 1180px) {
     padding: 0 4.8rem 3.2rem;
   }
-`
+`;
 
 class Converter extends React.Component {
   static propTypes = {
@@ -51,15 +51,15 @@ class Converter extends React.Component {
     converterStatus: PropTypes.object,
     lastUpdated: PropTypes.number,
     coinSymbol: PropTypes.string.isRequired
-  }
+  };
 
   state = {
     activeModal: null
-  }
+  };
 
-  onOpenModal = e => this.setState({ activeModal: e.target.dataset.modal })
+  onOpenModal = e => this.setState({ activeModal: e.target.dataset.modal });
 
-  onCloseModal = () => this.setState({ activeModal: null })
+  onCloseModal = () => this.setState({ activeModal: null });
 
   render() {
     return (
@@ -106,8 +106,8 @@ class Converter extends React.Component {
           <LastUpdated timestamp={this.props.lastUpdated} />
         </LastUpdatedContainer>
       </DarkLayout>
-    )
+    );
   }
 }
 
-export default withConverterState(Converter)
+export default withConverterState(Converter);

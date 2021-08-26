@@ -6,7 +6,7 @@ const isDev = require('electron-is-dev')
 const stringify = require('json-stringify-safe')
 const unhandled = require('electron-unhandled')
 
-logger.transports.file.appName = 'metronome-desktop-wallet'
+logger.transports.file.appName = 'lumerin-wallet-desktop';
 
 function getColorLevel (level = '') {
   const colors = {

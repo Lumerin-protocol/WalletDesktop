@@ -1,14 +1,14 @@
-import withLoadingState from 'metronome-wallet-ui-logic/src/hocs/withLoadingState'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import withLoadingState from 'lumerin-wallet-ui-logic/src/hocs/withLoadingState';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { LoadingBar, AltLayout, Flex } from './common'
-import ChecklistItem from './common/ChecklistItem'
+import { LoadingBar, AltLayout, Flex } from './common';
+import ChecklistItem from './common/ChecklistItem';
 
 const ChecklistContainer = styled(Flex.Row)`
   margin: 4rem -20rem;
-`
+`;
 
 const Title = styled.div`
   display: ${p => (p.isMultiChain ? 'block' : 'none')};
@@ -18,11 +18,11 @@ const Title = styled.div`
   opacity: 0.5;
   margin-bottom: 0.8rem;
   padding-left: 8rem;
-`
+`;
 
 const Checklist = styled.div`
   padding-left: ${p => (p.isMultiChain ? '4.8rem' : 0)};
-`
+`;
 
 class Loading extends React.Component {
   static propTypes = {
@@ -37,7 +37,7 @@ class Loading extends React.Component {
         symbol: PropTypes.string.isRequired
       })
     ).isRequired
-  }
+  };
 
   render() {
     return (
@@ -71,8 +71,8 @@ class Loading extends React.Component {
           ))}
         </ChecklistContainer>
       </AltLayout>
-    )
+    );
   }
 }
 
-export default withLoadingState(Loading)
+export default withLoadingState(Loading);

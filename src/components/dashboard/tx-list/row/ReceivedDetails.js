@@ -1,7 +1,7 @@
-import FilteredMessage from 'metronome-wallet-ui-logic/src/components/FilteredMessage'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import FilteredMessage from 'lumerin-wallet-ui-logic/src/components/FilteredMessage';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
 const Address = styled.span`
   letter-spacing: normal;
@@ -13,13 +13,13 @@ const Address = styled.span`
   @media (min-width: 800px) {
     font-size: 1.3rem;
   }
-`
+`;
 
 export default class ReceivedDetails extends React.Component {
   static propTypes = {
     isPending: PropTypes.bool.isRequired,
     from: PropTypes.string.isRequired
-  }
+  };
 
   render() {
     return (
@@ -29,6 +29,6 @@ export default class ReceivedDetails extends React.Component {
           <FilteredMessage>{this.props.from}</FilteredMessage>
         </Address>
       </div>
-    )
+    );
   }
 }

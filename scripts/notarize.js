@@ -10,7 +10,7 @@ exports.default = function notarizing(context) {
   const appName = context.packager.appInfo.productFilename;
 
   return notarize({
-    appBundleId: 'sh.autonomous.metronome.wallet.desktop',
+    appBundleId: 'sh.autonomous.lumerin.wallet.desktop',
     appPath: `${appOutDir}/${appName}.app`,
     appleId: process.env.APPLE_ID,
     appleIdPassword: process.env.APPLE_ID_PASSWORD,

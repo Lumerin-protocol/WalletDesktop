@@ -1,10 +1,10 @@
-import * as utils from 'metronome-wallet-ui-logic/src/utils'
-import PropTypes from 'prop-types'
-import React from 'react'
+import * as utils from 'lumerin-wallet-ui-logic/src/utils';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { TextInput, AltLayout, Btn, Sp } from '../common'
-import SecondaryBtn from './SecondaryBtn'
-import Message from './Message'
+import { TextInput, AltLayout, Btn, Sp } from '../common';
+import SecondaryBtn from './SecondaryBtn';
+import Message from './Message';
 
 export default class VerifyMnemonicStep extends React.Component {
   static propTypes = {
@@ -15,7 +15,7 @@ export default class VerifyMnemonicStep extends React.Component {
     shouldSubmit: PropTypes.func.isRequired,
     getTooltip: PropTypes.func.isRequired,
     errors: utils.errorPropTypes('mnemonicAgain')
-  }
+  };
 
   render() {
     return (
@@ -63,6 +63,6 @@ export default class VerifyMnemonicStep extends React.Component {
           </Sp>
         </form>
       </AltLayout>
-    )
+    );
   }
 }

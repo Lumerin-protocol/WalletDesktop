@@ -8,8 +8,8 @@ DEBFILE=\"$npm_package_name\"_v$npm_package_version.deb
 mkdir -p dist/app
 
 dpkg -x dist/"$DEBFILE" ./dist/app/
-rm -r dist/app/opt/Metronome\ Wallet/resources/app.asar.unpacked/node_modules/7zip-bin-linux/arm*
-perl -pi -e 's/opt/usr\\/lib/' dist/app/usr/share/applications/metronome-desktop-wallet.desktop
+rm -r dist/app/opt/Lumerin\ Wallet/resources/app.asar.unpacked/node_modules/7zip-bin-linux/arm*
+perl -pi -e 's/opt/usr\\/lib/' dist/app/usr/share/applications/lumerin-wallet-desktop.desktop
 tar -czf ppa/"$TARFILE" -C dist/ app/
 rm -r dist/app
 
