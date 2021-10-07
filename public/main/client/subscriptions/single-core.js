@@ -8,20 +8,19 @@ const withCore = core => fn => data => fn(data, core)
 const listeners = {
   'get-convert-coin-gas-limit': handlers.getConvertCoinGasLimit,
   'get-convert-coin-estimate': handlers.getConvertCoinEstimate,
-  'get-convert-met-gas-limit': handlers.getConvertMetGasLimit,
+  'get-convert-lmr-gas-limit': handlers.getConvertLmrGasLimit,
   'refresh-all-transactions': handlers.refreshAllTransactions,
-  'get-convert-met-estimate': handlers.getConvertMetEstimate,
-  'get-auction-gas-limit': handlers.getAuctionGasLimit,
+  'get-convert-lmr-estimate': handlers.getConvertLmrEstimate,
   'get-tokens-gas-limit': handlers.getTokensGasLimit,
   'refresh-transaction': handlers.refreshTransaction,
-  'get-export-gas-limit': handlers.getExportMetGas,
+  'get-export-gas-limit': handlers.getExportLmrGas,
   'buy-lumerin': handlers.buyLumerin,
   'get-gas-limit': handlers.getGasLimit,
   'get-gas-price': handlers.getGasPrice,
   'convert-coin': handlers.convertCoin,
-  'convert-met': handlers.convertMet,
+  'convert-lmr': handlers.convertLmr,
   'send-coin': handlers.sendCoin,
-  'send-met': handlers.sendMet
+  'send-lmr': handlers.sendLmr
 }
 
 const coreListeners = {}

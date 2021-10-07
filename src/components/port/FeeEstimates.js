@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { DisplayValue } from '../common'
+import { DisplayValue } from '../common';
 
 const Container = styled.div`
   margin-top: 1.6rem;
@@ -11,17 +11,17 @@ const Container = styled.div`
   font-weight: 600;
   text-shadow: 0 1px 1px ${p => p.theme.colors.darkShade};
   opacity: ${p => (p.weak ? 0.5 : 1)};
-`
+`;
 
 const ErrorMsg = styled.div`
   color: ${p => p.theme.colors.danger};
-`
+`;
 
 export default class FeeEstimates extends React.Component {
   static propTypes = {
     feeError: PropTypes.string,
     fee: PropTypes.string
-  }
+  };
 
   render() {
     return (
@@ -33,7 +33,7 @@ export default class FeeEstimates extends React.Component {
               inline
               value={this.props.fee}
               color="primary"
-              post=" MET"
+              post=" LMR"
             />
           </Container>
         )}
@@ -45,6 +45,6 @@ export default class FeeEstimates extends React.Component {
           </Container>
         )}
       </React.Fragment>
-    )
+    );
   }
 }

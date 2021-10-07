@@ -26,7 +26,7 @@ export default class ReceivedDetails extends React.Component {
       <div>
         {this.props.isPending ? 'Pending' : 'Received'} from{' '}
         <Address>
-          <FilteredMessage>{this.props.from}</FilteredMessage>
+          <FilteredMessage>Received from {this.props.from}</FilteredMessage>
         </Address>
       </div>
     );

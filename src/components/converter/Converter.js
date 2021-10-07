@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
 
-import { DarkLayout, LastUpdated, LoadingBar, Text, Btn, Sp } from '../common';
+import { LightLayout, LastUpdated, LoadingBar, Text, Btn, Sp } from '../common';
 import ConvertDrawer from './ConvertDrawer';
-import Stats from './Stats';
 
 const Container = styled.div`
   padding: 3.2rem 2.4rem;
@@ -63,18 +62,12 @@ class Converter extends React.Component {
 
   render() {
     return (
-      <DarkLayout
+      <LightLayout
         data-testid="converter-container"
         title="Autonomous Converter"
       >
         {this.props.converterStatus ? (
           <Container>
-            <Stats
-              converterPriceUSD={this.props.converterPriceUSD}
-              converterStatus={this.props.converterStatus}
-              coinSymbol={this.props.coinSymbol}
-            />
-
             <ConvertBtn
               data-rh-negative
               data-disabled={this.props.convertDisabled}
@@ -105,7 +98,7 @@ class Converter extends React.Component {
         <LastUpdatedContainer>
           <LastUpdated timestamp={this.props.lastUpdated} />
         </LastUpdatedContainer>
-      </DarkLayout>
+      </LightLayout>
     );
   }
 }

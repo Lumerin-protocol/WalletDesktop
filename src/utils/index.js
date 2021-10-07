@@ -1,58 +1,58 @@
-import BigNumber from 'bignumber.js'
-import PropTypes from 'prop-types'
-import { fromWei, toBN, toWei, toHex } from 'web3-utils'
+import BigNumber from 'bignumber.js';
+import PropTypes from 'prop-types';
+import { fromWei, toBN, toWei, toHex } from 'web3-utils';
 
 export const errorPropTypes = (...fields) => {
   const shape = fields.reduce((acc, fieldName) => {
     acc[fieldName] = PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.string),
       PropTypes.string
-    ])
-    return acc
-  }, {})
-  return PropTypes.shape(shape).isRequired
-}
+    ]);
+    return acc;
+  }, {});
+  return PropTypes.shape(shape).isRequired;
+};
 
 export const statusPropTypes = PropTypes.oneOf([
   'init',
   'pending',
   'success',
   'failure'
-]).isRequired
+]).isRequired;
 
 export function isWeiable(amount, unit = 'ether') {
-  let isValid
+  let isValid;
   try {
-    toWei(amount.replace(',', '.'), unit)
-    isValid = true
+    toWei(amount.replace(',', '.'), unit);
+    isValid = true;
   } catch (e) {
-    isValid = false
+    isValid = false;
   }
-  return isValid
+  return isValid;
 }
 
 export function isHexable(amount) {
   try {
-    toHex(amount)
-    return true
+    toHex(amount);
+    return true;
   } catch (e) {
-    return false
+    return false;
   }
 }
 
 export function isGreaterThanZero(amount) {
-  const weiAmount = new BigNumber(toWei(amount.replace(',', '.')))
-  return weiAmount.gt(new BigNumber(0))
+  const weiAmount = new BigNumber(toWei(amount.replace(',', '.')));
+  return weiAmount.gt(new BigNumber(0));
 }
 
 export function getWeiUSDvalue(amount, rate) {
-  const amountBN = toBN(amount)
-  const rateBN = toBN(toWei(typeof rate === 'string' ? rate : rate.toString()))
-  return amountBN.mul(rateBN).div(toBN(toWei('1')))
+  const amountBN = toBN(amount);
+  const rateBN = toBN(toWei(typeof rate === 'string' ? rate : rate.toString()));
+  return amountBN.mul(rateBN).div(toBN(toWei('1')));
 }
 
 export function getUSDequivalent(amount, rate) {
-  const weiUSDvalue = getWeiUSDvalue(amount, rate)
+  const weiUSDvalue = getWeiUSDvalue(amount, rate);
 
   return weiUSDvalue.isZero()
     ? '$0.00 (USD)'
@@ -60,17 +60,17 @@ export function getUSDequivalent(amount, rate) {
     ? '< $0.01 (USD)'
     : `$${new BigNumber(fromWei(weiUSDvalue.toString()))
         .dp(2)
-        .toString(10)} (USD)`
+        .toString(10)} (USD)`;
 }
 
 export function toUSD(amount, rate, errorValue, smallValue) {
-  let isValidAmount
-  let weiUSDvalue
+  let isValidAmount;
+  let weiUSDvalue;
   try {
-    weiUSDvalue = getWeiUSDvalue(toWei(amount.replace(',', '.')), rate)
-    isValidAmount = weiUSDvalue.gte(toBN('0'))
+    weiUSDvalue = getWeiUSDvalue(toWei(amount.replace(',', '.')), rate);
+    isValidAmount = weiUSDvalue.gte(toBN('0'));
   } catch (e) {
-    isValidAmount = false
+    isValidAmount = false;
   }
 
   const expectedUSDamount = isValidAmount
@@ -79,19 +79,19 @@ export function toUSD(amount, rate, errorValue, smallValue) {
       : weiUSDvalue.lt(toBN(toWei('0.01')))
       ? smallValue
       : new BigNumber(fromWei(weiUSDvalue.toString())).dp(2).toString(10)
-    : errorValue
+    : errorValue;
 
-  return expectedUSDamount
+  return expectedUSDamount;
 }
 
 export function toCoin(amount, rate, errorValue = 'Invalid amount') {
-  let isValidAmount
-  let weiAmount
+  let isValidAmount;
+  let weiAmount;
   try {
-    weiAmount = new BigNumber(toWei(amount.replace(',', '.')))
-    isValidAmount = weiAmount.gte(new BigNumber(0))
+    weiAmount = new BigNumber(toWei(amount.replace(',', '.')));
+    isValidAmount = weiAmount.gte(new BigNumber(0));
   } catch (e) {
-    isValidAmount = false
+    isValidAmount = false;
   }
 
   const expectedCoinamount = isValidAmount
@@ -99,33 +99,33 @@ export function toCoin(amount, rate, errorValue = 'Invalid amount') {
         .dividedBy(new BigNumber(toWei(String(rate))))
         .decimalPlaces(18)
         .toString(10)
-    : errorValue
+    : errorValue;
 
-  return expectedCoinamount
+  return expectedCoinamount;
 }
 
-export function toMET(amount, rate, errorValue = 'Invalid amount', remaining) {
-  let isValidAmount
-  let weiAmount
+export function toLMR(amount, rate, errorValue = 'Invalid amount', remaining) {
+  let isValidAmount;
+  let weiAmount;
   try {
-    weiAmount = new BigNumber(toWei(amount.replace(',', '.')))
-    isValidAmount = weiAmount.gte(new BigNumber(0))
+    weiAmount = new BigNumber(toWei(amount.replace(',', '.')));
+    isValidAmount = weiAmount.gte(new BigNumber(0));
   } catch (e) {
-    isValidAmount = false
+    isValidAmount = false;
   }
 
-  const expectedMETamount = isValidAmount
+  const expectedLMRamount = isValidAmount
     ? toWei(
         weiAmount
           .dividedBy(new BigNumber(rate))
           .decimalPlaces(18)
           .toString(10)
       )
-    : errorValue
+    : errorValue;
 
   const excedes = isValidAmount
-    ? toBN(expectedMETamount).gte(toBN(remaining))
-    : null
+    ? toBN(expectedLMRamount).gte(toBN(remaining))
+    : null;
 
   const usedCoinAmount =
     isValidAmount && excedes
@@ -134,7 +134,7 @@ export function toMET(amount, rate, errorValue = 'Invalid amount', remaining) {
           .dividedBy(new BigNumber(toWei('1')))
           .integerValue()
           .toString(10)
-      : null
+      : null;
 
   const excessCoinAmount =
     isValidAmount && excedes
@@ -142,29 +142,29 @@ export function toMET(amount, rate, errorValue = 'Invalid amount', remaining) {
           .minus(usedCoinAmount)
           .integerValue()
           .toString(10)
-      : null
+      : null;
 
-  return { expectedMETamount, excedes, usedCoinAmount, excessCoinAmount }
+  return { expectedLMRamount, excedes, usedCoinAmount, excessCoinAmount };
 }
 
 export function weiToGwei(amount) {
-  return fromWei(amount, 'gwei')
+  return fromWei(amount, 'gwei');
 }
 
 export function gweiToWei(amount) {
-  return toWei(amount, 'gwei')
+  return toWei(amount, 'gwei');
 }
 
 export function smartRound(weiAmount) {
-  const n = Number.parseFloat(fromWei(weiAmount), 10)
-  let decimals = -Math.log10(n) + 10
+  const n = Number.parseFloat(fromWei(weiAmount), 10);
+  let decimals = -Math.log10(n) + 10;
   if (decimals < 2) {
-    decimals = 2
+    decimals = 2;
   } else if (decimals >= 18) {
-    decimals = 18
+    decimals = 18;
   }
   // round extra decimals and remove trailing zeroes
-  return new BigNumber(n.toFixed(Math.ceil(decimals))).toString(10)
+  return new BigNumber(n.toFixed(Math.ceil(decimals))).toString(10);
 }
 
 /**
@@ -177,13 +177,19 @@ export function sanitizeMnemonic(str) {
   return str
     .replace(/\s+/gi, ' ')
     .trim()
-    .toLowerCase()
+    .toLowerCase();
 }
 
-export function getConversionRate(metAmount, coinAmount) {
-  const compareAgainst = fromWei(metAmount)
+export function getConversionRate(lmrAmount, coinAmount) {
+  const compareAgainst = fromWei(lmrAmount);
   return new BigNumber(coinAmount)
     .dividedBy(new BigNumber(compareAgainst))
     .integerValue()
-    .toString(10)
+    .toString(10);
+}
+export function abbreviateAddress(addr, length = 6) {
+  return `${addr.slice(0, length)}...${addr.slice(
+    addr.length - length,
+    addr.length
+  )}`;
 }

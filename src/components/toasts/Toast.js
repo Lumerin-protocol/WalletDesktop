@@ -1,15 +1,16 @@
-import { TransitionMotion, spring } from 'react-motion'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import { TransitionMotion, spring } from 'react-motion';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import CloseIcon from '../icons/CloseIcon'
+import CloseIcon from '../icons/CloseIcon';
 
 const Separator = styled.div`
   padding: 8px 0;
-`
+`;
 
 const Container = styled.div`
+  z-index: 20;
   border-top-style: solid;
   border-top-width: 4px;
   border-top-color: ${({ type, theme }) =>
@@ -24,7 +25,7 @@ const Container = styled.div`
   position: relative;
   box-shadow: 0 4px 12px -1px rgba(0, 0, 0, 0.35),
     0 1px 3px 2px rgba(0, 0, 0, 0.1);
-`
+`;
 
 const DismissBtn = styled.button`
   position: absolute;
@@ -45,20 +46,20 @@ const DismissBtn = styled.button`
   &:hover {
     opacity: 1;
   }
-`
+`;
 
 const Scroller = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
   max-height: 410px;
-`
+`;
 
 const Message = styled.div`
   color: white;
   font-size: 13px;
   line-height: 1.25;
   padding: 12px 32px 12px 0;
-`
+`;
 
 const ShowMoreBtn = styled.button`
   background: none;
@@ -78,7 +79,7 @@ const ShowMoreBtn = styled.button`
   &:hover {
     opacity: 1;
   }
-`
+`;
 
 export default class Toast extends React.Component {
   static propTypes = {
@@ -87,31 +88,31 @@ export default class Toast extends React.Component {
     onDismiss: PropTypes.func.isRequired,
     messages: PropTypes.arrayOf(PropTypes.string).isRequired,
     type: PropTypes.oneOf(['info', 'success', 'error']).isRequired
-  }
+  };
 
-  state = { showMore: false }
+  state = { showMore: false };
 
-  handleDismiss = () => this.props.onDismiss(this.props.type)
+  handleDismiss = () => this.props.onDismiss(this.props.type);
 
   handleShowMore = () => {
-    this.setState({ showMore: true })
+    this.setState({ showMore: true });
     // cancel autoClose
-    this.props.onShowMore(this.props.type)
-  }
+    this.props.onShowMore(this.props.type);
+  };
 
-  willEnter = () => ({ maxHeight: 0, opacity: 0 })
+  willEnter = () => ({ maxHeight: 0, opacity: 0 });
 
   render() {
-    const { type, messages } = this.props
-    const { showMore } = this.state
+    const { type, messages } = this.props;
+    const { showMore } = this.state;
 
     const shownMessages = showMore
       ? messages
-      : messages.slice(0, this.props.messagesPerToast)
+      : messages.slice(0, this.props.messagesPerToast);
 
     const hiddenMessages = showMore
       ? []
-      : messages.slice(this.props.messagesPerToast)
+      : messages.slice(this.props.messagesPerToast);
 
     return (
       <Separator>
@@ -159,6 +160,6 @@ export default class Toast extends React.Component {
           </TransitionMotion>
         </Container>
       </Separator>
-    )
+    );
   }
 }

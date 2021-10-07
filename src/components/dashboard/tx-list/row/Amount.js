@@ -1,10 +1,8 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { DisplayValue } from '../../../common'
-import ConvertedAmount from './ConvertedAmount'
-import AuctionAmount from './AuctionAmount'
+import { DisplayValue } from '../../../common';
 
 const Container = styled.div`
   line-height: 2.5rem;
@@ -31,29 +29,29 @@ const Container = styled.div`
   @media (min-width: 1440px) {
     font-size: 2.2rem;
   }
-`
+`;
 
 export default class Amount extends React.Component {
-  static propTypes = {
-    isAttestationValid: PropTypes.bool,
-    isProcessing: PropTypes.bool,
-    isPending: PropTypes.bool,
-    isFailed: PropTypes.bool.isRequired,
-    symbol: PropTypes.string,
-    txType: PropTypes.oneOf([
-      'import-requested',
-      'attestation',
-      'converted',
-      'imported',
-      'exported',
-      'received',
-      'auction',
-      'unknown',
-      'sent'
-    ]).isRequired,
-    value: PropTypes.string.isRequired,
-    coinSymbol: PropTypes.string
-  }
+  // static propTypes = {
+  //   isAttestationValid: PropTypes.bool,
+  //   isProcessing: PropTypes.bool,
+  //   isPending: PropTypes.bool,
+  //   isFailed: PropTypes.bool.isRequired,
+  //   symbol: PropTypes.string,
+  //   txType: PropTypes.oneOf([
+  //     'import-requested',
+  //     'attestation',
+  //     'converted',
+  //     'imported',
+  //     'exported',
+  //     'received',
+  //     'auction',
+  //     'unknown',
+  //     'sent'
+  //   ]).isRequired,
+  //   value: PropTypes.string.isRequired,
+  //   coinSymbol: PropTypes.string
+  // }
 
   // eslint-disable-next-line complexity
   render() {
@@ -62,17 +60,7 @@ export default class Amount extends React.Component {
         isPending={this.props.isPending}
         isFailed={this.props.isFailed}
       >
-        {this.props.txType === 'auction' ? (
-          <AuctionAmount {...this.props} />
-        ) : this.props.txType === 'converted' ? (
-          <ConvertedAmount {...this.props} />
-        ) : this.props.txType === 'attestation' &&
-          this.props.isAttestationValid ? (
-          <div>Attestation Valid</div>
-        ) : this.props.txType === 'attestation' &&
-          !this.props.isAttestationValid ? (
-          <div>Attestation Invalid</div>
-        ) : this.props.txType === 'unknown' || this.props.isProcessing ? (
+        {this.props.txType === 'unknown' || this.props.isProcessing ? (
           <div>New transaction</div>
         ) : (
           <DisplayValue
@@ -81,7 +69,7 @@ export default class Amount extends React.Component {
               this.props.txType === 'import-requested' ||
               this.props.txType === 'imported' ||
               this.props.txType === 'exported'
-                ? ' MET'
+                ? ' LMR'
                 : ` ${
                     this.props.symbol === 'coin'
                       ? this.props.coinSymbol
@@ -91,6 +79,6 @@ export default class Amount extends React.Component {
           />
         )}
       </Container>
-    )
+    );
   }
 }

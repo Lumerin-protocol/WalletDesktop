@@ -38,7 +38,7 @@ export default class SentDetails extends React.Component {
           ? 'Allowance cancelled for '
           : 'Sent to '}
         <Address>
-          <FilteredMessage>{this.props.to}</FilteredMessage>
+          <FilteredMessage>Sent to {this.props.to}</FilteredMessage>
         </Address>
       </div>
     );

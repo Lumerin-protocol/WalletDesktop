@@ -41,6 +41,7 @@ const Title = styled.h1`
     p.variant === 'primary' ? p.theme.colors.light : p.theme.colors.copy};
   margin: 0;
   flex-grow: 1;
+  cursor: default;
 `;
 
 export const HeaderButton = styled.button`
@@ -64,15 +65,15 @@ export const HeaderButton = styled.button`
 `;
 
 export default class Modal extends React.Component {
-  static propTypes = {
-    onRequestClose: PropTypes.func.isRequired,
-    headerChildren: PropTypes.node,
-    children: PropTypes.node.isRequired,
-    variant: PropTypes.oneOf(['primary']),
-    isOpen: PropTypes.bool.isRequired,
-    title: PropTypes.string,
-    styleOverrides: PropTypes.object
-  };
+  // static propTypes = {
+  //   onRequestClose: PropTypes.func.isRequired,
+  //   headerChildren: PropTypes.node,
+  //   children: PropTypes.node.isRequired,
+  //   variant: PropTypes.oneOf(['primary']),
+  //   isOpen: PropTypes.bool.isRequired,
+  //   title: PropTypes.string,
+  //   styleOverrides: PropTypes.object
+  // };
 
   render() {
     const {

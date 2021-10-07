@@ -3,9 +3,9 @@ import { withRouter } from 'react-router-dom';
 import * as utils from 'lumerin-wallet-ui-logic/src/utils';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 
-import { EntropyMeter, DarkLayout, TextInput, Btn, Sp } from './common';
+import { EntropyMeter, LightLayout, TextInput, BaseBtn, Sp } from './common';
 import { ToastsContext } from '../components/toasts';
 
 const Container = styled.div`
@@ -36,108 +36,120 @@ const ErrorMessage = styled.div`
   margin-bottom: -3.9rem;
 `;
 
-class ChangePassword extends React.Component {
-  static propTypes = {
-    requiredPasswordEntropy: PropTypes.number.isRequired,
-    newPasswordAgain: PropTypes.string,
-    onInputChange: PropTypes.func.isRequired,
-    newPassword: PropTypes.string,
-    oldPassword: PropTypes.string,
-    onSubmit: PropTypes.func.isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired
-    }).isRequired,
-    status: PropTypes.oneOf(['init', 'pending', 'success', 'failure']),
-    errors: utils.errorPropTypes(
-      'newPasswordAgain',
-      'newPassword',
-      'oldPassword'
-    ),
-    error: PropTypes.string
-  };
+const StyledBtn = styled(BaseBtn)`
+  width: 40%;
+  height: 40px;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  padding: 0 .6rem;
+  background-color: ${p => p.theme.colors.primary}
+  color: ${p => p.theme.colors.light}
 
-  static contextType = ToastsContext;
+  @media (min-width: 1040px) {
+    width: 35%;
+    height: 40px;
+    margin-left: 0;
+    margin-top: 1.6rem;
+  }
+`;
 
-  handleSubmitAndNavigate = e => {
+function ChangePassword(props) {
+  // static propTypes = {
+  //   requiredPasswordEntropy: PropTypes.number.isRequired,
+  //   newPasswordAgain: PropTypes.string,
+  //   onInputChange: PropTypes.func.isRequired,
+  //   newPassword: PropTypes.string,
+  //   oldPassword: PropTypes.string,
+  //   onSubmit: PropTypes.func.isRequired,
+  //   history: PropTypes.shape({
+  //     push: PropTypes.func.isRequired
+  //   }).isRequired,
+  //   status: PropTypes.oneOf(['init', 'pending', 'success', 'failure']),
+  //   errors: utils.errorPropTypes(
+  //     'newPasswordAgain',
+  //     'newPassword',
+  //     'oldPassword'
+  //   ),
+  //   error: PropTypes.string
+  // };
+
+  const context = useContext(ToastsContext);
+
+  const handleSubmitAndNavigate = e => {
     e.preventDefault();
     this.props.onSubmit();
   };
 
-  componentDidUpdate(prevProps) {
-    if (this.props.status === 'success' && prevProps.status !== 'success') {
-      this.props.history.push('/tools');
-      this.context.toast('success', 'Password successfully changed');
+  useEffect(() => {
+    if (props.status === 'success') {
+      props.history.push('/tools');
+      context.toast('success', 'Password successfully changed');
     }
-  }
+  }, []);
 
-  render() {
-    return (
-      <DarkLayout
-        data-testid="change-password-container"
-        title="Change your password"
-      >
-        <Container>
-          <form
-            data-testid="change-password-form"
-            onSubmit={this.handleSubmitAndNavigate}
-          >
-            <Sp mt={2}>
-              <TextInput
-                data-testid="oldPassword-field"
-                autoFocus
-                onChange={this.props.onInputChange}
-                label="Current Password"
-                error={this.props.errors.oldPassword}
-                value={this.props.oldPassword || ''}
-                type="password"
-                id="oldPassword"
+  return (
+    <LightLayout
+      data-testid="change-password-container"
+      title="Change your password"
+    >
+      <Container>
+        <form
+          data-testid="change-password-form"
+          onSubmit={handleSubmitAndNavigate}
+        >
+          <Sp mt={2}>
+            <TextInput
+              data-testid="oldPassword-field"
+              autoFocus
+              onChange={props.onInputChange}
+              label="Current Password"
+              error={props.errors.oldPassword}
+              value={props.oldPassword || ''}
+              type="password"
+              id="oldPassword"
+            />
+          </Sp>
+          <PasswordMessage>
+            Enter a strong password until the meter turns <Green>green</Green>.
+          </PasswordMessage>
+          <Sp mt={2}>
+            <TextInput
+              data-testid="newPassword-field"
+              onChange={props.onInputChange}
+              label="New Password"
+              error={props.errors.newPassword}
+              value={props.newPassword || ''}
+              type="password"
+              id="newPassword"
+            />
+            {!props.errors.newPassword && (
+              <EntropyMeter
+                targetEntropy={props.requiredPasswordEntropy}
+                password={props.newPassword}
               />
-            </Sp>
-            <PasswordMessage>
-              Enter a strong password until the meter turns <Green>green</Green>
-              .
-            </PasswordMessage>
-            <Sp mt={2}>
-              <TextInput
-                data-testid="newPassword-field"
-                onChange={this.props.onInputChange}
-                label="New Password"
-                error={this.props.errors.newPassword}
-                value={this.props.newPassword || ''}
-                type="password"
-                id="newPassword"
-              />
-              {!this.props.errors.newPassword && (
-                <EntropyMeter
-                  targetEntropy={this.props.requiredPasswordEntropy}
-                  password={this.props.newPassword}
-                />
-              )}
-            </Sp>
-            <Sp mt={3}>
-              <TextInput
-                data-testid="newPassword-again-field"
-                onChange={this.props.onInputChange}
-                error={this.props.errors.newPasswordAgain}
-                label="Repeat New Password"
-                value={this.props.newPasswordAgain}
-                type="password"
-                id="newPasswordAgain"
-              />
-            </Sp>
-            {this.props.error && (
-              <ErrorMessage>{this.props.error}</ErrorMessage>
             )}
-            <Sp mt={8}>
-              <Btn submit disabled={this.props.status === 'pending'}>
-                Change Password
-              </Btn>
-            </Sp>
-          </form>
-        </Container>
-      </DarkLayout>
-    );
-  }
+          </Sp>
+          <Sp mt={3}>
+            <TextInput
+              data-testid="newPassword-again-field"
+              onChange={props.onInputChange}
+              error={props.errors.newPasswordAgain}
+              label="Repeat New Password"
+              value={props.newPasswordAgain}
+              type="password"
+              id="newPasswordAgain"
+            />
+          </Sp>
+          {props.error && <ErrorMessage>{props.error}</ErrorMessage>}
+          <Sp mt={8}>
+            <StyledBtn submit disabled={props.status === 'pending'}>
+              Change Password
+            </StyledBtn>
+          </Sp>
+        </form>
+      </Container>
+    </LightLayout>
+  );
 }
 
 export default withRouter(withChangePasswordState(ChangePassword));

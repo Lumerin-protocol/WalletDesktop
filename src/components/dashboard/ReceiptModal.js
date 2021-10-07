@@ -1,54 +1,49 @@
+import React, { useState, useEffect, useContext } from 'react';
 import withReceiptState from 'lumerin-wallet-ui-logic/src/hocs/withReceiptState';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 import Modal, { HeaderButton } from '../common/Modal';
 import { ToastsContext } from '../toasts';
 import Receipt from '../common/receipt/Receipt';
 
-class ReceiptModal extends React.Component {
-  static propTypes = {
-    onRefreshRequest: PropTypes.func.isRequired,
-    onRequestClose: PropTypes.func.isRequired,
-    refreshStatus: PropTypes.oneOf(['init', 'pending', 'success', 'failure'])
-      .isRequired,
-    isOpen: PropTypes.bool.isRequired,
-    hash: PropTypes.string
-  };
+function ReceiptModal(props) {
+  // static propTypes = {
+  //   onRefreshRequest: PropTypes.func.isRequired,
+  //   onRequestClose: PropTypes.func.isRequired,
+  //   refreshStatus: PropTypes.oneOf(['init', 'pending', 'success', 'failure'])
+  //     .isRequired,
+  //   isOpen: PropTypes.bool.isRequired,
+  //   hash: PropTypes.string
+  // };
 
-  static contextType = ToastsContext;
+  const context = useContext(ToastsContext);
 
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.refreshStatus !== prevProps.refreshStatus &&
-      this.props.refreshStatus === 'failure'
-    ) {
-      this.context.toast('error', 'Could not refresh');
+  useEffect(() => {
+    if (props.refreshStatus === 'failure') {
+      context.toast('error', 'Could not refresh');
     }
-  }
+  }, []);
 
-  render() {
-    if (!this.props.hash) return null;
+  if (!props.hash) return null;
 
-    return (
-      <Modal
-        shouldReturnFocusAfterClose={false}
-        onRequestClose={this.props.onRequestClose}
-        headerChildren={
-          <HeaderButton
-            disabled={this.props.refreshStatus === 'pending'}
-            onClick={this.props.onRefreshRequest}
-          >
-            {this.props.refreshStatus === 'pending' ? 'Syncing...' : 'Refresh'}
-          </HeaderButton>
-        }
-        isOpen={this.props.isOpen}
-        title="Receipt"
-      >
-        <Receipt {...this.props} />
-      </Modal>
-    );
-  }
+  return (
+    <Modal
+      shouldReturnFocusAfterClose={false}
+      onRequestClose={props.onRequestClose}
+      headerChildren={
+        <HeaderButton
+          disabled={props.refreshStatus === 'pending'}
+          onClick={props.onRefreshRequest}
+        >
+          {props.refreshStatus === 'pending' ? 'Syncing...' : 'Refresh'}
+        </HeaderButton>
+      }
+      isOpen={props.isOpen}
+      title="Receipt"
+    >
+      <Receipt {...props} />
+    </Modal>
+  );
 }
 
 export default withReceiptState(ReceiptModal);

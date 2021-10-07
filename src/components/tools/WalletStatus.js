@@ -9,6 +9,7 @@ import { Flex, Sp } from '../common';
 import LastUpdated, { Label } from '../common/LastUpdated';
 
 const Text = styled.div`
+  color: ${p => p.theme.colors.dark};
   font-size: 1.3rem;
   margin: 0.8rem 0;
   display: flex;

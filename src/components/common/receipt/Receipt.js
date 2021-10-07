@@ -133,7 +133,7 @@ export default class Receipt extends React.Component {
               <Row>
                 <Label>Fee</Label>
                 <Value>
-                  <DisplayValue value={tx.portFee} post=" MET" />
+                  <DisplayValue value={tx.portFee} post=" LMR" />
                 </Value>
               </Row>
             )}

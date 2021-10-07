@@ -1,13 +1,13 @@
-'use strict'
+'use strict';
 
 const enabledChains = (process.env.ENABLED_CHAINS || 'ethRopsten,etcMordor')
   .split(',')
-  .map(name => name.trim())
+  .map(name => name.trim());
 
 const chains = enabledChains.reduce(function (allChains, chainName) {
-  allChains[chainName] = require(`./${chainName}`)
-  return allChains
-}, {})
+  allChains[chainName] = require(`./${chainName}`);
+  return allChains;
+}, {});
 
 module.exports = {
   chains,
@@ -22,4 +22,4 @@ module.exports = {
   statePersistanceDebounce: 2000,
   trackingId: process.env.TRACKING_ID,
   web3Timeout: 120000
-}
+};

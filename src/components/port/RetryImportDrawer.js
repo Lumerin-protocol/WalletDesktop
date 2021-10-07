@@ -73,7 +73,7 @@ class RetryImportDrawer extends React.Component {
     <ConfirmationContainer data-testid="confirmation">
       <React.Fragment>
         You will request an import of{' '}
-        <DisplayValue inline value={this.props.value} post=" MET" /> from the{' '}
+        <DisplayValue inline value={this.props.value} post=" LMR" /> from the{' '}
         <span>{this.props.originDisplayName}</span> blockchain to the{' '}
         <span>{this.props.destinationDisplayName}</span> blockchain.
       </React.Fragment>
@@ -100,7 +100,7 @@ class RetryImportDrawer extends React.Component {
             <Flex.Item grow="1">
               <ReadOnlyField
                 value={<DisplayValue value={this.props.value} />}
-                label="Amount (MET)"
+                label="Amount (LMR)"
                 id="value"
               />
             </Flex.Item>
@@ -108,7 +108,7 @@ class RetryImportDrawer extends React.Component {
             <Flex.Item grow="1">
               <ReadOnlyField
                 value={<DisplayValue value={this.props.fee} />}
-                label="Fee (MET)"
+                label="Fee (LMR)"
                 id="fee"
               />
             </Flex.Item>
@@ -144,7 +144,7 @@ class RetryImportDrawer extends React.Component {
         <ConfirmationWizard
           renderConfirmation={this.renderConfirmation}
           onWizardSubmit={this.props.onSubmit}
-          pendingTitle="Importing MET..."
+          pendingTitle="Importing LMR..."
           renderForm={this.renderForm}
           editLabel="Edit this import"
           validate={this.props.validate}

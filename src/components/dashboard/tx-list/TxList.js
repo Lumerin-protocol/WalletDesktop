@@ -6,24 +6,30 @@ import React from 'react';
 
 import ScanningTxPlaceholder from './ScanningTxPlaceholder';
 import NoTxPlaceholder from './NoTxPlaceholder';
-import { ItemFilter } from '../../common';
+import { ItemFilter, Flex } from '../../common';
 import ReceiptModal from '../ReceiptModal';
-import LogoIcon from '../../icons/LogoIcon';
+import LumerinLightIcon from '../../icons/LumerinLightIcon';
 import Header from './Header';
 import TxRow from './row/Row';
+import { DummyTx } from '../../../dummy';
 
 const Container = styled.div`
   margin-top: 2.4rem;
+  padding: 1.8rem 0;
+  background-color: ${p => p.theme.colors.light};
 
   @media (min-width: 960px) {
-    margin-top: 4.8rem;
   }
 `;
 
+const Transactions = styled.div`
+  margin: 1.6rem 0 1.6rem;
+  border: 1px solid ${p => p.theme.colors.lightBG};
+  border-radius: 5px;
+`;
+
 const ListContainer = styled.div`
-  border-radius: 2px;
   background-color: #ffffff;
-  box-shadow: 0 4px 8px 0 ${p => p.theme.colors.darkShade};
 `;
 
 const TxRowContainer = styled.div`
@@ -38,19 +44,40 @@ const FooterLogo = styled.div`
   margin: 0 auto;
 `;
 
+const Title = styled.div`
+  font-size: 2.4rem;
+  line-height: 3rem;
+  color: ${p => p.theme.colors.darker}
+  white-space: nowrap;
+  margin: 0;
+  font-weight: 600;
+  color: ${p => p.theme.colors.dark}
+  margin-bottom: 4.8px;
+  margin-right: 2.4rem;
+  cursor: default;
+
+  @media (min-width: 1140px) {
+    margin-right: 0.8rem;
+  }
+
+  @media (min-width: 1200px) {
+    margin-right: 1.6rem;
+  }
+`;
+
 class TxList extends React.Component {
-  static propTypes = {
-    hasTransactions: PropTypes.bool.isRequired,
-    onWalletRefresh: PropTypes.func.isRequired,
-    isMultiChain: PropTypes.bool.isRequired,
-    syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
-    items: PropTypes.arrayOf(
-      PropTypes.shape({
-        txType: PropTypes.string.isRequired,
-        hash: PropTypes.string.isRequired
-      })
-    ).isRequired
-  };
+  // static propTypes = {
+  //   hasTransactions: PropTypes.bool.isRequired,
+  //   onWalletRefresh: PropTypes.func.isRequired,
+  //   isMultiChain: PropTypes.bool.isRequired,
+  //   syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
+  //   items: PropTypes.arrayOf(
+  //     PropTypes.shape({
+  //       txType: PropTypes.string.isRequired,
+  //       hash: PropTypes.string.isRequired
+  //     })
+  //   ).isRequired
+  // };
 
   state = {
     displayAttestations: false,
@@ -109,70 +136,72 @@ class TxList extends React.Component {
     if (!this.state.isReady) return null;
     return (
       <Container data-testid="tx-list">
-        <ItemFilter
-          extractValue={this.filterExtractValue}
-          items={this.props.items.filter(({ txType }) =>
-            this.state.displayAttestations ? true : txType !== 'attestation'
-          )}
-        >
-          {({ filteredItems, onFilterChange, activeFilter }) => (
-            <React.Fragment>
-              <Header
-                onWalletRefresh={this.props.onWalletRefresh}
-                hasTransactions={this.props.hasTransactions}
-                onFilterChange={onFilterChange}
-                isMultiChain={this.props.isMultiChain}
-                onTitleClick={this.handleClick}
-                activeFilter={activeFilter}
-                syncStatus={this.props.syncStatus}
-              />
+        <Flex.Row grow="1">
+          <Title onClick={this.handleClick}>Transactions</Title>
+        </Flex.Row>
+        <Transactions>
+          <ItemFilter
+            extractValue={this.filterExtractValue}
+            items={this.props.items.filter(({ txType }) =>
+              this.state.displayAttestations ? true : txType !== 'attestation'
+            )}
+          >
+            {({ filteredItems, onFilterChange, activeFilter }) => (
+              <React.Fragment>
+                <Header
+                  onWalletRefresh={this.props.onWalletRefresh}
+                  hasTransactions={this.props.hasTransactions}
+                  onFilterChange={onFilterChange}
+                  isMultiChain={this.props.isMultiChain}
+                  activeFilter={activeFilter}
+                  syncStatus={this.props.syncStatus}
+                />
 
-              <ListContainer>
-                {!this.props.hasTransactions &&
-                  (this.props.syncStatus === 'syncing' ? (
-                    <ScanningTxPlaceholder />
-                  ) : (
-                    <NoTxPlaceholder />
-                  ))}
-                <WindowScroller
-                  // WindowScroller is required to sync window scroll with virtualized list scroll.
-                  // scrollElement is required because in our layout we're scrolling a div, not window
-                  scrollElement={this.scrollElement}
-                >
-                  {({ height, isScrolling, onChildScroll, scrollTop }) => {
-                    if (!height) return null;
-                    return (
-                      // AutoSizer is required to make virtualized rows have responsive width
-                      <AutoSizer disableHeight>
-                        {({ width }) => (
-                          <RVList
-                            rowRenderer={this.rowRenderer(filteredItems)}
-                            isScrolling={isScrolling}
-                            autoHeight
-                            scrollTop={scrollTop}
-                            rowHeight={66}
-                            rowCount={filteredItems.length}
-                            onScroll={onChildScroll}
-                            height={height || 500} // defaults for tests
-                            width={width || 500} // defaults for tests
-                          />
-                        )}
-                      </AutoSizer>
-                    );
-                  }}
-                </WindowScroller>
-                <FooterLogo>
-                  <LogoIcon />
-                </FooterLogo>
-              </ListContainer>
-            </React.Fragment>
-          )}
-        </ItemFilter>
-        <ReceiptModal
-          onRequestClose={this.onCloseModal}
-          isOpen={this.state.activeModal === 'receipt'}
-          hash={this.state.selectedTx}
-        />
+                <ListContainer>
+                  {!this.props.hasTransactions &&
+                    (this.props.syncStatus === 'syncing' ? (
+                      <ScanningTxPlaceholder />
+                    ) : (
+                      <NoTxPlaceholder />
+                    ))}
+                  <WindowScroller
+                    // WindowScroller is required to sync window scroll with virtualized list scroll.
+                    // scrollElement is required because in our layout we're scrolling a div, not window
+                    scrollElement={this.scrollElement}
+                  >
+                    {({ height, isScrolling, onChildScroll, scrollTop }) => {
+                      if (!height) return null;
+                      return (
+                        // AutoSizer is required to make virtualized rows have responsive width
+                        <AutoSizer disableHeight>
+                          {({ width }) => (
+                            <RVList
+                              rowRenderer={this.rowRenderer(filteredItems)}
+                              isScrolling={isScrolling}
+                              autoHeight
+                              scrollTop={scrollTop}
+                              rowHeight={66}
+                              rowCount={filteredItems.length}
+                              onScroll={onChildScroll}
+                              height={height || 500} // defaults for tests
+                              width={width || 500} // defaults for tests
+                            />
+                          )}
+                        </AutoSizer>
+                      );
+                    }}
+                  </WindowScroller>
+                  <FooterLogo></FooterLogo>
+                </ListContainer>
+              </React.Fragment>
+            )}
+          </ItemFilter>
+          <ReceiptModal
+            onRequestClose={this.onCloseModal}
+            isOpen={this.state.activeModal === 'receipt'}
+            hash={this.state.selectedTx}
+          />
+        </Transactions>
       </Container>
     );
   }

@@ -13,6 +13,7 @@ const ChecklistContainer = styled(Flex.Row)`
 const Title = styled.div`
   display: ${p => (p.isMultiChain ? 'block' : 'none')};
   font-weight: 600;
+  cursor: default;
   font-size: 0.9rem;
   letter-spacing: 1.6px;
   opacity: 0.5;
@@ -21,6 +22,8 @@ const Title = styled.div`
 `;
 
 const Checklist = styled.div`
+  opacity: 0.5;
+  color: ${p => p.theme.colors.dark}
   padding-left: ${p => (p.isMultiChain ? '4.8rem' : 0)};
 `;
 
@@ -31,7 +34,7 @@ class Loading extends React.Component {
       PropTypes.shape({
         hasBlockHeight: PropTypes.bool,
         hasCoinBalance: PropTypes.bool,
-        hasMetBalance: PropTypes.bool,
+        hasLmrBalance: PropTypes.bool,
         hasCoinRate: PropTypes.bool,
         displayName: PropTypes.string.isRequired,
         symbol: PropTypes.string.isRequired
@@ -63,8 +66,8 @@ class Loading extends React.Component {
                   text={`${this.props.chainsStatus[chainName].symbol} balance`}
                 />
                 <ChecklistItem
-                  isActive={this.props.chainsStatus[chainName].hasMetBalance}
-                  text="MET balance"
+                  isActive={this.props.chainsStatus[chainName].hasLmrBalance}
+                  text="LMR balance"
                 />
               </Checklist>
             </div>

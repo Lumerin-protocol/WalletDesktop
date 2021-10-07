@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import DisplayValue from '../DisplayValue'
+import DisplayValue from '../DisplayValue';
 
 const Label = styled.div`
   line-height: 1.4rem;
@@ -12,13 +12,13 @@ const Label = styled.div`
   color: ${p => p.theme.colors.copy};
   margin-right: 1.6rem;
   white-space: nowrap;
-`
+`;
 
 const Amount = styled.div`
   color: ${p => p.theme.colors.primary};
   line-height: 2.5rem;
   text-align: right;
-`
+`;
 
 const Arrow = styled.span`
   color: ${p => p.theme.colors.primary};
@@ -26,11 +26,11 @@ const Arrow = styled.span`
   margin: 0 12px;
   transform: scale3d(1.5, 1.5, 1);
   display: inline-block;
-`
+`;
 
 export default class AmountRow extends React.Component {
   static propTypes = {
-    metBoughtInAuction: PropTypes.string,
+    lmrBoughtInAuction: PropTypes.string,
     coinSpentInAuction: PropTypes.string,
     convertedFrom: PropTypes.string,
     coinSymbol: PropTypes.string.isRequired,
@@ -49,7 +49,7 @@ export default class AmountRow extends React.Component {
     ]).isRequired,
     symbol: PropTypes.string,
     value: PropTypes.string
-  }
+  };
 
   // eslint-disable-next-line complexity
   render() {
@@ -64,13 +64,13 @@ export default class AmountRow extends React.Component {
                 isCoin
                 value={this.props.coinSpentInAuction}
               />
-              {this.props.metBoughtInAuction && (
+              {this.props.lmrBoughtInAuction && (
                 <React.Fragment>
                   <Arrow>&darr;</Arrow>
                   <DisplayValue
                     maxSize="1.6rem"
-                    value={this.props.metBoughtInAuction}
-                    post=" MET"
+                    value={this.props.lmrBoughtInAuction}
+                    post=" LMR"
                   />
                 </React.Fragment>
               )}
@@ -83,7 +83,7 @@ export default class AmountRow extends React.Component {
                 post={
                   this.props.convertedFrom === 'coin'
                     ? ` ${this.props.coinSymbol}`
-                    : ' MET'
+                    : ' LMR'
                 }
               />
               {this.props.toValue && (
@@ -94,7 +94,7 @@ export default class AmountRow extends React.Component {
                     value={this.props.toValue}
                     post={
                       this.props.convertedFrom === 'coin'
-                        ? ' MET'
+                        ? ' LMR'
                         : ` ${this.props.coinSymbol}`
                     }
                   />
@@ -109,7 +109,7 @@ export default class AmountRow extends React.Component {
                 this.props.txType === 'import-requested' ||
                 this.props.txType === 'imported' ||
                 this.props.txType === 'exported'
-                  ? ' MET'
+                  ? ' LMR'
                   : ` ${
                       this.props.symbol === 'coin'
                         ? this.props.coinSymbol
@@ -120,6 +120,6 @@ export default class AmountRow extends React.Component {
           )}
         </Amount>
       </React.Fragment>
-    )
+    );
   }
 }

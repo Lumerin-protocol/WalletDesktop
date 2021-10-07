@@ -76,14 +76,14 @@ const createClient = function(createStore) {
     getConvertCoinGasLimit: utils.forwardToMainProcess(
       'get-convert-coin-gas-limit'
     ),
-    getConvertMetGasLimit: utils.forwardToMainProcess(
-      'get-convert-met-gas-limit'
+    getConvertLmrGasLimit: utils.forwardToMainProcess(
+      'get-convert-lmr-gas-limit'
     ),
     getConvertCoinEstimate: utils.forwardToMainProcess(
       'get-convert-coin-estimate'
     ),
-    getConvertMetEstimate: utils.forwardToMainProcess(
-      'get-convert-met-estimate'
+    getConvertLmrEstimate: utils.forwardToMainProcess(
+      'get-convert-lmr-estimate'
     ),
     refreshAllTransactions: utils.forwardToMainProcess(
       'refresh-all-transactions',
@@ -95,7 +95,6 @@ const createClient = function(createStore) {
     ),
     onOnboardingCompleted: utils.forwardToMainProcess('onboarding-completed'),
     recoverFromMnemonic: utils.forwardToMainProcess('recover-from-mnemonic'),
-    getAuctionGasLimit: utils.forwardToMainProcess('get-auction-gas-limit'),
     getImportGasLimit: utils.forwardToMainProcess('get-import-gas-limit'),
     getExportGasLimit: utils.forwardToMainProcess('get-export-gas-limit'),
     getTokensGasLimit: utils.forwardToMainProcess('get-tokens-gas-limit'),
@@ -104,14 +103,14 @@ const createClient = function(createStore) {
     buyLumerin: utils.forwardToMainProcess('buy-lumerin', 750000),
     convertCoin: utils.forwardToMainProcess('convert-coin', 750000),
     retryImport: utils.forwardToMainProcess('retry-import', 750000),
-    convertMet: utils.forwardToMainProcess('convert-met', 750000),
+    convertLmr: utils.forwardToMainProcess('convert-lmr', 750000),
     changePassword: utils.forwardToMainProcess('change-password'),
     onLoginSubmit: utils.forwardToMainProcess('login-submit'),
     getPortFees: utils.forwardToMainProcess('get-port-fees'),
     getGasLimit: utils.forwardToMainProcess('get-gas-limit'),
     getGasPrice: utils.forwardToMainProcess('get-gas-price'),
     sendCoin: utils.forwardToMainProcess('send-coin', 750000),
-    sendMet: utils.forwardToMainProcess('send-met', 750000),
+    sendLmr: utils.forwardToMainProcess('send-lmr', 750000),
     clearCache: utils.forwardToMainProcess('clear-cache')
   };
 

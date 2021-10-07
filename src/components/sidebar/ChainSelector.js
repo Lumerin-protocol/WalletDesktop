@@ -35,6 +35,7 @@ const Title = styled.div`
   opacity: 0.5;
   margin-bottom: 0.8rem;
   margin-left: 0.6rem;
+  cursor: default;
 `;
 
 const MenuButton = styled(ReachUI.MenuButton)`
@@ -236,7 +237,7 @@ const Item = ({ displayName, balance, id, caret, parent }) => (
     <ItemBody grow="1" shrink="1" parent={parent}>
       <ChainName>{displayName}</ChainName>
       <Balance>
-        <DisplayValue value={balance} post=" MET" />
+        <DisplayValue value={balance} post=" LMR" />
       </Balance>
     </ItemBody>
     <Flex.Item shrink="0">

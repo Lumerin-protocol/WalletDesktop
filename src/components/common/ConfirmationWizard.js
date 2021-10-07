@@ -21,6 +21,7 @@ const Title = styled.div`
   font-size: 2.4rem;
   font-weight: bold;
   text-align: center;
+  cursor: default;
   text-shadow: 0 1px 1px ${p => p.theme.colors.darkShade};
 `;
 

@@ -1,26 +1,27 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
 export const Label = styled.label`
   line-height: 1.6rem;
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: ${p => (p.hasErrors ? p.theme.colors.danger : p.theme.colors.light)};
+  color: ${p => (p.hasErrors ? p.theme.colors.danger : p.theme.colors.dark)};
   text-shadow: ${p => p.theme.textShadow};
-`
+`;
 
 const Input = styled.input`
   border: none;
   display: block;
+  border-radius: 5px;
   height: ${({ rows }) => (rows ? `${4 * rows + 0.8}rem` : '4.8rem')};
   padding: 0.8rem 1.6rem;
-  background-color: ${p => p.theme.colors.translucentPrimary};
+  background-color: ${p => p.theme.colors.medium};
   margin-top: 0.8rem;
   width: 100%;
   line-height: 4rem;
-  color: ${p => p.theme.colors.light};
+  color: ${p => p.theme.colors.dark};
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -42,7 +43,7 @@ const Input = styled.input`
   @media (min-height: 600px) {
     height: ${({ rows }) => (rows ? `${4 * rows + 1.6}rem` : '5.6rem')};
   }
-`
+`;
 
 export const ErrorMsg = styled.div`
   color: ${p => p.theme.colors.danger};
@@ -54,7 +55,7 @@ export const ErrorMsg = styled.div`
   margin-top: 0.4rem;
   width: 100%;
   margin-bottom: -2rem;
-`
+`;
 
 export default class TextInput extends React.Component {
   static propTypes = {
@@ -72,19 +73,21 @@ export default class TextInput extends React.Component {
     rows: PropTypes.number,
     cols: PropTypes.number,
     id: PropTypes.string.isRequired
-  }
+  };
 
   InputControl =
-    this.props.rows || this.props.cols ? Input.withComponent('textarea') : Input
+    this.props.rows || this.props.cols
+      ? Input.withComponent('textarea')
+      : Input;
 
   onChange = e => {
-    this.props.onChange({ id: this.props.id, value: e.target.value })
-  }
+    this.props.onChange({ id: this.props.id, value: e.target.value });
+  };
 
   render() {
-    const { onChange, label, value, type, id, error, ...other } = this.props
+    const { onChange, label, value, type, id, error, ...other } = this.props;
 
-    const hasErrors = error && error.length > 0
+    const hasErrors = error && error.length > 0;
 
     return (
       <div>
@@ -105,6 +108,6 @@ export default class TextInput extends React.Component {
           </ErrorMsg>
         )}
       </div>
-    )
+    );
   }
 }

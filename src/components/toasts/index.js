@@ -1,47 +1,47 @@
-import { TransitionMotion, spring } from 'react-motion'
-import PropTypes from 'prop-types'
-import React from 'react'
+import React from 'react';
+import { TransitionMotion, spring } from 'react-motion';
+import PropTypes from 'prop-types';
 
-import ToastsContainer from './ToastsContainer'
-import Toast from './Toast'
-import Timer from './Timer'
+import ToastsContainer from './ToastsContainer';
+import Toast from './Toast';
+import Timer from './Timer';
 
-export const ToastsContext = React.createContext({})
+export const ToastsContext = React.createContext({});
 
 const defaults = {
   messagesPerToast: 1,
   autoClose: 6000
-}
+};
 
 export class ToastsProvider extends React.Component {
   static propTypes = {
     messagesPerToast: PropTypes.number,
     autoClose: PropTypes.number,
     children: PropTypes.node.isRequired
-  }
+  };
 
-  timers = {}
+  timers = {};
 
   addToast = (type, message, options = {}) => {
-    if (!type || !message) return
+    if (!type || !message) return;
 
     const autoClose =
       typeof options.autoClose === 'number'
         ? options.autoClose
         : typeof this.props.autoClose === 'number'
         ? this.props.autoClose
-        : defaults.autoClose
+        : defaults.autoClose;
 
     // check if requested type is already visible
-    const typeGroup = this.state.stack.find(([typeName]) => typeName === type)
+    const typeGroup = this.state.stack.find(([typeName]) => typeName === type);
 
     // only set timer if first message in toast or if toast is not fixed
     if (
       autoClose > 0 &&
       (!typeGroup || (this.timers[type] && this.timers[type].timerId))
     ) {
-      this.clearTimeout(type)
-      this.timers[type] = new Timer(() => this.removeToast(type), autoClose)
+      this.clearTimeout(type);
+      this.timers[type] = new Timer(() => this.removeToast(type), autoClose);
     }
 
     this.setState(state => ({
@@ -56,57 +56,57 @@ export class ToastsProvider extends React.Component {
           )
         : // if not, append a new type group with the new message
           [...state.stack, [type, message]]
-    }))
-  }
+    }));
+  };
 
   state = {
     stack: []
-  }
+  };
 
   componentDidMount() {
     window.ipcRenderer.on('wallet-error', (_, { message }) =>
       this.addToast('error', message, { autoClose: 15000 })
-    )
+    );
   }
 
   removeToast = type => {
     this.setState(state => ({
       ...state,
       stack: state.stack.filter(([typeName]) => typeName !== type)
-    }))
-  }
+    }));
+  };
 
   clearTimeout = type => {
-    if (this.timers[type]) this.timers[type].stop()
-  }
+    if (this.timers[type]) this.timers[type].stop();
+  };
 
-  handleDismiss = type => this.removeToast(type)
+  handleDismiss = type => this.removeToast(type);
 
-  handleShowMore = type => this.clearTimeout(type)
+  handleShowMore = type => this.clearTimeout(type);
 
   handleMouseEnter = e => {
-    const type = e.currentTarget.dataset.type
+    const type = e.currentTarget.dataset.type;
     if (this.timers[type] && this.timers[type].timerId) {
-      this.timers[type].pause()
+      this.timers[type].pause();
     }
-  }
+  };
 
   handleMouseLeave = e => {
-    const type = e.currentTarget.dataset.type
+    const type = e.currentTarget.dataset.type;
     if (this.timers[type] && this.timers[type].timerId) {
-      this.timers[type].resume()
+      this.timers[type].resume();
     }
-  }
+  };
 
-  willEnter = () => ({ maxHeight: 0, opacity: 0, translate: -45 })
+  willEnter = () => ({ maxHeight: 0, opacity: 0, translate: -45 });
 
   willLeave = () => ({
     translate: spring(-45),
     maxHeight: spring(0),
     opacity: spring(0)
-  })
+  });
 
-  contextValue = { toast: this.addToast }
+  contextValue = { toast: this.addToast };
 
   render() {
     return (
@@ -155,6 +155,6 @@ export class ToastsProvider extends React.Component {
           )}
         </TransitionMotion>
       </ToastsContext.Provider>
-    )
+    );
   }
 }

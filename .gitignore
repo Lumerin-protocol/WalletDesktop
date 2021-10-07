@@ -33,3 +33,6 @@ ppa/lumerin-wallet-desktop*
 
 # Certificates
 *.p12
+
+
+dummy.js

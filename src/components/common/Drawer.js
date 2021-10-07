@@ -1,9 +1,9 @@
-import styled, { createGlobalStyle } from 'styled-components'
-import PropTypes from 'prop-types'
-import Modal from 'react-modal'
-import React from 'react'
+import styled, { createGlobalStyle } from 'styled-components';
+import PropTypes from 'prop-types';
+import Modal from 'react-modal';
+import React from 'react';
 
-import CloseIcon from '../icons/CloseIcon'
+import CloseIcon from '../icons/CloseIcon';
 
 /**
  * There's no other way to override overlay states styles
@@ -34,7 +34,7 @@ const GlobalStyles = createGlobalStyle`
     opacity: 0;
     transition: opacity 0.6s;
   }
-`
+`;
 
 const Container = styled(Modal)`
   &.ReactModal__Content {
@@ -49,7 +49,7 @@ const Container = styled(Modal)`
   &.ReactModal__Content--before-close {
     transform: translate3d(100%, 0, 0);
   }
-`
+`;
 
 const Header = styled.header`
   background-color: ${p => p.theme.colors.primary};
@@ -58,7 +58,7 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
   flex-shrink: 0;
-`
+`;
 
 const Title = styled.h1`
   font-size: 2rem;
@@ -66,12 +66,13 @@ const Title = styled.h1`
   font-weight: bold;
   text-shadow: 0 1px 1px ${p => p.theme.colors.darkShade};
   margin: 0;
+  cursor: default;
 
   @media (min-height: 700px) {
     font-size: 2.4rem;
     line-height: 3rem;
   }
-`
+`;
 
 const CloseButton = styled.button`
   background: transparent;
@@ -82,7 +83,7 @@ const CloseButton = styled.button`
   &:hover {
     opacity: 0.5;
   }
-`
+`;
 
 export default class Drawer extends React.Component {
   static propTypes = {
@@ -91,10 +92,10 @@ export default class Drawer extends React.Component {
     children: PropTypes.node.isRequired,
     isOpen: PropTypes.bool.isRequired,
     title: PropTypes.string
-  }
+  };
 
   render() {
-    const { onRequestClose, children, isOpen, title } = this.props
+    const { onRequestClose, children, isOpen, title } = this.props;
 
     return (
       <Container
@@ -143,6 +144,6 @@ export default class Drawer extends React.Component {
         <div data-testid={this.props['data-testid']}>{children}</div>
         <GlobalStyles />
       </Container>
-    )
+    );
   }
 }

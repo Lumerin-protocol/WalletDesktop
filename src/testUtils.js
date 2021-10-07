@@ -124,7 +124,7 @@ export function getInitialState(overrides = {}) {
     converter: {
       status: {
         availableEth: '100',
-        availableMet: '100',
+        availableLmr: '100',
         currentPrice: '10'
       }
     },
@@ -148,7 +148,7 @@ export function getInitialState(overrides = {}) {
           addresses: {
             '0x15dd2028C976beaA6668E286b496A518F457b5Cf': {
               token: {
-                [config.MET_TOKEN_ADDR]: { balance: '5000000000000000000000' }
+                [config.LMR_TOKEN_ADDR]: { balance: '5000000000000000000000' }
               },
               balance: '5000000000000000000000',
               transactions: []
@@ -169,7 +169,7 @@ export function getDummyTransaction() {
     meta: {
       lumerin: {},
       tokens: {
-        [config.MET_TOKEN_ADDR]: {
+        [config.LMR_TOKEN_ADDR]: {
           event: 'Transfer',
           processing: false,
           value:

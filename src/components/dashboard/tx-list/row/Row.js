@@ -6,6 +6,7 @@ import React from 'react';
 import Details from './Details';
 import Amount from './Amount';
 import Icon from './Icon';
+import LumerinDarkIcon from '../../../icons/LumerinDarkIcon';
 
 const Container = styled.div`
   margin-left: 1.6rem;
@@ -19,16 +20,17 @@ const Container = styled.div`
 `;
 
 class Row extends React.Component {
-  static propTypes = {
-    tx: PropTypes.any
-  };
+  // static propTypes = {
+  //   tx: PropTypes.any
+  // };
 
   render() {
     const { tx, ...other } = this.props;
 
     return (
       <Container {...other}>
-        <Icon {...this.props} />
+        <LumerinDarkIcon />
+        <Icon type={tx.txType} />
         <div>
           <Amount {...this.props} />
           <Details {...this.props} />

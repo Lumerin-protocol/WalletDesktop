@@ -1,4 +1,4 @@
-import withConvertMETtoCoinState from 'lumerin-wallet-ui-logic/src/hocs/withConvertMETtoCoinState';
+import withConvertLMRtoCoinState from 'lumerin-wallet-ui-logic/src/hocs/withConvertLMRtoCoinState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
@@ -33,18 +33,18 @@ const Footer = styled.div`
   height: 100%;
 `;
 
-class ConvertMETtoCoinForm extends React.Component {
+class ConvertLMRtoCoinForm extends React.Component {
   static propTypes = {
     onUseMinimumToggle: PropTypes.func.isRequired,
     gasEstimateError: PropTypes.bool,
-    metPlaceholder: PropTypes.string,
+    lmrPlaceholder: PropTypes.string,
     onInputChange: PropTypes.func.isRequired,
     estimateError: PropTypes.string,
     useCustomGas: PropTypes.bool.isRequired,
     coinSymbol: PropTypes.string.isRequired,
     onMaxClick: PropTypes.func.isRequired,
     useMinimum: PropTypes.bool.isRequired,
-    metAmount: PropTypes.string,
+    lmrAmount: PropTypes.string,
     onSubmit: PropTypes.func.isRequired,
     validate: PropTypes.func.isRequired,
     gasPrice: PropTypes.string,
@@ -52,24 +52,24 @@ class ConvertMETtoCoinForm extends React.Component {
     estimate: PropTypes.string,
     errors: PropTypes.shape({
       useMinimum: PropTypes.string,
-      metAmount: PropTypes.string
+      lmrAmount: PropTypes.string
     }).isRequired,
     tabs: PropTypes.node.isRequired,
     rate: PropTypes.string
   };
 
   renderConfirmation = () => {
-    const { metAmount, estimate, rate } = this.props;
+    const { lmrAmount, estimate, rate } = this.props;
     return (
       <ConfirmationContainer data-testid="confirmation">
         You will convert{' '}
-        <DisplayValue inline value={metAmount} post=" MET" toWei /> and get
+        <DisplayValue inline value={lmrAmount} post=" LMR" toWei /> and get
         approximately <DisplayValue inline value={estimate} isCoin />, which
         means a rate of{' '}
         <DisplayValue
           inline
           value={rate}
-          post={` ${this.props.coinSymbol}/MET`}
+          post={` ${this.props.coinSymbol}/LMR`}
         />
         .
       </ConfirmationContainer>
@@ -81,7 +81,7 @@ class ConvertMETtoCoinForm extends React.Component {
       {this.props.tabs}
       <Sp py={4} px={3}>
         <form
-          data-testid="metToCoin-form"
+          data-testid="lmrToCoin-form"
           noValidate
           onSubmit={goToReview}
           id="convertForm"
@@ -96,14 +96,14 @@ class ConvertMETtoCoinForm extends React.Component {
               MAX
             </FieldBtn>
             <TextInput
-              placeholder={this.props.metPlaceholder}
-              data-testid="metAmount-field"
+              placeholder={this.props.lmrPlaceholder}
+              data-testid="lmrAmount-field"
               autoFocus
               onChange={this.props.onInputChange}
-              error={this.props.errors.metAmount}
-              label="Amount (MET)"
-              value={this.props.metAmount}
-              id="metAmount"
+              error={this.props.errors.lmrAmount}
+              label="Amount (LMR)"
+              value={this.props.lmrAmount}
+              id="lmrAmount"
             />
             <Sp mt={3}>
               <GasEditor
@@ -144,7 +144,7 @@ class ConvertMETtoCoinForm extends React.Component {
       <ConfirmationWizard
         renderConfirmation={this.renderConfirmation}
         onWizardSubmit={this.props.onSubmit}
-        pendingTitle="Converting MET..."
+        pendingTitle="Converting LMR..."
         pendingText="This may take a while. You can close this and follow the status of the conversion in the transaction list."
         renderForm={this.renderForm}
         editLabel="Edit this conversion"
@@ -154,4 +154,4 @@ class ConvertMETtoCoinForm extends React.Component {
   }
 }
 
-export default withConvertMETtoCoinState(ConvertMETtoCoinForm);
+export default withConvertLMRtoCoinState(ConvertLMRtoCoinForm);

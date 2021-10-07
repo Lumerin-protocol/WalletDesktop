@@ -1,15 +1,16 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import ChainSelector from './ChainSelector'
-import SecondaryNav from './SecondaryNav'
-import PrimaryNav from './PrimaryNav'
-import LogoIcon from '../icons/LogoIcon'
-import Logo from './Logo'
+import ChainSelector from './ChainSelector';
+import SecondaryNav from './SecondaryNav';
+import PrimaryNav from './PrimaryNav';
+import LogoIcon from '../icons/LogoIcon';
+import Logo from './Logo';
+import LumerinDarkIconk from '../icons/LumerinLightIcon';
 
 const Container = styled.div`
-  background: ${p => p.theme.colors.darkGradient};
+  background: ${p => p.theme.colors.light};
   width: 64px;
   display: flex;
   flex-direction: column;
@@ -32,19 +33,18 @@ const Container = styled.div`
       box-shadow: none;
     }
   }
-`
+`;
 
 const LogoLargeContainer = styled.div`
-  padding: ${p =>
-    p.isMultiChain ? '2.4rem 2.4rem 2.8rem 2.4rem' : '3.2rem 3.2rem 5.6rem'};
-  height: ${p => (p.isMultiChain ? 'auto' : '125px')};
+  padding: 2.4rem 2.4rem 2.8rem 2.4rem;
+  height: 125px;
   display: none;
   flex-shrink: 0;
 
   @media (min-width: 800px) {
     display: block;
   }
-`
+`;
 
 const LogoSmallContainer = styled.div`
   padding: ${p => (p.isMultiChain ? '2.3rem 1.6rem 3.2rem' : '2.3rem 1.6rem')};
@@ -55,7 +55,7 @@ const LogoSmallContainer = styled.div`
   @media (min-width: 800px) {
     display: none;
   }
-`
+`;
 
 const ChainSelectorContainer = styled.div`
   margin: 0 0.8rem 2.4rem;
@@ -63,12 +63,12 @@ const ChainSelectorContainer = styled.div`
   @media (min-width: 800px) {
     margin: 0 1.6rem 2.4rem;
   }
-`
+`;
 
 const PrimaryNavContainer = styled.nav`
   flex-grow: 1;
   margin-top: ${p => (p.isMultiChain ? 0 : '5rem')};
-`
+`;
 
 const SecondaryNavContainer = styled.div`
   padding-bottom: 0;
@@ -76,7 +76,7 @@ const SecondaryNavContainer = styled.div`
   @media (min-width: 800px) {
     padding-bottom: 2.4rem;
   }
-`
+`;
 
 const Footer = styled.div`
   padding: 0rem 1.6rem 2.4rem;
@@ -89,45 +89,40 @@ const Footer = styled.div`
   @media (max-height: 650px) {
     display: none;
   }
-`
+`;
 
-export default class Sidebar extends React.Component {
-  static propTypes = {
-    isMultiChain: PropTypes.bool.isRequired
-  }
+export default function Sidebar(props) {
+  // static propTypes = {
+  //   isMultiChain: PropTypes.bool.isRequired
+  // }
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  render() {
-    return (
-      <Container>
-        <LogoLargeContainer isMultiChain={this.props.isMultiChain}>
-          <Logo />
-        </LogoLargeContainer>
+  return (
+    <Container>
+      <LogoLargeContainer isMultiChain={props.isMultiChain}>
+        <Logo />
+      </LogoLargeContainer>
 
-        <LogoSmallContainer isMultiChain={this.props.isMultiChain}>
-          <LogoIcon negative />
-        </LogoSmallContainer>
+      <LogoSmallContainer isMultiChain={props.isMultiChain}>
+        <LumerinDarkIconk size="3.6rem" />
+      </LogoSmallContainer>
 
-        {this.props.isMultiChain && (
-          <ChainSelectorContainer>
-            <ChainSelector parent={Container} />
-          </ChainSelectorContainer>
-        )}
+      <PrimaryNavContainer isMultiChain={props.isMultiChain}>
+        <PrimaryNav
+          isMultiChain={props.isMultiChain}
+          parent={Container}
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex}
+        />
+      </PrimaryNavContainer>
 
-        <PrimaryNavContainer isMultiChain={this.props.isMultiChain}>
-          <PrimaryNav
-            isMultiChain={this.props.isMultiChain}
-            parent={Container}
-          />
-        </PrimaryNavContainer>
-
-        <SecondaryNavContainer>
-          <SecondaryNav parent={Container} />
-        </SecondaryNavContainer>
-
-        <Footer>
-          <LogoIcon negative />
-        </Footer>
-      </Container>
-    )
-  }
+      <SecondaryNavContainer>
+        <SecondaryNav
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex}
+          parent={Container}
+        />
+      </SecondaryNavContainer>
+    </Container>
+  );
 }

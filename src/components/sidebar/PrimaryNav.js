@@ -1,13 +1,15 @@
-import { NavLink } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-import FailedImportsBadge from './FailedImportsBadge'
-import ConverterIcon from '../icons/ConverterIcon'
-import AuctionIcon from '../icons/AuctionIcon'
-import WalletIcon from '../icons/WalletIcon'
-import PortIcon from '../icons/PortIcon'
+import FailedImportsBadge from './FailedImportsBadge';
+import ConverterIcon from '../icons/ConverterIcon';
+import AuctionIcon from '../icons/AuctionIcon';
+import WalletIcon from '../icons/WalletIcon';
+import PortIcon from '../icons/PortIcon';
+import SocketIcon from '../icons/SocketIcon';
+import ContractIcon from '../icons/ContractIcon';
 
 const Button = styled(NavLink)`
   display: flex;
@@ -15,34 +17,20 @@ const Button = styled(NavLink)`
   align-items: center;
   text-decoration: none;
   letter-spacing: 1.6px;
-  text-transform: uppercase;
-  color: ${p => p.theme.colors.light};
+  // text-transform: uppercase;
+  color: ${p => p.theme.colors.darker};
   padding: 1.6rem;
-  border-bottom: 1px solid ${p => p.theme.colors.darkShade};
   border-top: 1px solid transparent;
 
   &:focus {
     outline: none;
   }
 
-  &:hover:not(.active) {
-    background-color: ${p => p.theme.colors.lightShade};
-  }
-
-  &:first-child {
-    border-top: 1px solid ${p => p.theme.colors.darkShade};
-  }
-
   &.active {
+    color: ${p => p.theme.colors.primary};
     pointer-events: none;
-    border-bottom: 2px solid ${p => p.theme.colors.primary};
-    background-image: linear-gradient(
-      250deg,
-      rgba(66, 53, 119, 0.4),
-      rgba(126, 97, 248, 0.1)
-    );
   }
-`
+`;
 
 const IconWrapper = styled.div`
   margin-right: 1.6rem;
@@ -52,7 +40,7 @@ const IconWrapper = styled.div`
   ${Button}.active & {
     opacity: 1;
   }
-`
+`;
 
 const Label = styled.span`
   opacity: 0;
@@ -73,61 +61,45 @@ const Label = styled.span`
       opacity: 1;
     }
   }
-`
+`;
+const iconSize = '3.6rem';
 
-export default class PrimaryNav extends React.Component {
-  static propTypes = {
-    isMultiChain: PropTypes.bool.isRequired,
-    parent: PropTypes.object.isRequired
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <Button
-          activeClassName="active"
-          data-testid="wallets-nav-btn"
-          to="/wallets"
-        >
-          <IconWrapper>
-            <WalletIcon />
-          </IconWrapper>
-          <Label parent={this.props.parent}>Wallet</Label>
-        </Button>
-        <Button
-          activeClassName="active"
-          data-testid="auction-nav-btn"
-          to="/auction"
-        >
-          <IconWrapper>
-            <AuctionIcon />
-          </IconWrapper>
-          <Label parent={this.props.parent}>Auction</Label>
-        </Button>
-        <Button
-          activeClassName="active"
-          data-testid="converter-nav-btn"
-          to="/converter"
-        >
-          <IconWrapper>
-            <ConverterIcon />
-          </IconWrapper>
-          <Label parent={this.props.parent}>Converter</Label>
-        </Button>
-        {this.props.isMultiChain && (
-          <Button
-            activeClassName="active"
-            data-testid="port-nav-btn"
-            to="/port"
-          >
-            <IconWrapper>
-              <PortIcon />
-            </IconWrapper>
-            <Label parent={this.props.parent}>Port</Label>
-            <FailedImportsBadge parent={this.props.parent} />
-          </Button>
-        )}
-      </React.Fragment>
-    )
-  }
+export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
+  return (
+    <React.Fragment>
+      <Button
+        onClick={() => setActiveIndex(0)}
+        activeClassName="active"
+        data-testid="wallets-nav-btn"
+        to="/wallets"
+      >
+        <IconWrapper>
+          <WalletIcon isActive={activeIndex === 0} size={iconSize} />
+        </IconWrapper>
+        <Label parent={parent}>Wallet</Label>
+      </Button>
+      <Button
+        onClick={() => setActiveIndex(1)}
+        activeClassName="active"
+        data-testid="auction-nav-btn"
+        to="/sockets"
+      >
+        <IconWrapper>
+          <SocketIcon isActive={activeIndex === 1} size={iconSize} />
+        </IconWrapper>
+        <Label parent={parent}>Sockets</Label>
+      </Button>
+      <Button
+        onClick={() => setActiveIndex(2)}
+        activeClassName="active"
+        data-testid="auction-nav-btn"
+        to="/contracts"
+      >
+        <IconWrapper>
+          <ContractIcon isActive={activeIndex === 2} size={iconSize} />
+        </IconWrapper>
+        <Label parent={parent}>Contracts</Label>
+      </Button>
+    </React.Fragment>
+  );
 }

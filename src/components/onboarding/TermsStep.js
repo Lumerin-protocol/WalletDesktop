@@ -67,7 +67,6 @@ export default class TermsStep extends React.Component {
               id="licenseCheckbox"
             />
             <span>I have read and accept the </span>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={this.props.onTermsLinkClick}>software license</a>.
           </div>
         </Message>

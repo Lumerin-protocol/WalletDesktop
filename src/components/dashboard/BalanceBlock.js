@@ -2,21 +2,36 @@ import withBalanceBlockState from 'lumerin-wallet-ui-logic/src/hocs/withBalanceB
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
+import LumerinLightIcon from '../icons/LumerinLightIcon';
+import StatusPillIcon from '../icons/StatusPillIcon';
 
-import { DisplayValue } from '../common';
+import { BaseBtn, Btn, DisplayValue } from '../common';
+
+const convertLmrToEth = () => {};
 
 const relSize = ratio => `calc(100vw / ${ratio})`;
 
+const Container = styled.div`
+  margin: 1.6rem 0 1.6rem;
+  background-color: ${p => p.theme.colors.xLight};
+  width: 70%;
+  height: 100px;
+  padding: 0 1.6rem 0 1.6rem;
+  border-radius: 5px;
+  display: flex;
+  @media (min-width: 1040px) {
+    display: flex;
+  }
+`;
+
 const Balance = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75em 0;
-  & + & {
-    border-top: 1px solid ${p => p.theme.colors.darkShade};
-  }
+  padding: 0.75em 1.6rem;
+  width: 35%;
   @media (min-width: 1040px) {
-    padding: 0.95em 0;
   }
 `;
 
@@ -39,20 +54,13 @@ const Value = styled.div`
   line-height: 1.5;
   font-weight: 600;
   letter-spacing: ${p => (p.large ? '-1px' : 'inherit')};
-  text-shadow: 0 1px 1px ${p => p.theme.colors.darkShade};
+  color: ${p => p.theme.colors.darker}
   margin: 0 1.6rem;
   flex-grow: 1;
   position: relative;
-  top: ${relSize(-400)};
-  font-size: ${relSize(32)};
-
-  @media (min-width: 800px) {
-    font-size: ${relSize(44)};
-  }
-
-  @media (min-width: 1040px) {
-    font-size: ${({ large }) => relSize(large ? 40 : 52)};
-  }
+  // top: ${relSize(-400)};
+  // font-size: ${relSize(58)};
+  font-size: 3rem;
 
   @media (min-width: 1440px) {
     font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
@@ -60,11 +68,11 @@ const Value = styled.div`
 `;
 
 const USDValue = styled.div`
+  display: block;
   line-height: 1.5;
   font-weight: 600;
-  text-shadow: 0 1px 1px ${p => p.theme.colors.darkShade};
+  color: ${p => p.theme.colors.darker}
   white-space: nowrap;
-  opacity: ${p => (p.hide ? '0' : '1')};
   position: relative;
   top: ${relSize(-400)};
   font-size: ${relSize(36)};
@@ -78,38 +86,93 @@ const USDValue = styled.div`
   }
 `;
 
-class BalanceBlock extends React.Component {
-  static propTypes = {
-    coinBalanceUSD: PropTypes.string.isRequired,
-    coinBalanceWei: PropTypes.string.isRequired,
-    metBalanceWei: PropTypes.string.isRequired,
-    coinSymbol: PropTypes.string.isRequired
+const LeftBtn = styled(BaseBtn)`
+  width: 45%;
+  height: 60%;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  background-color: ${p => p.theme.colors.primary}
+  color: ${p => p.theme.colors.light}
+
+  @media (min-width: 1040px) {
+    margin-left: 0;
+  }
+`;
+
+const RightBtn = styled(BaseBtn)`
+  width: 45%;
+  height: 60%;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  border: 1px solid ${p => p.theme.colors.primary};
+  background-color: ${p => p.theme.colors.light}
+  color: ${p => p.theme.colors.primary}
+
+  @media (min-width: 1040px) {
+    margin-left: 0;
+  }
+`;
+
+const BtnRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 70%;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+function BalanceBlock({
+  sendDisabled,
+  sendDisabledReason,
+  coinBalanceUSD,
+  coinBalanceWei,
+  lmrBalanceWei,
+  CoinSymbol,
+  onTabSwitch
+}) {
+  const handleTabSwitch = e => {
+    e.preventDefault();
+
+    onTabSwitch(e.target.dataset.modal);
   };
 
-  render() {
-    return (
-      <React.Fragment>
+  return (
+    <>
+      <Container>
+        <LumerinLightIcon size="6rem" />
         <Balance>
-          <CoinSymbol>MET</CoinSymbol>
-          <Value data-testid="met-balance" large>
-            <DisplayValue value={this.props.metBalanceWei} />
+          <Value data-testid="lmr-balance" large>
+            <DisplayValue value={lmrBalanceWei} />
           </Value>
-          <USDValue data-testid="met-balance-usd" hide>
-            N/A
+          <USDValue data-testid="lmr-balance-usd" hide>
+            ETH ≈ {lmrBalanceWei}
           </USDValue>
         </Balance>
-        <Balance>
-          <CoinSymbol>{this.props.coinSymbol}</CoinSymbol>
-          <Value data-testid="coin-balance">
-            <DisplayValue value={this.props.coinBalanceWei} />
-          </Value>
-          <USDValue data-testid="coin-balance-usd">
-            ${this.props.coinBalanceUSD} (USD)
-          </USDValue>
-        </Balance>
-      </React.Fragment>
-    );
-  }
+        <BtnRow>
+          <LeftBtn
+            data-modal="receive"
+            data-testid="receive-btn"
+            onClick={handleTabSwitch}
+            block
+          >
+            Receive
+          </LeftBtn>
+
+          <RightBtn
+            data-modal="send"
+            data-disabled={sendDisabled}
+            data-rh={sendDisabledReason}
+            data-testid="send-btn"
+            onClick={sendDisabled ? null : handleTabSwitch}
+            block
+          >
+            Send
+          </RightBtn>
+        </BtnRow>
+      </Container>
+    </>
+  );
 }
 
 export default withBalanceBlockState(BalanceBlock);

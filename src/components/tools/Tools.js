@@ -8,16 +8,19 @@ import ConfirmModal from './ConfirmModal';
 import WalletStatus from './WalletStatus';
 import {
   ConfirmationWizard,
-  DarkLayout,
+  LightLayout,
   TextInput,
   Flex,
+  BaseBtn,
   Btn,
   Sp
 } from '../common';
 
+const Container = styled.div``;
+
 const Confirmation = styled.div`
   color: ${p => p.theme.colors.danger};
-  background-color: ${p => p.theme.colors.darkShade};
+  background-color: ${p => p.theme.colors.medium};
   border-radius: 4px;
   padding: 0.8rem 1.6rem;
 `;
@@ -25,6 +28,31 @@ const ValidationMsg = styled.div`
   font-size: 1.4rem;
   margin-left: 1.6rem;
   opacity: 0.75;
+`;
+
+const StyledBtn = styled(BaseBtn)`
+  width: 40%;
+  height: 40px;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  padding: 0 .6rem;
+  background-color: ${p => p.theme.colors.primary}
+  color: ${p => p.theme.colors.light}
+
+  @media (min-width: 1040px) {
+    width: 35%;
+    height: 40px;
+    margin-left: 0;
+    margin-top: 1.6rem;
+  }
+`;
+
+const Subtitle = styled.h2`
+  color: ${p => p.theme.colors.dark};
+`;
+
+const StyledParagraph = styled.p`
+  color: ${p => p.theme.colors.dark};
 `;
 
 class Tools extends React.Component {
@@ -71,13 +99,15 @@ class Tools extends React.Component {
     const { onInputChange, mnemonic, errors } = this.props;
 
     return (
-      <Sp mt={-2}>
-        <h2>Recover a Wallet</h2>
+      <Sp mt={-4}>
+        <Subtitle>Recover a Wallet</Subtitle>
         <form data-testid="recover-form" onSubmit={goToReview}>
-          <p>
+          <StyledParagraph>
             Enter a valid twelve-word recovery phrase to recover another wallet.
-          </p>
-          <p>This action will replace your current stored seed!</p>
+          </StyledParagraph>
+          <StyledParagraph>
+            This action will replace your current stored seed!
+          </StyledParagraph>
           <TextInput
             data-testid="mnemonic-field"
             autoFocus
@@ -90,9 +120,9 @@ class Tools extends React.Component {
           />
           <Sp mt={4}>
             <Flex.Row align="center">
-              <Btn disabled={!this.props.isRecoverEnabled} submit>
+              <StyledBtn disabled={!this.props.isRecoverEnabled} submit>
                 Recover
-              </Btn>
+              </StyledBtn>
               {!this.props.isRecoverEnabled && (
                 <ValidationMsg>
                   A recovery phrase must have exactly 12 words
@@ -103,25 +133,25 @@ class Tools extends React.Component {
         </form>
         <Sp mt={5}>
           <hr />
-          <h2>Change Password</h2>
-          <p>
+          <Subtitle>Change Password</Subtitle>
+          <StyledParagraph>
             This will allow you to change the password you use to access the
             wallet.
-          </p>
+          </StyledParagraph>
           <NavLink data-testid="change-password-btn" to="/change-pass">
-            <Btn>Change Password</Btn>
+            <StyledBtn>Change Password</StyledBtn>
           </NavLink>
         </Sp>
         <Sp mt={5}>
           <hr />
-          <h2>Rescan Transactions List</h2>
-          <p>
+          <Subtitle>Rescan Transactions List</Subtitle>
+          <StyledParagraph>
             This will clear your local cache and rescan all your wallet
             transactions.
-          </p>
-          <Btn onClick={this.onRescanTransactionsClick}>
+          </StyledParagraph>
+          <StyledBtn onClick={this.onRescanTransactionsClick}>
             Rescan Transactions
-          </Btn>
+          </StyledBtn>
           <ConfirmModal
             onRequestClose={this.onCloseModal}
             onConfirm={this.props.onRescanTransactions}
@@ -139,7 +169,7 @@ class Tools extends React.Component {
 
   render() {
     return (
-      <DarkLayout title="Tools" data-testid="tools-container">
+      <LightLayout title="Tools" data-testid="tools-container">
         <Sp py={4} px={6}>
           <ConfirmationWizard
             renderConfirmation={this.renderConfirmation}
@@ -163,7 +193,7 @@ class Tools extends React.Component {
             }}
           />
         </Sp>
-      </DarkLayout>
+      </LightLayout>
     );
   }
 }

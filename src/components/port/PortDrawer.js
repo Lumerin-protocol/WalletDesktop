@@ -46,12 +46,12 @@ class PortDrawer extends React.Component {
     gasEstimateError: PropTypes.bool,
     onRequestClose: PropTypes.func.isRequired,
     onInputChange: PropTypes.func.isRequired,
-    availableMet: PropTypes.string.isRequired,
+    availableLmr: PropTypes.string.isRequired,
     useCustomGas: PropTypes.bool.isRequired,
     destination: PropTypes.string.isRequired,
     onMaxClick: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
-    metAmount: PropTypes.string,
+    lmrAmount: PropTypes.string,
     onSubmit: PropTypes.func.isRequired,
     validate: PropTypes.func.isRequired,
     gasPrice: PropTypes.string,
@@ -76,11 +76,11 @@ class PortDrawer extends React.Component {
       <ConfirmationContainer data-testid="confirmation">
         <React.Fragment>
           You will port{' '}
-          <DisplayValue inline value={this.props.metAmount} toWei post=" MET" />{' '}
+          <DisplayValue inline value={this.props.lmrAmount} toWei post=" LMR" />{' '}
           from the <span>{this.props.sourceDisplayName}</span> blockchain to the{' '}
           <span>{destination.label}</span> blockchain, paying a fee of
           approximately{' '}
-          <DisplayValue inline value={this.props.fee} post=" MET" />.
+          <DisplayValue inline value={this.props.fee} post=" LMR" />.
         </React.Fragment>
       </ConfirmationContainer>
     );
@@ -90,7 +90,7 @@ class PortDrawer extends React.Component {
     <form onSubmit={goToReview} noValidate data-testid="port-form">
       <Sp py={4} px={3}>
         <ReadOnlyField
-          suffix={<DisplayValue value={this.props.availableMet} post=" MET" />}
+          suffix={<DisplayValue value={this.props.availableLmr} post=" LMR" />}
           value={this.props.sourceDisplayName}
           label="Source"
           id="source-field"
@@ -119,10 +119,10 @@ class PortDrawer extends React.Component {
           data-testid="amount-field"
           autoFocus
           onChange={this.props.onInputChange}
-          error={this.props.errors.metAmount}
-          label="Amount (MET)"
-          value={this.props.metAmount}
-          id="metAmount"
+          error={this.props.errors.lmrAmount}
+          label="Amount (LMR)"
+          value={this.props.lmrAmount}
+          id="lmrAmount"
         />
 
         <Sp mt={3}>
@@ -160,7 +160,7 @@ class PortDrawer extends React.Component {
         <ConfirmationWizard
           renderConfirmation={this.renderConfirmation}
           onWizardSubmit={this.props.onSubmit}
-          pendingTitle="Porting MET..."
+          pendingTitle="Porting LMR..."
           renderForm={this.renderForm}
           editLabel="Edit this port"
           validate={this.props.validate}

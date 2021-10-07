@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { DisplayValue, Flex } from '../common'
-import RetryBtn from './RetryBtn'
+import { DisplayValue, Flex } from '../common';
+import RetryBtn from './RetryBtn';
 
 const List = styled.ul`
   list-style-type: none;
@@ -12,7 +12,7 @@ const List = styled.ul`
   margin-right: 0;
   margin-top: 2.4rem;
   margin-bottom: 4.8rem;
-`
+`;
 
 const Item = styled.li`
   background-color: ${({ theme }) => theme.colors.lightShade};
@@ -22,14 +22,14 @@ const Item = styled.li`
   & + & {
     margin-top: 1.6rem;
   }
-`
+`;
 
 const LeftLabel = styled.div`
   font-size: 1.1rem;
   letter-spacing: 0.4px;
   color: #c2c4c6;
   flex-grow: 1;
-`
+`;
 
 const Hiddable = styled.span`
   display: none;
@@ -37,7 +37,7 @@ const Hiddable = styled.span`
   @media (min-width: 1000px) {
     display: inline;
   }
-`
+`;
 
 const Validations = styled.span`
   background-color: ${({ theme }) => theme.colors.darkShade};
@@ -45,19 +45,19 @@ const Validations = styled.span`
   padding: 0.5rem 1.2rem;
   border-radius: 1.2rem;
   margin-right: 1.6rem;
-`
+`;
 
 const Refutations = styled.span`
   color: ${({ theme }) => theme.colors.warning};
   padding: 0.5rem 1.2rem;
   margin-right: 1.6rem;
-`
+`;
 
 const Amount = styled.div`
   color: ${({ theme }) => theme.colors.primary};
   font-size: 2rem;
   font-weight: 600;
-`
+`;
 
 const Details = styled.div`
   font-size: 1.1rem;
@@ -70,7 +70,7 @@ const Details = styled.div`
     font-weight: 600;
     text-transform: uppercase;
   }
-`
+`;
 
 export default class OngoingImports extends React.Component {
   static propTypes = {
@@ -87,9 +87,9 @@ export default class OngoingImports extends React.Component {
         hash: PropTypes.string.isRequired
       })
     ).isRequired
-  }
+  };
 
-  handleRetryClick = e => this.props.onRetryClick(e.target.dataset.hash)
+  handleRetryClick = e => this.props.onRetryClick(e.target.dataset.hash);
 
   render() {
     return (
@@ -113,7 +113,7 @@ export default class OngoingImports extends React.Component {
               </LeftLabel>
               <Flex.Column align="flex-end">
                 <Amount>
-                  <DisplayValue value={item.value} post=" MET" />
+                  <DisplayValue value={item.value} post=" LMR" />
                 </Amount>
                 <Details>
                   IMPORTING FROM <span>{item.importedFrom}</span> BLOCKCHAIN
@@ -134,6 +134,6 @@ export default class OngoingImports extends React.Component {
           </Item>
         ))}
       </List>
-    )
+    );
   }
 }

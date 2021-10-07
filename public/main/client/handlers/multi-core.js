@@ -63,7 +63,7 @@ const findCoreBySymbol = (cores, ticker) =>
 function getPortFees (data, cores) {
   const exportCore = findCoreByChainName(cores, data.chain);
   return singleCore
-    .getExportMetFee(data, exportCore)
+    .getExportLmrFee(data, exportCore)
     .then(fee =>
       singleCore
         .getExportGasLimit(Object.assign({}, data, { fee }), exportCore)
@@ -86,14 +86,14 @@ const withMerkleRoot = fn =>
 const importLumerin = (data, cores) =>
   withMerkleRoot(singleCore.importLumerin)(data, cores)
 
-const getImportMetGas = (data, cores) =>
+const getImportLmrGas = (data, cores) =>
   withMerkleRoot(singleCore.getImportGasLimit)(data, cores)
 
 function portLumerin (data, cores) {
   const exportCore = findCoreByChainName(cores, data.chain)
   const exportData = Object.assign({}, data, {
     destinationChain: config.chains[data.destinationChain].symbol,
-    destinationMetAddress: config.chains[data.destinationChain].metTokenAddress,
+    destinationLmrAddress: config.chains[data.destinationChain].lmrTokenAddress,
     extraData: '0x00'
   })
   return singleCore
@@ -119,7 +119,7 @@ function portLumerin (data, cores) {
         currentTick: returnValues.currentTick,
         dailyMintable: returnValues.dailyMintable,
         destinationChain: config.chains[data.destinationChain].symbol,
-        destinationMetAddress: returnValues.destinationLumerinAddr,
+        destinationLmrAddress: returnValues.destinationLumerinAddr,
         extraData: returnValues.extraData,
         fee: returnValues.fee,
         from: data.from,
@@ -151,7 +151,7 @@ module.exports = {
   onboardingCompleted,
   recoverFromMnemonic,
   importLumerin,
-  getImportMetGas,
+  getImportLmrGas,
   portLumerin,
   onLoginSubmit,
   getPortFees

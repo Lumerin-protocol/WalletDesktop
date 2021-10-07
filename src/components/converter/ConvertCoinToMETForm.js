@@ -1,4 +1,4 @@
-import withConvertCoinToMETState from 'lumerin-wallet-ui-logic/src/hocs/withConvertCoinToMETState';
+import withConvertCoinToLMRState from 'lumerin-wallet-ui-logic/src/hocs/withConvertCoinToLMRState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
@@ -32,7 +32,7 @@ const Footer = styled.div`
   height: 100%;
 `;
 
-class ConvertCointoMETForm extends React.Component {
+class ConvertCointoLMRForm extends React.Component {
   static propTypes = {
     onUseMinimumToggle: PropTypes.func.isRequired,
     gasEstimateError: PropTypes.bool,
@@ -64,12 +64,12 @@ class ConvertCointoMETForm extends React.Component {
       <ConfirmationContainer data-testid="confirmation">
         You will convert <DisplayValue inline isCoin value={coinAmount} toWei />{' '}
         {usdAmount ? `($${usdAmount})` : `(< $0.01)`} and get approximately{' '}
-        <DisplayValue value={estimate} post=" MET" inline />, which means a rate
+        <DisplayValue value={estimate} post=" LMR" inline />, which means a rate
         of{' '}
         <DisplayValue
           inline
           value={rate}
-          post={` ${this.props.coinSymbol}/MET`}
+          post={` ${this.props.coinSymbol}/LMR`}
         />
         .
       </ConfirmationContainer>
@@ -81,7 +81,7 @@ class ConvertCointoMETForm extends React.Component {
       {this.props.tabs}
       <Sp py={4} px={3}>
         <form
-          data-testid="coinToMet-form"
+          data-testid="coinToLmr-form"
           noValidate
           onSubmit={goToReview}
           id="convertForm"
@@ -110,14 +110,14 @@ class ConvertCointoMETForm extends React.Component {
           <ConverterEstimates
             estimateError={this.props.estimateError}
             coinSymbol={this.props.coinSymbol}
-            convertTo="MET"
+            convertTo="LMR"
             estimate={this.props.estimate}
             rate={this.props.rate}
           />
           <MinReturnCheckbox
             useMinimum={this.props.useMinimum}
             onToggle={this.props.onUseMinimumToggle}
-            label="Get expected MET amount or cancel"
+            label="Get expected LMR amount or cancel"
             error={this.props.errors.useMinimum}
           />
         </form>
@@ -144,4 +144,4 @@ class ConvertCointoMETForm extends React.Component {
   }
 }
 
-export default withConvertCoinToMETState(ConvertCointoMETForm);
+export default withConvertCoinToLMRState(ConvertCointoLMRForm);

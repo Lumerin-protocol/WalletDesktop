@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
 
-import { DarkLayout, Flex, Btn } from '../common';
+import { LightLayout, Flex, Btn } from '../common';
 import RetryImportDrawer from './RetryImportDrawer';
 import OngoingImports from './OngoingImports';
 import FailedImports from './FailedImports';
@@ -28,6 +28,7 @@ const Title = styled.h2`
   font-size: 2rem;
   font-weight: 600;
   margin: 0;
+  cursor: default;
 `;
 
 const Description = styled.p`
@@ -36,6 +37,7 @@ const Description = styled.p`
   color: #c2c4c6;
   margin-top: 0.8rem;
   margin-bottom: 0;
+  cursor: default;
 
   & > span {
     color: ${({ theme }) => theme.colors.light};
@@ -89,6 +91,7 @@ const NoPortsMessage = styled.div`
   font-size: 1.6rem;
   line-height: 2.4rem;
   text-align: center;
+  cursor: default;
 `;
 
 class Port extends React.Component {
@@ -136,7 +139,7 @@ class Port extends React.Component {
   // eslint-disable-next-line complexity
   render() {
     return (
-      <DarkLayout data-testid="port-container" title="Port">
+      <LightLayout data-testid="port-container" title="Port">
         <Container>
           {(this.props.failedImports.length > 0 ||
             this.props.ongoingImports.length > 0) && (
@@ -168,7 +171,7 @@ class Port extends React.Component {
                         ? 'validations'
                         : 'validation'}
                     </span>{' '}
-                    for the MET to be imported on this chain.
+                    for the LMR to be imported on this chain.
                   </Description>
                   <OngoingImports
                     attestationThreshold={this.props.attestationThreshold}
@@ -220,7 +223,7 @@ class Port extends React.Component {
             isOpen={this.state.activeModal === 'retry-import'}
           />
         )}
-      </DarkLayout>
+      </LightLayout>
     );
   }
 }

@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
 const Container = styled.label`
   line-height: 1.6rem;
@@ -10,24 +10,24 @@ const Container = styled.label`
   text-shadow: ${p => p.theme.textShadow};
   margin-top: 1.6rem;
   display: flex;
-`
+`;
 
 const Checkbox = styled.input`
   margin: 0 0.8rem 0 0;
   font-size: 1.6rem;
   cursor: pointer;
-`
+`;
 
 const Label = styled.span`
   cursor: pointer;
   user-select: none;
-`
+`;
 
 const Icon = styled.span`
   margin: 0.15rem 0 0 1rem;
   display: inline-block;
   opacity: 0.7;
-`
+`;
 
 const ErrorMsg = styled.div`
   color: ${p => p.theme.colors.danger};
@@ -38,7 +38,7 @@ const ErrorMsg = styled.div`
   margin-top: 0.2rem;
   width: 100%;
   margin-left: 23px;
-`
+`;
 
 export default class MinReturnCheckbox extends React.Component {
   static propTypes = {
@@ -47,10 +47,10 @@ export default class MinReturnCheckbox extends React.Component {
     onToggle: PropTypes.func.isRequired,
     label: PropTypes.string.isRequired,
     error: PropTypes.string
-  }
+  };
 
   render() {
-    const hasErrors = this.props.error && this.props.error.length > 0
+    const hasErrors = this.props.error && this.props.error.length > 0;
 
     return (
       <div>
@@ -66,7 +66,7 @@ export default class MinReturnCheckbox extends React.Component {
           <Icon
             data-rh-darker
             data-rh-width="400px"
-            data-rh="This option will cancel the conversion if there is a change in price after you submit the transaction and the expected conversion amount is not met.  Gas will be consumed regardless."
+            data-rh="This option will cancel the conversion if there is a change in price after you submit the transaction and the expected conversion amount is not lmr.  Gas will be consumed regardless."
           >
             <svg width="14px" height="14px" viewBox="0 0 14 14">
               <path
@@ -85,6 +85,6 @@ export default class MinReturnCheckbox extends React.Component {
           </ErrorMsg>
         )}
       </div>
-    )
+    );
   }
 }

@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
 const LumerinContracts = require('metronome-contracts');
-const contracts = LumerinContracts.ropsten;
+const contracts = LumerinContracts['ropsten'];
 
 const indexerUrl = process.env.ROPSTEN_INDEXER_URL || 'http://localhost:3005';
 const wsApiUrl = process.env.ROPSTEN_NODE_URL || 'ws://localhost:8546';
@@ -15,7 +15,7 @@ module.exports = {
   tokenPorterAddress: contracts.TokenPorter.address,
   converterAddress: contracts.AutonomousConverter.address,
   validatorAddress: contracts.Validator.address,
-  metTokenAddress: contracts.METToken.address,
+  lmrTokenAddress: contracts.METToken.address,
   auctionAddress: contracts.Auctions.address,
 
   // urls
@@ -25,7 +25,7 @@ module.exports = {
 
   // defauls
   coinDefaultGasLimit: '21000',
-  metDefaultGasLimit: '250000',
+  lmrDefaultGasLimit: '250000',
   defaultGasPrice: '1000000000',
   maxGasPrice: '20000000000000000'
-}
+};

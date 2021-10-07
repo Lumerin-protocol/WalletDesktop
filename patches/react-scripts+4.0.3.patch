@@ -6,7 +6,7 @@ patch-package
              {
                test: /\.(js|mjs|jsx|ts|tsx)$/,
 -              include: paths.appSrc,
-+              include: [paths.appSrc, /metronome-wallet-ui-logic/],
++              include: [paths.appSrc, /lumerin-wallet-ui-logic/],
                loader: require.resolve('babel-loader'),
                options: {
                  customize: require.resolve(
@@ -17,7 +17,7 @@ patch-package
      },
      transformIgnorePatterns: [
 -      '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
-+      '[/\\\\]node_modules[/\\\\](?!(metronome-wallet-ui-logic)/).+\\.(js|jsx|ts|tsx)$',
++      '[/\\\\]node_modules[/\\\\](?!(lumerin-wallet-ui-logic)/).+\\.(js|jsx|ts|tsx)$',
        '^.+\\.module\\.(css|sass|scss)$',
      ],
      modulePaths: modules.additionalModulePaths || [],

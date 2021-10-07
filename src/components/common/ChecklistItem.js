@@ -1,31 +1,32 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
 const Container = styled.div`
   position: relative;
   line-height: 1.5;
   padding-left: 2em;
   margin-bottom: 0.8rem;
-`
+`;
 
 const Icon = styled.svg`
   position: absolute;
-  fill: ${p => (p.isActive ? '#45d48d' : '#7d7f89')};
+  fill: ${p =>
+    p.isActive ? p.theme.colors.primary : p.theme.colors.translucentDark};
   left: 0;
   top: 1px;
-`
+`;
 
 const Label = styled.span`
   transition: opacity 0.3s;
   opacity: ${p => (p.isActive ? 1 : 0.5)};
-`
+`;
 
 export default class ChecklistItem extends React.Component {
   static propTypes = {
     isActive: PropTypes.bool.isRequired,
     text: PropTypes.string.isRequired
-  }
+  };
 
   render() {
     return (
@@ -40,6 +41,6 @@ export default class ChecklistItem extends React.Component {
         </Icon>
         <Label isActive={this.props.isActive}>{this.props.text}</Label>
       </Container>
-    )
+    );
   }
 }
