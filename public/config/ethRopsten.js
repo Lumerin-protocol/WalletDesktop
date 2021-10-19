@@ -1,6 +1,6 @@
 'use strict';
 
-const LumerinContracts = require('metronome-contracts');
+const LumerinContracts = require('lumerin-contracts');
 const contracts = LumerinContracts['ropsten'];
 
 const indexerUrl = process.env.ROPSTEN_INDEXER_URL || 'http://localhost:3005';

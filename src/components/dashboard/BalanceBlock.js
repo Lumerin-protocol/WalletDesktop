@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
 import LumerinLightIcon from '../icons/LumerinLightIcon';
-import StatusPillIcon from '../icons/StatusPillIcon';
 
-import { BaseBtn, Btn, DisplayValue } from '../common';
+import { BaseBtn, DisplayValue } from '../common';
 
 const convertLmrToEth = () => {};
 

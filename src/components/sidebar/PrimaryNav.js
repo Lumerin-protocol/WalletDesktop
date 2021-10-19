@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 import FailedImportsBadge from './FailedImportsBadge';
 import ConverterIcon from '../icons/ConverterIcon';
 import AuctionIcon from '../icons/AuctionIcon';
-import WalletIcon from '../icons/WalletIcon';
+import { WalletNavIcon } from '../icons/WalletNavIcon';
 import PortIcon from '../icons/PortIcon';
-import SocketIcon from '../icons/SocketIcon';
-import ContractIcon from '../icons/ContractIcon';
+import { SocketNavIcon } from '../icons/SocketNavIcon';
+import { ContractNavIcon } from '../icons/ContractNavIcon';
 
 const Button = styled(NavLink)`
   display: flex;
@@ -74,7 +74,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         to="/wallets"
       >
         <IconWrapper>
-          <WalletIcon isActive={activeIndex === 0} size={iconSize} />
+          <WalletNavIcon isActive={activeIndex === 0} size={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Wallet</Label>
       </Button>
@@ -85,7 +85,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         to="/sockets"
       >
         <IconWrapper>
-          <SocketIcon isActive={activeIndex === 1} size={iconSize} />
+          <SocketNavIcon isActive={activeIndex === 1} size={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Sockets</Label>
       </Button>
@@ -96,7 +96,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         to="/contracts"
       >
         <IconWrapper>
-          <ContractIcon isActive={activeIndex === 2} size={iconSize} />
+          <ContractNavIcon isActive={activeIndex === 2} size={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Contracts</Label>
       </Button>

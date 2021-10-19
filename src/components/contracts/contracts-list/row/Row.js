@@ -6,41 +6,35 @@ import React from 'react';
 import Details from './Details';
 import Amount from './Amount';
 import Icon from './Icon';
+import { ClockIcon } from '../../../icons/ClockIcon';
 
 const Container = styled.div`
   margin-left: 1.6rem;
   padding: 1.2rem 2.4rem 1.2rem 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   cursor: pointer;
   height: 66px;
 `;
 
-const Label = styled.label`
+const Value = styled.label`
   color: black;
   font-size: 1rem;
+  align-text: left;
 `;
 
-class Row extends React.Component {
-  static propTypes = {
-    contract: PropTypes.any
-  };
-
-  render() {
-    console.log('props: ', this.props);
-    const { contract, ...other } = this.props;
-
-    // TODO: Add better padding
-    return (
-      <Container {...other}>
-        <Label>{contract.status}</Label>
-        <Label>{contract.deviceName}</Label>
-        <Label>{contract.hashrate}</Label>
-      </Container>
-    );
-  }
+function Row({ contract }) {
+  // TODO: Add better padding
+  return (
+    <Container>
+      <Value>{contract.status}</Value>
+      <ClockIcon fill={contract.status === 'Live' ? '#8C2AF5' : 'black'} />
+      <Value>{contract.deviceName}</Value>
+      <Value>{contract.hashrate}</Value>
+    </Container>
+  );
 }
 
 export default withContractsRowState(Row);

@@ -15,11 +15,6 @@ const Label = styled.div`
   margin-top: 0.8rem;
 `;
 
-const Emoji = styled.svg`
-  display: block;
-  margin: 0 auto;
-`;
-
 export default class NoSocketPlaceholder extends React.Component {
   render() {
     return (

@@ -11,7 +11,7 @@ const relSize = ratio => `calc(100vw / ${ratio})`;
 
 const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
-  width: 70%;
+  width: 450px;
   height: 100px;
   border-radius: 5px;
   display: flex;
@@ -27,24 +27,9 @@ const Total = styled.div`
   flex-direction: column;
   height: 95%;
   justify-content: space-between;
-  padding: 0.75rem 3rem;
+  padding: 1.4rem 2.6rem;
   border-radius: 5px;
   @media (min-width: 1040px) {
-  }
-`;
-
-const CoinSymbol = styled.div`
-  border-radius: 14.1px;
-  background-color: ${p => p.theme.colors.primary};
-  width: 4rem;
-  line-height: 2.5rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-align: center;
-  @media (min-width: 1040px) {
-    line-height: 3.2rem;
-    width: 6.3rem;
-    font-size: 2rem;
   }
 `;
 
@@ -127,13 +112,13 @@ function TotalsBlock(props) {
           <TotalValue>{530}</TotalValue>
         </Total>
         <Total>
-          <TotalLabel>Active</TotalLabel>
-          <TotalSubLabel>Contracts</TotalSubLabel>
+          <TotalLabel>Lumerin Pool</TotalLabel>
+          <TotalSubLabel>Default Outgoing</TotalSubLabel>
           <TotalValue>{500}</TotalValue>
         </Total>
         <Total>
-          <TotalLabel>Draft</TotalLabel>
-          <TotalSubLabel>Contracts</TotalSubLabel>
+          <TotalLabel>Alt Pool</TotalLabel>
+          <TotalSubLabel>Routed</TotalSubLabel>
           <TotalValue>{30}</TotalValue>
         </Total>
       </Container>

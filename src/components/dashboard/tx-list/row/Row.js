@@ -5,7 +5,7 @@ import React from 'react';
 
 import Details from './Details';
 import Amount from './Amount';
-import Icon from './Icon';
+import { TxIcon } from './Icon';
 import LumerinDarkIcon from '../../../icons/LumerinDarkIcon';
 
 const Container = styled.div`
@@ -19,25 +19,15 @@ const Container = styled.div`
   height: 66px;
 `;
 
-class Row extends React.Component {
-  // static propTypes = {
-  //   tx: PropTypes.any
-  // };
-
-  render() {
-    const { tx, ...other } = this.props;
-
-    return (
-      <Container {...other}>
-        <LumerinDarkIcon />
-        <Icon type={tx.txType} />
-        <div>
-          <Amount {...this.props} />
-          <Details {...this.props} />
-        </div>
-      </Container>
-    );
-  }
-}
+const Row = ({ tx }) => (
+  <Container>
+    <LumerinDarkIcon />
+    <TxIcon type={tx.txType} />
+    <div>
+      <Amount />
+      <Details />
+    </div>
+  </Container>
+);
 
 export default withTxRowState(Row);

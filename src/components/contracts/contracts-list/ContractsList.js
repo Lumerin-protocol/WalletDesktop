@@ -104,7 +104,6 @@ function ContractsList(props) {
 
   const rowRenderer = contracts => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
-      {console.log('contracts: ', props.hasContracts)}
       <ContractsRow
         data-testid="Contracts-row"
         onClick={onContractsClicked}
@@ -129,7 +128,6 @@ function ContractsList(props) {
       </Flex.Row>
       <Contracts>
         <ItemFilter
-          defaultFilter="status"
           extractValue={filterExtractValue}
           items={props.contracts.contracts}
         >

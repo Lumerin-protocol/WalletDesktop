@@ -78,32 +78,32 @@ const getGasPrice = (data, { coreApi }) => coreApi.wallet.getGasPrice(data)
 const sendCoin = (data, { coreApi }) =>
   withAuth(coreApi.wallet.sendCoin)(data, { coreApi })
 
-const getTokensGasLimit = (data, { coreApi }) =>
-  coreApi.tokens.getTokensGasLimit(data)
+// const getTokensGasLimit = (data, { coreApi }) =>
+//   coreApi.tokens.getTokensGasLimit(data)
 
-const getAuctionGasLimit = (data, { coreApi }) =>
-  coreApi.lumerin.getAuctionGasLimit(data)
+// const getAuctionGasLimit = (data, { coreApi }) =>
+//   coreApi.lumerin.getAuctionGasLimit(data)
 
-const getConvertCoinEstimate = (data, { coreApi }) =>
-  coreApi.lumerin.getConvertCoinEstimate(data)
+// const getConvertCoinEstimate = (data, { coreApi }) =>
+//   coreApi.lumerin.getConvertCoinEstimate(data)
 
-const getConvertCoinGasLimit = (data, { coreApi }) =>
-  coreApi.lumerin.getConvertCoinGasLimit(data)
+// const getConvertCoinGasLimit = (data, { coreApi }) =>
+//   coreApi.lumerin.getConvertCoinGasLimit(data)
 
-const getConvertLmrEstimate = (data, { coreApi }) =>
-  coreApi.lumerin.getConvertLmrEstimate(data)
+// const getConvertLmrEstimate = (data, { coreApi }) =>
+//   coreApi.lumerin.getConvertLmrEstimate(data)
 
-const getConvertLmrGasLimit = (data, { coreApi }) =>
-  coreApi.lumerin.getConvertLmrGasLimit(data)
+// const getConvertLmrGasLimit = (data, { coreApi }) =>
+//   coreApi.lumerin.getConvertLmrGasLimit(data)
 
-const buyLumerin = (data, { coreApi }) =>
-  withAuth(coreApi.lumerin.buyLumerin)(data, { coreApi })
+// const buyLumerin = (data, { coreApi }) =>
+//   withAuth(coreApi.lumerin.buyLumerin)(data, { coreApi })
 
-const convertCoin = (data, { coreApi }) =>
-  withAuth(coreApi.lumerin.convertCoin)(data, { coreApi })
+// const convertCoin = (data, { coreApi }) =>
+//   withAuth(coreApi.lumerin.convertCoin)(data, { coreApi })
 
-const convertLmr = (data, { coreApi }) =>
-  withAuth(coreApi.lumerin.convertLmr)(data, { coreApi })
+// const convertLmr = (data, { coreApi }) =>
+//   withAuth(coreApi.lumerin.convertLmr)(data, { coreApi })
 
 const sendLmr = (data, { coreApi }) =>
   withAuth(coreApi.lumerin.sendLmr)(data, { coreApi })
@@ -114,9 +114,10 @@ const getExportLmrFee = (data, { coreApi }) =>
 const getExportGasLimit = (data, { coreApi }) =>
   coreApi.lumerin.estimateExportLmrGas(
     Object.assign({}, data, {
-      destinationChain: config.chains[data.destinationChain].symbol,
-      destinationLmrAddress:
-        config.chains[data.destinationChain].lmrTokenAddress,
+      // destinationChain: config.chains[data.destinationChain].symbol,
+      destinationChain: config.chain.symbol,
+      destinationLmrAddress: config.chain.lmrTokenAddress,
+        // config.chains[data.destinationChain].lmrTokenAddress,
       extraData: '0x00' // TODO: complete with extra data as needed
     })
   )
@@ -135,25 +136,25 @@ const getMerkleRoot = (data, { coreApi }) =>
 
 module.exports = {
   refreshAllTransactions,
-  getConvertCoinEstimate,
-  getConvertCoinGasLimit,
-  getConvertLmrEstimate,
-  getConvertLmrGasLimit,
+  // getConvertCoinEstimate,
+  // getConvertCoinGasLimit,
+  // getConvertLmrEstimate,
+  // getConvertLmrGasLimit,
   refreshTransaction,
-  getAuctionGasLimit,
+  // getAuctionGasLimit,
   getExportGasLimit,
   getImportGasLimit,
-  getTokensGasLimit,
+  // getTokensGasLimit,
   getExportLmrFee,
   exportLumerin,
   importLumerin,
   getMerkleRoot,
-  buyLumerin,
+  // buyLumerin,
   createWallet,
   getGasLimit,
   getGasPrice,
-  convertCoin,
-  convertLmr,
+  // convertCoin,
+  // convertLmr,
   openWallet,
   sendLmr,
   sendCoin

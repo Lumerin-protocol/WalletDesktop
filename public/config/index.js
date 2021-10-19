@@ -1,19 +1,20 @@
 'use strict';
 
-const enabledChains = (process.env.ENABLED_CHAINS || 'ethRopsten,etcMordor')
-  .split(',')
-  .map(name => name.trim());
+const enabledChain = (process.env.ENABLED_CHAIN || 'ethRopsten').trim();
 
-const chains = enabledChains.reduce(function (allChains, chainName) {
-  allChains[chainName] = require(`./${chainName}`);
-  return allChains;
-}, {});
+// const chains = enabledChain.reduce(function (allChains, chainName) {
+//   allChains[chainName] = require(`./${chainName}`);
+//   return allChains;
+// }, {});
+
+// const chain = allChains[chainName] = require(`./${chainName}`);
+const chain = require(`./${enabledChain}`);
 
 module.exports = {
-  chains,
+  chain,
   dbAutocompactionInterval: 30000,
   debug: process.env.DEBUG || false,
-  enabledChains,
+  enabledChain,
   explorerDebounce: 2000,
   ratesUpdateMs: 30000,
   requiredPasswordEntropy: parseInt(process.env.REQUIRED_PASSWORD_ENTROPY || '72', 10),

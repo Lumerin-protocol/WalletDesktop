@@ -1,63 +1,57 @@
-import withTxRowState from 'lumerin-wallet-ui-logic/src/hocs/withTxRowState';
+import withSocketsRowState from 'lumerin-wallet-ui-logic/src/hocs/withSocketsRowState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
-import StatusPillIcon from '../../../icons/StatusPillIcon';
 
 import Details from './Details';
 import Amount from './Amount';
-import Icon from './Icon';
 import IpAddress from './IpAddress';
 import Total from './Total';
+import { SocketIcon } from '../../../icons/SocketIcon';
 
 const Container = styled.div`
-  margin-left: 1.6rem;
-  padding: 1.2rem 10rem 1.2rem 2.4rem;
+  padding: 1.2rem 1.2rem 1.2rem 2.4rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   cursor: pointer;
   height: 66px;
 `;
 
-const Label = styled.label`
+const Value = styled.label`
   color: black;
-  font-size: 1rem;
+  font-size: 0.8rem;
+  width: 60px;
+  margin: 0 0 0 2rem;
 `;
 
-// TODO: rip these out and add in the correct colors
+const StatusPill = styled.span`
+  width: 60px;
+  height: 20px;
+  border-radius: 5px;
+  background-color: ${({ color }) => color};
+  font-size: 1rem;
+  text-align: center;
+  padding: 1px 0;
+`;
+
 const statusColors = {
-  Running: 'teal',
-  Available: 'green',
-  Pending: 'purple',
-  Completed: 'gray'
+  Running: '#11B4BF',
+  Available: '#66BE26',
+  Pending: '#8C2AF5',
+  Completed: '#DEE3EA'
 };
 
-class Row extends React.Component {
-  static propTypes = {
-    socket: PropTypes.any
-  };
+const Row = ({ socket }) => (
+  <Container>
+    <Value>{socket.ipAddress}</Value>
+    <SocketIcon size="2.4rem" fill="black" />
+    <StatusPill color={statusColors[socket.status]}>{socket.status}</StatusPill>
+    <Value>{socket.socketAddress}</Value>
+    <Value>{socket.total}</Value>
+    <Value>{socket.accepted}</Value>
+    <Value>{socket.rejected}</Value>
+  </Container>
+);
 
-  // TODO: Add better padding and pill sizing
-  render() {
-    const { socket, ...other } = this.props;
-    return (
-      <Container {...other}>
-        <Label>{socket.ipAddress}</Label>
-        <Label>
-          <StatusPillIcon
-            fill={statusColors[socket.status]}
-            text={socket.status}
-          />
-        </Label>
-        <Label>{socket.socketAddress}</Label>
-        <Label>{socket.total}</Label>
-        <Label>{socket.accepted}</Label>
-        <Label>{socket.rejected}</Label>
-      </Container>
-    );
-  }
-}
-
-export default withTxRowState(Row);
+export default withSocketsRowState(Row);

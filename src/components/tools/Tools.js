@@ -16,7 +16,13 @@ import {
   Sp
 } from '../common';
 
-const Container = styled.div``;
+const Container = styled.div`
+  background-color: ${p => p.theme.colors.light};
+  min-height: 100%;
+  width: 100%;
+  position: relative;
+  padding: 0 2.4rem;
+`;
 
 const Confirmation = styled.div`
   color: ${p => p.theme.colors.danger};
@@ -169,7 +175,7 @@ class Tools extends React.Component {
 
   render() {
     return (
-      <LightLayout title="Tools" data-testid="tools-container">
+      <Container data-testid="tools-container">
         <Sp py={4} px={6}>
           <ConfirmationWizard
             renderConfirmation={this.renderConfirmation}
@@ -193,7 +199,7 @@ class Tools extends React.Component {
             }}
           />
         </Sp>
-      </LightLayout>
+      </Container>
     );
   }
 }

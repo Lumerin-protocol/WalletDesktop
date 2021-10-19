@@ -20,7 +20,7 @@ const Container = styled.div`
   }
 `;
 
-const Sockets = styled.div`
+const Table = styled.table`
   margin: 1.6rem 0 1.6rem;
   border: 1px solid ${p => p.theme.colors.lightBG};
   border-radius: 5px;
@@ -82,7 +82,7 @@ const Subtitle = styled.div`
   }
 `;
 
-function SocketsList(props) {
+const SocketsList = props => {
   const [displayAttestations, setDisplayAttestations] = useState(false);
   const [activeModal, setActiveModal] = useState('');
   const [selectedSockets, setSelectedSockets] = useState([]);
@@ -137,13 +137,10 @@ function SocketsList(props) {
   if (!isReady) return null;
   return (
     <Container data-testid="Sockets-list">
-      <Flex.Row grow="1">
-        <Title onClick={handleClick}>
-          Status
-          <Subtitle>{8} Machines Connected</Subtitle>
-        </Title>
-      </Flex.Row>
-      <Sockets>
+      <Subtitle>
+        {props.ipAddress} : {props.port}
+      </Subtitle>
+      <Table>
         <ItemFilter
           extractValue={filterExtractValue}
           items={props.sockets.sockets}
@@ -193,19 +190,13 @@ function SocketsList(props) {
                     );
                   }}
                 </WindowScroller>
-                <FooterLogo></FooterLogo>
               </ListContainer>
             </React.Fragment>
           )}
         </ItemFilter>
-        <ReceiptModal
-          onRequestClose={onCloseModal}
-          isOpen={activeModal === 'receipt'}
-          hash={selectedSockets}
-        />
-      </Sockets>
+      </Table>
     </Container>
   );
-}
+};
 
 export default withSocketsListState(SocketsList);

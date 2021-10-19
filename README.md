@@ -14,7 +14,7 @@
 Create a local `.env` file with the following content:
 
 ```shell
-ENABLED_CHAINS=
+ENABLED_CHAIN=
 ROPSTEN_NODE_URL=
 ```
 

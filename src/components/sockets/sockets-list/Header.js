@@ -6,13 +6,13 @@ import ScanIndicator from './ScanIndicator';
 import { Flex } from '../../common';
 import Filter from './Filter';
 
-const responsiveHeader = width => css`
-  @media (min-width: ${width}) {
-    align-items: baseline;
-    display: flex;
-    top: 6.8rem;
-  }
-`;
+// const responsiveHeader = width => css`
+//   @media (min-width: ${width}) {
+//     align-items: baseline;
+//     display: flex;
+//     top: 6.8rem;
+//   }
+// `;
 
 const Container = styled.div`
   position: sticky;
@@ -22,38 +22,27 @@ const Container = styled.div`
   right: 0;
   z-index: 1;
 
-  padding: 1.2rem 10rem 1.2rem 2.4rem;
+  padding: 1.2rem 2.4rem 1.2rem 2.4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  ${p => responsiveHeader(p.isMultiChain ? '1140px' : '1040px')}
 `;
 
-export default class Header extends React.Component {
-  static propTypes = {
-    hasTransactions: PropTypes.bool.isRequired,
-    onWalletRefresh: PropTypes.func.isRequired,
-    onFilterChange: PropTypes.func.isRequired,
-    activeFilter: PropTypes.string.isRequired,
-    isMultiChain: PropTypes.bool.isRequired,
-    syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired
-  };
-
-  render() {
-    return (
-      <>
-        {/* <Flex.Row grow="1">
-        <Title onClick={this.props.onTitleClick}>Transactions</Title>
-      </Flex.Row> */}
-        <Container isMultiChain={this.props.isMultiChain}>
-          <Filter
-            onFilterChange={this.props.onFilterChange}
-            isMultiChain={this.props.isMultiChain}
-            activeFilter={this.props.activeFilter}
-          />
-        </Container>
-      </>
-    );
-  }
+export default function Header({
+  onFilterChange,
+  activeFilter,
+  isMultiChain,
+  syncStatus
+}) {
+  return (
+    <>
+      <Container>
+        <Filter
+          onFilterChange={onFilterChange}
+          isMultiChain={isMultiChain}
+          activeFilter={activeFilter}
+        />
+      </Container>
+    </>
+  );
 }

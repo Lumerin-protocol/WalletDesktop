@@ -1,15 +1,15 @@
 'use strict';
 
-const { flatten } = require('lodash')
+const { flatten } = require('lodash');
 
-const auth = require('../auth')
-const config = require('../../../config')
-const keys = require('../keys')
-const wallet = require('../wallet')
-const WalletError = require('../WalletError')
+const auth = require('../auth');
+const config = require('../../../config');
+const keys = require('../keys');
+const wallet = require('../wallet');
+const WalletError = require('../WalletError');
 
-const noCore = require('./no-core')
-const singleCore = require('./single-core')
+const noCore = require('./no-core');
+const singleCore = require('./single-core');
 
 const createWallets = (data, cores, openWallets = true) =>
   Promise.all([
@@ -18,7 +18,7 @@ const createWallets = (data, cores, openWallets = true) =>
         .createWallet(data, core)
         .then(() => openWallets && singleCore.openWallet(core))
     )
-  ])
+  ]);
 
 const onboardingCompleted = (data, cores) =>
   auth.setPassword(data.password).then(() =>
@@ -29,7 +29,7 @@ const onboardingCompleted = (data, cores) =>
       },
       cores
     )
-  )
+  );
 
 const recoverFromMnemonic = function (data, cores) {
   if (!auth.isValidPassword(data.password)) {
@@ -73,21 +73,21 @@ function getPortFees (data, cores) {
 
 const withMerkleRoot = fn =>
   function (data, cores) {
-    const exportCore = findCoreBySymbol(cores, data.originChain)
-    const importCore = findCoreByChainName(cores, data.chain)
+    const exportCore = findCoreBySymbol(cores, data.originChain);
+    const importCore = findCoreByChainName(cores, data.chain);
     return singleCore
       .getMerkleRoot(data.burnSequence, exportCore)
       .then(function (root) {
-        const importData = Object.assign({}, data, { root })
-        return fn(importData, importCore)
-      })
+        const importData = Object.assign({}, data, { root });
+        return fn(importData, importCore);
+      });
   }
 
 const importLumerin = (data, cores) =>
-  withMerkleRoot(singleCore.importLumerin)(data, cores)
+  withMerkleRoot(singleCore.importLumerin)(data, cores);
 
 const getImportLmrGas = (data, cores) =>
-  withMerkleRoot(singleCore.getImportGasLimit)(data, cores)
+  withMerkleRoot(singleCore.getImportGasLimit)(data, cores);
 
 function portLumerin (data, cores) {
   const exportCore = findCoreByChainName(cores, data.chain)
@@ -95,7 +95,7 @@ function portLumerin (data, cores) {
     destinationChain: config.chains[data.destinationChain].symbol,
     destinationLmrAddress: config.chains[data.destinationChain].lmrTokenAddress,
     extraData: '0x00'
-  })
+  });
   return singleCore
     .exportLumerin(exportData, exportCore)
     .then(function ({ receipt }) {
@@ -104,14 +104,14 @@ function portLumerin (data, cores) {
           .filter(e => !receipt.events[e].event) // Filter already parsed event keys
           .map(e => receipt.events[e]) // Get not parsed events
           .map(e => exportCore.coreApi.explorer.tryParseEventLog(e)) // Try to parse each event
-      ).find(e => e.parsed.event === 'LogExportReceipt') // Get LogExportReceipt event
+      ).find(e => e.parsed.event === 'LogExportReceipt'); // Get LogExportReceipt event
       if (!parsedExportReceipt || !parsedExportReceipt.parsed) {
         return Promise.reject(
           new WalletError('There was an error trying to parse export receipt')
-        )
+        );
       }
-      const { returnValues } = parsedExportReceipt.parsed
-      const importCore = findCoreByChainName(cores, data.destinationChain)
+      const { returnValues } = parsedExportReceipt.parsed;
+      const importCore = findCoreByChainName(cores, data.destinationChain);
       const importData = {
         blockTimestamp: returnValues.blockTimestamp,
         burnSequence: returnValues.burnSequence,
@@ -129,11 +129,11 @@ function portLumerin (data, cores) {
         value: returnValues.amountToBurn,
         password: data.password,
         walletId: data.walletId
-      }
+      };
       return singleCore
         .getMerkleRoot(returnValues.burnSequence, exportCore)
         .then(function (root) {
-          Object.assign(importData, { root })
+          Object.assign(importData, { root });
           return singleCore
             .getImportGasLimit(importData, importCore)
             .then(({ gasLimit }) =>
@@ -142,9 +142,9 @@ function portLumerin (data, cores) {
                 importCore
               )
             )
-            .catch(e => Promise.reject(new WalletError(e.message)))
-        })
-    })
+            .catch(e => Promise.reject(new WalletError(e.message)));
+        });
+    });
 }
 
 module.exports = {
@@ -155,4 +155,4 @@ module.exports = {
   portLumerin,
   onLoginSubmit,
   getPortFees
-}
+};

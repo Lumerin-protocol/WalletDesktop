@@ -1,6 +1,6 @@
 'use strict';
 
-const LumerinContracts = require('metronome-contracts');
+const LumerinContracts = require('lumerin-contracts');
 const contracts = LumerinContracts['mordor'];
 
 const indexerUrl = process.env.MORDOR_INDEXER_URL || 'http://localhost:3015';

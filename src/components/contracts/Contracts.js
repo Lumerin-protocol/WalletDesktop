@@ -2,29 +2,18 @@ import React, { useState } from 'react';
 import withContractsState from 'lumerin-wallet-ui-logic/src/hocs/withContractsState';
 import styled from 'styled-components';
 
-import AddressHeader from '../common/AddressHeader';
-import ReceiveDrawer from './ReceiveDrawer';
+import { BaseBtn } from '../common';
+import { LayoutHeader } from '../common/LayoutHeader';
 import TotalsBlock from './TotalsBlock';
-import SendDrawer from './SendDrawer';
 import ContractsList from './contracts-list/ContractsList';
 import CreateContractModal from './CreateContractModal';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
   min-height: 100%;
+  width: 100%;
   position: relative;
-  padding: 0 2.4rem 2.4rem;
-
-  @media (min-width: 800px) {
-  }
-`;
-
-const FixedContainer = styled.div`
-  position: sticky;
-  z-index: 2;
-  right: 0;
-  left: 0;
-  top: 0;
+  padding: 0 2.4rem;
 `;
 
 const Title = styled.div`
@@ -47,6 +36,22 @@ const Title = styled.div`
   }
 `;
 
+const ContractBtn = styled(BaseBtn)`
+  width: 100px;
+  height: 50%;
+  font-size: 1rem;
+
+  margin-right: 2.6rem;
+  border-radius: 5px;
+  border: 1px solid ${p => p.theme.colors.primary};
+  background-color: ${p => p.theme.colors.light}
+  color: ${p => p.theme.colors.primary}
+
+  @media (min-width: 1040px) {
+    margin-left: 0;
+  }
+`;
+
 function Contracts(props) {
   const [isModalActive, setIsModalActive] = useState(false);
   // static propTypes = {
@@ -62,7 +67,6 @@ function Contracts(props) {
   const handleOpenModal = () => setIsModalActive(true);
 
   const handleCloseModal = e => {
-    console.log('event ', e);
     setIsModalActive(false);
   };
   const handleContractDeploy = e => {
@@ -74,14 +78,13 @@ function Contracts(props) {
 
   return (
     <Container data-testid="contracts-container">
-      <FixedContainer>
-        <AddressHeader
-          copyToClipboard={props.copyToClipboard}
-          address={props.address}
-        />
-      </FixedContainer>
-
-      <Title>My Contracts</Title>
+      <LayoutHeader
+        title="Contracts"
+        address={props.address}
+        copyToClipboard={props.copyToClipboard}
+      >
+        <ContractBtn onClick={handleOpenModal}>Create New Contract</ContractBtn>
+      </LayoutHeader>
       <TotalsBlock
         isModalActive={isModalActive}
         onOpenModal={handleOpenModal}

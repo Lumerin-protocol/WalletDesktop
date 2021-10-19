@@ -12,13 +12,12 @@ const relSize = ratio => `calc(100vw / ${ratio})`;
 
 const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
-  width: 80%;
   height: 100px;
+  width: 100%;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
   align-items: start;
-  justify-content: space-between;
   @media (min-width: 1040px) {
   }
 `;
@@ -28,8 +27,10 @@ const Total = styled.div`
   display: flex;
   flex-direction: column;
   height: 95%;
+  width: 150px;
+  margin-right: 2rem;
   justify-content: space-between;
-  padding: 0.75rem 2rem;
+  padding: 1.4rem 2.6rem;
   border-radius: 5px;
   @media (min-width: 1040px) {
   }
@@ -109,23 +110,7 @@ const TotalValue = styled.div`
   }
 `;
 
-const ContractBtn = styled(BaseBtn)`
-  width: 25%;
-  height: 50%;
-  font-size: 1rem;
-
-  margin-right: 2.6rem;
-  border-radius: 5px;
-  border: 1px solid ${p => p.theme.colors.primary};
-  background-color: ${p => p.theme.colors.light}
-  color: ${p => p.theme.colors.primary}
-
-  @media (min-width: 1040px) {
-    margin-left: 0;
-  }
-`;
-
-function TotalsBlock({ onOpenModal }) {
+const TotalsBlock = ({ onOpenModal }) => {
   // static propTypes = {
   //   coinBalanceUSD: PropTypes.string.isRequired,
   //   coinBalanceWei: PropTypes.string.isRequired,
@@ -135,27 +120,20 @@ function TotalsBlock({ onOpenModal }) {
 
   return (
     <Container>
-      <ContractBtn onClick={() => onOpenModal()}>
-        Create New Contract
-      </ContractBtn>
       <Total>
         <TotalRow>
-          <TotalLabel>Lumerin Pool</TotalLabel>
-          <DraftIcon size="3.4rem" fill="black" />
+          <TotalLabel>Active</TotalLabel>
         </TotalRow>
-        <TotalSubLabel>Default Outgoing</TotalSubLabel>
-        <TotalValue>{500}</TotalValue>
+        <TotalValue>{4}</TotalValue>
       </Total>
       <Total>
         <TotalRow>
-          <TotalLabel>Alternative Pool</TotalLabel>
-          <DraftIcon size="3.4rem" fill="black" />
+          <TotalLabel>Draft</TotalLabel>
         </TotalRow>
-        <TotalSubLabel>Routed</TotalSubLabel>
-        <TotalValue>{30}</TotalValue>
+        <TotalValue>{1}</TotalValue>
       </Total>
     </Container>
   );
-}
+};
 
 export default withContractTotalsBlockState(TotalsBlock);

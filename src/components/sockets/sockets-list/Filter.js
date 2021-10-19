@@ -4,19 +4,20 @@ import React from 'react';
 
 const Container = styled.div`
   display: flex;
-  justify-content: start;
+  text-align: center;
 `;
 
 const Tab = styled.button`
+  justify-content: start;
+  width: 80px;
   font: inherit;
-  line-height: 1.2rem;
-  font-size: 1.2rem;
+  line-height: 1rem;
+  font-size: .8rem;
   font-weight: 600;
   color: ${p => p.theme.colors.dark}
-  letter-spacing: 1px;
-  text-align: center;
+  text-align: left;
   opacity: ${p => (p.isActive ? '1' : '0.5')};
-  padding: 1.6rem 0.8rem;
+  padding: 1.6rem 0;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -29,8 +30,8 @@ const Tab = styled.button`
   }
 
   @media (min-width: 880px) {
-    line-height: 1.4rem;
-    font-size: 1.4rem;
+    line-height: 1.2rem;
+    font-size: 1rem;
     padding: 1.6rem 1.4rem;
   }
 `;

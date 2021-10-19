@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "author": {
     "name": "Kodee McIntosh",
-    "email": "kodee@titan.io",
-    "url": "https://titan.io"
+    "email": "kodee@lumerin.io",
+    "url": "https://lumerin.io"
   },
   "description": "Lumerin Wallet for desktop devices",
-  "repository": "TitanInd/lumerin-wallet-desktop",
+  "repository": "https://github.com/Lumerin-protocol/lumerin-wallet-desktop",
   "license": "MIT",
   "homepage": "./",
   "main": "public/electron.js",
