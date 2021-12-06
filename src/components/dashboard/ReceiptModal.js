@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import withReceiptState from 'lumerin-wallet-ui-logic/src/hocs/withReceiptState';
+import withReceiptState from '@lumerin/wallet-ui-logic/src/hocs/withReceiptState';
 import PropTypes from 'prop-types';
 
 import Modal, { HeaderButton } from '../common/Modal';

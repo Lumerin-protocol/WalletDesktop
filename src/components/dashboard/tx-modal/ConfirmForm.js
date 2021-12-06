@@ -157,7 +157,6 @@ const FooterSublabel = styled.label`
 // export function ConfirmForm({ activeTab, address, lmrBalanceUSD, sendLmrDisabled, sendLmrDisabledReason, onTabSwitch, amountInput, onAmountInput, destinationAddress, onDestinationAddressInput, onInputChange, usdAmount, coinAmount, onMaxClick }) {
 export function ConfirmForm(props) {
   const context = useContext(ToastsContext);
-  console.log('PROPS: --------------- ', props);
 
   const handleTabSwitch = e => {
     e.preventDefault();

@@ -1,15 +1,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
-import FailedImportsBadge from './FailedImportsBadge';
-import ConverterIcon from '../icons/ConverterIcon';
-import AuctionIcon from '../icons/AuctionIcon';
 import { WalletNavIcon } from '../icons/WalletNavIcon';
-import PortIcon from '../icons/PortIcon';
 import { SocketNavIcon } from '../icons/SocketNavIcon';
 import { ContractNavIcon } from '../icons/ContractNavIcon';
+import CogIcon from '../icons/CogIcon';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-height: 10%;
+`;
 
 const Button = styled(NavLink)`
   display: flex;
@@ -62,11 +65,12 @@ const Label = styled.span`
     }
   }
 `;
+
 const iconSize = '3.6rem';
 
 export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
   return (
-    <React.Fragment>
+    <Container>
       <Button
         onClick={() => setActiveIndex(0)}
         activeClassName="active"
@@ -78,6 +82,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         </IconWrapper>
         <Label parent={parent}>Wallet</Label>
       </Button>
+
       <Button
         onClick={() => setActiveIndex(1)}
         activeClassName="active"
@@ -89,6 +94,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         </IconWrapper>
         <Label parent={parent}>Sockets</Label>
       </Button>
+
       <Button
         onClick={() => setActiveIndex(2)}
         activeClassName="active"
@@ -100,6 +106,19 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         </IconWrapper>
         <Label parent={parent}>Contracts</Label>
       </Button>
-    </React.Fragment>
+
+      <Button
+        onClick={() => setActiveIndex(3)}
+        activeClassName="active"
+        data-testid="auction-nav-btn"
+        to="/reports"
+      >
+        <IconWrapper>
+          <CogIcon isActive={activeIndex === 3} size={iconSize} />
+          {/* <ReportsNavIcon isActive={activeIndex === 3} size={iconSize} /> */}
+        </IconWrapper>
+        <Label parent={parent}>Reports</Label>
+      </Button>
+    </Container>
   );
 }

@@ -1,6 +1,6 @@
 import { toChecksumAddress } from 'web3-utils';
 import PropTypes from 'prop-types';
-import TimeAgo from 'lumerin-wallet-ui-logic/src/components/TimeAgo';
+import TimeAgo from '@lumerin/wallet-ui-logic/src/components/TimeAgo';
 import styled from 'styled-components';
 import React from 'react';
 

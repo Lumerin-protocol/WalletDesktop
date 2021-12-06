@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import withContractsState from 'lumerin-wallet-ui-logic/src/hocs/withContractsState';
+import withContractsState from '@lumerin/wallet-ui-logic/src/hocs/withContractsState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -13,12 +13,6 @@ const Container = styled.div`
   }
 `;
 
-const LoadingContainer = styled.div`
-  text-align: center;
-  max-width: 400px;
-  margin: 0 auto;
-`;
-
 const Body = styled.div`
   display: flex;
   margin-top: 3.2rem;
@@ -29,19 +23,6 @@ const Body = styled.div`
     align-items: flex-start;
     margin-top: 4.8rem;
     flex-direction: row;
-  }
-`;
-
-const BuyBtn = styled(Btn)`
-  order: 0;
-  white-space: nowrap;
-  margin-bottom: 3.2rem;
-  min-width: 300px;
-
-  @media (min-width: 1200px) {
-    margin-bottom: 0;
-    order: 1;
-    min-width: auto;
   }
 `;
 
@@ -59,17 +40,6 @@ export function Totals(props) {
     activeModal: false
   });
   const [socketData, setSocketData] = useState([]);
-
-  useEffect(() => {
-    setTimeout(pingMessengerAPI, 5000);
-  }, [socketData]);
-
-  const pingMessengerAPI = async () => {
-    const { data } = await axios('http://localhost:8080/connection');
-    console.log('connection data: ', data);
-
-    setSocketData(data);
-  };
 
   const onOpenModal = e => {
     e.preventDefault();

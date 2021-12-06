@@ -7,7 +7,7 @@ const Container = styled.svg`
 
 export default function Logo() {
   return (
-    <Container width="140" height="40" viewBox="0 0 704 137">
+    <Container width="160" height="60" viewBox="0 0 704 137">
       <defs>
         <linearGradient
           id="paint0_linear"

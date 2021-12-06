@@ -1,7 +1,7 @@
-import withLoadingState from 'lumerin-wallet-ui-logic/src/hocs/withLoadingState';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
+import styled from 'styled-components';
+
+import withLoadingState from '@lumerin/wallet-ui-logic/src/hocs/withLoadingState';
 
 import { LoadingBar, AltLayout, Flex } from './common';
 import ChecklistItem from './common/ChecklistItem';
@@ -11,7 +11,7 @@ const ChecklistContainer = styled(Flex.Row)`
 `;
 
 const Title = styled.div`
-  display: ${p => (p.isMultiChain ? 'block' : 'none')};
+  display: none;
   font-weight: 600;
   cursor: default;
   font-size: 0.9rem;
@@ -24,58 +24,38 @@ const Title = styled.div`
 const Checklist = styled.div`
   opacity: 0.5;
   color: ${p => p.theme.colors.dark}
-  padding-left: ${p => (p.isMultiChain ? '4.8rem' : 0)};
+  padding-left: 0;
 `;
 
-class Loading extends React.Component {
-  static propTypes = {
-    isMultiChain: PropTypes.bool.isRequired,
-    chainsStatus: PropTypes.objectOf(
-      PropTypes.shape({
-        hasBlockHeight: PropTypes.bool,
-        hasCoinBalance: PropTypes.bool,
-        hasLmrBalance: PropTypes.bool,
-        hasCoinRate: PropTypes.bool,
-        displayName: PropTypes.string.isRequired,
-        symbol: PropTypes.string.isRequired
-      })
-    ).isRequired
-  };
-
-  render() {
-    return (
-      <AltLayout title="Gathering Information..." data-testid="loading-scene">
-        <LoadingBar />
-        <ChecklistContainer justify="center">
-          {Object.keys(this.props.chainsStatus).map(chainName => (
-            <div key={chainName}>
-              <Title isMultiChain={this.props.isMultiChain}>
-                {this.props.chainsStatus[chainName].displayName}
-              </Title>
-              <Checklist isMultiChain={this.props.isMultiChain}>
-                <ChecklistItem
-                  isActive={this.props.chainsStatus[chainName].hasBlockHeight}
-                  text="Blockchain status"
-                />
-                <ChecklistItem
-                  isActive={this.props.chainsStatus[chainName].hasCoinRate}
-                  text={`${this.props.chainsStatus[chainName].symbol} exchange data`}
-                />
-                <ChecklistItem
-                  isActive={this.props.chainsStatus[chainName].hasCoinBalance}
-                  text={`${this.props.chainsStatus[chainName].symbol} balance`}
-                />
-                <ChecklistItem
-                  isActive={this.props.chainsStatus[chainName].hasLmrBalance}
-                  text="LMR balance"
-                />
-              </Checklist>
-            </div>
-          ))}
-        </ChecklistContainer>
-      </AltLayout>
-    );
-  }
+function Loading({ chainStatus }) {
+  return (
+    <AltLayout title="Gathering Information..." data-testid="loading-scene">
+      <LoadingBar />
+      <ChecklistContainer justify="center">
+        <div key={chainStatus.displayName}>
+          <Title>{chainStatus.displayName}</Title>
+          <Checklist>
+            <ChecklistItem
+              isActive={chainStatus.hasBlockHeight}
+              text="Blockchain status"
+            />
+            <ChecklistItem
+              isActive={chainStatus.hasCoinRate}
+              text={`${chainStatus.symbol} exchange data`}
+            />
+            <ChecklistItem
+              isActive={chainStatus.hasCoinBalance}
+              text={`${chainStatus.symbol} balance`}
+            />
+            <ChecklistItem
+              isActive={chainStatus.hasLmrBalance}
+              text="LMR balance"
+            />
+          </Checklist>
+        </div>
+      </ChecklistContainer>
+    </AltLayout>
+  );
 }
 
 export default withLoadingState(Loading);

@@ -1,11 +1,11 @@
-import { Provider as ClientProvider } from 'lumerin-wallet-ui-logic/src/hocs/clientContext';
-import { Provider, createStore } from 'lumerin-wallet-ui-logic/src/store';
+import { Provider as ClientProvider } from '@lumerin/wallet-ui-logic/src/hocs/clientContext';
+import { Provider, createStore } from '@lumerin/wallet-ui-logic/src/store';
 import { ThemeProvider } from 'styled-components';
 import ReactDOM from 'react-dom';
-import theme from 'lumerin-wallet-ui-logic/src/theme';
+import theme from '@lumerin/wallet-ui-logic/src/theme';
 import Modal from 'react-modal';
 import React from 'react';
-import Root from 'lumerin-wallet-ui-logic/src/components/Root';
+import Root from '@lumerin/wallet-ui-logic/src/components/Root';
 
 import { subscribeToMainProcessMessages } from './subscriptions';
 import Web3ConnectionNotifier from './components/Web3ConnectionNotifier';

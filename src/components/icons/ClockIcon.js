@@ -4,7 +4,7 @@ import React from 'react';
 import BaseIcon from './BaseIcon';
 
 export const ClockIcon = ({ size, fill }) => (
-  <BaseIcon size={size} viewBox="0 0 48 48">
+  <BaseIcon size={size} viewBox="-5 -5 28 28">
     <path
       fillRule="evenodd"
       clipRule="evenodd"

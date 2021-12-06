@@ -1,4 +1,4 @@
-import * as utils from 'lumerin-wallet-ui-logic/src/utils';
+import * as utils from '@lumerin/wallet-ui-logic/src/utils';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -30,6 +30,7 @@ export default class VerifyMnemonicStep extends React.Component {
           </Message>
           <Sp mt={3} mx={-8}>
             <TextInput
+              id="mnemonicAgain"
               data-testid="mnemonic-field"
               autoFocus
               onChange={this.props.onInputChange}
@@ -37,7 +38,6 @@ export default class VerifyMnemonicStep extends React.Component {
               error={this.props.errors.mnemonicAgain}
               value={this.props.mnemonicAgain || ''}
               rows={3}
-              id="mnemonicAgain"
             />
           </Sp>
           <Sp mt={5}>

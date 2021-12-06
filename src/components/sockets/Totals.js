@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import withSocketsState from 'lumerin-wallet-ui-logic/src/hocs/withSocketsState';
+import withSocketsState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -46,17 +46,6 @@ export function Totals(props) {
     activeModal: false
   });
   const [socketData, setSocketData] = useState([]);
-
-  useEffect(() => {
-    setTimeout(pingMessengerAPI, 5000);
-  }, [socketData]);
-
-  const pingMessengerAPI = async () => {
-    const { data } = await axios('http://localhost:8080/connection');
-    console.log('connection data: ', data);
-
-    setSocketData(data);
-  };
 
   const onOpenModal = e => {
     e.preventDefault();

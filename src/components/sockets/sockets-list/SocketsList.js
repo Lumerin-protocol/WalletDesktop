@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
-import withSocketsListState from 'lumerin-wallet-ui-logic/src/hocs/withSocketsListState';
+import withSocketsListState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsListState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -10,24 +10,31 @@ import { ItemFilter, Flex } from '../../common';
 import ReceiptModal from '../ReceiptModal';
 import LogoIcon from '../../icons/LogoIcon';
 import Header from './Header';
-import SocketsRow from './row/Row';
+import SocketsRow from './Row';
 
 const Container = styled.div`
   margin-top: 2.4rem;
   background-color: ${p => p.theme.colors.light};
+  height: 100%;
 
   @media (min-width: 960px) {
   }
 `;
 
-const Table = styled.table`
+const Sockets = styled.div`
   margin: 1.6rem 0 1.6rem;
   border: 1px solid ${p => p.theme.colors.lightBG};
   border-radius: 5px;
+  height: 60%;
 `;
 
 const ListContainer = styled.div`
   background-color: #ffffff;
+  overflow-y: scroll;
+  height: ${p => p.count * 66 + 'px'};
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const SocketsRowContainer = styled.div`
@@ -91,7 +98,6 @@ const SocketsList = props => {
   // static propTypes = {
   //   hasSockets: PropTypes.bool.isRequired,
   //   onWalletRefresh: PropTypes.func.isRequired,
-  //   isMultiChain: PropTypes.bool.isRequired,
   //   syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
   //   items: PropTypes.arrayOf(
   //     PropTypes.shape({
@@ -140,23 +146,19 @@ const SocketsList = props => {
       <Subtitle>
         {props.ipAddress} : {props.port}
       </Subtitle>
-      <Table>
-        <ItemFilter
-          extractValue={filterExtractValue}
-          items={props.sockets.sockets}
-        >
+      <Sockets>
+        <ItemFilter extractValue={filterExtractValue} items={props.connections}>
           {({ filteredItems, onFilterChange, activeFilter }) => (
             <React.Fragment>
               <Header
                 onWalletRefresh={props.onWalletRefresh}
-                hasSockets={props.hasSockets}
+                hasConnections={props.hasConnections}
                 onFilterChange={onFilterChange}
-                isMultiChain={props.isMultiChain}
                 activeFilter={activeFilter}
                 syncStatus={props.syncStatus}
               />
 
-              <ListContainer>
+              <ListContainer count={props.connections.length}>
                 {!props.hasSockets &&
                   (props.syncStatus === 'syncing' ? (
                     <ScanningSocketsPlaceholder />
@@ -194,7 +196,7 @@ const SocketsList = props => {
             </React.Fragment>
           )}
         </ItemFilter>
-      </Table>
+      </Sockets>
     </Container>
   );
 };

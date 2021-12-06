@@ -1,7 +1,7 @@
 'use strict';
 
 const { ipcMain } = require('electron');
-const createCore = require('lumerin-wallet-core');
+const createCore = require('@lumerin/wallet-core');
 const stringify = require('json-stringify-safe');
 
 const logger = require('../../logger');
@@ -13,7 +13,8 @@ function startCore ({ chain, core, config: coreConfig }, webContent) {
   logger.verbose(`Starting core ${chain}`);
   const { emitter, events, api: coreApi } = core.start(coreConfig);
 
-  emitter.setMaxListeners(30);
+  // emitter.setMaxListeners(30);
+  emitter.setMaxListeners(50);
 
   events.push(
     'create-wallet',
@@ -128,16 +129,17 @@ function createClient (config) {
         core.emitter = emitter;
         core.events = events;
         core.coreApi = coreApi;
-        subscriptions.subscribe(core);
+        subscriptions.subscribe([core]);
       })
       .catch(function (err) {
+        console.log('Unknown chain =', err.message)
         logger.error('Could not start cores', err.message);
       });
   });
 
   ipcMain.on('ui-unload', function () {
     stopCore(core);
-    subscriptions.unsubscribe(core);
+    subscriptions.unsubscribe([core]);
   });
 }
 

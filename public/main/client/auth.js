@@ -1,50 +1,50 @@
-'use strict'
+'use strict';
 
-const logger = require('../../logger.js')
+const logger = require('../../logger.js');
 
-const { getPasswordHash, setPasswordHash } = require('./settings')
+const { getPasswordHash, setPasswordHash } = require('./settings');
 const {
   pbkdf2: { hash, verify },
   sha256
-} = require('./crypto')
+} = require('./crypto');
 
 function setPassword (password) {
-  const passwordHash = getPasswordHash()
+  const passwordHash = getPasswordHash();
   if (!passwordHash) {
-    logger.info('No password set, using current as default')
+    logger.info('No password set, using current as default');
   }
-  return hash(password).then(setPasswordHash)
+  return hash(password).then(setPasswordHash);
 }
 
 function isValidPassword (password) {
-  const passwordHash = getPasswordHash()
+  const passwordHash = getPasswordHash();
 
   return verify(passwordHash, password)
     .then(function (isValid) {
       if (isValid) {
-        logger.verbose('Supplied password is valid')
+        logger.verbose('Supplied password is valid');
       } else {
-        logger.warn('Supplied password is invalid')
+        logger.warn('Supplied password is invalid');
       }
-      return isValid
+      return isValid;
     })
     .catch(function (err) {
-      logger.warn('Could not verify password', err)
+      logger.warn('Could not verify password', err);
 
       // TODO remove this check for an old hash before production release
       if (sha256.hash(password) === passwordHash) {
-        logger.debug('Upgrading password encryption')
+        logger.debug('Upgrading password encryption');
 
         return hash(password).then(function (newHash) {
-          setPasswordHash(newHash)
+          setPasswordHash(newHash);
 
-          return true
+          return true;
         })
       }
       // end of logic to remove
 
-      return false
-    })
+      return false;
+    });
 }
 
-module.exports = { isValidPassword, setPassword }
+module.exports = { isValidPassword, setPassword };

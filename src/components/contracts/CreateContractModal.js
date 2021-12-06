@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import withCreateContractModalState from 'lumerin-wallet-ui-logic/src/hocs/withCreateContractModalState';
+import withCreateContractModalState from '@lumerin/wallet-ui-logic/src/hocs/withCreateContractModalState';
 
 import { BaseBtn } from '../common';
 
@@ -219,7 +219,7 @@ function CreateContractModal({ isActive, save, deploy, close }) {
               />
               <Sublabel>Contract Length (min 1 hour)</Sublabel>
             </InputGroup>
-            <InputGroup>
+            {/* <InputGroup>
               <Label htmlFor="date">End Date</Label>
               <Input
                 value={inputs.date}
@@ -230,7 +230,7 @@ function CreateContractModal({ isActive, save, deploy, close }) {
                 id="date"
               />
               <Sublabel>Contract Expiry</Sublabel>
-            </InputGroup>
+            </InputGroup> */}
           </Row>
           <Row>
             <InputGroup>

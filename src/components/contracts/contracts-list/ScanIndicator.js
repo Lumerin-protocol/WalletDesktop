@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import withScanIndicatorState from 'lumerin-wallet-ui-logic/src/hocs/withScanIndicatorState';
+import withScanIndicatorState from '@lumerin/wallet-ui-logic/src/hocs/withScanIndicatorState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 

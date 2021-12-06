@@ -1,4 +1,4 @@
-import withContractTotalsBlockState from 'lumerin-wallet-ui-logic/src/hocs/withContractTotalsBlockState';
+import withContractTotalsBlockState from '@lumerin/wallet-ui-logic/src/hocs/withContractTotalsBlockState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';

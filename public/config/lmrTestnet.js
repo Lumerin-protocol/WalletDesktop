@@ -1,16 +1,16 @@
 'use strict';
 
-const LumerinContracts = require('lumerin-contracts');
-const { LMRToken } = LumerinContracts['1337'];
+const LumerinContracts = require('@lumerin/contracts');
+const { Lumerin, WebFacing } = LumerinContracts['1337'];
 
-console.log('LumerinContract - [chainId] - lmrTestnet.js: ', LumerinContracts['1337']);
 module.exports = {
   displayName: 'Lumerin',
   chainId: '1337',
-  symbol: 'ETH',
+  symbol: 'LMR',
 
   // contracts addresses
-  lmrTokenAddress: LMRToken.address,
+  lmrTokenAddress: Lumerin.address,
+  // webfacingAddress: WebFacing.address,
 
   // urls
   explorerUrl: 'https://etherscan.io/tx/{{hash}}',

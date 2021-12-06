@@ -1,5 +1,5 @@
-import { withClient } from 'lumerin-wallet-ui-logic/src/hocs/clientContext';
-import * as selectors from 'lumerin-wallet-ui-logic/src/selectors';
+import { withClient } from '@lumerin/wallet-ui-logic/src/hocs/clientContext';
+import selectors from '@lumerin/wallet-ui-logic/src/selectors';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -88,7 +88,7 @@ const mapStateToProps = (state, props) => ({
   isIndexerConnected: selectors.getIndexerConnectionStatus(state),
   isWeb3Connected: selectors.getChainConnectionStatus(state),
   appVersion: props.client.getAppVersion(),
-  chainName: selectors.getActiveChainDisplayName(state),
+  chainName: selectors.getChainDisplayName(state),
   isOnline: selectors.getIsOnline(state),
   ...selectors.getChainMeta(state)
 });

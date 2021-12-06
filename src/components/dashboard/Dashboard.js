@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import withDashboardState from 'lumerin-wallet-ui-logic/src/hocs/withDashboardState';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
+import withDashboardState from '@lumerin/wallet-ui-logic/src/hocs/withDashboardState';
 
 import { LayoutHeader } from '../common/LayoutHeader';
 import BalanceBlock from './BalanceBlock';
 import TransactionModal from './tx-modal';
 import TxList from './tx-list/TxList';
+import { View } from '../common/View';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
-  min-height: 100%;
-  width: 100%;
+  height: 100vh;
+  max-width: 100vw;
   position: relative;
   padding: 0 2.4rem;
 `;
@@ -32,14 +33,18 @@ const Dashboard = ({
   const onTabSwitch = modal => setActiveModal(modal);
 
   return (
-    <Container data-testid="dashboard-container">
+    <View data-testid="dashboard-container">
       <LayoutHeader
         title="My Wallet"
         address={address}
         copyToClipboard={copyToClipboard}
       />
 
-      <BalanceBlock sendDisabled={sendDisabled} onTabSwitch={onTabSwitch} />
+      <BalanceBlock
+        sendDisabled={sendDisabled}
+        sendDisabledReason={sendDisabledReason}
+        onTabSwitch={onTabSwitch}
+      />
 
       <TxList
         hasTransactions={hasTransactions}
@@ -52,7 +57,7 @@ const Dashboard = ({
         onTabSwitch={onTabSwitch}
         activeTab={activeModal}
       />
-    </Container>
+    </View>
   );
 };
 

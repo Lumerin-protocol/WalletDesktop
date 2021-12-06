@@ -1,6 +1,6 @@
 'use strict';
 
-const enabledChain = (process.env.ENABLED_CHAIN || 'ethRopsten').trim();
+const enabledChain = (process.env.ENABLED_CHAIN || 'ethRopsten');
 
 // const chains = enabledChain.reduce(function (allChains, chainName) {
 //   allChains[chainName] = require(`./${chainName}`);

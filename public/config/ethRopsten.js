@@ -1,7 +1,7 @@
 'use strict';
 
-const LumerinContracts = require('lumerin-contracts');
-const contracts = LumerinContracts['ropsten'];
+const LumerinContracts = require('@lumerin/contracts');
+const { Lumerin, WebFacing } = LumerinContracts['ropsten'];
 
 const indexerUrl = process.env.ROPSTEN_INDEXER_URL || 'http://localhost:3005';
 const wsApiUrl = process.env.ROPSTEN_NODE_URL || 'ws://localhost:8546';
@@ -9,14 +9,11 @@ const wsApiUrl = process.env.ROPSTEN_NODE_URL || 'ws://localhost:8546';
 module.exports = {
   displayName: 'Ropsten',
   chainId: 3,
-  symbol: 'ETH',
+  symbol: 'LMR',
 
   // contracts addresses
-  tokenPorterAddress: contracts.TokenPorter.address,
-  converterAddress: contracts.AutonomousConverter.address,
-  validatorAddress: contracts.Validator.address,
-  lmrTokenAddress: contracts.METToken.address,
-  auctionAddress: contracts.Auctions.address,
+  lmrTokenAddress: Lumerin.address,
+  webfacingAddress: WebFacing.address,
 
   // urls
   explorerUrl: 'https://ropsten.etherscan.io/tx/{{hash}}',

@@ -1,4 +1,4 @@
-import * as utils from 'lumerin-wallet-ui-logic/src/utils';
+import * as utils from '@lumerin/wallet-ui-logic/src/utils';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
@@ -8,6 +8,7 @@ import Message from './Message';
 
 const PasswordMessage = styled(Message)`
   text-align: center;
+  color: ${p => p.theme.colors.dark};
 `;
 
 const Green = styled.div`

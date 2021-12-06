@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import withSocketsState from 'lumerin-wallet-ui-logic/src/hocs/withSocketsState';
-import PropTypes from 'prop-types';
+import withSocketsState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsState';
 import styled from 'styled-components';
 
 import { AddressHeader } from '../common/AddressHeader';
-import ReceiveDrawer from './ReceiveDrawer';
 import TotalsBlock from './TotalsBlock';
-import SendDrawer from './SendDrawer';
 import { BaseBtn, Btn } from '../common';
 import SocketsList from './sockets-list/SocketsList';
 import { LayoutHeader } from '../common/LayoutHeader';
+import { View } from '../common/View';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -75,7 +73,7 @@ const Sockets = props => {
   const onCloseModal = () => setActiveModal(null);
 
   return (
-    <Container data-testid="sockets-container">
+    <View data-testid="sockets-container">
       <LayoutHeader
         title="Sockets"
         address={props.address}
@@ -85,11 +83,10 @@ const Sockets = props => {
       <TotalsBlock />
 
       <SocketsList
-        hasSockets={props.hasSockets}
         onWalletRefresh={props.onWalletRefresh}
         syncStatus={props.syncStatus}
       />
-    </Container>
+    </View>
   );
 };
 

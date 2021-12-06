@@ -1,18 +1,16 @@
-import styled, { css } from 'styled-components';
-import PropTypes from 'prop-types';
 import React from 'react';
+import styled, { css } from 'styled-components';
 
 import ScanIndicator from './ScanIndicator';
-import { Flex } from '../../common';
 import Filter from './Filter';
 
-// const responsiveHeader = width => css`
-//   @media (min-width: ${width}) {
-//     align-items: baseline;
-//     display: flex;
-//     top: 6.8rem;
-//   }
-// `;
+const responsiveHeader = width => css`
+  @media (min-width: ${width}) {
+    align-items: baseline;
+    display: flex;
+    top: 6.8rem;
+  }
+`;
 
 const Container = styled.div`
   position: sticky;
@@ -22,26 +20,20 @@ const Container = styled.div`
   right: 0;
   z-index: 1;
 
-  padding: 1.2rem 2.4rem 1.2rem 2.4rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  ${p => responsiveHeader('800px')}
 `;
 
-export default function Header({
-  onFilterChange,
-  activeFilter,
-  isMultiChain,
-  syncStatus
-}) {
+export default function Header(props) {
+  // hasConnections: PropTypes.bool.isRequired,
+  // onWalletRefresh: PropTypes.func.isRequired,
+  // onFilterChange: PropTypes.func.isRequired,
+  // activeFilter: PropTypes.string.isRequired,
+  // syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired
+
   return (
     <>
       <Container>
-        <Filter
-          onFilterChange={onFilterChange}
-          isMultiChain={isMultiChain}
-          activeFilter={activeFilter}
-        />
+        <Filter onFilterChange={props.onFilterChange} activeFilter={false} />
       </Container>
     </>
   );

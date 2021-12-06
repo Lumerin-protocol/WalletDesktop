@@ -1,9 +1,10 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const Message = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   line-height: 1.5;
+  color: ${p => p.theme.colors.dark};
 
   & span {
     font-size: 13px;
@@ -15,6 +16,6 @@ const Message = styled.div`
     cursor: pointer;
     color: ${p => p.theme.colors.success};
   }
-`
+`;
 
-export default Message
+export default Message;

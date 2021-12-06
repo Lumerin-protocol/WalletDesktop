@@ -1,9 +1,9 @@
-import FilteredMessage from 'lumerin-wallet-ui-logic/src/components/FilteredMessage';
-import * as validators from 'lumerin-wallet-ui-logic/src/validators';
-import { withClient } from 'lumerin-wallet-ui-logic/src/hocs/clientContext';
+import FilteredMessage from '@lumerin/wallet-ui-logic/src/components/FilteredMessage';
+import * as validators from '@lumerin/wallet-ui-logic/src/validators';
+import { withClient } from '@lumerin/wallet-ui-logic/src/hocs/clientContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'lumerin-wallet-ui-logic/src/theme';
+import theme from '@lumerin/wallet-ui-logic/src/theme';
 import React from 'react';
 
 import { LoadingBar, TextInput, BaseBtn, Flex, Btn, Sp } from './index';

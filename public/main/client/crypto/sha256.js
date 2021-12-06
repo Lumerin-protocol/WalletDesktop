@@ -1,11 +1,11 @@
-'use strict'
+'use strict';
 
-const crypto = require('crypto')
+const crypto = require('crypto');
 
 const hash = data =>
   crypto
     .createHash('sha256')
     .update(data)
-    .digest('hex')
+    .digest('hex');
 
-module.exports = { hash }
+module.exports = { hash };

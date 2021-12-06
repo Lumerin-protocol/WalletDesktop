@@ -1,20 +1,20 @@
-'use strict'
+'use strict';
 
-const { app } = require('electron')
-const { promisify } = require('util')
-const { sum, upperFirst } = require('lodash')
-const Datastore = require('nedb')
-const path = require('path')
+const { app } = require('electron');
+const { promisify } = require('util');
+const { sum, upperFirst } = require('lodash');
+const Datastore = require('nedb');
+const path = require('path');
 
-const logger = require('../../logger')
-const config = require('../../config')
+const logger = require('../../logger');
+const config = require('../../config');
 
 const promisifyMethods = methods =>
   function (obj) {
     methods.forEach(function (method) {
       obj[`${method}Async`] = promisify(obj[method].bind(obj))
-    })
-    return obj
+    });
+    return obj;
   }
 
 const promisifyCollection = promisifyMethods([
@@ -22,12 +22,12 @@ const promisifyCollection = promisifyMethods([
   'findOne',
   'remove',
   'update'
-])
+]);
 
-const collections = {}
+const collections = {};
 
 function addCollection (name) {
-  logger.verbose(`Creating database collection ${name}`)
+  logger.verbose(`Creating database collection ${name}`);
 
   const newCollection = promisifyCollection(
     new Datastore({
@@ -37,23 +37,23 @@ function addCollection (name) {
       ),
       autoload: true
     })
-  )
+  );
 
-  collections[name] = newCollection
+  collections[name] = newCollection;
 
   if (config.dbAutocompactionInterval) {
-    newCollection.persistence.setAutocompactionInterval(config.dbAutocompactionInterval)
+    newCollection.persistence.setAutocompactionInterval(config.dbAutocompactionInterval);
   }
 
-  return newCollection
+  return newCollection;
 }
 
 function collection (name) {
-  return collections[name] || addCollection(name)
+  return collections[name] || addCollection(name);
 }
 
 function dropDatabase () {
-  logger.verbose('Dropping database')
+  logger.verbose('Dropping database');
 
   return Promise.all(
     Object.keys(collections).map(name =>
@@ -62,24 +62,24 @@ function dropDatabase () {
   )
     .then(sum)
     .then(function (count) {
-      logger.verbose(`Database drop - removed ${count} documents`)
+      logger.verbose(`Database drop - removed ${count} documents`);
 
-      return count
+      return count;
     })
     .catch(function (err) {
-      logger.error('Database drop failed', err)
+      logger.error('Database drop failed', err);
 
-      throw err
-    })
+      throw err;
+    });
 }
 
 const db = {
   collection,
   dropDatabase
-}
+};
 
 const dbManager = {
   getDb: () => db
-}
+};
 
-module.exports = dbManager
+module.exports = dbManager;

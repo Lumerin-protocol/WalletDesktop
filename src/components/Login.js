@@ -1,8 +1,7 @@
-import withLoginState from 'lumerin-wallet-ui-logic/src/hocs/withLoginState';
-import * as utils from 'lumerin-wallet-ui-logic/src/utils';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
+import styled from 'styled-components';
+
+import withLoginState from '@lumerin/wallet-ui-logic/src/hocs/withLoginState';
 
 import { TextInput, AltLayout, BaseBtn, Sp } from './common';
 
@@ -21,15 +20,6 @@ const LoginBtn = styled(BaseBtn)`
 `;
 
 function Login({ onInputChange, onSubmit, password, errors, status, error }) {
-  // static propTypes = {
-  //   onInputChange: PropTypes.func.isRequired,
-  //   onSubmit: PropTypes.func.isRequired,
-  //   password: PropTypes.string,
-  //   errors: utils.errorPropTypes('password'),
-  //   status: utils.statusPropTypes,
-  //   error: PropTypes.string
-  // };
-
   return (
     <AltLayout title="Enter your password">
       <form onSubmit={onSubmit} data-testid="login-form">

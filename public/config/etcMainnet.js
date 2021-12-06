@@ -1,7 +1,7 @@
 'use strict';
 
-const LumerinContracts = require('lumerin-contracts');
-const contracts = LumerinContracts['classic'];
+const LumerinContracts = require('@lumerin/contracts');
+const { Lumerin, WebFacing } = LumerinContracts['classic'];
 
 module.exports = {
   displayName: 'Ethereum Classic',
@@ -9,11 +9,8 @@ module.exports = {
   symbol: 'ETC',
 
   // contracts addresses
-  tokenPorterAddress: contracts.TokenPorter.address,
-  converterAddress: contracts.AutonomousConverter.address,
-  validatorAddress: contracts.Validator.address,
-  lmrTokenAddress: contracts.METToken.address,
-  auctionAddress: contracts.Auctions.address,
+  lmrTokenAddress: Lumerin.address,
+  webfacingAddress: WebFacing.address,
 
   // urls
   explorerUrl: 'https://blockscout.com/etc/mainnet/tx/{{hash}}/internal_transactions',

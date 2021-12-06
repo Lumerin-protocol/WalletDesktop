@@ -1,7 +1,7 @@
 'use strict';
 
-const LumerinContracts = require('lumerin-contracts')
-const contracts = LumerinContracts['mainnet'];
+const LumerinContracts = require('@lumerin/contracts')
+const { Lumerin, WebFacing } = LumerinContracts['mainnet'];
 
 module.exports = {
   displayName: 'Ethereum',
@@ -9,11 +9,8 @@ module.exports = {
   symbol: 'ETH',
 
   // contracts addresses
-  tokenPorterAddress: contracts.TokenPorter.address,
-  converterAddress: contracts.AutonomousConverter.address,
-  validatorAddress: contracts.Validator.address,
-  lmrTokenAddress: contracts.METToken.address,
-  auctionAddress: contracts.Auctions.address,
+  lmrTokenAddress: Lumerin.address,
+  webfacingAddress: WebFacing.address,
 
   // urls
   explorerUrl: 'https://etherscan.io/tx/{{hash}}',

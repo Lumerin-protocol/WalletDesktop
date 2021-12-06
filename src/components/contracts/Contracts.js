@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import withContractsState from 'lumerin-wallet-ui-logic/src/hocs/withContractsState';
+import withContractsState from '@lumerin/wallet-ui-logic/src/hocs/withContractsState';
 import styled from 'styled-components';
 
 import { BaseBtn } from '../common';
@@ -7,6 +7,7 @@ import { LayoutHeader } from '../common/LayoutHeader';
 import TotalsBlock from './TotalsBlock';
 import ContractsList from './contracts-list/ContractsList';
 import CreateContractModal from './CreateContractModal';
+import { View } from '../common/View';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -27,10 +28,8 @@ const Title = styled.div`
   margin-right: 2.4rem;
   cursor: default;
 
-  @media (min-width: 1140px) {
-    margin-right: 0.8rem;
+  @media (min-width: 800px) {
   }
-
   @media (min-width: 1200px) {
     margin-right: 1.6rem;
   }
@@ -38,8 +37,8 @@ const Title = styled.div`
 
 const ContractBtn = styled(BaseBtn)`
   width: 100px;
-  height: 50%;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  padding: 1rem 1.4rem;
 
   margin-right: 2.6rem;
   border-radius: 5px;
@@ -52,7 +51,13 @@ const ContractBtn = styled(BaseBtn)`
   }
 `;
 
-function Contracts(props) {
+function Contracts({
+  hasContracts,
+  copyToClipboard,
+  onWalletRefresh,
+  syncStatus,
+  address
+}) {
   const [isModalActive, setIsModalActive] = useState(false);
   // static propTypes = {
   //   sendDisabledReason: PropTypes.string,
@@ -77,11 +82,11 @@ function Contracts(props) {
   };
 
   return (
-    <Container data-testid="contracts-container">
+    <View data-testid="contracts-container">
       <LayoutHeader
         title="Contracts"
-        address={props.address}
-        copyToClipboard={props.copyToClipboard}
+        address={address}
+        copyToClipboard={copyToClipboard}
       >
         <ContractBtn onClick={handleOpenModal}>Create New Contract</ContractBtn>
       </LayoutHeader>
@@ -91,9 +96,9 @@ function Contracts(props) {
       />
 
       <ContractsList
-        hasContracts={props.hasContracts}
-        onWalletRefresh={props.onWalletRefresh}
-        syncStatus={props.syncStatus}
+        hasContracts={hasContracts}
+        onWalletRefresh={onWalletRefresh}
+        syncStatus={syncStatus}
       />
 
       <CreateContractModal
@@ -102,7 +107,7 @@ function Contracts(props) {
         deploy={handleContractDeploy}
         close={handleCloseModal}
       />
-    </Container>
+    </View>
   );
 }
 

@@ -14,10 +14,10 @@ const Container = styled(Flex.Column)`
 `;
 
 const Body = styled.div`
-  max-width: 30rem;
+  max-width: 40rem;
   width: 100%;
   margin-top: 4rem;
-  @media (min-height: 600px) {
+  @media (min-height: 800px) {
     margin-top: 8rem;
   }
 `;

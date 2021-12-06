@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import withContractTotalsBlockState from 'lumerin-wallet-ui-logic/src/hocs/withSocketTotalsBlockState';
+import withContractTotalsBlockState from '@lumerin/wallet-ui-logic/src/hocs/withSocketTotalsBlockState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import DraftIcon from '../icons/DraftIcon';

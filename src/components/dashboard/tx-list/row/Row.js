@@ -1,12 +1,11 @@
-import withTxRowState from 'lumerin-wallet-ui-logic/src/hocs/withTxRowState';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
+import styled from 'styled-components';
 
+import withTxRowState from '@lumerin/wallet-ui-logic/src/hocs/withTxRowState';
 import Details from './Details';
 import Amount from './Amount';
 import { TxIcon } from './Icon';
-import LumerinDarkIcon from '../../../icons/LumerinDarkIcon';
+import { LumerinDarkIcon } from '../../../icons/LumerinDarkIcon';
 
 const Container = styled.div`
   margin-left: 1.6rem;
@@ -19,9 +18,19 @@ const Container = styled.div`
   height: 66px;
 `;
 
+const IconLogoContainer = styled.div`
+  padding: 2.4rem 1.2rem;
+  height: 100px;
+  width: 100px
+  display: block;
+  flex-shrink: 0;
+`;
+
 const Row = ({ tx }) => (
   <Container>
-    <LumerinDarkIcon />
+    <IconLogoContainer>
+      <LumerinDarkIcon size="3rem" />
+    </IconLogoContainer>
     <TxIcon type={tx.txType} />
     <div>
       <Amount />

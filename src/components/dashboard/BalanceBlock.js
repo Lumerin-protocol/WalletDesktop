@@ -1,14 +1,15 @@
-import withBalanceBlockState from 'lumerin-wallet-ui-logic/src/hocs/withBalanceBlockState';
+import withBalanceBlockState from '@lumerin/wallet-ui-logic/src/hocs/withBalanceBlockState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
-import LumerinLightIcon from '../icons/LumerinLightIcon';
+import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 
 import { BaseBtn, DisplayValue } from '../common';
 
 const convertLmrToEth = () => {};
 
 const relSize = ratio => `calc(100vw / ${ratio})`;
+const sizeMult = mult => `calc(5px * ${mult})`;
 
 const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
@@ -18,9 +19,6 @@ const Container = styled.div`
   padding: 0 1.6rem 0 1.6rem;
   border-radius: 5px;
   display: flex;
-  @media (min-width: 1040px) {
-    display: flex;
-  }
 `;
 
 const Balance = styled.div`
@@ -46,6 +44,17 @@ const CoinSymbol = styled.div`
     line-height: 3.2rem;
     width: 6.3rem;
     font-size: 2rem;
+  }
+`;
+
+const IconLogoContainer = styled.div`
+  padding: 2.4rem 1.2rem;
+  height: 100px;
+  display: none;
+  flex-shrink: 0;
+
+  @media (min-width: 800px) {
+    display: block;
   }
 `;
 
@@ -139,13 +148,15 @@ function BalanceBlock({
   return (
     <>
       <Container>
-        <LumerinLightIcon size="6rem" />
+        <IconLogoContainer>
+          <LumerinLightIcon size="6rem" />
+        </IconLogoContainer>
         <Balance>
           <Value data-testid="lmr-balance" large>
-            <DisplayValue value={lmrBalanceWei} />
+            <DisplayValue value={lmrBalanceWei / 10000000} />
           </Value>
           <USDValue data-testid="lmr-balance-usd" hide>
-            ETH ≈ {lmrBalanceWei}
+            ETH ≈ {lmrBalanceWei / 10000000}
           </USDValue>
         </Balance>
         <BtnRow>

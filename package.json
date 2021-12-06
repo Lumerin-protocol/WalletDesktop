@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "0.1.0",
+  "version": "1.0.0-beta",
   "author": {
     "name": "Kodee McIntosh",
     "email": "kodee@lumerin.io",
@@ -47,7 +47,6 @@
     "fast-password-entropy": "1.1.1",
     "json-stringify-safe": "5.0.1",
     "lodash": "4.17.21",
-    "metronome-contracts": "2.5.0",
     "nedb": "1.8.0",
     "p-timeout": "4.1.0",
     "patch-package": "5.1.1",
@@ -98,7 +97,7 @@
     "wait-on": "6.0.0"
   },
   "build": {
-    "appId": "io.titan.lumerin.wallet.desktop",
+    "appId": "io.lumerin.wallet.desktop",
     "productName": "Lumerin Wallet",
     "files": [
       ".env",
@@ -115,7 +114,7 @@
     "mac": {
       "artifactName": "${name}_v${version}.${ext}",
       "category": "public.app-category.finance",
-      "icon": "./assets/icon.icns",
+      "icon": "./assets/icon",
       "extendInfo": {
         "NSUserNotificationAlertStyle": "alert"
       },
@@ -146,12 +145,12 @@
       "target": [
         "deb"
       ],
-      "icon": "./assets/icon.png"
+      "icon": "./assets/shared/lumerin.png"
     },
     "win": {
       "artifactName": "${name}_v${version}.${ext}",
       "target": "nsis",
-      "icon": "./assets/icon",
+      "icon": "./assets/lumerin.ico",
       "legalTrademarks": ""
     }
   },

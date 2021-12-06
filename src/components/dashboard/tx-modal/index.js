@@ -6,7 +6,7 @@ import { ReceiveForm } from './ReceiveForm';
 import { ConfirmForm } from './ConfirmForm';
 import { SuccessForm } from './SuccessForm';
 
-import withTransactionModalState from 'lumerin-wallet-ui-logic/src/hocs/withTransactionModalState';
+import withTransactionModalState from '@lumerin/wallet-ui-logic/src/hocs/withTransactionModalState';
 import QRCode from 'qrcode.react';
 
 import CopyIcon from '../../icons/CopyIcon';
@@ -40,10 +40,6 @@ const Body = styled.div`
   height: 500px;
   border-radius: 5px;
   padding: 2rem 3rem 2rem 3rem;
-
-  @media (min-height: 700px) {
-    padding: 6.4rem 1.6rem;
-  }
 `;
 
 function TransactionModal(props) {

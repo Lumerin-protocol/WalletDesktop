@@ -1,9 +1,8 @@
-import withSendDrawerState from 'lumerin-wallet-ui-logic/src/hocs/withSendDrawerState';
+import withSendDrawerState from '@lumerin/wallet-ui-logic/src/hocs/withSendDrawerState';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import { Drawer, Tabs } from '../common';
-import SendCoinForm from './SendCoinForm';
 import SendLMRForm from './SendLMRForm';
 
 class SendDrawer extends React.Component {
@@ -49,7 +48,6 @@ class SendDrawer extends React.Component {
         isOpen={this.props.isOpen}
         title="Send Transaction"
       >
-        {this.state.activeTab === 'coin' && <SendCoinForm tabs={tabs} />}
         {this.state.activeTab === 'lmr' && <SendLMRForm tabs={tabs} />}
       </Drawer>
     );

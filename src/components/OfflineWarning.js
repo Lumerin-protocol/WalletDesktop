@@ -1,7 +1,7 @@
-import withOfflineWarningState from 'lumerin-wallet-ui-logic/src/hocs/withOfflineWarningState';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
+import styled from 'styled-components';
+
+import withOfflineWarningState from '@lumerin/wallet-ui-logic/src/hocs/withOfflineWarningState';
 
 import { BaseBtn } from './common';
 import CloseIcon from './icons/CloseIcon';
@@ -25,25 +25,18 @@ const DismissBtn = styled(BaseBtn)`
   left: 6px;
 `;
 
-class OfflineWarning extends React.Component {
-  static propTypes = {
-    handleDismissClick: PropTypes.func.isRequired,
-    isVisible: PropTypes.bool.isRequired
-  };
-
-  render() {
-    return (
-      this.props.isVisible && (
-        <Container>
-          Your wallet is not connected to the network. Check your internet
-          connection.{' '}
-          <DismissBtn onClick={this.props.handleDismissClick}>
-            <CloseIcon size="1.2rem" />
-          </DismissBtn>
-        </Container>
-      )
-    );
-  }
+function OfflineWarning({ handleDismissClick, isVisible }) {
+  return (
+    isVisible && (
+      <Container>
+        Your wallet is not connected to the network. Check your internet
+        connection.{' '}
+        <DismissBtn onClick={handleDismissClick}>
+          <CloseIcon size="1.2rem" />
+        </DismissBtn>
+      </Container>
+    )
+  );
 }
 
 export default withOfflineWarningState(OfflineWarning);
