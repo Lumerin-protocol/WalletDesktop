@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.0.0-beta",
+  "version": "1.0.1-beta",
   "author": {
     "name": "Kodee McIntosh",
     "email": "kodee@lumerin.io",
@@ -28,6 +28,8 @@
     "@electron/remote": "1.2.0",
     "@headlessui/react": "1.4.1",
     "@heroicons/react": "1.0.4",
+    "@lumerin/wallet-core": "1.0.1-beta",
+    "@lumerin/wallet-ui-logic": "1.0.1-beta",
     "@reach/menu-button": "0.1.7",
     "bignumber.js": "7.2.1",
     "bip39": "2.5.0",
