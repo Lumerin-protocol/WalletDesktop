@@ -122,7 +122,7 @@ const SendBtn = styled(BaseBtn)`
   height: 50px;
   border-radius: 5px;
   background-color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.lumerin.hypertext - gray : theme.colors.primary};
+    isActive ? theme.colors.lumerin.helpertextGray : theme.colors.primary};
 `;
 
 const Footer = styled.div`
@@ -137,21 +137,11 @@ const FooterRow = styled.div`
   justify-content: space-between;
 `;
 
-const FooterBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const FooterLabel = styled.label`
   color: ${p => p.theme.colors.dark};
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 5px;
-`;
-
-const FooterSublabel = styled.label`
-  color: ${p => p.theme.colors.primary};
-  font-size: 1.4rem;
 `;
 
 // export function ConfirmForm({ activeTab, address, lmrBalanceUSD, sendLmrDisabled, sendLmrDisabledReason, onTabSwitch, amountInput, onAmountInput, destinationAddress, onDestinationAddressInput, onInputChange, usdAmount, coinAmount, onMaxClick }) {

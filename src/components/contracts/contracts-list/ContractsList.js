@@ -73,8 +73,6 @@ const Title = styled.div`
 `;
 
 function ContractsList({ hasContracts, contracts, syncStatus }) {
-  const [displayAttestations, setDisplayAttestations] = useState(false);
-  const [activeModal, setActiveModal] = useState('');
   const [selectedContracts, setSelectedContracts] = useState([]);
   const [isReady, setIsReady] = useState(false);
   const [scrollElement, setScrollElement] = useState(window);
@@ -93,18 +91,15 @@ function ContractsList({ hasContracts, contracts, syncStatus }) {
   }, []);
 
   const onContractsClicked = ({ currentTarget }) => {
-    setActiveModal('receipt');
     setSelectedContracts(currentTarget.dataset.hash);
   };
 
-  const onCloseModal = () => setActiveModal(null);
-
-  const rowRenderer = contracts => ({ key, index, style }) => (
+  const rowRenderer = contractsList => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <ContractsRow
         data-testid="Contracts-row"
         onClick={onContractsClicked}
-        contract={contracts[index]}
+        contract={contractsList[index]}
       />
     </ContractsRowContainer>
   );
@@ -114,7 +109,6 @@ function ContractsList({ hasContracts, contracts, syncStatus }) {
   const handleClick = e => {
     e.preventDefault();
     if (!window.isDev || !e.shiftKey || !e.altKey) return;
-    setDisplayAttestations(!displayAttestations);
   };
 
   if (!isReady) return null;

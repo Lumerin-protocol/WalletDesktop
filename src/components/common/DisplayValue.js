@@ -9,8 +9,8 @@ export function DisplayValue(props) {
 
   try {
     formattedValue = this.round(
-      toWei ? sanitize(value) : fromWei(value),
-      shouldFormat
+      props.toWei ? sanitize(props.value) : props.fromWei(props.value),
+      props.shouldFormat
     );
   } catch (e) {
     formattedValue = null;

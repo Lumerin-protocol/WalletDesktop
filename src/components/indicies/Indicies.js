@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import withIndiciesState from '@lumerin/wallet-ui-logic/src/hocs/withIndiciesState';

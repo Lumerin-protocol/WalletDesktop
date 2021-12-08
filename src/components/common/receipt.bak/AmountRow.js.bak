@@ -80,11 +80,7 @@ export default class AmountRow extends React.Component {
               <DisplayValue
                 maxSize="1.6rem"
                 value={this.props.fromValue}
-                post={
-                  this.props.convertedFrom === 'coin'
-                    ? ` ${this.props.coinSymbol}`
-                    : ' LMR'
-                }
+                post=" LMR"
               />
               {this.props.toValue && (
                 <React.Fragment>
@@ -92,11 +88,7 @@ export default class AmountRow extends React.Component {
                   <DisplayValue
                     maxSize="1.6rem"
                     value={this.props.toValue}
-                    post={
-                      this.props.convertedFrom === 'coin'
-                        ? ' LMR'
-                        : ` ${this.props.coinSymbol}`
-                    }
+                    post=" LMR"
                   />
                 </React.Fragment>
               )}

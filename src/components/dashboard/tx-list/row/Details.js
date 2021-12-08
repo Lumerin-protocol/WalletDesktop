@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-
-import ReceivedDetails from './ReceivedDetails';
 import SentDetails from './SentDetails';
+import ReceivedDetails from './ReceivedDetails';
 
 const Container = styled.div`
   line-height: 1.6rem;

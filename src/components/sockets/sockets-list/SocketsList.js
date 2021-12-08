@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
 import withSocketsListState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsListState';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import ScanningSocketsPlaceholder from './ScanningSocketsPlaceholder';
 import NoSocketsPlaceholder from './NoSocketsPlaceholder';
-import { ItemFilter, Flex } from '../../common';
-import ReceiptModal from '../ReceiptModal';
-import LogoIcon from '../../icons/LogoIcon';
+import { ItemFilter } from '../../common';
 import Header from './Header';
 import SocketsRow from './Row';
 
@@ -43,32 +40,6 @@ const SocketsRowContainer = styled.div`
   }
 `;
 
-const FooterLogo = styled.div`
-  padding: 4.8rem 0;
-  width: 3.2rem;
-  margin: 0 auto;
-`;
-
-const Title = styled.div`
-  font-size: 2.4rem;
-  line-height: 3rem;
-  white-space: nowrap;
-  margin: 0;
-  font-weight: 600;
-  color: ${p => p.theme.colors.dark}
-  margin-bottom: 4.8px;
-  margin-right: 2.4rem;
-  cursor: default;
-
-  @media (min-width: 1140px) {
-    margin-right: 0.8rem;
-  }
-
-  @media (min-width: 1200px) {
-    margin-right: 1.6rem;
-  }
-`;
-
 const Subtitle = styled.div`
   font-size: 1.4rem;
   align-self: end;
@@ -90,9 +61,6 @@ const Subtitle = styled.div`
 `;
 
 const SocketsList = props => {
-  const [displayAttestations, setDisplayAttestations] = useState(false);
-  const [activeModal, setActiveModal] = useState('');
-  const [selectedSockets, setSelectedSockets] = useState([]);
   const [isReady, setIsReady] = useState(false);
   const [scrollElement, setScrollElement] = useState(window);
   // static propTypes = {
@@ -120,8 +88,6 @@ const SocketsList = props => {
     setIsReady(true);
   }, []);
 
-  const onCloseModal = () => setActiveModal(null);
-
   const rowRenderer = sockets => ({ key, index, style }) => (
     <SocketsRowContainer style={style} key={`${key}-${index}`}>
       <SocketsRow
@@ -137,7 +103,6 @@ const SocketsList = props => {
   const handleClick = e => {
     e.preventDefault();
     if (!window.isDev || !e.shiftKey || !e.altKey) return;
-    setDisplayAttestations(!displayAttestations);
   };
 
   if (!isReady) return null;

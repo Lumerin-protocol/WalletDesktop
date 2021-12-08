@@ -54,11 +54,11 @@ const StyledBtn = styled(BaseBtn)`
 
 function ChangePassword({
   requiredPasswordEntropy,
-  newPasswordAgain,
   onInputChange,
+  onSubmit,
+  newPasswordAgain,
   newPassword,
   oldPassword,
-  onSubmit,
   history,
   status,
   errors,

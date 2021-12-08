@@ -6,7 +6,7 @@ import React from 'react';
 
 import { BaseBtn, Btn } from '../Btn';
 import DisplayValue from '../DisplayValue';
-import AmountRow from './AmountRow';
+import AmountRow from './AmountRow.js.bak';
 import TypeRow from './TypeRow';
 
 const Container = styled.div`

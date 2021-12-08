@@ -1,9 +1,7 @@
-import withContractTotalsBlockState from '@lumerin/wallet-ui-logic/src/hocs/withContractTotalsBlockState';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
+import styled from 'styled-components';
 
-import { BaseBtn, Btn, DisplayValue } from '../common';
+import withContractTotalsBlockState from '@lumerin/wallet-ui-logic/src/hocs/withContractTotalsBlockState';
 
 const convertLmrToEth = () => {};
 
@@ -95,7 +93,7 @@ const TotalValue = styled.div`
   }
 `;
 
-function TotalsBlock(props) {
+const TotalsBlock = props => {
   // static propTypes = {
   //   coinBalanceUSD: PropTypes.string.isRequired,
   //   coinBalanceWei: PropTypes.string.isRequired,
@@ -124,6 +122,6 @@ function TotalsBlock(props) {
       </Container>
     </>
   );
-}
+};
 
 export default withContractTotalsBlockState(TotalsBlock);

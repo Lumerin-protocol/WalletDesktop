@@ -32,21 +32,6 @@ const Balance = styled.div`
   }
 `;
 
-const CoinSymbol = styled.div`
-  border-radius: 14.1px;
-  background-color: ${p => p.theme.colors.primary};
-  width: 4rem;
-  line-height: 2.5rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-align: center;
-  @media (min-width: 1040px) {
-    line-height: 3.2rem;
-    width: 6.3rem;
-    font-size: 2rem;
-  }
-`;
-
 const IconLogoContainer = styled.div`
   padding: 2.4rem 1.2rem;
   height: 100px;
@@ -133,8 +118,6 @@ const BtnRow = styled.div`
 function BalanceBlock({
   sendDisabled,
   sendDisabledReason,
-  coinBalanceUSD,
-  coinBalanceWei,
   lmrBalanceWei,
   CoinSymbol,
   onTabSwitch
@@ -153,7 +136,10 @@ function BalanceBlock({
         </IconLogoContainer>
         <Balance>
           <Value data-testid="lmr-balance" large>
-            <DisplayValue value={lmrBalanceWei / 10000000} />
+            <DisplayValue
+              shouldFormate={false}
+              value={lmrBalanceWei / 10000000}
+            />
           </Value>
           <USDValue data-testid="lmr-balance-usd" hide>
             ETH ≈ {lmrBalanceWei / 10000000}

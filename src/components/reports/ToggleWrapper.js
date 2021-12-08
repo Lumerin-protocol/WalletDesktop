@@ -1,3 +1,4 @@
+import React from 'react';
 import StyledToggle from './Toggle';
 
 export const Toggle = ({ name, active, toggle }) => {

@@ -3,9 +3,6 @@ import styled from 'styled-components';
 
 import withSocketsRowState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsRowState';
 import { SocketIcon } from '../../icons/SocketIcon';
-import ShareIcon from '../../icons/ShareIcon';
-import AcceptedIcon from '../../icons/AcceptedIcon';
-import RejectedIcon from '../../icons/RejectedIcon';
 
 const calcWidth = n => 100 / n;
 

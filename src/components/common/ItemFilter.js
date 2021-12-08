@@ -8,10 +8,10 @@ export const ItemFilter = ({
 }) => {
   const [activeFilter, setActiveFilter] = useState(defaultFilter);
 
-  const handleFilter = (filterValue, items) =>
+  const handleFilter = (filterValue, itemsList) =>
     filterValue
-      ? items.filter(item => this.props.extractValue(item) === filterValue)
-      : items;
+      ? itemsList.filter(item => extractValue(item) === filterValue)
+      : itemsList;
 
   const onFilterChange = filterValue => {
     if (typeof filterValue !== 'undefined') {

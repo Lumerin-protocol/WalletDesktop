@@ -68,7 +68,7 @@ const DoneBtn = styled(BaseBtn)`
   height: 50px;
   border-radius: 5px;
   background-color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.lumerin.hypertext - gray : theme.colors.primary};
+    isActive ? theme.colors.lumerin.helpertextGray : theme.colors.primary};
 `;
 
 const Column = styled.div`

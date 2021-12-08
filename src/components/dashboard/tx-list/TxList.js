@@ -39,12 +39,6 @@ const TxRowContainer = styled.div`
   }
 `;
 
-const FooterLogo = styled.div`
-  padding: 4.8rem 0;
-  width: 3.2rem;
-  margin: 0 auto;
-`;
-
 const Title = styled.div`
   font-size: 2.4rem;
   line-height: 3rem;
@@ -106,18 +100,16 @@ export const TxList = ({
     // if (!window.isDev || !e.shiftKey || !e.altKey) return;
     setSelectedTx(currentTarget.dataset.hash);
 
-    props.onTransactionLinkClick(currentTarget.dataset.hash);
+    client.onTransactionLinkClick(currentTarget.dataset.hash);
   };
 
-  const onCloseModal = () => setActiveModal(null);
-
-  const rowRenderer = transactions => ({ key, style, index }) => (
-    <TxRowContainer style={style} key={`${key}-${transactions[index].hash}`}>
+  const rowRenderer = transactionList => ({ key, style, index }) => (
+    <TxRowContainer style={style} key={`${key}-${transactionList[index].hash}`}>
       <TxRow
         data-testid="tx-row"
-        data-hash={transactions[index].hash}
+        data-hash={transactionList[index].hash}
         onClick={onTxClicked}
-        tx={transactions[index]}
+        tx={transactionList[index]}
       />
     </TxRowContainer>
   );
@@ -125,7 +117,7 @@ export const TxList = ({
   const handleClick = e => {
     if (!window.isDev || !e.shiftKey || !e.altKey) return;
 
-    client.onTransactionLinkClick();
+    client.onTransactionLinkClick(e.currentTarget.dataset.hash);
   };
 
   if (!isReady) return null;

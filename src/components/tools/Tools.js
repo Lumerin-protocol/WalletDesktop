@@ -6,16 +6,7 @@ import React from 'react';
 
 import ConfirmModal from './ConfirmModal';
 import WalletStatus from './WalletStatus';
-import {
-  ConfirmationWizard,
-  LightLayout,
-  TextInput,
-  Flex,
-  BaseBtn,
-  Btn,
-  Sp
-} from '../common';
-import { LayoutHeader } from '../common/LayoutHeader';
+import { ConfirmationWizard, TextInput, Flex, BaseBtn, Sp } from '../common';
 import { View } from '../common/View';
 
 const Container = styled.div`
