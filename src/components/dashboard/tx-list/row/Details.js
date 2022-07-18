@@ -1,13 +1,7 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
-
-import ImportRequestedDetails from './ImportRequestedDetails';
-import AttestationDetails from './AttestationDetails';
-import ImportedDetails from './ImportedDetails';
-import ExportedDetails from './ExportedDetails';
-import ReceivedDetails from './ReceivedDetails';
+import styled from 'styled-components';
 import SentDetails from './SentDetails';
+import ReceivedDetails from './ReceivedDetails';
 
 const Container = styled.div`
   line-height: 1.6rem;
@@ -29,36 +23,18 @@ const Failed = styled.span`
   color: ${p => p.theme.colors.danger};
 `;
 
-export default class Details extends React.Component {
-  static propTypes = {
-    isPending: PropTypes.bool,
-    isFailed: PropTypes.bool.isRequired,
-    txType: PropTypes.oneOf([
-      'import-requested',
-      'attestation',
-      'converted',
-      'received',
-      'imported',
-      'exported',
-      'auction',
-      'unknown',
-      'sent'
-    ]).isRequired
-  };
-
-  render() {
-    return (
-      <Container isPending={this.props.isPending}>
-        {this.props.isFailed ? (
-          <Failed>FAILED TRANSACTION</Failed>
-        ) : this.props.txType === 'sent' ? (
-          <SentDetails {...this.props} />
-        ) : this.props.txType === 'received' ? (
-          <ReceivedDetails {...this.props} />
-        ) : (
-          <div>Waiting for metadata</div>
-        )}
-      </Container>
-    );
-  }
+export default function Details(props) {
+  return (
+    <Container isPending={props.isPending}>
+      {props.isFailed ? (
+        <Failed>FAILED TRANSACTION</Failed>
+      ) : props.txType === 'sent' ? (
+        <SentDetails {...props} />
+      ) : props.txType === 'received' ? (
+        <ReceivedDetails {...props} />
+      ) : (
+        <div>Waiting for metadata</div>
+      )}
+    </Container>
+  );
 }

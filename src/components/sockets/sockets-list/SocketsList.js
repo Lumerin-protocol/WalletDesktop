@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
-import withSocketsListState from 'lumerin-wallet-ui-logic/src/hocs/withSocketsListState';
-import PropTypes from 'prop-types';
+import withSocketsListState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsListState';
 import styled from 'styled-components';
 
 import ScanningSocketsPlaceholder from './ScanningSocketsPlaceholder';
 import NoSocketsPlaceholder from './NoSocketsPlaceholder';
-import { ItemFilter, Flex } from '../../common';
-import ReceiptModal from '../ReceiptModal';
-import LogoIcon from '../../icons/LogoIcon';
+import { ItemFilter } from '../../common';
 import Header from './Header';
-import SocketsRow from './row/Row';
+import SocketsRow from './Row';
 
 const Container = styled.div`
   margin-top: 2.4rem;
   background-color: ${p => p.theme.colors.light};
+  height: 100%;
 
   @media (min-width: 960px) {
   }
@@ -24,41 +22,21 @@ const Sockets = styled.div`
   margin: 1.6rem 0 1.6rem;
   border: 1px solid ${p => p.theme.colors.lightBG};
   border-radius: 5px;
+  height: 60%;
 `;
 
 const ListContainer = styled.div`
   background-color: #ffffff;
+  overflow-y: scroll;
+  height: ${p => p.count * 66 + 'px'};
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const SocketsRowContainer = styled.div`
   &:hover {
     background-color: rgba(126, 97, 248, 0.1);
-  }
-`;
-
-const FooterLogo = styled.div`
-  padding: 4.8rem 0;
-  width: 3.2rem;
-  margin: 0 auto;
-`;
-
-const Title = styled.div`
-  font-size: 2.4rem;
-  line-height: 3rem;
-  white-space: nowrap;
-  margin: 0;
-  font-weight: 600;
-  color: ${p => p.theme.colors.dark}
-  margin-bottom: 4.8px;
-  margin-right: 2.4rem;
-  cursor: default;
-
-  @media (min-width: 1140px) {
-    margin-right: 0.8rem;
-  }
-
-  @media (min-width: 1200px) {
-    margin-right: 1.6rem;
   }
 `;
 
@@ -82,16 +60,12 @@ const Subtitle = styled.div`
   }
 `;
 
-function SocketsList(props) {
-  const [displayAttestations, setDisplayAttestations] = useState(false);
-  const [activeModal, setActiveModal] = useState('');
-  const [selectedSockets, setSelectedSockets] = useState([]);
+const SocketsList = props => {
   const [isReady, setIsReady] = useState(false);
   const [scrollElement, setScrollElement] = useState(window);
   // static propTypes = {
   //   hasSockets: PropTypes.bool.isRequired,
   //   onWalletRefresh: PropTypes.func.isRequired,
-  //   isMultiChain: PropTypes.bool.isRequired,
   //   syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
   //   items: PropTypes.arrayOf(
   //     PropTypes.shape({
@@ -114,13 +88,11 @@ function SocketsList(props) {
     setIsReady(true);
   }, []);
 
-  const onCloseModal = () => setActiveModal(null);
-
   const rowRenderer = sockets => ({ key, index, style }) => (
     <SocketsRowContainer style={style} key={`${key}-${index}`}>
       <SocketsRow
         data-testid="Sockets-row"
-        onClick={props.onSocketsClicked}
+        // onClick={props.onSocketsClicked}
         socket={sockets[index]}
       />
     </SocketsRowContainer>
@@ -131,36 +103,28 @@ function SocketsList(props) {
   const handleClick = e => {
     e.preventDefault();
     if (!window.isDev || !e.shiftKey || !e.altKey) return;
-    setDisplayAttestations(!displayAttestations);
   };
 
   if (!isReady) return null;
   return (
     <Container data-testid="Sockets-list">
-      <Flex.Row grow="1">
-        <Title onClick={handleClick}>
-          Status
-          <Subtitle>{8} Machines Connected</Subtitle>
-        </Title>
-      </Flex.Row>
+      {/* <Subtitle>
+        {props.ipAddress} : {props.port}
+      </Subtitle> */}
       <Sockets>
-        <ItemFilter
-          extractValue={filterExtractValue}
-          items={props.sockets.sockets}
-        >
+        <ItemFilter extractValue={filterExtractValue} items={props.connections}>
           {({ filteredItems, onFilterChange, activeFilter }) => (
             <React.Fragment>
               <Header
-                onWalletRefresh={props.onWalletRefresh}
-                hasSockets={props.hasSockets}
+                // onWalletRefresh={props.onWalletRefresh}
+                // hasConnections={props.hasConnections}
                 onFilterChange={onFilterChange}
-                isMultiChain={props.isMultiChain}
                 activeFilter={activeFilter}
                 syncStatus={props.syncStatus}
               />
 
-              <ListContainer>
-                {!props.hasSockets &&
+              <ListContainer count={props.connections.length}>
+                {!props.hasConnections &&
                   (props.syncStatus === 'syncing' ? (
                     <ScanningSocketsPlaceholder />
                   ) : (
@@ -193,19 +157,13 @@ function SocketsList(props) {
                     );
                   }}
                 </WindowScroller>
-                <FooterLogo></FooterLogo>
               </ListContainer>
             </React.Fragment>
           )}
         </ItemFilter>
-        <ReceiptModal
-          onRequestClose={onCloseModal}
-          isOpen={activeModal === 'receipt'}
-          hash={selectedSockets}
-        />
       </Sockets>
     </Container>
   );
-}
+};
 
 export default withSocketsListState(SocketsList);

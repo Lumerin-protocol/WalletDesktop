@@ -1,11 +1,10 @@
-import withSendModalState from 'lumerin-wallet-ui-logic/src/hocs/withSendModalState';
+import withSendModalState from '@lumerin/wallet-ui-logic/src/hocs/withSendModalState';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal, { HeaderButton } from '../common/Modal';
 
 import { Drawer, Tabs } from '../common';
-import SendCoinForm from '../sockets/SendCoinForm';
-import SendLMRForm from '../sockets/SendLMRForm';
+import SendLMRForm from './SendLMRForm';
 
 class SendModal extends React.Component {
   // static propTypes = {

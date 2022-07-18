@@ -1,63 +1,33 @@
-'use strict'
+'use strict';
 
-const { aes256cbcIv, sha256 } = require('./crypto')
-const settings = require('electron-settings')
+const { aes256cbcIv, sha256 } = require('./crypto');
+const settings = require('electron-settings');
 
-const getActiveWallet = () => settings.getSync('user.activeWallet')
+const getWallet = () => Object.keys(settings.getSync('user.wallet'));
 
-const setActiveWallet = activeWallet =>
-  settings.setSync('user.activeWallet', activeWallet)
+const getAddress = () => settings.getSync(`user.wallet.address`);
 
-const getWallets = () => Object.keys(settings.getSync('user.wallets'))
+const getToken = () => settings.getSync(`user.wallet.token`);
 
-const getWalletId = seed => sha256.hash(seed)
-
-const getWalletAddresses = walletId =>
-  Object.keys(settings.getSync(`user.wallets.${walletId}.addresses`))
-
-const findWalletId = address =>
-  Object.keys(settings.getSync('user.wallets')).find(walletId =>
-    getWalletAddresses(walletId).includes(address)
-  )
-
-function getSeed (walletId, password) {
-  if (!walletId) {
-    return new Error('Origin address not found')
-  }
-  const encryptedSeed = settings.getSync(`user.wallets.${walletId}.encryptedSeed`)
-  return aes256cbcIv.decrypt(password, encryptedSeed)
+function getSeed (password) {
+  const encryptedSeed = settings.getSync(`user.wallet.encryptedSeed`);
+  return aes256cbcIv.decrypt(password, encryptedSeed);
 }
 
-const getSeedByAddress = (address, password) =>
-  getSeed(findWalletId(address), password)
+const setAddress = (address) => settings.setSync(`user.wallet.address`, { address });
 
-const setAddressForWalletId = (walletId, address) =>
-  settings.setSync(`user.wallets.${walletId}.addresses`, {
-    [address]: {
-      index: 0
-    }
-  })
+const setSeed = (seed, password) => settings.setSync(`user.wallet.encryptedSeed`, aes256cbcIv.encrypt(password, seed));
 
-const getAddressesForWalletId = walletId => getWalletAddresses(walletId)
-
-const setSeed = (seed, password) =>
-  settings.setSync(
-    `user.wallets.${getWalletId(seed)}.encryptedSeed`,
-    aes256cbcIv.encrypt(password, seed)
-  )
-
-const clearWallets = () => settings.setSync('user.wallets', {})
+const clearWallet = () => settings.setSync('user.wallet', {});
 
 module.exports = {
-  getAddressesForWalletId,
-  setAddressForWalletId,
-  getSeedByAddress,
-  getActiveWallet,
-  setActiveWallet,
-  clearWallets,
-  findWalletId,
-  getWalletId,
-  getWallets,
+  getAddress,
+  setAddress,
+  getActiveWallet: getWallet,
+  setActiveWallet: setAddress,
+  clearWallet,
+  getWallet,
+  getToken,
   getSeed,
   setSeed
-}
+};

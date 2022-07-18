@@ -1,66 +1,66 @@
-'use strict'
+'use strict';
 
-const { ipcMain } = require('electron')
-const stringify = require('json-stringify-safe')
+const { ipcMain } = require('electron');
+const stringify = require('json-stringify-safe');
 
-const logger = require('../../../logger')
-const WalletError = require('../WalletError')
+const logger = require('../../../logger');
+const WalletError = require('../WalletError');
 
 function getLogData (data) {
   if (!data) {
-    return ''
+    return '';
   }
-  const logData = Object.assign({}, data)
+  const logData = Object.assign({}, data);
 
-  const blackList = ['password']
-  blackList.forEach(w => delete logData[w])
+  const blackList = ['password'];
+  blackList.forEach(w => delete logData[w]);
 
-  return stringify(logData)
+  return stringify(logData);
 }
 
-const logEvent = eventName => eventName !== 'persist-state'
+const checkIfLoggableEvent = eventName => eventName !== 'persist-state';
 
 const ignoreChain = (chain, data) =>
-  (chain !== 'multi' && chain !== 'none' && data.chain && chain !== data.chain)
+  (chain !== 'multi' && chain !== 'none' && data.chain && chain !== data.chain);
 
 function onRendererEvent (eventName, handler, chain) {
   ipcMain.on(eventName, function (event, { id, data }) {
     if (ignoreChain(chain, data)) {
-      return
+      return;
     }
-    if (logEvent(eventName)) {
-      logger.verbose(`--> ${eventName}:${id} ${getLogData()}`)
+    if (checkIfLoggableEvent(eventName)) {
+      logger.verbose(`--> ${eventName}:${id} ${getLogData()}`);
     }
-    const result = handler(data)
+    const result = handler(data);
 
     result
       .then(function (res) {
         if (event.sender.isDestroyed()) {
-          return
+          return;
         }
-        event.sender.send(eventName, { id, data: res })
-        if (logEvent(eventName)) {
-          logger.verbose(`<-- ${eventName}:${id} ${stringify(res)}`)
+        event.sender.send(eventName, { id, data: res });
+        if (checkIfLoggableEvent(eventName)) {
+          logger.verbose(`<-- ${eventName}:${id} ${stringify(res)}`);
         }
       })
       .catch(function (err) {
         if (event.sender.isDestroyed()) {
-          return
+          return;
         }
-        const error = new WalletError(err.message)
-        event.sender.send(eventName, { id, data: { error } })
-        logger.warn(`<-- ${eventName}:${id} ${err.message}`)
+        const error = new WalletError(err.message);
+        event.sender.send(eventName, { id, data: { error } });
+        logger.warn(`<-- ${eventName}:${id} ${err.message}`);
       })
       .catch(function (err) {
-        logger.warn(`Could not send message to renderer: ${err.message}`)
-      })
-  })
+        logger.warn(`Could not send message to renderer: ${err.message}`);
+      });
+  });
 }
 
 const subscribeTo = (types, chain) =>
-  Object.keys(types).forEach(type => onRendererEvent(type, types[type], chain))
+  Object.keys(types).forEach(type => onRendererEvent(type, types[type], chain));
 
 const unsubscribeTo = types =>
-  Object.keys(types).forEach(type => ipcMain.removeAllListeners(type, types[type]))
+  Object.keys(types).forEach(type => ipcMain.removeAllListeners(type, types[type]));
 
-module.exports = { subscribeTo, unsubscribeTo }
+module.exports = { subscribeTo, unsubscribeTo };

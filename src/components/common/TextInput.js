@@ -57,57 +57,55 @@ export const ErrorMsg = styled.div`
   margin-bottom: -2rem;
 `;
 
-export default class TextInput extends React.Component {
-  static propTypes = {
-    'data-testid': PropTypes.string,
-    placeholder: PropTypes.string,
-    autoFocus: PropTypes.bool,
-    onChange: PropTypes.func.isRequired,
-    error: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.string),
-      PropTypes.string
-    ]),
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string,
-    type: PropTypes.oneOf(['text', 'number', 'password', 'url']),
-    rows: PropTypes.number,
-    cols: PropTypes.number,
-    id: PropTypes.string.isRequired
+const TextInput = props => {
+  const InputControl =
+    props.rows || props.cols ? Input.withComponent('textarea') : Input;
+
+  const onChange = e => {
+    props.onChange({ id: props.id, value: e.target.value });
   };
 
-  InputControl =
-    this.props.rows || this.props.cols
-      ? Input.withComponent('textarea')
-      : Input;
+  const { label, value, type, id, error, other } = props;
 
-  onChange = e => {
-    this.props.onChange({ id: this.props.id, value: e.target.value });
-  };
+  const hasErrors = error && error.length > 0;
 
-  render() {
-    const { onChange, label, value, type, id, error, ...other } = this.props;
+  return (
+    <div>
+      <Label hasErrors={hasErrors} htmlFor={id}>
+        {label}
+      </Label>
+      <InputControl
+        hasErrors={hasErrors}
+        onChange={onChange}
+        value={value || ''}
+        type={type || 'text'}
+        id={id}
+        {...other}
+      />
+      {hasErrors && (
+        <ErrorMsg data-testid={`${props['data-testid']}-error`}>
+          {typeof error === 'string' ? error : error.join('. ')}
+        </ErrorMsg>
+      )}
+    </div>
+  );
+};
 
-    const hasErrors = error && error.length > 0;
+TextInput.propTypes = {
+  'data-testid': PropTypes.string,
+  placeholder: PropTypes.string,
+  autoFocus: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
+  error: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.string
+  ]),
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  type: PropTypes.oneOf(['text', 'number', 'password', 'url']),
+  rows: PropTypes.number,
+  cols: PropTypes.number,
+  id: PropTypes.string.isRequired
+};
 
-    return (
-      <div>
-        <Label hasErrors={hasErrors} htmlFor={id}>
-          {label}
-        </Label>
-        <this.InputControl
-          hasErrors={hasErrors}
-          onChange={this.onChange}
-          value={value || ''}
-          type={type || 'text'}
-          id={id}
-          {...other}
-        />
-        {hasErrors && (
-          <ErrorMsg data-testid={`${this.props['data-testid']}-error`}>
-            {typeof error === 'string' ? error : error.join('. ')}
-          </ErrorMsg>
-        )}
-      </div>
-    );
-  }
-}
+export default TextInput;

@@ -1,4 +1,4 @@
-import withGasEditorState from 'lumerin-wallet-ui-logic/src/hocs/withGasEditorState';
+import withGasEditorState from '@lumerin/wallet-ui-logic/src/hocs/withGasEditorState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';

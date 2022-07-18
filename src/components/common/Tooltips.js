@@ -1,20 +1,20 @@
-import styled, { createGlobalStyle, keyframes } from 'styled-components'
-import ReactHintFactory from 'react-hint'
-import React from 'react'
-import 'react-hint/css/index.css'
+import React from 'react';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
+import ReactHintFactory from 'react-hint';
+import 'react-hint/css/index.css';
 
-const ReactHint = ReactHintFactory(React)
+const ReactHint = ReactHintFactory(React);
 
 const GlobalStyles = createGlobalStyle`
   .react-hint {
     &:after { display: none !important; }
   }
-`
+`;
 
 const trans = keyframes`
   from { transform: translateY(-10px); }
   to { transform: translateY(-5px); }
-`
+`;
 
 const Container = styled.div`
   animation: 0.5s ${trans};
@@ -54,7 +54,7 @@ const Container = styled.div`
         ? p.theme.colors.darker
         : p.theme.colors.dark};
   }
-`
+`;
 
 const onRenderContent = (target, content) => (
   <Container
@@ -65,13 +65,13 @@ const onRenderContent = (target, content) => (
   >
     {content}
   </Container>
-)
+);
 
 const Tooltips = () => (
   <React.Fragment>
     <ReactHint events delay={100} onRenderContent={onRenderContent} />
     <GlobalStyles />
   </React.Fragment>
-)
+);
 
-export default Tooltips
+export default Tooltips;

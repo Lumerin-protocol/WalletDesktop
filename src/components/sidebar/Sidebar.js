@@ -1,115 +1,88 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import ChainSelector from './ChainSelector';
 import SecondaryNav from './SecondaryNav';
 import PrimaryNav from './PrimaryNav';
-import LogoIcon from '../icons/LogoIcon';
 import Logo from './Logo';
-import LumerinDarkIconk from '../icons/LumerinLightIcon';
+import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 
 const Container = styled.div`
   background: ${p => p.theme.colors.light};
-  width: 64px;
+  width: 7rem;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
   overflow: hidden;
-  transition: width 0.3s;
+  transition: width 0.2s;
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
   z-index: 3;
   &:hover {
-    width: 200px;
+    width: 210px;
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.2);
   }
   @media (min-width: 800px) {
-    position: static;
-    width: 200px;
+    position: relative;
+    width: 210px;
     &:hover {
       box-shadow: none;
     }
   }
 `;
 
-const LogoLargeContainer = styled.div`
-  padding: 2.4rem 2.4rem 2.8rem 2.4rem;
-  height: 125px;
+const FullLogoContainer = styled.div`
+  padding: 2.2rem 2.2rem 2.8rem 2.2rem;
+  height: 100px;
   display: none;
   flex-shrink: 0;
 
+  ${({ parent }) => parent}:hover & {
+    display: block;
+  }
   @media (min-width: 800px) {
     display: block;
   }
 `;
 
-const LogoSmallContainer = styled.div`
-  padding: ${p => (p.isMultiChain ? '2.3rem 1.6rem 3.2rem' : '2.3rem 1.6rem')};
-  height: ${p => (p.isMultiChain ? 'auto' : '125px')};
+const IconLogoContainer = styled.div`
+  padding: 2rem 0.8rem;
+  height: 100px;
   display: block;
   flex-shrink: 0;
 
-  @media (min-width: 800px) {
+  ${({ parent }) => parent}:hover & {
     display: none;
   }
-`;
-
-const ChainSelectorContainer = styled.div`
-  margin: 0 0.8rem 2.4rem;
-
   @media (min-width: 800px) {
-    margin: 0 1.6rem 2.4rem;
+    display: none;
   }
 `;
 
 const PrimaryNavContainer = styled.nav`
   flex-grow: 1;
-  margin-top: ${p => (p.isMultiChain ? 0 : '5rem')};
+  margin-top: 3rem;
 `;
 
-const SecondaryNavContainer = styled.div`
-  padding-bottom: 0;
-
-  @media (min-width: 800px) {
-    padding-bottom: 2.4rem;
-  }
+const SecondaryNavContainer = styled.nav`
+  padding-bottom: 1.2rem;
 `;
 
-const Footer = styled.div`
-  padding: 0rem 1.6rem 2.4rem;
-  display: none;
-
-  @media (min-width: 800px) {
-    display: block;
-  }
-
-  @media (max-height: 650px) {
-    display: none;
-  }
-`;
-
-export default function Sidebar(props) {
-  // static propTypes = {
-  //   isMultiChain: PropTypes.bool.isRequired
-  // }
+export default function Sidebar() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
     <Container>
-      <LogoLargeContainer isMultiChain={props.isMultiChain}>
+      <FullLogoContainer parent={Container}>
         <Logo />
-      </LogoLargeContainer>
+      </FullLogoContainer>
 
-      <LogoSmallContainer isMultiChain={props.isMultiChain}>
-        <LumerinDarkIconk size="3.6rem" />
-      </LogoSmallContainer>
+      <IconLogoContainer parent={Container}>
+        <LumerinLightIcon size="6rem" />
+      </IconLogoContainer>
 
-      <PrimaryNavContainer isMultiChain={props.isMultiChain}>
+      <PrimaryNavContainer>
         <PrimaryNav
-          isMultiChain={props.isMultiChain}
           parent={Container}
           activeIndex={activeIndex}
           setActiveIndex={setActiveIndex}

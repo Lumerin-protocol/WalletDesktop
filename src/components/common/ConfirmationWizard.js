@@ -1,10 +1,10 @@
-import FilteredMessage from 'lumerin-wallet-ui-logic/src/components/FilteredMessage';
-import * as validators from 'lumerin-wallet-ui-logic/src/validators';
-import { withClient } from 'lumerin-wallet-ui-logic/src/hocs/clientContext';
+import FilteredMessage from '@lumerin/wallet-ui-logic/src/components/FilteredMessage';
+import * as validators from '@lumerin/wallet-ui-logic/src/validators';
+import { withClient } from '@lumerin/wallet-ui-logic/src/hocs/clientContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'lumerin-wallet-ui-logic/src/theme';
-import React from 'react';
+import theme from '@lumerin/wallet-ui-logic/src/theme';
+import React, { useState } from 'react';
 
 import { LoadingBar, TextInput, BaseBtn, Flex, Btn, Sp } from './index';
 import CheckIcon from '../icons/CheckIcon';
@@ -73,192 +73,149 @@ const Focusable = styled.div.attrs({
   }
 `;
 
-class ConfirmationWizard extends React.Component {
-  static propTypes = {
-    renderConfirmation: PropTypes.func.isRequired,
-    confirmationTitle: PropTypes.string,
-    onWizardSubmit: PropTypes.func.isRequired,
-    successTitle: PropTypes.string,
-    failureTitle: PropTypes.string,
-    pendingTitle: PropTypes.string,
-    pendingText: PropTypes.string,
-    successText: PropTypes.string,
-    renderForm: PropTypes.func.isRequired,
-    disclaimer: PropTypes.string,
-    editLabel: PropTypes.string,
-    noCancel: PropTypes.bool,
-    validate: PropTypes.func,
-    styles: PropTypes.object,
-    client: PropTypes.shape({
-      validatePassword: PropTypes.func.isRequired
-    }).isRequired
-  };
-
-  static defaultProps = {
-    confirmationTitle: 'Transaction Preview',
-    successTitle: 'Success!',
-    successText:
-      'You can view the status of this transaction in the transaction list.',
-    failureTitle: 'Error',
-    pendingTitle: 'Sending...',
-    editLabel: 'Edit this transaction',
-    styles: {}
-  };
-
-  static initialState = {
+const ConfirmationWizard = props => {
+  let initialState = {
     password: null,
     errors: {},
     status: 'init', // init | confirm | pending | success | failure
     error: null
   };
 
-  state = ConfirmationWizard.initialState;
+  let focusable = null;
 
-  focusable = null;
+  const [state, setState] = useState(initialState);
 
-  goToReview = ev => {
+  const goToReview = ev => {
     ev.preventDefault();
-    const isValid = !this.props.validate || this.props.validate();
-    if (isValid) this.setState({ status: 'confirm', password: null });
+    const isValid = !props.validate || props.validate();
+    if (isValid) setState({ ...state, status: 'confirm', password: null });
   };
 
-  onCancelClick = () => this.setState(ConfirmationWizard.initialState);
+  const onCancelClick = () => setState(...state, initialState);
 
-  onConfirmClick = ev => {
+  const onConfirmClick = ev => {
     ev.preventDefault();
-    this.validateConfirmation()
+    validateConfirmation()
       .then(isValid => {
         if (isValid) {
-          this.submitWizard();
+          submitWizard();
           return;
         }
-        this.setState({
-          errors: { password: 'Invalid password' }
-        });
+        setState({ ...state, errors: { password: 'Invalid password' } });
       })
-      .catch(err =>
-        this.setState({
-          errors: { password: err.message }
-        })
-      );
+      .catch(err => setState({ ...state, errors: { password: err.message } }));
   };
 
-  validateConfirmation = () => {
-    const errors = validators.validatePassword(this.state.password);
+  const validateConfirmation = () => {
+    const errors = validators.validatePassword(state.password);
     const hasErrors = Object.keys(errors).length > 0;
     if (hasErrors) {
-      this.setState({ errors });
+      setState({ ...state, errors });
       return Promise.reject(new Error(errors.password));
     }
-    return this.props.client.validatePassword(this.state.password);
+    return props.client.validatePassword(state.password);
   };
 
-  submitWizard = () => {
-    this.setState({ status: 'pending' }, () =>
-      this.focusable ? this.focusable.focus() : null
+  const submitWizard = () => {
+    setState({ ...state, status: 'pending' }, () =>
+      focusable ? focusable.focus() : null
     );
-    this.props
-      .onWizardSubmit(this.state.password)
-      .then(result => this.setState({ status: 'success' }))
-      .then(() => (this.focusable ? this.focusable.focus() : null))
-      .catch(err => this.setState({ status: 'failure', error: err.message }));
+    props
+      .onWizardSubmit(state.password)
+      .then(() => setState({ ...state, status: 'success' }))
+      .then(() => (focusable ? focusable.focus() : null))
+      .catch(err =>
+        setState({ ...state, status: 'failure', error: err.message })
+      );
   };
 
-  onPasswordChange = ({ value }) =>
-    this.setState({ password: value, errors: {} });
+  const onPasswordChange = ({ value }) =>
+    setState({ ...state, password: value, errors: {} });
 
   // eslint-disable-next-line complexity
-  render() {
-    const { password, errors, status, error } = this.state;
+  const { password, errors, status, error } = state;
 
-    if (status === 'init') return this.props.renderForm(this.goToReview);
-    if (status === 'confirm') {
-      return (
-        <form onSubmit={this.onConfirmClick} data-testid="confirm-form">
-          <Sp py={4} px={3} style={this.props.styles.confirmation || {}}>
-            {this.props.confirmationTitle && (
-              <ConfirmationTitle>
-                {this.props.confirmationTitle}
-              </ConfirmationTitle>
-            )}
-            {this.props.renderConfirmation()}
-            <Sp mt={2}>
-              <TextInput
-                data-testid="pass-field"
-                autoFocus
-                onChange={this.onPasswordChange}
-                error={errors.password}
-                value={password}
-                label="Enter your password to confirm"
-                type="password"
-                id="password"
-              />
-            </Sp>
-          </Sp>
-          <BtnContainer style={this.props.styles.btns || {}}>
-            <Btn submit block>
-              Confirm
-            </Btn>
-            {!this.props.noCancel && (
-              <EditBtn onClick={this.onCancelClick} data-testid="cancel-btn">
-                {this.props.editLabel}
-              </EditBtn>
-            )}
-          </BtnContainer>
-          {this.props.disclaimer && (
-            <Disclaimer>{this.props.disclaimer}</Disclaimer>
+  if (status === 'init') {
+    return props.renderForm(goToReview);
+  } else if (status === 'confirm') {
+    return (
+      <form onSubmit={onConfirmClick} data-testid="confirm-form">
+        <Sp py={4} px={3} style={props.styles.confirmation || {}}>
+          {props.confirmationTitle && (
+            <ConfirmationTitle>{props.confirmationTitle}</ConfirmationTitle>
           )}
-        </form>
-      );
-    }
-    if (status === 'success') {
-      return (
-        <Sp my={19} mx={12} data-testid="success">
-          <Focusable ref={element => (this.focusable = element)}>
-            <Flex.Column align="center">
-              <CheckIcon color={theme.colors.success} />
-              <Sp my={2}>
-                <Title>{this.props.successTitle}</Title>
-              </Sp>
-              {this.props.successText && (
-                <Message>{this.props.successText}</Message>
-              )}
-            </Flex.Column>
-          </Focusable>
-        </Sp>
-      );
-    }
-    if (status === 'failure') {
-      return (
-        <Sp my={19} mx={12} data-testid="failure">
-          <Flex.Column align="center">
-            <CloseIcon color={theme.colors.danger} size="4.8rem" />
-            <Sp my={2}>
-              <Title>{this.props.failureTitle}</Title>
-            </Sp>
-            {error && <FilteredMessage>{error}</FilteredMessage>}
-            <TryAgainBtn
-              data-testid="try-again-btn"
-              onClick={this.onCancelClick}
+          {props.renderConfirmation()}
+          <Sp mt={2}>
+            <TextInput
+              data-testid="pass-field"
               autoFocus
-            >
-              Try again
-            </TryAgainBtn>
-          </Flex.Column>
+              onChange={onPasswordChange}
+              error={errors.password}
+              value={password}
+              label="Enter your password to confirm"
+              type="password"
+              id="password"
+            />
+          </Sp>
         </Sp>
-      );
-    }
+        <BtnContainer style={props.styles.btns || {}}>
+          <Btn submit block>
+            Confirm
+          </Btn>
+          {!props.noCancel && (
+            <EditBtn onClick={onCancelClick} data-testid="cancel-btn">
+              {props.editLabel}
+            </EditBtn>
+          )}
+        </BtnContainer>
+        {props.disclaimer && <Disclaimer>{props.disclaimer}</Disclaimer>}
+      </form>
+    );
+  } else if (status === 'success') {
+    return (
+      <Sp my={19} mx={12} data-testid="success">
+        <Focusable ref={element => (focusable = element)}>
+          <Flex.Column align="center">
+            <CheckIcon color={theme.colors.success} />
+            <Sp my={2}>
+              <Title>{props.successTitle}</Title>
+            </Sp>
+            {props.successText && <Message>{props.successText}</Message>}
+          </Flex.Column>
+        </Focusable>
+      </Sp>
+    );
+  } else if (status === 'failure') {
+    return (
+      <Sp my={19} mx={12} data-testid="failure">
+        <Flex.Column align="center">
+          <CloseIcon color={theme.colors.danger} size="4.8rem" />
+          <Sp my={2}>
+            <Title>{props.failureTitle}</Title>
+          </Sp>
+          {error && <FilteredMessage>{error}</FilteredMessage>}
+          <TryAgainBtn
+            data-testid="try-again-btn"
+            onClick={onCancelClick}
+            autoFocus
+          >
+            Try again
+          </TryAgainBtn>
+        </Flex.Column>
+      </Sp>
+    );
+  } else {
     return (
       <Sp my={19} mx={12} data-testid="waiting">
-        <Focusable ref={element => (this.focusable = element)}>
+        <Focusable ref={element => (focusable = element)}>
           <Flex.Column align="center">
             <Sp mb={2}>
-              <Title>{this.props.pendingTitle}</Title>
+              <Title>{props.pendingTitle}</Title>
             </Sp>
             <LoadingBar />
-            {this.props.pendingText && (
+            {props.pendingText && (
               <Sp mt={2}>
-                <Message>{this.props.pendingText}</Message>
+                <Message>{props.pendingText}</Message>
               </Sp>
             )}
           </Flex.Column>
@@ -266,6 +223,37 @@ class ConfirmationWizard extends React.Component {
       </Sp>
     );
   }
-}
+};
+
+ConfirmationWizard.defaultProps = {
+  confirmationTitle: 'Transaction Preview',
+  successTitle: 'Success!',
+  successText:
+    'You can view the status of this transaction in the transaction list.',
+  failureTitle: 'Error',
+  pendingTitle: 'Sending...',
+  editLabel: 'Edit this transaction',
+  styles: {}
+};
+
+ConfirmationWizard.propTypes = {
+  renderConfirmation: PropTypes.func.isRequired,
+  confirmationTitle: PropTypes.string,
+  onWizardSubmit: PropTypes.func.isRequired,
+  successTitle: PropTypes.string,
+  failureTitle: PropTypes.string,
+  pendingTitle: PropTypes.string,
+  pendingText: PropTypes.string,
+  successText: PropTypes.string,
+  renderForm: PropTypes.func.isRequired,
+  disclaimer: PropTypes.string,
+  editLabel: PropTypes.string,
+  noCancel: PropTypes.bool,
+  validate: PropTypes.func,
+  styles: PropTypes.object,
+  client: PropTypes.shape({
+    validatePassword: PropTypes.func.isRequired
+  }).isRequired
+};
 
 export default withClient(ConfirmationWizard);

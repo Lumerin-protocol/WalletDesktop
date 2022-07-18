@@ -1,4 +1,4 @@
-import withSendLMRFormState from 'lumerin-wallet-ui-logic/src/hocs/withSendLMRFormState';
+import withSendLMRFormState from '@lumerin/wallet-ui-logic/src/hocs/withSendLMRFormState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';

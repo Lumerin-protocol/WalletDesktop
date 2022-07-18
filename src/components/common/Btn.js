@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const BaseBtn = styled.button.attrs(({ submit }) => ({
   type: submit ? 'submit' : 'button'
@@ -20,30 +20,24 @@ export const BaseBtn = styled.button.attrs(({ submit }) => ({
     opacity: 0.5;
     cursor: not-allowed;
   }
-`
+`;
 
 export const Btn = styled(BaseBtn)`
   line-height: 2.5rem;
   font-size: 2rem;
   font-weight: 600;
-  color: ${p => p.theme.colors.primary};
+  color: ${p => p.theme.colors.light};
   border-radius: 12px;
-  background-color: ${p => p.theme.colors.lightBG};
-  background-image: linear-gradient(
-    to top,
-    transparent,
-    ${p => p.theme.colors.light}
-  );
+  background-color: ${p => p.theme.colors.primary};
   box-shadow: inset 0 3px 0 0 rgba(255, 255, 255, 0.1);
   padding: 1.6rem;
 
   &:not([disabled], [data-disabled]):hover,
   &:not([disabled], [data-disabled]):focus,
   &:not([disabled], [data-disabled]):active {
-    background-color: ${p => p.theme.colors.light};
     box-shadow: 0 2px 8px 0 ${p => p.theme.colors.darkShade};
   }
-`
+`;
 
 export const FieldBtn = styled(BaseBtn)`
   float: ${p => (p.float ? 'right' : 'none')};
@@ -59,4 +53,4 @@ export const FieldBtn = styled(BaseBtn)`
   &:hover {
     opacity: 1;
   }
-`
+`;

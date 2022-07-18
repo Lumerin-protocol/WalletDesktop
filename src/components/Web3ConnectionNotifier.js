@@ -1,10 +1,10 @@
 import React, { useEffect, useContext } from 'react';
-import withConnectionState from 'lumerin-wallet-ui-logic/src/hocs/withConnectionState';
-import PropTypes from 'prop-types';
+
+import withConnectionState from '@lumerin/wallet-ui-logic/src/hocs/withConnectionState';
 
 import { ToastsContext } from '../components/toasts';
 
-function Web3ConnectionNotifier(props) {
+function Web3ConnectionNotifier({ isConnected, chainName }) {
   // static propTypes = {
   //   isConnected: PropTypes.bool,
   //   chainName: PropTypes.string
@@ -14,12 +14,12 @@ function Web3ConnectionNotifier(props) {
 
   useEffect(() => {
     // Only launch success toast when recovering from a disconnection
-    if (props.isConnected === true) {
-      context.toast('success', `Reconnected to ${props.chainName} network`);
+    if (isConnected === true) {
+      context.toast('success', `Reconnected to ${chainName} network`);
     }
     // Only launch error toast if disconnected on init or after being connected
-    if (props.isConnected === false) {
-      context.toast('error', `Disconnected from ${props.chainName} network`, {
+    if (isConnected === false) {
+      context.toast('error', `Disconnected from ${chainName} network`, {
         autoClose: 15000
       });
     }

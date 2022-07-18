@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import withSocketsState from 'lumerin-wallet-ui-logic/src/hocs/withSocketsState';
+import withSocketsState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import axios from 'axios';
