@@ -36,7 +36,6 @@ const TitleContainer = styled.div`
   left: 0;
   top: 0;
 `;
-
 const Title = styled.label`
   font-size: 2.4rem;
   line-height: 3rem;
