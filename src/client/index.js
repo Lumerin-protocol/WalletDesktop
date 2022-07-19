@@ -4,7 +4,7 @@ import get from 'lodash/get';
 
 import * as utils from './utils';
 import keys from './keys';
-import { getSessionPassword } from './secure';
+// import { getSessionPassword } from './secure';
 import './sentry';
 
 const createClient = function(createStore) {
@@ -108,7 +108,7 @@ const createClient = function(createStore) {
   };
 
   const api = {
-    getSessionPassword,
+    // getSessionPassword,
     ...utils,
     ...forwardedMethods,
     isValidMnemonic: keys.isValidMnemonic,

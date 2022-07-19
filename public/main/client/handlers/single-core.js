@@ -2,7 +2,7 @@
 
 const pTimeout = require("p-timeout");
 const logger = require("../../../logger");
-const auth = require("../../../../src/client/auth");
+const auth = require("../auth");
 const keys = require("../keys");
 const config = require("../../../config");
 const wallet = require("../wallet");

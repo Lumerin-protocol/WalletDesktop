@@ -4,7 +4,7 @@ const restart = require('../electron-restart');
 const dbManager = require('../database');
 const logger = require('../../../logger');
 const storage = require('../storage');
-const auth = require('../../../../src/client/auth');
+const auth = require('../auth');
 const wallet = require('../wallet');
 
 const validatePassword = data => auth.isValidPassword(data);
