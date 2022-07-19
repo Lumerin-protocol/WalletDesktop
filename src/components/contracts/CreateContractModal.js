@@ -13,6 +13,7 @@ const Modal = styled.div`
   left: 0;
   top: 0;
   width: 100%;
+  min-width: 330px;
   height: 100%;
   overflow: auto;
   background-color: rgb(0, 0, 0);
@@ -73,6 +74,7 @@ const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  flex: 1;
 `;
 
 const Row = styled.div`
@@ -147,12 +149,17 @@ const RightBtn = styled(BaseBtn)`
   }
 `;
 
-function CreateContractModal({ isActive, save, deploy, close }) {
+function CreateContractModal(props) {
+  // console.log(Object.keys(props));
+  // console.log(props);
+  const { isActive, save, deploy, close, client } = props;
+
   const [inputs, setInputs] = useState({
-    address: '',
+    address: props.address,
     time: '',
     date: '',
-    price: ''
+    price: '',
+    speed: ''
   });
 
   const handleInputs = e => {
@@ -163,7 +170,8 @@ function CreateContractModal({ isActive, save, deploy, close }) {
 
   const handleDeploy = e => {
     e.preventDefault();
-    deploy(e);
+
+    deploy(e, inputs);
   };
 
   const handleSaveDraft = e => {
@@ -185,17 +193,17 @@ function CreateContractModal({ isActive, save, deploy, close }) {
       <Body onClick={handlePropagation}>
         <TitleWrapper>
           <Title>Create new contract</Title>
-          <Subtitle>Sell your hashpower to the Lumerin Marketplace</Subtitle>
+          <Subtitle>Sell your hashpower on the Lumerin Marketplace</Subtitle>
         </TitleWrapper>
         <Form onSubmit={handleDeploy}>
           <Row>
             <InputGroup>
-              <Label htmlFor="address">Pool Address</Label>
+              <Label htmlFor="address">Ethereum Address *</Label>
               <Input
-                value={inputs.address}
-                onChange={handleInputs}
-                placeholder="0x0c34..."
-                style={{ width: '100%' }}
+                value={props.address}
+                readOnly
+                disable={true}
+                style={{ flex: 1, width: 'auto' }}
                 type="text"
                 name="address"
                 id="address"
@@ -218,6 +226,20 @@ function CreateContractModal({ isActive, save, deploy, close }) {
                 id="time"
               />
               <Sublabel>Contract Length (min 1 hour)</Sublabel>
+            </InputGroup>
+          </Row>
+          <Row>
+            <InputGroup>
+              <Label htmlFor="speed">Speed</Label>
+              <Input
+                value={inputs.speed}
+                onChange={handleInputs}
+                placeholder="Number of TH/s"
+                type="number"
+                name="speed"
+                id="speed"
+              />
+              <Sublabel>Amount of TH/s Contracted</Sublabel>
             </InputGroup>
             {/* <InputGroup>
               <Label htmlFor="date">End Date</Label>
@@ -264,7 +286,7 @@ function CreateContractModal({ isActive, save, deploy, close }) {
               marketplace.
             </SublabelGreen>
             <Row>
-              <LeftBtn onClick={handleSaveDraft}>Save as Draft</LeftBtn>
+              {/* <LeftBtn onClick={handleSaveDraft}>Save as Draft</LeftBtn> */}
               <RightBtn type="submit">Create New Contract</RightBtn>
             </Row>
           </InputGroup>

@@ -11,16 +11,17 @@ const storage = require('./storage');
 
 function startCore ({ chain, core, config: coreConfig }, webContent) {
   logger.verbose(`Starting core ${chain}`);
-  const { emitter, events, api: coreApi } = core.start(coreConfig);
+  const { emitter, events, api } = core.start(coreConfig);
 
   // emitter.setMaxListeners(30);
   emitter.setMaxListeners(50);
 
   events.push(
     'create-wallet',
-    'open-wallets',
     'transactions-scan-started',
-    'transactions-scan-finished'
+    'transactions-scan-finished',
+    'contracts-scan-started',
+    'contracts-scan-finished'
   );
 
   function send (eventName, data) {
@@ -44,15 +45,16 @@ function startCore ({ chain, core, config: coreConfig }, webContent) {
       .then(function (from) {
         send('transactions-scan-started', {});
 
-        return coreApi.explorer
+        return api.explorer
           .syncTransactions(from, address, number => storage.setSyncBlock(number, chain))
           .then(function () {
             send('transactions-scan-finished', { success: true });
 
             emitter.on('coin-block', function ({ number }) {
-              storage.setSyncBlock(number, chain).catch(function (err) {
-                logger.warn('Could not save new synced block', err);
-              });
+              storage.setSyncBlock(number, chain)
+                .catch(function (err) {
+                  logger.warn('Could not save new synced block', err);
+                });
             });
           });
       })
@@ -69,7 +71,7 @@ function startCore ({ chain, core, config: coreConfig }, webContent) {
       });
   }
 
-  emitter.on('open-wallets', syncTransactions);
+  emitter.on('open-wallet', syncTransactions)
 
   emitter.on('wallet-error', function (err) {
     logger.warn(err.inner
@@ -81,7 +83,7 @@ function startCore ({ chain, core, config: coreConfig }, webContent) {
   return {
     emitter,
     events,
-    coreApi
+    api
   };
 }
 
@@ -105,9 +107,10 @@ function createClient (config) {
 
   ipcMain.on('ui-ready', function (webContent, args) {
     const onboardingComplete = !!settings.getPasswordHash();
+
     storage.getState()
       .catch(function (err) {
-        logger.warn('Faild to get state', err.message);
+        logger.warn('Failed to get state', err.message);
         return {};
       })
       .then(function (persistedState) {
@@ -125,21 +128,21 @@ function createClient (config) {
         logger.error('Could not send ui-ready message back', err.message);
       })
       .then(function () {
-        const { emitter, events, coreApi } = startCore(core, webContent);
+        const { emitter, events, api } = startCore(core, webContent);
         core.emitter = emitter;
         core.events = events;
-        core.coreApi = coreApi;
-        subscriptions.subscribe([core]);
+        core.api = api;
+        subscriptions.subscribe(core);
       })
       .catch(function (err) {
         console.log('Unknown chain =', err.message)
-        logger.error('Could not start cores', err.message);
+        logger.error('Could not start core', err.message);
       });
   });
 
   ipcMain.on('ui-unload', function () {
     stopCore(core);
-    subscriptions.unsubscribe([core]);
+    subscriptions.unsubscribe(core);
   });
 }
 

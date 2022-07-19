@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import withContractsState from '@lumerin/wallet-ui-logic/src/hocs/withContractsState';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
-import { LightLayout, LastUpdated, LoadingBar, Text, Btn, Sp } from '../common';
+import { LightLayout, LastUpdated, Text } from '../common';
 
 const Container = styled.div`
   padding: 3.2rem 2.4rem;

@@ -25,14 +25,14 @@ function Login({ onInputChange, onSubmit, password, errors, status, error }) {
       <form onSubmit={onSubmit} data-testid="login-form">
         <Sp mt={4}>
           <TextInput
+            id="password"
+            type="password"
+            label="Password"
+            value={password}
             data-testid="pass-field"
             autoFocus
             onChange={onInputChange}
             error={errors.password || error}
-            value={password}
-            label="Password"
-            type="password"
-            id="password"
           />
         </Sp>
         <Sp mt={6}>

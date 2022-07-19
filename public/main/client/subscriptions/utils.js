@@ -18,7 +18,7 @@ function getLogData (data) {
   return stringify(logData);
 }
 
-const logEvent = eventName => eventName !== 'persist-state';
+const checkIfLoggableEvent = eventName => eventName !== 'persist-state';
 
 const ignoreChain = (chain, data) =>
   (chain !== 'multi' && chain !== 'none' && data.chain && chain !== data.chain);
@@ -28,7 +28,7 @@ function onRendererEvent (eventName, handler, chain) {
     if (ignoreChain(chain, data)) {
       return;
     }
-    if (logEvent(eventName)) {
+    if (checkIfLoggableEvent(eventName)) {
       logger.verbose(`--> ${eventName}:${id} ${getLogData()}`);
     }
     const result = handler(data);
@@ -39,7 +39,7 @@ function onRendererEvent (eventName, handler, chain) {
           return;
         }
         event.sender.send(eventName, { id, data: res });
-        if (logEvent(eventName)) {
+        if (checkIfLoggableEvent(eventName)) {
           logger.verbose(`<-- ${eventName}:${id} ${stringify(res)}`);
         }
       })

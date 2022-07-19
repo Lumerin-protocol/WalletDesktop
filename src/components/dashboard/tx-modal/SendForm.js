@@ -46,8 +46,12 @@ const AmountInput = styled.input`
   text-align: center;
   outline: none;
   border: none;
+  text-shadow: 0 0 0 #2196f3;
   color: ${({ isActive, theme }) =>
     isActive ? theme.colors.primary : theme.colors.dark};
+  &:focus {
+    outline: none;
+  }
 
   ::placeholder {
     color: ${p => p.theme.colors.dark};
@@ -218,14 +222,14 @@ export function SendForm({
       </WalletContainer>
 
       <Footer>
-        {amountInput > 0 && (
+        {
           <FooterRow>
             <FooterLabel>LMR Balance</FooterLabel>
             <FooterLabel>
               {convertToLMR(amountInput).toFixed(2)} ≈ ${amountInput}
             </FooterLabel>
           </FooterRow>
-        )}
+        }
         <ConfirmBtn data-modal="confirm" onClick={handleTabSwitch}>
           Confirm
         </ConfirmBtn>

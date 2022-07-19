@@ -25,10 +25,9 @@ function changePassword({ oldPassword, newPassword }) {
       return isValid;
     }
     return auth.setPassword(newPassword).then(function() {
-      wallet.getWallets().forEach(function(walletId) {
-        const seed = wallet.getSeed(walletId, oldPassword);
-        wallet.setSeed(seed, newPassword);
-      })
+      const seed = wallet.getSeed(oldPassword);
+      wallet.setSeed(seed, newPassword);
+
       return true;
     });
   });

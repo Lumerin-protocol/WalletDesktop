@@ -74,8 +74,8 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
       <Button
         onClick={() => setActiveIndex(0)}
         activeClassName="active"
-        data-testid="wallets-nav-btn"
-        to="/wallets"
+        data-testid="wallet-nav-btn"
+        to="/wallet"
       >
         <IconWrapper>
           <WalletNavIcon isActive={activeIndex === 0} size={iconSize} />
@@ -107,7 +107,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         <Label parent={parent}>Contracts</Label>
       </Button>
 
-      <Button
+      {/* <Button
         onClick={() => setActiveIndex(3)}
         activeClassName="active"
         data-testid="auction-nav-btn"
@@ -115,10 +115,9 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
       >
         <IconWrapper>
           <CogIcon isActive={activeIndex === 3} size={iconSize} />
-          {/* <ReportsNavIcon isActive={activeIndex === 3} size={iconSize} /> */}
         </IconWrapper>
         <Label parent={parent}>Reports</Label>
-      </Button>
+      </Button> */}
     </Container>
   );
 }

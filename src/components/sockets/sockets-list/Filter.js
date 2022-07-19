@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const columnCount = 4;
 const calcWidth = n => 100 / n;
 
 const Container = styled.div`
@@ -10,7 +11,7 @@ const Container = styled.div`
 `;
 
 const Tab = styled.button`
-  width: ${calcWidth(6)}%;
+  width: ${calcWidth(columnCount)}%;
   font: inherit;
   line-height: 1.2rem;
   font-size: 1.2rem;
@@ -32,13 +33,13 @@ const Tab = styled.button`
   }
 
   @media (min-width: 800px) {
-    width: ${calcWidth(6)}%;
+    width: ${calcWidth(columnCount)}%;
     font-size: 1.4rem;
   }
 `;
 
 const Spacer = styled.div`
-  width: 40px;
+  width: ${calcWidth(columnCount)}%;
 `;
 
 export default function Filter({ onFilterChange, activeFilter }) {
@@ -60,7 +61,7 @@ export default function Filter({ onFilterChange, activeFilter }) {
         isActive={activeFilter === 'ipAddress'}
         onClick={() => onFilterChange('ipAddress')}
       >
-        IP Address
+        Worker Address
       </Tab>
       <Spacer />
       <Tab
@@ -75,7 +76,7 @@ export default function Filter({ onFilterChange, activeFilter }) {
       >
         Socket
       </Tab>
-      <Tab
+      {/* <Tab
         isActive={activeFilter === 'total'}
         onClick={() => onFilterChange('totalShares')}
       >
@@ -92,7 +93,7 @@ export default function Filter({ onFilterChange, activeFilter }) {
         onClick={() => onFilterChange('rejected')}
       >
         Rejected
-      </Tab>
+      </Tab> */}
     </Container>
   );
 }

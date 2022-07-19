@@ -9,7 +9,7 @@ import { ToastsContext } from '../components/toasts';
 
 const Container = styled.div`
   padding: 3.2rem 2.4rem;
-  max-width: 50rem;
+  max-width: 55rem;
 
   @media (min-width: 800px) {
     padding: 3.2rem 4.8rem;
@@ -21,6 +21,7 @@ const PasswordMessage = styled.div`
   font-weight: 600;
   line-height: 1.5;
   margin-top: 3.2rem;
+  color: ${p => p.theme.colors.dark};
 `;
 
 const Green = styled.div`

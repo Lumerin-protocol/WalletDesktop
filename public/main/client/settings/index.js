@@ -22,27 +22,27 @@ function setPasswordHash (hash) {
 }
 
 function upgradeSettings (defaultSettings, currentSettings) {
-  const finalSettings = merge({}, currentSettings);
+  let finalSettings = merge({}, currentSettings);
   // Remove no longer used settings as now are stored in config
   delete finalSettings.app;
   delete finalSettings.coincap;
-  delete finalSettings.tokens;
+  delete finalSettings.token;
+
   // Convert previous addresses to checksum addresses
-  if (finalSettings.user && finalSettings.user.wallets) {
-    Object.keys(finalSettings.user.wallets).forEach(function (key) {
-      Object.keys(finalSettings.user.wallets[key].addresses).forEach(
-        function (address) {
-          if (!utils.checkAddressChecksum(address)) {
-            finalSettings.user.wallets[key]
-              .addresses[utils.toChecksumAddress(address)] =
-            finalSettings.user.wallets[key].addresses[address];
-            // Remove previous lowercase address
-            delete finalSettings.user.wallets[key].addresses[address];
-          }
-        }
-      );
-    });
-  }
+  // if (finalSettings.user && finalSettings.user.wallet) {
+
+
+  //   Object.keys(finalSettings.user.wallets).forEach(function (key) {
+  //     Object.keys(finalSettings.user.wallets[key].addresses).forEach(function (address) {
+  //         if (!utils.checkAddressChecksum(address)) {
+  //           finalSettings.user.wallets[key].addresses[utils.toChecksumAddress(address)] = finalSettings.user.wallets[key].addresses[address];
+  //           // Remove previous lowercase address
+  //           delete finalSettings.user.wallets[key].addresses[address];
+  //         }
+  //       }
+  //     );
+  //   });
+
   finalSettings.settingsVersion = defaultSettings.settingsVersion;
   settings.setSync(finalSettings);
 }

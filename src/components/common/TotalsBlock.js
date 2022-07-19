@@ -1,30 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+
+import { BaseBtn, Btn, DisplayValue } from '.';
+
+const convertLmrToEth = () => {};
 
 const relSize = ratio => `calc(100vw / ${ratio})`;
 
 const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
-  width: 100%;
   height: 100px;
+  width: 100%;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
-
+  align-items: start;
   @media (min-width: 1040px) {
   }
 `;
 
 const Total = styled.div`
   background-color: ${p => p.theme.colors.xLight};
+  display: flex;
   flex-direction: column;
   height: 95%;
-  width: 125px;
+  width: 250px;
+  margin-right: 2rem;
   justify-content: space-between;
   padding: 1.4rem 2.6rem;
-  margin-left: 1.4rem;
   border-radius: 5px;
   @media (min-width: 1040px) {
+  }
+`;
+
+const TotalRow = styled.div`
+  display: flex;
+  width: 100%;
+  height: 30%;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 5px;
+  @media (min-width: 1040px) {
+    padding: 0.95em 0;
   }
 `;
 
@@ -74,7 +91,8 @@ const TotalValue = styled.div`
   margin: .6rem 0;
   flex-grow: 1;
   position: relative;
-  font-size: ${relSize(24)};
+  top: ${relSize(-400)};
+  font-size: ${relSize(32)};
 
   @media (min-width: 800px) {
     font-size: ${relSize(44)};
@@ -89,35 +107,32 @@ const TotalValue = styled.div`
   }
 `;
 
-const TotalsBlock = ({ incoming, outgoing, routed }) => {
-  // static propTypes = {
-  //   coinBalanceUSD: PropTypes.string.isRequired,
-  //   coinBalanceWei: PropTypes.string.isRequired,
-  //   lmrBalanceWei: PropTypes.string.isRequired,
-  //   coinSymbol: PropTypes.string.isRequired
-  // };
-
+export const TotalsBlock = ({ config }) => {
   return (
-    <>
-      <Container>
-        <Total>
-          <TotalLabel>My Miners</TotalLabel>
-          <TotalSubLabel>Incoming Connections</TotalSubLabel>
-          <TotalValue>{incoming}</TotalValue>
-        </Total>
-        <Total>
-          <TotalLabel>Lumerin Pool</TotalLabel>
-          <TotalSubLabel>Default Outgoing</TotalSubLabel>
-          <TotalValue>{outgoing}</TotalValue>
-        </Total>
-        <Total>
-          <TotalLabel>Alt Pool</TotalLabel>
-          <TotalSubLabel>Routed</TotalSubLabel>
-          <TotalValue>{routed}</TotalValue>
-        </Total>
-      </Container>
-    </>
+    <Container>
+      {config.map((block, i) => {
+        <React.Fragment key={i + block.title}>
+          <Total>
+            <TotalRow>
+              <TotalLabel>{block.title}</TotalLabel>
+              {/* {!block.subtitle || <TotalSubLabel>{block.subtitle}</TotalSubLabel>} */}
+            </TotalRow>
+            <TotalValue>{block.value}</TotalValue>
+          </Total>
+        </React.Fragment>;
+      })}
+      {/* <Total>
+        <TotalRow>
+          <TotalLabel>Active</TotalLabel>
+        </TotalRow>
+        <TotalValue>{props.activeCount}</TotalValue>
+      </Total>
+      <Total>
+        <TotalRow>
+          <TotalLabel>Draft</TotalLabel>
+        </TotalRow>
+        <TotalValue>{props.draftCount}</TotalValue>
+      </Total> */}
+    </Container>
   );
 };
-
-export default TotalsBlock;

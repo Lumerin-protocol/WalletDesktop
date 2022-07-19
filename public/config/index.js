@@ -2,12 +2,6 @@
 
 const enabledChain = (process.env.ENABLED_CHAIN || 'ethRopsten');
 
-// const chains = enabledChain.reduce(function (allChains, chainName) {
-//   allChains[chainName] = require(`./${chainName}`);
-//   return allChains;
-// }, {});
-
-// const chain = allChains[chainName] = require(`./${chainName}`);
 const chain = require(`./${enabledChain}`);
 
 module.exports = {

@@ -45,10 +45,7 @@ export default function Filter({ onFilterChange, activeFilter }) {
   // static propTypes = {
   //   onFilterChange: PropTypes.func.isRequired,
   //   activeFilter: PropTypes.oneOf([
-  //     'converted',
   //     'received',
-  //     'auction',
-  //     'ported',
   //     'sent',
   //     ''
   //   ]).isRequired
@@ -57,23 +54,29 @@ export default function Filter({ onFilterChange, activeFilter }) {
   return (
     <Container>
       <Tab
-        isActive={activeFilter === 'status'}
-        onClick={() => onFilterChange('status')}
+        isActive={activeFilter === 'timestamp'}
+        // onClick={() => onFilterChange('timestamp')}
       >
-        Status
+        Timestamp
       </Tab>
       <Spacer />
       <Tab
-        isActive={activeFilter === 'device'}
-        onClick={() => onFilterChange('device')}
+        isActive={activeFilter === 'price'}
+        // onClick={() => onFilterChange('price')}
       >
-        Device
+        Price
       </Tab>
       <Tab
-        isActive={activeFilter === 'socketAddress'}
-        onClick={() => onFilterChange('socketAddress')}
+        isActive={activeFilter === 'length'}
+        // onClick={() => onFilterChange('length')}
       >
-        Socket Address
+        Duration (Days)
+      </Tab>
+      <Tab
+        isActive={activeFilter === 'speed'}
+        // onClick={() => onFilterChange('speed')}
+      >
+        Speed (TH/s)
       </Tab>
     </Container>
   );

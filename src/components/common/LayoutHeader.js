@@ -32,11 +32,9 @@ const Title = styled.label`
   cursor: default;
 
   @media (min-width: 1140px) {
-    margin-right: 0.8rem;
   }
 
   @media (min-width: 1200px) {
-    margin-right: 1.6rem;
   }
 `;
 

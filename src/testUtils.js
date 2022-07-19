@@ -120,41 +120,20 @@ export function getInitialState(overrides = {}) {
   const baseState = {
     config,
     connectivity: { isOnline: true },
-    blockchain: { height: 1, gasPrice: config.DEFAULT_GAS_PRICE },
-    converter: {
-      status: {
-        availableEth: '100',
-        availableLmr: '100',
-        currentPrice: '10'
-      }
-    },
-    auction: {
-      status: {
-        nextAuctionStartTime: inOneHour(),
-        tokenRemaining: '1',
-        currentAuction: 10,
-        currentPrice: '33000000000',
-        genesisTime: twoWeeksAgo()
-      }
-    },
+    chain: { height: 1, gasPrice: config.DEFAULT_GAS_PRICE },
     session: { isLoggedIn: true },
     rates: { ETH: { token: 'ETH', price: 1 } },
-    wallets: {
+    wallet: {
       syncStatus: 'up-to-date',
-      active: 'foo',
-      allIds: ['foo'],
-      byId: {
-        foo: {
-          addresses: {
-            '0x15dd2028C976beaA6668E286b496A518F457b5Cf': {
-              token: {
-                [config.LMR_TOKEN_ADDR]: { balance: '5000000000000000000000' }
-              },
-              balance: '5000000000000000000000',
-              transactions: []
-            }
-          }
-        }
+      isActive: true,
+      address: '0x15dd2028C976beaA6668E286b496A518F457b5Cf',
+      ethBalance: '5000000000000000000000',
+      transactions: [],
+      token: {
+        contract: config.LMR_TOKEN_ADDR,
+        lmrBalance: '5000000000000000000000',
+        transactions: [],
+        symbol: 'LMR'
       }
     }
   };
@@ -168,7 +147,7 @@ export function getDummyTransaction() {
   return {
     meta: {
       lumerin: {},
-      tokens: {
+      token: {
         [config.LMR_TOKEN_ADDR]: {
           event: 'Transfer',
           processing: false,

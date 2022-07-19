@@ -35,15 +35,16 @@ function Row({ contract }) {
   // TODO: Add better padding
   return (
     <Container>
-      <Value>{contract.status}</Value>
+      <Value>{contract.timestamp}</Value>
       <SmallAssetContainer>
         <ClockIcon
           size="3rem"
-          fill={contract.status === 'Live' ? '#8C2AF5' : 'black'}
+          fill={contract.state === '1' ? '#8C2AF5' : 'black'}
         />
       </SmallAssetContainer>
-      <Value>{contract.deviceName}</Value>
-      <Value>{contract.hashrate}</Value>
+      <Value>{contract.price}</Value>
+      <Value>{contract.length}</Value>
+      <Value>{contract.speed}</Value>
     </Container>
   );
 }

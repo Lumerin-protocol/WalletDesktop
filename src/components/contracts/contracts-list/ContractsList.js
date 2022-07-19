@@ -29,6 +29,9 @@ const Contracts = styled.div`
 
 const ListContainer = styled.div`
   background-color: #ffffff;
+  height: 100%;
+  overflow-y: auto;
+  /*
   ::-webkit-scrollbar {
     display: none;
   }
@@ -37,6 +40,7 @@ const ListContainer = styled.div`
   }
   @media (min-width: 1200px) {
   }
+  */
 `;
 
 const ContractsRowContainer = styled.div`
@@ -118,10 +122,7 @@ function ContractsList({ hasContracts, contracts, syncStatus }) {
         <Title onClick={handleClick}>Status</Title>
       </Flex.Row>
       <Contracts>
-        <ItemFilter
-          extractValue={filterExtractValue}
-          items={contracts.contracts}
-        >
+        <ItemFilter extractValue={filterExtractValue} items={contracts}>
           {({ filteredItems, onFilterChange, activeFilter }) => (
             <React.Fragment>
               <Header

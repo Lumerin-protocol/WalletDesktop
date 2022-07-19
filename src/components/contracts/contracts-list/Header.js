@@ -13,11 +13,11 @@ const responsiveHeader = width => css`
 `;
 
 const Container = styled.div`
-  position: sticky;
+  // position: sticky;
   border-radius: 5px;
-  top: 4.1rem;
-  left: 0;
-  right: 0;
+  // top: 4.1rem;
+  // left: 0;
+  // right: 0;
   z-index: 1;
 
   ${p => responsiveHeader('800px')}

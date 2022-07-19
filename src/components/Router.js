@@ -48,10 +48,11 @@ export const Layout = () => (
       data-scrollelement // Required by react-virtualized implementation in Dashboard/TxList
     >
       <Switch>
-        <Route path="/" exact render={() => <Redirect to="/wallets" />} />
-        <Route path="/wallets" component={Dashboard} />
+        <Route path="/" exact render={() => <Redirect to="/wallet" />} />
+        <Route path="/wallet" component={Dashboard} />
         <Route path="/sockets" component={Sockets} />
         <Route path="/contracts" component={Contracts} />
+        {/* TODO - Finish up reports */}
         <Route path="/reports" component={Reports} />
         <Route path="/indicies" component={Indicies} />
         <Route path="/tools" component={Tools} />

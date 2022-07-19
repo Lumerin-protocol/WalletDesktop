@@ -89,7 +89,7 @@ export default function Modal({
           background: theme.colors.light,
           flexDirection: 'column',
           marginBottom: '1.6rem',
-          borderRadius: '0',
+          borderRadius: '5px',
           boxShadow: `0 0 16px 0 ${theme.colors.darkShade}`,
           overflowY: 'auto',
           position: 'absolute',

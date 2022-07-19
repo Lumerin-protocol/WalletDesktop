@@ -19,9 +19,11 @@ export const ItemFilter = ({
     }
   };
 
+  const filteredItems = handleFilter(activeFilter, items);
+
   return children({
     onFilterChange,
-    filteredItems: handleFilter(activeFilter, items),
+    filteredItems,
     activeFilter
   });
 };

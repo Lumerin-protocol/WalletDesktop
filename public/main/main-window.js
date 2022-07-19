@@ -71,7 +71,8 @@ function loadWindow () {
   }
 
   const mainWindowState = windowStateKeeper({
-    defaultWidth: 1140,
+    // defaultWidth: 660,
+    defaultWidth: 820,
     defaultHeight: 700
   });
 
@@ -80,8 +81,10 @@ function loadWindow () {
     show: false,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    minWidth: 640,
-    minHeight: 632,
+    // maxWidth: 660,
+    // maxHeight: 700,
+    minWidth: 660,
+    minHeight: 700,
     backgroundColor: '#323232',
     webPreferences: {
       enableRemoteModule: true,

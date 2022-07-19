@@ -15,7 +15,14 @@ import { View } from '../common/View';
 //   cursor: default;
 // `
 
-const Sockets = props => {
+const Sockets = ({
+  address,
+  syncStatus,
+  copyToClipboard,
+  incomingCount,
+  outgoingCount,
+  routedCount
+}) => {
   const [activeModal, setActiveModal] = useState('');
   const ipAddress = '127.0.0.1';
   const port = '3000';
@@ -37,15 +44,21 @@ const Sockets = props => {
     <View data-testid="sockets-container">
       <LayoutHeader
         title="Sockets"
-        address={props.address}
-        copyToClipboard={props.copyToClipboard}
+        address={address}
+        copyToClipboard={copyToClipboard}
       />
 
-      <TotalsBlock />
+      <TotalsBlock
+        incoming={incomingCount}
+        outgoing={outgoingCount}
+        routed={routedCount}
+      />
 
       <SocketsList
-        onWalletRefresh={props.onWalletRefresh}
-        syncStatus={props.syncStatus}
+        ipAddress={ipAddress}
+        port={port}
+        // onWalletRefresh={props.onWalletRefresh}
+        syncStatus={syncStatus}
       />
     </View>
   );

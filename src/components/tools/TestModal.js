@@ -5,6 +5,7 @@ import React from 'react';
 import { Modal, BaseBtn } from '../common';
 
 const Container = styled.div`
+  border-radius: 5px;
   background-color: ${p => p.theme.colors.light};
   padding: 2.4rem 1.6rem 1.6rem 1.6rem;
 `;
@@ -18,7 +19,6 @@ const Message = styled.div`
 
 const Button = styled(BaseBtn)`
   background-color: ${p => p.theme.colors.primary};
-  border-radius: 12px;
   display: block;
   line-height: 1.6rem;
   font-size: 1.3rem;
@@ -33,7 +33,7 @@ const Button = styled(BaseBtn)`
   }
 `;
 
-export default class ConfirmModal extends React.Component {
+export default class TestModal extends React.Component {
   static propTypes = {
     onRequestClose: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
@@ -55,15 +55,7 @@ export default class ConfirmModal extends React.Component {
         variant="primary"
         isOpen={isOpen}
         title="Confirm Rescan"
-      >
-        <Container data-testid="confirm-modal">
-          <Message>
-            Rescanning your transactions will close and re-open the app. You
-            will need to log back in.
-          </Message>
-          <Button onClick={onConfirm}>Confirm and Log Out</Button>
-        </Container>
-      </Modal>
+      ></Modal>
     );
   }
 }

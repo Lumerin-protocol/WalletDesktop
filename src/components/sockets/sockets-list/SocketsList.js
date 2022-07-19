@@ -92,7 +92,7 @@ const SocketsList = props => {
     <SocketsRowContainer style={style} key={`${key}-${index}`}>
       <SocketsRow
         data-testid="Sockets-row"
-        onClick={props.onSocketsClicked}
+        // onClick={props.onSocketsClicked}
         socket={sockets[index]}
       />
     </SocketsRowContainer>
@@ -108,23 +108,23 @@ const SocketsList = props => {
   if (!isReady) return null;
   return (
     <Container data-testid="Sockets-list">
-      <Subtitle>
+      {/* <Subtitle>
         {props.ipAddress} : {props.port}
-      </Subtitle>
+      </Subtitle> */}
       <Sockets>
         <ItemFilter extractValue={filterExtractValue} items={props.connections}>
           {({ filteredItems, onFilterChange, activeFilter }) => (
             <React.Fragment>
               <Header
-                onWalletRefresh={props.onWalletRefresh}
-                hasConnections={props.hasConnections}
+                // onWalletRefresh={props.onWalletRefresh}
+                // hasConnections={props.hasConnections}
                 onFilterChange={onFilterChange}
                 activeFilter={activeFilter}
                 syncStatus={props.syncStatus}
               />
 
               <ListContainer count={props.connections.length}>
-                {!props.hasSockets &&
+                {!props.hasConnections &&
                   (props.syncStatus === 'syncing' ? (
                     <ScanningSocketsPlaceholder />
                   ) : (

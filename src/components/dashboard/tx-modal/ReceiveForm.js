@@ -135,7 +135,7 @@ export function ReceiveForm({
         </FooterRow>
         <FooterLabel>LMR Balance</FooterLabel>
         <FooterSublabel>
-          {lmrBalanceWei} LMR ≈ ${lmrBalanceUSD}
+          {lmrBalanceWei} LMR ≈ ${lmrBalanceUSD || 0}
         </FooterSublabel>
       </Footer>
     </>

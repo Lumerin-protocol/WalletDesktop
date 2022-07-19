@@ -6,12 +6,18 @@ const utils = require('./utils');
 const withCore = core => fn => data => fn(data, core);
 
 const listeners = {
-  'refresh-all-sockets': handlers.refreshAllSockets,
+  'recover-from-mnemonic': handlers.recoverFromMnemonic,
+  'onboarding-completed': handlers.onboardingCompleted,
+  'login-submit': handlers.onLoginSubmit,
+  // 'refresh-all-sockets': handlers.refreshAllSockets,
+  'refresh-all-contracts': handlers.refreshAllContracts,
   'refresh-all-transactions': handlers.refreshAllTransactions,
   'refresh-transaction': handlers.refreshTransaction,
   'get-gas-limit': handlers.getGasLimit,
   'get-gas-price': handlers.getGasPrice,
-  'send-lmr': handlers.sendLmr
+  'send-lmr': handlers.sendLmr,
+  'send-eth': handlers.sendEth,
+  'create-contract': handlers.createContract,
 };
 
 let coreListeners = {};

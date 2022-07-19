@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import withDashboardState from '@lumerin/wallet-ui-logic/src/hocs/withDashboardState';
@@ -20,7 +20,6 @@ const Container = styled.div`
 const Dashboard = ({
   sendDisabled,
   sendDisabledReason,
-  isRequired,
   syncStatus,
   address,
   hasTransactions,

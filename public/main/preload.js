@@ -17,7 +17,7 @@ const getAppVersion = function () {
 };
 
 const openLink = function (url) {
-  return shell.openExternal(url)
+  return shell.openExternal(url);
 };
 
 contextBridge.exposeInMainWorld('ipcRenderer', {

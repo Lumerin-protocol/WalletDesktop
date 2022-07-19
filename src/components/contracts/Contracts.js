@@ -23,7 +23,7 @@ const Title = styled.div`
   white-space: nowrap;
   margin: 0;
   font-weight: 600;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   margin-bottom: 4.8px;
   margin-right: 2.4rem;
   cursor: default;
@@ -36,11 +36,10 @@ const Title = styled.div`
 `;
 
 const ContractBtn = styled(BaseBtn)`
-  width: 100px;
+  width: 90px;
   font-size: 1.2rem;
   padding: 1rem 1.4rem;
 
-  margin-right: 2.6rem;
   border-radius: 5px;
   border: 1px solid ${p => p.theme.colors.primary};
   background-color: ${p => p.theme.colors.light}
@@ -56,7 +55,11 @@ function Contracts({
   copyToClipboard,
   onWalletRefresh,
   syncStatus,
-  address
+  activeCount,
+  draftCount,
+  address,
+  client,
+  ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   // static propTypes = {
@@ -74,8 +77,17 @@ function Contracts({
   const handleCloseModal = e => {
     setIsModalActive(false);
   };
-  const handleContractDeploy = e => {
+  const handleContractDeploy = (e, contractDetails) => {
     e.preventDefault();
+
+    client.createContract({
+      price: contractDetails.price,
+      speed: contractDetails.speed,
+      duration: contractDetails.time,
+      sellerAddress: contractDetails.address
+    });
+
+    setIsModalActive(false);
   };
   const handleContractSave = e => {
     e.preventDefault();
@@ -90,10 +102,8 @@ function Contracts({
       >
         <ContractBtn onClick={handleOpenModal}>Create New Contract</ContractBtn>
       </LayoutHeader>
-      <TotalsBlock
-        isModalActive={isModalActive}
-        onOpenModal={handleOpenModal}
-      />
+
+      {/* <TotalsBlock /> */}
 
       <ContractsList
         hasContracts={hasContracts}

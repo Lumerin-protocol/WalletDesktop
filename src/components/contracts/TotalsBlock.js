@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
-import withContractTotalsBlockState from '@lumerin/wallet-ui-logic/src/hocs/withSocketTotalsBlockState';
 import styled from 'styled-components';
-
-import { BaseBtn, Btn, DisplayValue } from '../common';
-
-const convertLmrToEth = () => {};
 
 const relSize = ratio => `calc(100vw / ${ratio})`;
 
 const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
+  width: 100%;
   height: 100px;
   width: 100%;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
-  align-items: start;
   @media (min-width: 1040px) {
   }
 `;
@@ -25,10 +20,10 @@ const Total = styled.div`
   display: flex;
   flex-direction: column;
   height: 95%;
-  width: 150px;
-  margin-right: 2rem;
+  width: 100px;
   justify-content: space-between;
   padding: 1.4rem 2.6rem;
+  margin-left: 1.4rem;
   border-radius: 5px;
   @media (min-width: 1040px) {
   }
@@ -108,7 +103,7 @@ const TotalValue = styled.div`
   }
 `;
 
-const TotalsBlock = ({ onOpenModal }) => {
+const TotalsBlock = () => {
   // static propTypes = {
   //   coinBalanceUSD: PropTypes.string.isRequired,
   //   coinBalanceWei: PropTypes.string.isRequired,
@@ -134,4 +129,4 @@ const TotalsBlock = ({ onOpenModal }) => {
   );
 };
 
-export default withContractTotalsBlockState(TotalsBlock);
+export default TotalsBlock;

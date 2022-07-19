@@ -1,18 +1,15 @@
 'use strict';
 
-const { subscribeMultiCore, unsubscribeMultiCore } = require('./multi-core');
 const { subscribeSingleCore, unsubscribeSingleCore } = require('./single-core');
 const { subscribeWithoutCore, unsubscribeWithoutCore } = require('./no-core');
 
-function subscribe (cores) {
-  cores.forEach(subscribeSingleCore);
-  subscribeMultiCore(cores);
+function subscribe (core) {
+  subscribeSingleCore(core);
   subscribeWithoutCore();
 }
 
-function unsubscribe (cores) {
-  cores.forEach(unsubscribeSingleCore);
-  unsubscribeMultiCore();
+function unsubscribe (core) {
+  unsubscribeSingleCore(core);
   unsubscribeWithoutCore();
 }
 

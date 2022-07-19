@@ -49,6 +49,8 @@ function TransactionModal(props) {
 
   const handlePropagation = e => e.stopPropagation();
 
+  const onSetDestinationAddress = e => setDestinationAddress(e.targetValue);
+
   if (!props.activeTab) {
     return <></>;
   }
@@ -58,19 +60,31 @@ function TransactionModal(props) {
   return (
     <Modal onClick={props.onRequestClose}>
       <Body onClick={handlePropagation}>
-        {props.activeTab === 'send' && (
+        {/* {props.activeTab === 'send' && (
           <SendForm
             destinationAddress={destinationAddress}
-            onDestinationAddressInput={setDestinationAddress}
+            onDestinationAddressInput={onSetDestinationAddress}
             amountInput={amount}
             onAmountInput={setAmount}
             lmrBalanceUSD={props.lmrBalanceUSD}
             {...props}
           />
-        )}
+        )} */}
         {props.activeTab === 'receive' && <ReceiveForm {...props} />}
-        {props.activeTab === 'confirm' && <ConfirmForm {...props} />}
-        {props.activeTab === 'success' && <SuccessForm {...props} />}
+        {/* {props.activeTab === 'confirm' && ( */}
+        {props.activeTab === 'send' && (
+          <ConfirmForm
+            destinationAddress={destinationAddress}
+            onDestinationAddressInput={onSetDestinationAddress}
+            onAmountInput={setAmount}
+            lmrBalanceUSD={props.lmrBalanceUSD}
+            // amountInput={amount}
+            {...props}
+          />
+        )}
+        {props.activeTab === 'success' && (
+          <SuccessForm amountInput={amount} {...props} />
+        )}
       </Body>
     </Modal>
   );
