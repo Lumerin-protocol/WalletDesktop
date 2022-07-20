@@ -9,7 +9,7 @@ const wsApiUrl = process.env.ROPSTEN_NODE_URL || 'wss://ropsten.infura.io/ws/v3/
 module.exports = {
   displayName: 'Ropsten',
   chainId: '3',
-  symbol: 'LMR',
+  symbol: 'ETH',
 
   // contract addresses
   lmrTokenAddress: Lumerin.address,
