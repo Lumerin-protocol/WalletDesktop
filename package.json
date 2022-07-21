@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": {
     "name": "Kodee McIntosh",
     "email": "kodee@lumerin.io",
@@ -35,12 +35,9 @@
     "test": "react-scripts test --env=jsdom src/client/auth.spec.js"
   },
   "dependencies": {
-    "@lumerin/wallet-core": "1.0.3-beta",
-    "@lumerin/wallet-ui-logic": "1.0.6-beta",
-    "@lumerin/contracts": "1.0.3-beta",
     "@electron/remote": "1.2.0",
     "@lumerin/contracts": "git+ssh://git@github.com:Lumerin-protocol/ContractsJS.git#1.0.10",
-    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.8",
+    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.9",
     "@lumerin/wallet-ui-logic": "git+ssh://git@github.com:Lumerin-protocol/WalletUILogic.git#1.0.11",
     "@reach/menu-button": "0.1.7",
     "bignumber.js": "7.2.1",
