@@ -1,7 +1,4 @@
-import { withClient } from 'lumerin-wallet-ui-logic/src/hocs/clientContext';
-import * as selectors from 'lumerin-wallet-ui-logic/src/selectors';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import withWalletInfoState from '@lumerin/wallet-ui-logic/src/hocs/withWalletInfoState';
 import styled from 'styled-components';
 import React from 'react';
 
@@ -56,6 +53,14 @@ const WalletStatus = function(props) {
       <Flex.Row align="center">
         <Text>
           <IndicatorLed
+            isConnected={props.isWeb3Connected}
+            isOnline={props.isOnline}
+          />
+          Web3 connection
+        </Text>
+        <Sp px={2} />
+        <Text>
+          <IndicatorLed
             isConnected={props.isIndexerConnected}
             isOnline={props.isOnline}
           />
@@ -64,33 +69,14 @@ const WalletStatus = function(props) {
         <Sp px={2} />
         <Text>
           <IndicatorLed
-            isConnected={props.isWeb3Connected}
+            isConnected={props.isIndexerConnected}
             isOnline={props.isOnline}
           />
-          Web3 connection
+          Proxy-Router connection
         </Text>
       </Flex.Row>
     </div>
   );
 };
 
-WalletStatus.propTypes = {
-  bestBlockTimestamp: PropTypes.number,
-  isIndexerConnected: PropTypes.bool,
-  isWeb3Connected: PropTypes.bool,
-  appVersion: PropTypes.string.isRequired,
-  chainName: PropTypes.string.isRequired,
-  isOnline: PropTypes.bool,
-  height: PropTypes.number
-};
-
-const mapStateToProps = (state, props) => ({
-  isIndexerConnected: selectors.getIndexerConnectionStatus(state),
-  isWeb3Connected: selectors.getChainConnectionStatus(state),
-  appVersion: props.client.getAppVersion(),
-  chainName: selectors.getActiveChainDisplayName(state),
-  isOnline: selectors.getIsOnline(state),
-  ...selectors.getChainMeta(state)
-});
-
-export default withClient(connect(mapStateToProps)(WalletStatus));
+export default withWalletInfoState(WalletStatus);

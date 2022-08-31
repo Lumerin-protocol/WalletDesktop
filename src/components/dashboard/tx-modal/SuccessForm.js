@@ -68,7 +68,7 @@ const DoneBtn = styled(BaseBtn)`
   height: 50px;
   border-radius: 5px;
   background-color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.lumerin.hypertext - gray : theme.colors.primary};
+    isActive ? theme.colors.lumerin.helpertextGray : theme.colors.primary};
 `;
 
 const Column = styled.div`
@@ -96,7 +96,8 @@ export function SuccessForm(props) {
   const handleTabSwitch = e => {
     e.preventDefault();
 
-    props.onTabSwitch(e.target.dataset.modal);
+    // props.onTabSwitch(e.target.dataset.modal);
+    props.onCloseModal();
   };
 
   const handleDestinationAddressInput = e => {
@@ -132,7 +133,7 @@ export function SuccessForm(props) {
 
       <Column>
         <AmountContainer>
-          <Currency isActive={props.amountInput > 0}>$</Currency>
+          {/* <Currency isActive={props.amountInput > 0}>$</Currency> */}
           <AmountInput
             id="usdAmount"
             placeholder={0}
@@ -150,7 +151,7 @@ export function SuccessForm(props) {
         <FooterLabel>
           You have successfully transferred LMR to {props.destinationAddress}
         </FooterLabel>
-        <DoneBtn data-modal={null} onClick={handleTabSwitch}>
+        <DoneBtn data-modal={null} onClick={props.onRequestClose}>
           Done
         </DoneBtn>
       </Footer>

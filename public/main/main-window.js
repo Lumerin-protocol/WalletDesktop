@@ -1,87 +1,90 @@
-'use strict'
+'use strict';
 
-const { app, BrowserWindow, Notification } = require('electron')
-const { autoUpdater } = require('electron-updater')
-const isDev = require('electron-is-dev')
-const path = require('path')
-const windowStateKeeper = require('electron-window-state')
+const { app, BrowserWindow, Notification } = require('electron');
+const { autoUpdater } = require('electron-updater');
+const isDev = require('electron-is-dev');
+const path = require('path');
+const windowStateKeeper = require('electron-window-state');
 
-const logger = require('../logger')
-const analytics = require('../analytics')
-const restart = require('./client/electron-restart')
+const logger = require('../logger');
+const analytics = require('../analytics');
+const restart = require('./client/electron-restart');
 
-let mainWindow
+let mainWindow;
 
 // Disable electron security warnings since local content is served via http
 if (isDev) {
-  process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
+  process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
 
 function showUpdateNotification (info = {}) {
-  if (!Notification.isSupported()) { return }
+  if (!Notification.isSupported()) { return };
 
   const versionLabel = info.label
     ? `Version ${info.version}`
-    : 'The latest version'
+    : 'The latest version';
 
   const notification = new Notification({
     title: `${versionLabel} was installed`,
     body: 'Lumerin Wallet will be automatically updated after restart.'
-  })
+  });
 
-  notification.show()
+  notification.show();
 }
 
 function initAutoUpdate () {
   if (isDev) {
-    return
+    return;
   }
   if (process.platform === 'linux') {
-    return
+    return;
   }
 
-  autoUpdater.on('checking-for-update', () => logger.info('Checking for update...'))
-  autoUpdater.on('update-available', () => logger.info('Update available.'))
+  autoUpdater.on('checking-for-update', () => logger.info('Checking for update...'));
+  autoUpdater.on('update-available', () => logger.info('Update available.'));
   autoUpdater.on('download-progress', function (progressObj) {
-    let msg = `Download speed: ${progressObj.bytesPerSecond}`
-    msg += ` - Downloaded ${progressObj.percent}%`
-    msg += ` (${progressObj.transferred}/${progressObj.total})`
-    logger.info(msg)
-  })
-  autoUpdater.on('update-downloaded', info => showUpdateNotification(info))
-  autoUpdater.on('update-not-available', () => logger.info('Update not available.'))
-  autoUpdater.on('error', err => logger.error(`Error in auto-updater. ${err}`))
+    let msg = `Download speed: ${progressObj.bytesPerSecond}`;
+    msg += ` - Downloaded ${progressObj.percent}%`;
+    msg += ` (${progressObj.transferred}/${progressObj.total})`;
+    logger.info(msg);
+  });
+  autoUpdater.on('update-downloaded', info => showUpdateNotification(info));
+  autoUpdater.on('update-not-available', () => logger.info('Update not available.'));
+  autoUpdater.on('error', err => logger.error(`Error in auto-updater. ${err}`));
 
   autoUpdater.checkForUpdates()
     .catch(function (err) {
       logger.warn('Could not find updates', err.message)
-    })
+    });
 }
 
 function loadWindow () {
   // Ensure the app is ready before creating the main window
   if (!app.isReady()) {
-    logger.warn('Tried to load main window while app not ready. Reloading...')
-    restart(1)
-    return
+    logger.warn('Tried to load main window while app not ready. Reloading...');
+    restart(1);
+    return;
   }
 
   if (mainWindow) {
-    return
+    return;
   }
 
   const mainWindowState = windowStateKeeper({
-    defaultWidth: 1140,
+    // defaultWidth: 660,
+    defaultWidth: 820,
     defaultHeight: 700
-  })
+  });
 
   // TODO this should be read from config
   mainWindow = new BrowserWindow({
     show: false,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    minWidth: 640,
-    minHeight: 632,
+    // maxWidth: 660,
+    // maxHeight: 700,
+    minWidth: 660,
+    minHeight: 700,
     backgroundColor: '#323232',
     webPreferences: {
       enableRemoteModule: true,
@@ -91,47 +94,47 @@ function loadWindow () {
     },
     x: mainWindowState.x,
     y: mainWindowState.y
-  })
+  });
 
-  mainWindowState.manage(mainWindow)
+  mainWindowState.manage(mainWindow);
 
-  analytics.init(mainWindow.webContents.getUserAgent())
+  analytics.init(mainWindow.webContents.getUserAgent());
 
   const appUrl = isDev
     ? process.env.ELECTRON_START_URL
-    : `file://${path.join(__dirname, '../index.html')}`
+    : `file://${path.join(__dirname, '../index.html')}`;
 
-  logger.info('Roading renderer from URL:', appUrl)
+  logger.info('Roading renderer from URL:', appUrl);
 
-  mainWindow.loadURL(appUrl)
+  mainWindow.loadURL(appUrl);
 
   mainWindow.webContents.on('crashed', function (ev, killed) {
-    logger.error('Crashed', ev.sender.id, killed)
-  })
+    logger.error('Crashed', ev.sender.id, killed);
+  });
 
   mainWindow.on('unresponsive', function (ev) {
-    logger.error('Unresponsive', ev.sender.id)
-  })
+    logger.error('Unresponsive', ev.sender.id);
+  });
 
   mainWindow.on('closed', function () {
-    mainWindow = null
-  })
+    mainWindow = null;
+  });
 
   mainWindow.once('ready-to-show', function () {
-    initAutoUpdate()
-    mainWindow.show()
-  })
+    initAutoUpdate();
+    mainWindow.show();
+  });
 }
 
 function createWindow () {
   app.on('fullscreen', function () {
     mainWindow.isFullScreenable
       ? mainWindow.setFullScreen(true)
-      : mainWindow.setFullScreen(false)
-  })
+      : mainWindow.setFullScreen(false);
+  });
 
-  app.on('ready', loadWindow)
-  app.on('activate', loadWindow)
+  app.on('ready', loadWindow);
+  app.on('activate', loadWindow);
 }
 
-module.exports = { createWindow }
+module.exports = { createWindow };

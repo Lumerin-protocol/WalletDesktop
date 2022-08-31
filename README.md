@@ -1,20 +1,20 @@
-<h1 align="center">
-  <img src="./public/images/banner.png" alt="Lumerin Wallet Desktop" width="50%">
+<h1>
+  <img src="logo.svg" alt="Lumerin Wallet Desktop Application" width="20%">
 </h1>
 
 💻💰 Lumerin Wallet for desktop computers
 
-[![Build Status](https://travis-ci.com/TitanInd/lumerin-wallet-desktop.svg?branch=master)](https://travis-ci.com/TitanInd/lumerin-wallet-desktop)
+<!-- [![Build Status](https://travis-ci.com/TitanInd/lumerin-wallet-desktop.svg?branch=master)](https://travis-ci.com/TitanInd/lumerin-wallet-desktop)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-![Lumerin Desktop Wallet](https://lumerin.io/images/lumerin-apps-demo@2x.png)
+![Lumerin Desktop Wallet](https://lumerin.io/images/lumerin-apps-demo@2x.png) -->
 
 ## Development
 
 Create a local `.env` file with the following content:
 
 ```shell
-ENABLED_CHAINS=
+ENABLED_CHAIN=
 ROPSTEN_NODE_URL=
 ```
 
@@ -64,13 +64,21 @@ To completely remove the application and start over, remove the settings file to
 ### Production Build
 
 ```sh
+npm run release-init
+```
+wait for container to build and run
+```sh
+git ls-remote --tags --heads ssh://git@github.com/Lumerin-protocol/ContractsJS.git
+```
+trust the github host and run
+```sh
 # Run build process
-npm run dist
+npm install && npm run dist
 
 # or
 
 # Run build process and publish to GitHub releases
-npm run release
+npm install && npm run release
 ```
 
 #### macOs

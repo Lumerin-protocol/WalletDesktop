@@ -1,47 +1,29 @@
-import PropTypes from 'prop-types'
-import React from 'react'
+import { useState } from 'react';
 
-export default class ItemFilter extends React.Component {
-  static propTypes = {
-    defaultFilter: PropTypes.string,
-    extractValue: PropTypes.func,
-    children: PropTypes.func.isRequired,
-    items: PropTypes.array.isRequired
-  }
+export const ItemFilter = ({
+  defaultFilter = '',
+  extractValue = _ => _,
+  children,
+  items
+}) => {
+  const [activeFilter, setActiveFilter] = useState(defaultFilter);
 
-  static defaultProps = {
-    defaultFilter: '',
-    extractValue: _ => _
-  }
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      activeFilter: props.defaultFilter
-    }
-  }
-
-  filterItems = (filterValue, items) =>
+  const handleFilter = (filterValue, itemsList) =>
     filterValue
-      ? items.filter(item => this.props.extractValue(item) === filterValue)
-      : items
+      ? itemsList.filter(item => extractValue(item) === filterValue)
+      : itemsList;
 
-  onFilterChange = filterValue => {
+  const onFilterChange = filterValue => {
     if (typeof filterValue !== 'undefined') {
-      this.setState({ activeFilter: filterValue })
+      setActiveFilter(filterValue);
     }
-  }
+  };
 
-  render() {
-    const { activeFilter } = this.state
+  const filteredItems = handleFilter(activeFilter, items);
 
-    return this.props.children({
-      onFilterChange: this.onFilterChange,
-      filteredItems: this.filterItems(
-        this.state.activeFilter,
-        this.props.items
-      ),
-      activeFilter
-    })
-  }
-}
+  return children({
+    onFilterChange,
+    filteredItems,
+    activeFilter
+  });
+};

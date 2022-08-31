@@ -155,23 +155,22 @@ function goOffline() {
 }
 
 function getInitialState({
+  symbol = 'LMR',
   lmrBalance = '25000000000000000',
   ethBalance = '50000000000000000',
   transactions = []
 } = {}) {
   return testUtils.getInitialState({
     rates: { ETH: { token: 'ETH', price: 100 } },
-    wallets: {
-      byId: {
-        foo: {
-          addresses: {
-            [ACTIVE_ADDRESS]: {
-              token: { [config.LMR_TOKEN_ADDR]: { balance: lmrBalance } },
-              balance: ethBalance,
-              transactions
-            }
-          }
-        }
+    wallet: {
+      address: ACTIVE_ADDRESS,
+      balance: lmrBalance,
+      transactions,
+      token: {
+        contract: config.LMR_TOKEN_ADDR,
+        balance: lmrBalance,
+        transactions,
+        symbol
       }
     }
   });

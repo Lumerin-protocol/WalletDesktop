@@ -10,14 +10,14 @@ const Container = styled(Flex.Column)`
   min-height: 100vh;
   padding: 3.2rem;
   background: ${p => p.theme.colors.light};
-    top center;
+  top center;
 `;
 
 const Body = styled.div`
-  max-width: 30rem;
+  max-width: 40rem;
   width: 100%;
   margin-top: 4rem;
-  @media (min-height: 600px) {
+  @media (min-height: 800px) {
     margin-top: 8rem;
   }
 `;
@@ -28,7 +28,8 @@ const Title = styled.div`
   font-weight: bold;
   text-align: center;
   cursor: default;
-  color: ${p => p.theme.colors.dark} @media (min-height: 600px) {
+  color: ${p => p.theme.colors.dark};
+  @media (min-height: 600px) {
     font-size: 2.4rem;
   }
 `;

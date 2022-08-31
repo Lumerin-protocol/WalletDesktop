@@ -1,7 +1,7 @@
 'use strict';
 
-const LumerinContracts = require('metronome-contracts');
-const contracts = LumerinContracts['mordor'];
+const LumerinContracts = require('@lumerin/contracts');
+const { Lumerin, WebFacing } = LumerinContracts['mordor'];
 
 const indexerUrl = process.env.MORDOR_INDEXER_URL || 'http://localhost:3015';
 const wsApiUrl = process.env.MORDOR_NODE_URL || 'ws://localhost:8556';
@@ -12,11 +12,8 @@ module.exports = {
   symbol: 'ETC',
 
   // contracts addresses
-  tokenPorterAddress: contracts.TokenPorter.address,
-  converterAddress: contracts.AutonomousConverter.address,
-  validatorAddress: contracts.Validator.address,
-  lmrTokenAddress: contracts.METToken.address,
-  auctionAddress: contracts.Auctions.address,
+  lmrTokenAddress: Lumerin.address,
+  webfacingAddress: WebFacing.address,
 
   // urls
   explorerUrl: 'https://mordorexplorer.ethernode.io/tx/{{hash}}',

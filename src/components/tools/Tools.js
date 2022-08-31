@@ -1,22 +1,60 @@
 import { withRouter, NavLink } from 'react-router-dom';
-import withToolsState from 'lumerin-wallet-ui-logic/src/hocs/withToolsState';
+import withToolsState from '@lumerin/wallet-ui-logic/src/hocs/withToolsState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
 
 import ConfirmModal from './ConfirmModal';
+import TestModal from './TestModal';
 import WalletStatus from './WalletStatus';
-import {
-  ConfirmationWizard,
-  LightLayout,
-  TextInput,
-  Flex,
-  BaseBtn,
-  Btn,
-  Sp
-} from '../common';
+import { ConfirmationWizard, TextInput, Flex, BaseBtn, Sp } from '../common';
+import Spinner from '../common/Spinner';
+import { View } from '../common/View';
+import { ToastsContext } from '../../components/toasts';
 
-const Container = styled.div``;
+const Container = styled.div`
+  padding: 3rem 0 0 0;
+  margin-left: 2rem;
+  height: 80vh;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  padding: 1.8rem 0;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  width: 100%;
+  z-index: 2;
+  right: 0;
+  left: 0;
+  top: 0;
+`;
+const Title = styled.label`
+  font-size: 2.4rem;
+  line-height: 3rem;
+  white-space: nowrap;
+  margin: 0;
+  font-weight: 600;
+  color: ${p => p.theme.colors.dark}
+  margin-bottom: 4.8px;
+  margin-right: 2.4rem;
+  cursor: default;
+
+  @media (min-width: 1140px) {
+    margin-right: 0.8rem;
+  }
+
+  @media (min-width: 1200px) {
+    margin-right: 1.6rem;
+  }
+`;
 
 const Confirmation = styled.div`
   color: ${p => p.theme.colors.danger};
@@ -24,6 +62,7 @@ const Confirmation = styled.div`
   border-radius: 4px;
   padding: 0.8rem 1.6rem;
 `;
+
 const ValidationMsg = styled.div`
   font-size: 1.4rem;
   margin-left: 1.6rem;
@@ -47,7 +86,7 @@ const StyledBtn = styled(BaseBtn)`
   }
 `;
 
-const Subtitle = styled.h2`
+const Subtitle = styled.h3`
   color: ${p => p.theme.colors.dark};
 `;
 
@@ -55,147 +94,238 @@ const StyledParagraph = styled.p`
   color: ${p => p.theme.colors.dark};
 `;
 
-class Tools extends React.Component {
-  static propTypes = {
-    onRescanTransactions: PropTypes.func.isRequired,
-    isRecoverEnabled: PropTypes.bool.isRequired,
-    onInputChange: PropTypes.func.isRequired,
-    validate: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired,
-    mnemonic: PropTypes.string,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired
-    }).isRequired,
-    errors: PropTypes.shape({
-      mnemonic: PropTypes.string
-    }).isRequired
+const Tools = props => {
+  const renderForm = goToReview => {
+    const defState = {
+      activeModal: null,
+      testSocket: '',
+      toast: {
+        Show: false,
+        Message: null,
+        Type: 'info'
+      }
+    };
+
+    const [state, setState] = useState(defState);
+    const [isRestarting, restartNode] = useState(false);
+
+    const context = useContext(ToastsContext);
+
+    const onCloseModal = () => {
+      setState({ ...state, activeModal: null });
+    };
+
+    const onActiveModalClick = modal => {
+      setState({ ...state, activeModal: modal });
+    };
+
+    const onRestartClick = async () => {
+      restartNode(true);
+
+      let conf = {
+        headers: {
+          'content-type': 'application/json',
+          accept: 'application/json'
+        }
+      };
+
+      const restartHost =
+        process.env.LUMERIN_RESTART_HOST || 'http://localhost';
+      const restartPort = process.env.LUMERIN_RESTART_PORT || '8081';
+
+      await axios
+        .post(
+          `${restartHost}:${restartPort}/signal`,
+          {
+            type: 'restart'
+          },
+          conf
+        )
+        .then(response => {
+          if (process.env.DEBUG) {
+            console.log(`received ${response} after restart`);
+          }
+          context.toast('success', response.data.message);
+        })
+        .catch(error => {
+          context.toast('error', error.message);
+        });
+
+      // for UX
+      setTimeout(() => {
+        restartNode(false);
+      }, 800);
+    };
+
+    const { onInputChange, mnemonic, errors } = props;
+    const { testSocket } = state;
+
+    return (
+      <Container>
+        <Sp mt={-4}>
+          <Subtitle>Recover a Wallet</Subtitle>
+          <form data-testid="recover-form" onSubmit={goToReview}>
+            <StyledParagraph>
+              Enter a valid twelve-word recovery phrase to recover another
+              wallet.
+            </StyledParagraph>
+            <StyledParagraph>
+              This action will replace your current stored seed!
+            </StyledParagraph>
+            <TextInput
+              data-testid="mnemonic-field"
+              autoFocus
+              onChange={onInputChange}
+              label="Recovery phrase"
+              error={errors.mnemonic}
+              value={mnemonic || ''}
+              rows={2}
+              id="mnemonic"
+            />
+            <Sp mt={4}>
+              <Flex.Row align="center">
+                <StyledBtn disabled={!props.isRecoverEnabled} submit>
+                  Recover
+                </StyledBtn>
+                {!props.isRecoverEnabled && (
+                  <ValidationMsg>
+                    A recovery phrase must have exactly 12 words
+                  </ValidationMsg>
+                )}
+              </Flex.Row>
+            </Sp>
+          </form>
+          <Sp mt={5}>
+            <hr />
+            <Subtitle>Change Password</Subtitle>
+            <StyledParagraph>
+              This will allow you to change the password you use to access the
+              wallet.
+            </StyledParagraph>
+            <NavLink data-testid="change-password-btn" to="/change-pass">
+              <StyledBtn>Change Password</StyledBtn>
+            </NavLink>
+          </Sp>
+          <Sp mt={5}>
+            <hr />
+            <Subtitle>Rescan Transactions List</Subtitle>
+            <StyledParagraph>
+              This will clear your local cache and rescan all your wallet
+              transactions.
+            </StyledParagraph>
+            <StyledBtn onClick={() => onActiveModalClick('confirm-rescan')}>
+              Rescan Transactions
+            </StyledBtn>
+            <ConfirmModal
+              onRequestClose={onCloseModal}
+              onConfirm={props.onRescanTransactions}
+              isOpen={state.activeModal === 'confirm-rescan'}
+            />
+          </Sp>
+          <Sp mt={5}>
+            <hr />
+            <Subtitle>Run End-to-End Test</Subtitle>
+            <StyledParagraph>
+              Before running test, make sure that all your Lumerin node is up
+              and running locally.
+            </StyledParagraph>
+
+            <TextInput
+              data-testid="test-field"
+              onChange={e => setState({ ...state, testSocket: e.targeValue })}
+              label={process.env.PROXY_ROUTER_URL || ''}
+              error={errors.mnemonic}
+              value={testSocket || ''}
+              rows={2}
+              id="testSocket"
+            />
+            <br />
+            <StyledBtn onClick={() => onActiveModalClick('confirm-test')}>
+              Run Test
+            </StyledBtn>
+            <TestModal
+              onRequestClose={onCloseModal}
+              onConfirm={props.onRunTest}
+              isOpen={state.activeModal === 'confirm-test'}
+            />
+          </Sp>
+          <Sp mt={5}>
+            <hr />
+            <Subtitle>Restart Lumerin Node</Subtitle>
+            <StyledParagraph>
+              Restart the connected Lumerin Node.
+            </StyledParagraph>
+
+            <br />
+            <StyledBtn onClick={() => onRestartClick()} disabled={isRestarting}>
+              Restart Node
+            </StyledBtn>
+            <Spinner show={isRestarting} />
+          </Sp>
+          <Sp mt={5}>
+            <hr />
+            <h4>Wallet Information</h4>
+            <WalletStatus />
+          </Sp>
+        </Sp>
+      </Container>
+    );
   };
 
-  state = {
-    activeModal: null
-  };
+  const onWizardSubmit = password =>
+    props.onSubmit(password).then(() => props.history.push('/wallet'));
 
-  onCloseModal = () => {
-    this.setState({ activeModal: null });
-  };
-
-  onRescanTransactionsClick = () => {
-    this.setState({ activeModal: 'confirm-rescan' });
-  };
-
-  onWizardSubmit = password =>
-    this.props
-      .onSubmit(password)
-      .then(() => this.props.history.push('/wallets'));
-
-  renderConfirmation = () => (
+  const renderConfirmation = () => (
     <Confirmation data-testid="confirmation">
       <h3>Are you sure?</h3>
       <p>This operation will overwrite and restart the current wallet!</p>
     </Confirmation>
   );
 
-  renderForm = goToReview => {
-    const { onInputChange, mnemonic, errors } = this.props;
+  return (
+    <View data-testid="tools-container">
+      <TitleContainer>
+        <Title>Tools</Title>
+      </TitleContainer>
+      <ConfirmationWizard
+        renderConfirmation={renderConfirmation}
+        confirmationTitle=""
+        onWizardSubmit={onWizardSubmit}
+        pendingTitle="Recovering..."
+        successText="Wallet successfully recovered"
+        renderForm={renderForm}
+        validate={props.validate}
+        noCancel
+        styles={{
+          confirmation: {
+            padding: 0
+          },
+          btns: {
+            background: 'none',
+            marginTop: '3.2rem',
+            maxWidth: '200px',
+            padding: 0
+          }
+        }}
+      />
+    </View>
+  );
+};
 
-    return (
-      <Sp mt={-4}>
-        <Subtitle>Recover a Wallet</Subtitle>
-        <form data-testid="recover-form" onSubmit={goToReview}>
-          <StyledParagraph>
-            Enter a valid twelve-word recovery phrase to recover another wallet.
-          </StyledParagraph>
-          <StyledParagraph>
-            This action will replace your current stored seed!
-          </StyledParagraph>
-          <TextInput
-            data-testid="mnemonic-field"
-            autoFocus
-            onChange={onInputChange}
-            label="Recovery phrase"
-            error={errors.mnemonic}
-            value={mnemonic || ''}
-            rows={2}
-            id="mnemonic"
-          />
-          <Sp mt={4}>
-            <Flex.Row align="center">
-              <StyledBtn disabled={!this.props.isRecoverEnabled} submit>
-                Recover
-              </StyledBtn>
-              {!this.props.isRecoverEnabled && (
-                <ValidationMsg>
-                  A recovery phrase must have exactly 12 words
-                </ValidationMsg>
-              )}
-            </Flex.Row>
-          </Sp>
-        </form>
-        <Sp mt={5}>
-          <hr />
-          <Subtitle>Change Password</Subtitle>
-          <StyledParagraph>
-            This will allow you to change the password you use to access the
-            wallet.
-          </StyledParagraph>
-          <NavLink data-testid="change-password-btn" to="/change-pass">
-            <StyledBtn>Change Password</StyledBtn>
-          </NavLink>
-        </Sp>
-        <Sp mt={5}>
-          <hr />
-          <Subtitle>Rescan Transactions List</Subtitle>
-          <StyledParagraph>
-            This will clear your local cache and rescan all your wallet
-            transactions.
-          </StyledParagraph>
-          <StyledBtn onClick={this.onRescanTransactionsClick}>
-            Rescan Transactions
-          </StyledBtn>
-          <ConfirmModal
-            onRequestClose={this.onCloseModal}
-            onConfirm={this.props.onRescanTransactions}
-            isOpen={this.state.activeModal === 'confirm-rescan'}
-          />
-        </Sp>
-        <Sp mt={5}>
-          <hr />
-          <h4>Wallet Information</h4>
-          <WalletStatus />
-        </Sp>
-      </Sp>
-    );
-  };
-
-  render() {
-    return (
-      <LightLayout title="Tools" data-testid="tools-container">
-        <Sp py={4} px={6}>
-          <ConfirmationWizard
-            renderConfirmation={this.renderConfirmation}
-            confirmationTitle=""
-            onWizardSubmit={this.onWizardSubmit}
-            pendingTitle="Recovering..."
-            successText="Wallet successfully recovered"
-            renderForm={this.renderForm}
-            validate={this.props.validate}
-            noCancel
-            styles={{
-              confirmation: {
-                padding: 0
-              },
-              btns: {
-                background: 'none',
-                marginTop: '3.2rem',
-                maxWidth: '200px',
-                padding: 0
-              }
-            }}
-          />
-        </Sp>
-      </LightLayout>
-    );
-  }
-}
+Tools.propTypes = {
+  onRescanTransactions: PropTypes.func.isRequired,
+  onRunTest: PropTypes.func.isRequired,
+  isRecoverEnabled: PropTypes.bool.isRequired,
+  onInputChange: PropTypes.func.isRequired,
+  validate: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  mnemonic: PropTypes.string,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired,
+  errors: PropTypes.shape({
+    mnemonic: PropTypes.string
+  }).isRequired
+};
 
 export default withToolsState(withRouter(Tools));

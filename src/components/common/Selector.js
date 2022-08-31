@@ -1,10 +1,10 @@
-import * as ReachUI from '@reach/menu-button'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import * as ReachUI from '@reach/menu-button';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { ErrorMsg, Label } from './TextInput'
-import SelectorCaret from '../icons/SelectorCaret'
+import { ErrorMsg, Label } from './TextInput';
+import SelectorCaret from '../icons/SelectorCaret';
 
 const MenuButton = styled(ReachUI.MenuButton)`
   background-color: ${p => p.theme.colors.translucentPrimary};
@@ -44,12 +44,12 @@ const MenuButton = styled(ReachUI.MenuButton)`
   @media (min-height: 600px) {
     height: 5.6rem;
   }
-`
+`;
 
 const ValueContainer = styled.div`
   padding: 0.8rem 1.6rem;
   flex-grow: 1;
-`
+`;
 
 const CaretContainer = styled.div`
   background-color: transparent;
@@ -68,12 +68,12 @@ const CaretContainer = styled.div`
   [disabled] & {
     opacity: 0.25;
   }
-`
+`;
 
 const MenuList = styled(ReachUI.MenuList)`
   background-color: ${p => p.theme.colors.light};
   padding: 1.6rem 0;
-`
+`;
 
 const MenuItem = styled(ReachUI.MenuItem)`
   color: ${p => p.theme.colors.copy};
@@ -87,7 +87,7 @@ const MenuItem = styled(ReachUI.MenuItem)`
     color: ${p => p.theme.colors.primary};
     outline: none;
   }
-`
+`;
 
 export default class Selector extends React.Component {
   static propTypes = {
@@ -106,17 +106,17 @@ export default class Selector extends React.Component {
     label: PropTypes.string.isRequired,
     value: PropTypes.string,
     id: PropTypes.string.isRequired
-  }
+  };
 
   onChange = e => {
-    this.props.onChange({ id: this.props.id, value: e.target.value })
-  }
+    this.props.onChange({ id: this.props.id, value: e.target.value });
+  };
 
   render() {
-    const { onChange, options, error, label, value, id, ...other } = this.props
+    const { onChange, options, error, label, value, id, ...other } = this.props;
 
-    const hasErrors = error && error.length > 0
-    const activeItem = options.find(item => item.value === value)
+    const hasErrors = error && error.length > 0;
+    const activeItem = options.find(item => item.value === value);
 
     return (
       <div>
@@ -149,6 +149,6 @@ export default class Selector extends React.Component {
           </ErrorMsg>
         )}
       </div>
-    )
+    );
   }
 }

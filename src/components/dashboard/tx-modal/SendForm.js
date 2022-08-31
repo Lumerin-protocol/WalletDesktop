@@ -46,8 +46,12 @@ const AmountInput = styled.input`
   text-align: center;
   outline: none;
   border: none;
+  text-shadow: 0 0 0 #2196f3;
   color: ${({ isActive, theme }) =>
     isActive ? theme.colors.primary : theme.colors.dark};
+  &:focus {
+    outline: none;
+  }
 
   ::placeholder {
     color: ${p => p.theme.colors.dark};
@@ -106,7 +110,7 @@ const ConfirmBtn = styled(BaseBtn)`
   height: 50px;
   border-radius: 5px;
   background-color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.lumerin.hypertext - gray : theme.colors.primary};
+    isActive ? theme.colors.lumerin.helpertextGray : theme.colors.primary};
 `;
 
 const Footer = styled.div`
@@ -218,14 +222,14 @@ export function SendForm({
       </WalletContainer>
 
       <Footer>
-        {amountInput > 0 && (
+        {
           <FooterRow>
             <FooterLabel>LMR Balance</FooterLabel>
             <FooterLabel>
               {convertToLMR(amountInput).toFixed(2)} ≈ ${amountInput}
             </FooterLabel>
           </FooterRow>
-        )}
+        }
         <ConfirmBtn data-modal="confirm" onClick={handleTabSwitch}>
           Confirm
         </ConfirmBtn>

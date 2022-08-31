@@ -1,27 +1,22 @@
-import withBalanceBlockState from 'lumerin-wallet-ui-logic/src/hocs/withBalanceBlockState';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import withBalanceBlockState from '@lumerin/wallet-ui-logic/src/hocs/withBalanceBlockState';
 import styled from 'styled-components';
-import React from 'react';
-import LumerinLightIcon from '../icons/LumerinLightIcon';
-import StatusPillIcon from '../icons/StatusPillIcon';
+import { LumerinLightIcon } from '../icons/LumerinLightIcon';
+import { EtherIcon } from '../icons/EtherIcon';
 
-import { BaseBtn, Btn, DisplayValue } from '../common';
-
-const convertLmrToEth = () => {};
+import { BaseBtn, DisplayValue } from '../common';
 
 const relSize = ratio => `calc(100vw / ${ratio})`;
+const sizeMult = mult => `calc(5px * ${mult})`;
 
 const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
   background-color: ${p => p.theme.colors.xLight};
-  width: 70%;
   height: 100px;
+  width: 400px;
   padding: 0 1.6rem 0 1.6rem;
   border-radius: 5px;
   display: flex;
-  @media (min-width: 1040px) {
-    display: flex;
-  }
 `;
 
 const Balance = styled.div`
@@ -30,52 +25,48 @@ const Balance = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0.75em 1.6rem;
-  width: 35%;
+  height: 90%;
   @media (min-width: 1040px) {
   }
 `;
 
-const CoinSymbol = styled.div`
-  border-radius: 14.1px;
-  background-color: ${p => p.theme.colors.primary};
-  width: 4rem;
-  line-height: 2.5rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-align: center;
-  @media (min-width: 1040px) {
-    line-height: 3.2rem;
-    width: 6.3rem;
-    font-size: 2rem;
+const IconLogoContainer = styled.div`
+  padding: 2.4rem 1.2rem;
+  height: 100px;
+  display: none;
+  flex-shrink: 0;
+
+  @media (min-width: 800px) {
+    display: block;
   }
 `;
 
-const Value = styled.div`
+const Primary = styled.div`
   line-height: 1.5;
   font-weight: 600;
-  letter-spacing: ${p => (p.large ? '-1px' : 'inherit')};
+  letter-spacing: -1px;
   color: ${p => p.theme.colors.darker}
   margin: 0 1.6rem;
   flex-grow: 1;
   position: relative;
   // top: ${relSize(-400)};
   // font-size: ${relSize(58)};
-  font-size: 3rem;
+  font-size: ${relSize(28)};
 
   @media (min-width: 1440px) {
     font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
   }
 `;
 
-const USDValue = styled.div`
+const Secondary = styled.div`
   display: block;
-  line-height: 1.5;
+  line-height: 1;
   font-weight: 600;
   color: ${p => p.theme.colors.darker}
   white-space: nowrap;
   position: relative;
   top: ${relSize(-400)};
-  font-size: ${relSize(36)};
+  font-size: ${relSize(48)};
 
   @media (min-width: 800px) {
     font-size: ${relSize(68)};
@@ -87,9 +78,9 @@ const USDValue = styled.div`
 `;
 
 const LeftBtn = styled(BaseBtn)`
-  width: 45%;
   height: 60%;
   font-size: 1.5rem;
+  margin-right: .4rem;
   border-radius: 5px;
   background-color: ${p => p.theme.colors.primary}
   color: ${p => p.theme.colors.light}
@@ -100,9 +91,9 @@ const LeftBtn = styled(BaseBtn)`
 `;
 
 const RightBtn = styled(BaseBtn)`
-  width: 45%;
   height: 60%;
   font-size: 1.5rem;
+  margin-left: .4rem;
   border-radius: 5px;
   border: 1px solid ${p => p.theme.colors.primary};
   background-color: ${p => p.theme.colors.light}
@@ -116,7 +107,7 @@ const RightBtn = styled(BaseBtn)`
 const BtnRow = styled.div`
   display: flex;
   flex-direction: row;
-  width: 70%;
+  width: 200px;
   height: 100%;
   align-items: center;
   justify-content: space-between;
@@ -125,31 +116,58 @@ const BtnRow = styled.div`
 function BalanceBlock({
   sendDisabled,
   sendDisabledReason,
-  coinBalanceUSD,
-  coinBalanceWei,
-  lmrBalanceWei,
-  CoinSymbol,
+  ethBalance,
+  lmrBalance,
   onTabSwitch
 }) {
+  const [assetMode, setAssetMode] = useState('LMR');
+  const handleToggleAssetMode = e => setAssetMode(e.target.dataset.asset);
   const handleTabSwitch = e => {
     e.preventDefault();
 
     onTabSwitch(e.target.dataset.modal);
   };
 
+  const LumerinMode = () => (
+    <>
+      <LumerinLightIcon size="6rem" />
+      <Balance>
+        <Primary data-testid="lmr-balance">
+          <DisplayValue shouldFormate={false} value={lmrBalance} />
+        </Primary>
+        {/* TODO: Fix ethBalance */}
+        {/* <Secondary data-testid="eth-balance">ETH {ethBalance}</Secondary> */}
+      </Balance>
+    </>
+  );
+
+  const EtherMode = () => (
+    <>
+      <EtherIcon size="6rem" data-asset="ETH" onClick={handleToggleAssetMode} />
+      <Balance>
+        <Primary data-testid="eth-balance" large>
+          <DisplayValue shouldFormate={false} value={ethBalance} />
+        </Primary>
+        <Secondary data-testid="lmr-balance" hide>
+          <LumerinLightIcon size="2rem" /> {lmrBalance}
+        </Secondary>
+      </Balance>
+    </>
+  );
+
   return (
     <>
       <Container>
-        <LumerinLightIcon size="6rem" />
-        <Balance>
-          <Value data-testid="lmr-balance" large>
-            <DisplayValue value={lmrBalanceWei} />
-          </Value>
-          <USDValue data-testid="lmr-balance-usd" hide>
-            ETH ≈ {lmrBalanceWei}
-          </USDValue>
-        </Balance>
+        <LumerinMode />
+
         <BtnRow>
+          {/* <LeftBtn
+            data-asset="ETH"
+            data-testid="receive-btn"
+            block
+          >
+            toggle {assetMode}
+          </LeftBtn> */}
           <LeftBtn
             data-modal="receive"
             data-testid="receive-btn"

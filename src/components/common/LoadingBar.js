@@ -1,5 +1,5 @@
-import styled, { keyframes } from 'styled-components'
-import React from 'react'
+import React from 'react';
+import styled, { keyframes } from 'styled-components';
 
 const loading = keyframes`
     from {left: -200px; width: 30%;}
@@ -8,14 +8,14 @@ const loading = keyframes`
     80% { left: 50%;}
     95% {left: 120%;}
     to {left: 100%;}
-`
+`;
 
 const Container = styled.div`
   width: 100%;
   background-color: ${p => p.theme.colors.translucentPrimary};
   padding: 0.2rem;
   border-radius: 0.8rem;
-`
+`;
 
 const Bar = styled.div`
   position: relative;
@@ -34,14 +34,12 @@ const Bar = styled.div`
     background-color: ${p => p.theme.colors.primary};
     animation: ${loading} 2s linear infinite;
   }
-`
+`;
 
-export default class LoadingBar extends React.Component {
-  render() {
-    return (
-      <Container>
-        <Bar />
-      </Container>
-    )
-  }
+export default function LoadingBar() {
+  return (
+    <Container>
+      <Bar />
+    </Container>
+  );
 }

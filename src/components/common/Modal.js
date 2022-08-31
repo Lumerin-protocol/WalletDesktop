@@ -1,7 +1,7 @@
 import ReactModal from 'react-modal';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'lumerin-wallet-ui-logic/src/theme';
+import theme from '@lumerin/wallet-ui-logic/src/theme';
 import React from 'react';
 
 import CloseIcon from '../icons/CloseIcon';
@@ -64,74 +64,60 @@ export const HeaderButton = styled.button`
   }
 `;
 
-export default class Modal extends React.Component {
-  // static propTypes = {
-  //   onRequestClose: PropTypes.func.isRequired,
-  //   headerChildren: PropTypes.node,
-  //   children: PropTypes.node.isRequired,
-  //   variant: PropTypes.oneOf(['primary']),
-  //   isOpen: PropTypes.bool.isRequired,
-  //   title: PropTypes.string,
-  //   styleOverrides: PropTypes.object
-  // };
-
-  render() {
-    const {
-      onRequestClose,
-      styleOverrides,
-      headerChildren,
-      children,
-      variant,
-      isOpen,
-      title,
-      ...other
-    } = this.props;
-
-    return (
-      <Container
-        onRequestClose={onRequestClose}
-        closeTimeoutMS={600}
-        contentLabel="Modal"
-        isOpen={isOpen}
-        style={{
-          overlay: {
-            backgroundColor: 'transparent',
-            zIndex: '3'
-          },
-          content: {
-            background: theme.colors.light,
-            flexDirection: 'column',
-            marginBottom: '1.6rem',
-            borderRadius: '0',
-            boxShadow: `0 0 16px 0 ${theme.colors.darkShade}`,
-            overflowY: 'auto',
-            position: 'absolute',
-            outline: 'none',
-            display: 'flex',
-            padding: '0',
-            border: 'none',
-            width: '420px',
-            right: 'auto',
-            left: '50%',
-            top: '10rem',
-            ...styleOverrides
-          }
-        }}
-        {...other}
-      >
-        <Header hasTitle={!!title} variant={variant}>
-          {title && <Title variant={variant}>{title}</Title>}
-          {headerChildren}
-          <HeaderButton onClick={onRequestClose} variant={variant}>
-            <CloseIcon
-              color={
-                variant === 'primary' ? theme.colors.light : theme.colors.copy
-              }
-            />
-          </HeaderButton>
-        </Header>
-        {children}
-      </Container>
-    );
-  }
+export default function Modal({
+  onRequestClose,
+  headerChildren,
+  children,
+  variant,
+  isOpen,
+  title,
+  styleOverrides,
+  ...other
+}) {
+  return (
+    <Container
+      onRequestClose={onRequestClose}
+      closeTimeoutMS={600}
+      contentLabel="Modal"
+      isOpen={isOpen}
+      style={{
+        overlay: {
+          backgroundColor: 'transparent',
+          zIndex: '3'
+        },
+        content: {
+          background: theme.colors.light,
+          flexDirection: 'column',
+          marginBottom: '1.6rem',
+          borderRadius: '5px',
+          boxShadow: `0 0 16px 0 ${theme.colors.darkShade}`,
+          overflowY: 'auto',
+          position: 'absolute',
+          outline: 'none',
+          display: 'flex',
+          padding: '0',
+          border: 'none',
+          width: '420px',
+          right: 'auto',
+          left: '50%',
+          top: '10rem',
+          ...styleOverrides
+        }
+      }}
+      {...other}
+    >
+      <Header hasTitle={!!title} variant={variant}>
+        {title && <Title variant={variant}>{title}</Title>}
+        {headerChildren}
+        <HeaderButton onClick={onRequestClose} variant={variant}>
+          <CloseIcon
+            color={
+              variant === 'primary' ? theme.colors.light : theme.colors.copy
+            }
+          />
+        </HeaderButton>
+      </Header>
+      {children}
+    </Container>
+  );
 }

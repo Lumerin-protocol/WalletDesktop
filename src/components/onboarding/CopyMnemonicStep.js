@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { AltLayout, Btn, Sp } from '../common'
-import SecondaryBtn from './SecondaryBtn'
-import Message from './Message'
+import { AltLayout, Btn, Sp } from '../common';
+import SecondaryBtn from './SecondaryBtn';
+import Message from './Message';
 
 const Mnemonic = styled.div`
   font-size: 1.8rem;
@@ -13,21 +13,21 @@ const Mnemonic = styled.div`
   text-align: center;
   color: ${p => p.theme.colors.primary};
   word-spacing: 1.6rem;
-`
+`;
 
 export default class CopyMnemonicStep extends React.Component {
   static propTypes = {
     onUseUserMnemonicToggled: PropTypes.func.isRequired,
     onMnemonicCopiedToggled: PropTypes.func.isRequired,
     mnemonic: PropTypes.string
-  }
+  };
 
   render() {
     return (
-      <AltLayout title="Recovery Passphrase" data-testid="onboarding-container">
+      <AltLayout title="Recovery Mnemonic" data-testid="onboarding-container">
         <Message>
           Copy the following word list and keep it in a safe place. You will
-          need these to recover your wallet in the future —don’t lose it.
+          need these to recover your wallet in the future — don’t lose it.
         </Message>
         <Sp mt={3} mx={-8}>
           <Mnemonic data-testid="mnemonic-label">
@@ -51,10 +51,10 @@ export default class CopyMnemonicStep extends React.Component {
             onClick={this.props.onUseUserMnemonicToggled}
             block
           >
-            Or recover a wallet from a saved passphrase
+            Or recover a wallet from a saved mnemonic
           </SecondaryBtn>
         </Sp>
       </AltLayout>
-    )
+    );
   }
 }

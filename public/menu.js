@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
-const { app, shell, Menu } = require('electron')
-const APP_NAME = 'Lumerin Wallet'
+const { app, shell, Menu } = require('electron');
+const APP_NAME = 'Lumerin Wallet';
 
 const template = [
   {
@@ -24,7 +24,7 @@ const template = [
         label: 'Toggle Full Screen',
         accelerator: (() => process.platform === 'darwin' ? 'Ctrl+Command+F' : 'F11')(),
         click (item, focusedWindow) {
-          focusedWindow && focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
+          focusedWindow && focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
         }
       },
 
@@ -61,7 +61,7 @@ const template = [
       }
     ]
   }
-]
+];
 
 if (process.platform === 'darwin') {
   template.unshift({
@@ -77,27 +77,27 @@ if (process.platform === 'darwin') {
       { type: 'separator' },
       { role: 'quit', label: `Quit ${APP_NAME}` }
     ]
-  })
+  });
 
-  const windowMenu = template.find(m => m.role === 'window')
+  const windowMenu = template.find(m => m.role === 'window');
 
   if (windowMenu) {
-    windowMenu.submenu.push({ type: 'separator' }, { role: 'front' })
+    windowMenu.submenu.push({ type: 'separator' }, { role: 'front' });
   }
 } else {
   template.unshift({
     label: 'File',
     submenu: [{ role: 'quit', label: `Quit ${APP_NAME}` }]
-  })
+  });
 
-  const help = template.find(t => t.role === 'help')
+  const help = template.find(t => t.role === 'help');
 
   if (help) {
-    help.submenu.unshift({ type: 'separator' })
-    help.submenu.unshift({ role: 'about', label: `${APP_NAME} v${app.getVersion()}`, enabled: false })
+    help.submenu.unshift({ type: 'separator' });
+    help.submenu.unshift({ role: 'about', label: `${APP_NAME} v${app.getVersion()}`, enabled: false });
   }
 }
 
 module.exports = function () {
-  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
-}
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+};

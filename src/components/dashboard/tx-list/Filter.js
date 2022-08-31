@@ -1,22 +1,25 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
+import styled from 'styled-components';
+
+const calcWidth = n => 100 / n;
 
 const Container = styled.div`
   display: flex;
   justify-content: start;
+  width: 100%;
 `;
 
 const Tab = styled.button`
+  width: ${calcWidth(4)}%;
   font: inherit;
   line-height: 1.2rem;
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: bold;
   color: ${p => p.theme.colors.dark}
   letter-spacing: 1.4px;
   text-align: center;
-  opacity: ${p => (p.isActive ? '1' : '0.5')};
-  padding: 1.6rem 1.8rem;
+  opacity: ${p => (p.isActive ? '1' : '0.75')};
+  padding: 1.6rem 1rem;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -28,16 +31,15 @@ const Tab = styled.button`
     outline: none;
   }
 
-  @media (min-width: 880px) {
+  @media (min-width: 800px) {
+    width: ${calcWidth(4)}%;
     font-size: 1.4rem;
-    padding: 1.6rem 2.4rem;
   }
 `;
 
-export default function Filter({ onFilterChange, isMultiChain, activeFilter }) {
+export default function Filter({ onFilterChange, activeFilter }) {
   // static propTypes = {
   //   onFilterChange: PropTypes.func.isRequired,
-  //   isMultiChain: PropTypes.bool.isRequired,
   //   activeFilter: PropTypes.oneOf([
   //     'converted',
   //     'received',

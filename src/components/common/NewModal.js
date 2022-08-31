@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import withNewContractModalState from 'lumerin-wallet-ui-logic/src/hocs/withNewContractModalState';
+import withNewContractModalState from '@lumerin/wallet-ui-logic/src/hocs/withNewContractModalState';
 
 import { BaseBtn } from '.';
 
@@ -20,6 +20,7 @@ const Modal = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
 const Body = styled.div`
   position: fixed;
   z-index: 20;

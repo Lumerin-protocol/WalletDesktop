@@ -62,12 +62,7 @@ const CopyBtn = styled(BaseBtn)`
   margin-left: .8rem;
 `;
 
-export default function AddressHeader({ copyToClipboard, address }) {
-  // static propTypes = {
-  //   copyToClipboard: PropTypes.func.isRequired,
-  //   address: PropTypes.string.isRequired
-  // }
-
+export const AddressHeader = ({ copyToClipboard, address }) => {
   const context = useContext(ToastsContext);
 
   const onCopyToClipboardClick = () => {
@@ -92,4 +87,4 @@ export default function AddressHeader({ copyToClipboard, address }) {
       </CopyBtn>
     </Container>
   );
-}
+};

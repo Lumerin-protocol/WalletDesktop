@@ -1,50 +1,72 @@
-'use strict'
+'use strict';
 
-const logger = require('../../logger.js')
-
-const { getPasswordHash, setPasswordHash } = require('./settings')
+const { setSessionPassword, getSessionPassword } = require('./secure.js');
+const logger = require('../../logger.js');
+const {
+  getPasswordHash,
+  setPasswordHash
+} = require('./settings');
 const {
   pbkdf2: { hash, verify },
   sha256
-} = require('./crypto')
+} = require('./crypto');
 
-function setPassword (password) {
-  const passwordHash = getPasswordHash()
+async function setPassword(password) {
+  await setSessionPassword(password);
+
+  const passwordHash = getPasswordHash();
   if (!passwordHash) {
-    logger.info('No password set, using current as default')
+    logger.info('No password set, using current as default');
   }
-  return hash(password).then(setPasswordHash)
+  await hash(password).then(setPasswordHash);
 }
 
-function isValidPassword (password) {
-  const passwordHash = getPasswordHash()
+function isValidPassword(password) {
+  const passwordHash = getPasswordHash();
 
   return verify(passwordHash, password)
-    .then(function (isValid) {
+    .then(async function(isValid) {
       if (isValid) {
-        logger.verbose('Supplied password is valid')
+        await setSessionPassword(password);
+        logger.verbose('Supplied password is valid');
       } else {
-        logger.warn('Supplied password is invalid')
+        logger.warn('Supplied password is invalid');
       }
-      return isValid
+      return isValid;
     })
-    .catch(function (err) {
-      logger.warn('Could not verify password', err)
+    .catch(function(err) {
+      logger.warn('Could not verify password', err);
 
       // TODO remove this check for an old hash before production release
-      if (sha256.hash(password) === passwordHash) {
-        logger.debug('Upgrading password encryption')
+      // if (sha256.hash(password) === passwordHash) {
+      //   logger.debug("Upgrading password encryption");
 
-        return hash(password).then(function (newHash) {
-          setPasswordHash(newHash)
+      //   return hash(password).then(function(newHash) {
+      //     setPasswordHash(newHash);
 
-          return true
-        })
-      }
+      //     return true;
+      //   });
+      // }
       // end of logic to remove
 
-      return false
-    })
+      return false;
+    });
 }
 
-module.exports = { isValidPassword, setPassword }
+async function getHashedPassword() {
+  const hashString = await getPasswordHash();
+
+  const hash = JSON.parse(hashString, (key, val) =>
+    key == 'hash' ? JSON.parse(val) : val
+  );
+
+  return hash.hash.secret;
+}
+
+module.exports = {
+  isValidPassword,
+  setPassword,
+  setSessionPassword,
+  getSessionPassword,
+  getHashedPassword
+};

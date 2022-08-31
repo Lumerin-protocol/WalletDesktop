@@ -1,30 +1,20 @@
 import React, { useState } from 'react';
-import withContractsState from 'lumerin-wallet-ui-logic/src/hocs/withContractsState';
 import styled from 'styled-components';
 
-import AddressHeader from '../common/AddressHeader';
-import ReceiveDrawer from './ReceiveDrawer';
+import withContractsState from '@lumerin/wallet-ui-logic/src/hocs/withContractsState';
+import { BaseBtn } from '../common';
+import { LayoutHeader } from '../common/LayoutHeader';
 import TotalsBlock from './TotalsBlock';
-import SendDrawer from './SendDrawer';
 import ContractsList from './contracts-list/ContractsList';
 import CreateContractModal from './CreateContractModal';
+import { View } from '../common/View';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
   min-height: 100%;
+  width: 100%;
   position: relative;
-  padding: 0 2.4rem 2.4rem;
-
-  @media (min-width: 800px) {
-  }
-`;
-
-const FixedContainer = styled.div`
-  position: sticky;
-  z-index: 2;
-  right: 0;
-  left: 0;
-  top: 0;
+  padding: 0 2.4rem;
 `;
 
 const Title = styled.div`
@@ -33,21 +23,44 @@ const Title = styled.div`
   white-space: nowrap;
   margin: 0;
   font-weight: 600;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   margin-bottom: 4.8px;
   margin-right: 2.4rem;
   cursor: default;
 
-  @media (min-width: 1140px) {
-    margin-right: 0.8rem;
+  @media (min-width: 800px) {
   }
-
   @media (min-width: 1200px) {
     margin-right: 1.6rem;
   }
 `;
 
-function Contracts(props) {
+const ContractBtn = styled(BaseBtn)`
+  width: 90px;
+  font-size: 1.2rem;
+  padding: 1rem 1.4rem;
+
+  border-radius: 5px;
+  border: 1px solid ${p => p.theme.colors.primary};
+  background-color: ${p => p.theme.colors.light}
+  color: ${p => p.theme.colors.primary}
+
+  @media (min-width: 1040px) {
+    margin-left: 0;
+  }
+`;
+
+function Contracts({
+  hasContracts,
+  copyToClipboard,
+  onWalletRefresh,
+  syncStatus,
+  activeCount,
+  draftCount,
+  address,
+  client,
+  ...props
+}) {
   const [isModalActive, setIsModalActive] = useState(false);
   // static propTypes = {
   //   sendDisabledReason: PropTypes.string,
@@ -62,35 +75,40 @@ function Contracts(props) {
   const handleOpenModal = () => setIsModalActive(true);
 
   const handleCloseModal = e => {
-    console.log('event ', e);
     setIsModalActive(false);
   };
-  const handleContractDeploy = e => {
+  const handleContractDeploy = (e, contractDetails) => {
     e.preventDefault();
+
+    client.createContract({
+      price: contractDetails.price,
+      speed: contractDetails.speed,
+      duration: contractDetails.time,
+      sellerAddress: contractDetails.address
+    });
+
+    setIsModalActive(false);
   };
   const handleContractSave = e => {
     e.preventDefault();
   };
 
   return (
-    <Container data-testid="contracts-container">
-      <FixedContainer>
-        <AddressHeader
-          copyToClipboard={props.copyToClipboard}
-          address={props.address}
-        />
-      </FixedContainer>
+    <View data-testid="contracts-container">
+      <LayoutHeader
+        title="Contracts"
+        address={address}
+        copyToClipboard={copyToClipboard}
+      >
+        <ContractBtn onClick={handleOpenModal}>Create New Contract</ContractBtn>
+      </LayoutHeader>
 
-      <Title>My Contracts</Title>
-      <TotalsBlock
-        isModalActive={isModalActive}
-        onOpenModal={handleOpenModal}
-      />
+      {/* <TotalsBlock /> */}
 
       <ContractsList
-        hasContracts={props.hasContracts}
-        onWalletRefresh={props.onWalletRefresh}
-        syncStatus={props.syncStatus}
+        hasContracts={hasContracts}
+        onWalletRefresh={onWalletRefresh}
+        syncStatus={syncStatus}
       />
 
       <CreateContractModal
@@ -99,7 +117,7 @@ function Contracts(props) {
         deploy={handleContractDeploy}
         close={handleCloseModal}
       />
-    </Container>
+    </View>
   );
 }
 

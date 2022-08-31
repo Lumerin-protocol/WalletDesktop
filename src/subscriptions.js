@@ -1,19 +1,27 @@
 export const subscribeToMainProcessMessages = function(store) {
   const ipcMessages = [
     'indexer-connection-status-changed',
-    'lumerin-token-status-updated',
+    'lumerin-token-status-changed',
     'web3-connection-status-changed',
-    'attestation-threshold-updated',
-    'chain-hop-start-time-updated',
     'connectivity-state-changed',
+    'proxy-router-connections-changed',
+    'proxy-router-status-changed',
+    'proxy-router-error',
     'transactions-scan-finished',
     'transactions-scan-started',
-    'converter-status-updated',
-    'auction-status-updated',
+    'contracts-scan-finished',
+    'contracts-scan-started',
     'wallet-state-changed',
     'coin-price-updated',
     'create-wallet',
-    'open-wallets',
+    'open-wallet',
+    'eth-balance-changed',
+    'token-balance-changed',
+    'token-contract-received',
+    'token-transactions-changed',
+    'wallet-transactions-changed',
+    'eth-tx',
+    'lmr-tx',
     'coin-block'
   ];
 

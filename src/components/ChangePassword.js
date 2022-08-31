@@ -1,7 +1,6 @@
-import withChangePasswordState from 'lumerin-wallet-ui-logic/src/hocs/withChangePasswordState';
+import withChangePasswordState from '@lumerin/wallet-ui-logic/src/hocs/withChangePasswordState';
 import { withRouter } from 'react-router-dom';
-import * as utils from 'lumerin-wallet-ui-logic/src/utils';
-import PropTypes from 'prop-types';
+import * as utils from '@lumerin/wallet-ui-logic/src/utils';
 import styled from 'styled-components';
 import React, { useEffect, useContext } from 'react';
 
@@ -10,7 +9,7 @@ import { ToastsContext } from '../components/toasts';
 
 const Container = styled.div`
   padding: 3.2rem 2.4rem;
-  max-width: 50rem;
+  max-width: 55rem;
 
   @media (min-width: 800px) {
     padding: 3.2rem 4.8rem;
@@ -22,6 +21,7 @@ const PasswordMessage = styled.div`
   font-weight: 600;
   line-height: 1.5;
   margin-top: 3.2rem;
+  color: ${p => p.theme.colors.dark};
 `;
 
 const Green = styled.div`
@@ -53,36 +53,28 @@ const StyledBtn = styled(BaseBtn)`
   }
 `;
 
-function ChangePassword(props) {
-  // static propTypes = {
-  //   requiredPasswordEntropy: PropTypes.number.isRequired,
-  //   newPasswordAgain: PropTypes.string,
-  //   onInputChange: PropTypes.func.isRequired,
-  //   newPassword: PropTypes.string,
-  //   oldPassword: PropTypes.string,
-  //   onSubmit: PropTypes.func.isRequired,
-  //   history: PropTypes.shape({
-  //     push: PropTypes.func.isRequired
-  //   }).isRequired,
-  //   status: PropTypes.oneOf(['init', 'pending', 'success', 'failure']),
-  //   errors: utils.errorPropTypes(
-  //     'newPasswordAgain',
-  //     'newPassword',
-  //     'oldPassword'
-  //   ),
-  //   error: PropTypes.string
-  // };
-
+function ChangePassword({
+  requiredPasswordEntropy,
+  onInputChange,
+  onSubmit,
+  newPasswordAgain,
+  newPassword,
+  oldPassword,
+  history,
+  status,
+  errors,
+  error
+}) {
   const context = useContext(ToastsContext);
 
   const handleSubmitAndNavigate = e => {
     e.preventDefault();
-    this.props.onSubmit();
+    onSubmit();
   };
 
   useEffect(() => {
-    if (props.status === 'success') {
-      props.history.push('/tools');
+    if (status === 'success') {
+      history.push('/tools');
       context.toast('success', 'Password successfully changed');
     }
   }, []);
@@ -101,10 +93,10 @@ function ChangePassword(props) {
             <TextInput
               data-testid="oldPassword-field"
               autoFocus
-              onChange={props.onInputChange}
+              onChange={onInputChange}
               label="Current Password"
-              error={props.errors.oldPassword}
-              value={props.oldPassword || ''}
+              error={errors.oldPassword}
+              value={oldPassword || ''}
               type="password"
               id="oldPassword"
             />
@@ -115,34 +107,34 @@ function ChangePassword(props) {
           <Sp mt={2}>
             <TextInput
               data-testid="newPassword-field"
-              onChange={props.onInputChange}
+              onChange={onInputChange}
               label="New Password"
-              error={props.errors.newPassword}
-              value={props.newPassword || ''}
+              error={errors.newPassword}
+              value={newPassword || ''}
               type="password"
               id="newPassword"
             />
-            {!props.errors.newPassword && (
+            {!errors.newPassword && (
               <EntropyMeter
-                targetEntropy={props.requiredPasswordEntropy}
-                password={props.newPassword}
+                targetEntropy={requiredPasswordEntropy}
+                password={newPassword}
               />
             )}
           </Sp>
           <Sp mt={3}>
             <TextInput
               data-testid="newPassword-again-field"
-              onChange={props.onInputChange}
-              error={props.errors.newPasswordAgain}
+              onChange={onInputChange}
+              error={errors.newPasswordAgain}
               label="Repeat New Password"
-              value={props.newPasswordAgain}
+              value={newPasswordAgain}
               type="password"
               id="newPasswordAgain"
             />
           </Sp>
-          {props.error && <ErrorMessage>{props.error}</ErrorMessage>}
+          {error && <ErrorMessage>{error}</ErrorMessage>}
           <Sp mt={8}>
-            <StyledBtn submit disabled={props.status === 'pending'}>
+            <StyledBtn submit disabled={status === 'pending'}>
               Change Password
             </StyledBtn>
           </Sp>

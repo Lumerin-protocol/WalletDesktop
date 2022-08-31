@@ -122,7 +122,7 @@ const SendBtn = styled(BaseBtn)`
   height: 50px;
   border-radius: 5px;
   background-color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.lumerin.hypertext - gray : theme.colors.primary};
+    isActive ? theme.colors.lumerin.helpertextGray : theme.colors.primary};
 `;
 
 const Footer = styled.div`
@@ -137,11 +137,6 @@ const FooterRow = styled.div`
   justify-content: space-between;
 `;
 
-const FooterBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const FooterLabel = styled.label`
   color: ${p => p.theme.colors.dark};
   font-size: 1.2rem;
@@ -149,15 +144,11 @@ const FooterLabel = styled.label`
   margin-bottom: 5px;
 `;
 
-const FooterSublabel = styled.label`
-  color: ${p => p.theme.colors.primary};
-  font-size: 1.4rem;
-`;
-
 // export function ConfirmForm({ activeTab, address, lmrBalanceUSD, sendLmrDisabled, sendLmrDisabledReason, onTabSwitch, amountInput, onAmountInput, destinationAddress, onDestinationAddressInput, onInputChange, usdAmount, coinAmount, onMaxClick }) {
 export function ConfirmForm(props) {
+  const { usdAmount: amountInput = '', errors } = props;
+  console.log({ errors });
   const context = useContext(ToastsContext);
-  console.log('PROPS: --------------- ', props);
 
   const handleTabSwitch = e => {
     e.preventDefault();
@@ -165,17 +156,29 @@ export function ConfirmForm(props) {
     props.onTabSwitch(e.target.dataset.modal);
   };
 
+  const handleSendLmr = e => {
+    if (props.validate()) {
+      console.log('submitting');
+      props.onSubmit();
+    } else {
+      console.log('failed validation');
+    }
+    handleTabSwitch(e);
+  };
+
   const handleDestinationAddressInput = e => {
     e.preventDefault();
 
+    props.onInputChange(e.target);
     props.onDestinationAddressInput(e.target.value);
   };
 
   const handleAmountInput = e => {
     e.preventDefault();
 
+    props.onInputChange(e.target);
     props.onAmountInput(e.target.value);
-    props.onInputChange(e);
+    // props.onInputChange({ id: 'coinAmount', value: e.target.value });
   };
 
   if (!props.activeTab) {
@@ -183,7 +186,7 @@ export function ConfirmForm(props) {
   }
 
   const convertToLMR = val => {
-    return val * 15.8;
+    return val * props.coinPrice;
   };
 
   return (
@@ -197,21 +200,31 @@ export function ConfirmForm(props) {
 
       <Column>
         <AmountContainer>
-          <Currency isActive={props.amountInput > 0}>$</Currency>
           <AmountInput
             id="usdAmount"
             placeholder={0}
-            isActive={props.amountInput > 0}
+            isActive={true}
             onChange={handleAmountInput}
-            value={props.amountInput}
+            value={amountInput}
           />
         </AmountContainer>
-        <AmountSublabel>
+        <AmountSublabel>LMR</AmountSublabel>
+        {/* <AmountContainer>
+          <Currency isActive={amountInput > 0}>$</Currency>
+          <AmountInput
+            id="usdAmount"
+            placeholder={0}
+            isActive={true}
+            onChange={handleAmountInput}
+            value={amountInput}
+          />
+        </AmountContainer> */}
+        {/* <AmountSublabel>
           {+convertToLMR(props.amountInput).toFixed(2) || 0} LMR
-        </AmountSublabel>
+        </AmountSublabel> */}
 
         <FeeContainer>
-          <FeeRow>
+          {/* <FeeRow>
             <FeeLabel>Lumerin Fee</FeeLabel>
             <FeeLabel>{props.gasPrice || 3.45}</FeeLabel>
           </FeeRow>
@@ -222,13 +235,14 @@ export function ConfirmForm(props) {
           <FeeRow>
             <FeeLabel>Total</FeeLabel>
             <FeeLabel>${(12.45 / 15.8).toFixed(2)}</FeeLabel>
-          </FeeRow>
+          </FeeRow> */}
         </FeeContainer>
       </Column>
 
       <WalletContainer>
         <WalletInputLabel>To: </WalletInputLabel>
         <WalletInput
+          id="toAddress"
           onChange={handleDestinationAddressInput}
           value={props.destinationAddress}
         />
@@ -244,7 +258,7 @@ export function ConfirmForm(props) {
             </FooterLabel>
           </FooterRow>
         )}
-        <SendBtn data-modal="success" onClick={handleTabSwitch}>
+        <SendBtn data-modal="success" onClick={handleSendLmr}>
           Send now
         </SendBtn>
       </Footer>

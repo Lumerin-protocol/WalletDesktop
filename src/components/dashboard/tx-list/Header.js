@@ -1,9 +1,7 @@
-import styled, { css } from 'styled-components';
-import PropTypes from 'prop-types';
 import React from 'react';
+import styled, { css } from 'styled-components';
 
 import ScanIndicator from './ScanIndicator';
-import { Flex } from '../../common';
 import Filter from './Filter';
 
 const responsiveHeader = width => css`
@@ -21,35 +19,22 @@ const Container = styled.div`
   left: 0;
   right: 0;
   z-index: 1;
-  padding: 0 2.4rem;
 
-  ${p => responsiveHeader(p.isMultiChain ? '1140px' : '1040px')}
+  ${p => responsiveHeader('800px')}
 `;
 
-export default class Header extends React.Component {
-  static propTypes = {
-    // hasTransactions: PropTypes.bool.isRequired,
-    // onWalletRefresh: PropTypes.func.isRequired,
-    // onFilterChange: PropTypes.func.isRequired,
-    // activeFilter: PropTypes.string.isRequired,
-    // isMultiChain: PropTypes.bool.isRequired,
-    // syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired
-  };
-  onFilterChange = () => {};
+export default function Header(props) {
+  // hasTransactions: PropTypes.bool.isRequired,
+  // onWalletRefresh: PropTypes.func.isRequired,
+  // onFilterChange: PropTypes.func.isRequired,
+  // activeFilter: PropTypes.string.isRequired,
+  // syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired
 
-  render() {
-    return (
-      <>
-        {/* <Flex.Row grow="1">
-        <Title onClick={this.props.onTitleClick}>Transactions</Title>
-      </Flex.Row> */}
-        <Container>
-          <Filter
-            onFilterChange={this.props.onFilterChange}
-            activeFilter={false}
-          />
-        </Container>
-      </>
-    );
-  }
+  return (
+    <>
+      <Container>
+        <Filter onFilterChange={props.onFilterChange} activeFilter={false} />
+      </Container>
+    </>
+  );
 }

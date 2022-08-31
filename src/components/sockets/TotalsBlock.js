@@ -1,50 +1,30 @@
-import withContractTotalsBlockState from 'lumerin-wallet-ui-logic/src/hocs/withContractTotalsBlockState';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
-
-import { BaseBtn, Btn, DisplayValue } from '../common';
-
-const convertLmrToEth = () => {};
+import styled from 'styled-components';
 
 const relSize = ratio => `calc(100vw / ${ratio})`;
 
 const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
-  width: 70%;
+  width: 100%;
   height: 100px;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+
   @media (min-width: 1040px) {
   }
 `;
 
 const Total = styled.div`
   background-color: ${p => p.theme.colors.xLight};
-  display: flex;
   flex-direction: column;
   height: 95%;
+  width: 125px;
   justify-content: space-between;
-  padding: 0.75rem 3rem;
+  padding: 1.4rem 2.6rem;
+  margin-left: 1.4rem;
   border-radius: 5px;
   @media (min-width: 1040px) {
-  }
-`;
-
-const CoinSymbol = styled.div`
-  border-radius: 14.1px;
-  background-color: ${p => p.theme.colors.primary};
-  width: 4rem;
-  line-height: 2.5rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-align: center;
-  @media (min-width: 1040px) {
-    line-height: 3.2rem;
-    width: 6.3rem;
-    font-size: 2rem;
   }
 `;
 
@@ -94,8 +74,7 @@ const TotalValue = styled.div`
   margin: .6rem 0;
   flex-grow: 1;
   position: relative;
-  top: ${relSize(-400)};
-  font-size: ${relSize(32)};
+  font-size: ${relSize(24)};
 
   @media (min-width: 800px) {
     font-size: ${relSize(44)};
@@ -110,7 +89,7 @@ const TotalValue = styled.div`
   }
 `;
 
-function TotalsBlock(props) {
+const TotalsBlock = ({ incoming, outgoing, routed }) => {
   // static propTypes = {
   //   coinBalanceUSD: PropTypes.string.isRequired,
   //   coinBalanceWei: PropTypes.string.isRequired,
@@ -124,21 +103,21 @@ function TotalsBlock(props) {
         <Total>
           <TotalLabel>My Miners</TotalLabel>
           <TotalSubLabel>Incoming Connections</TotalSubLabel>
-          <TotalValue>{530}</TotalValue>
+          <TotalValue>{incoming}</TotalValue>
         </Total>
         <Total>
-          <TotalLabel>Active</TotalLabel>
-          <TotalSubLabel>Contracts</TotalSubLabel>
-          <TotalValue>{500}</TotalValue>
+          <TotalLabel>Lumerin Pool</TotalLabel>
+          <TotalSubLabel>Default Outgoing</TotalSubLabel>
+          <TotalValue>{outgoing}</TotalValue>
         </Total>
         <Total>
-          <TotalLabel>Draft</TotalLabel>
-          <TotalSubLabel>Contracts</TotalSubLabel>
-          <TotalValue>{30}</TotalValue>
+          <TotalLabel>Alt Pool</TotalLabel>
+          <TotalSubLabel>Routed</TotalSubLabel>
+          <TotalValue>{routed}</TotalValue>
         </Total>
       </Container>
     </>
   );
-}
+};
 
-export default withContractTotalsBlockState(TotalsBlock);
+export default TotalsBlock;

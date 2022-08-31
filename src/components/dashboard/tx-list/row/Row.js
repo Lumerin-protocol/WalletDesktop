@@ -1,12 +1,11 @@
-import withTxRowState from 'lumerin-wallet-ui-logic/src/hocs/withTxRowState';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
+import styled from 'styled-components';
 
+import withTxRowState from '@lumerin/wallet-ui-logic/src/hocs/withTxRowState';
 import Details from './Details';
 import Amount from './Amount';
-import Icon from './Icon';
-import LumerinDarkIcon from '../../../icons/LumerinDarkIcon';
+import { TxIcon } from './Icon';
+import { LumerinDarkIcon } from '../../../icons/LumerinDarkIcon';
 
 const Container = styled.div`
   margin-left: 1.6rem;
@@ -19,25 +18,25 @@ const Container = styled.div`
   height: 66px;
 `;
 
-class Row extends React.Component {
-  // static propTypes = {
-  //   tx: PropTypes.any
-  // };
+const IconLogoContainer = styled.div`
+  padding: 2.4rem 1.2rem;
+  height: 100px;
+  width: 100px
+  display: block;
+  flex-shrink: 0;
+`;
 
-  render() {
-    const { tx, ...other } = this.props;
-
-    return (
-      <Container {...other}>
-        <LumerinDarkIcon />
-        <Icon type={tx.txType} />
-        <div>
-          <Amount {...this.props} />
-          <Details {...this.props} />
-        </div>
-      </Container>
-    );
-  }
-}
+const Row = ({ tx }) => (
+  <Container>
+    <IconLogoContainer>
+      <LumerinDarkIcon size="3rem" />
+    </IconLogoContainer>
+    <TxIcon type={tx.txType} />
+    <div>
+      <Amount />
+      <Details />
+    </div>
+  </Container>
+);
 
 export default withTxRowState(Row);

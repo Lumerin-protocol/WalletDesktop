@@ -1,15 +1,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
-import FailedImportsBadge from './FailedImportsBadge';
-import ConverterIcon from '../icons/ConverterIcon';
-import AuctionIcon from '../icons/AuctionIcon';
-import WalletIcon from '../icons/WalletIcon';
-import PortIcon from '../icons/PortIcon';
-import SocketIcon from '../icons/SocketIcon';
-import ContractIcon from '../icons/ContractIcon';
+import { WalletNavIcon } from '../icons/WalletNavIcon';
+import { SocketNavIcon } from '../icons/SocketNavIcon';
+import { ContractNavIcon } from '../icons/ContractNavIcon';
+import CogIcon from '../icons/CogIcon';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-height: 10%;
+`;
 
 const Button = styled(NavLink)`
   display: flex;
@@ -62,22 +65,24 @@ const Label = styled.span`
     }
   }
 `;
+
 const iconSize = '3.6rem';
 
 export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
   return (
-    <React.Fragment>
+    <Container>
       <Button
         onClick={() => setActiveIndex(0)}
         activeClassName="active"
-        data-testid="wallets-nav-btn"
-        to="/wallets"
+        data-testid="wallet-nav-btn"
+        to="/wallet"
       >
         <IconWrapper>
-          <WalletIcon isActive={activeIndex === 0} size={iconSize} />
+          <WalletNavIcon isActive={activeIndex === 0} size={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Wallet</Label>
       </Button>
+
       <Button
         onClick={() => setActiveIndex(1)}
         activeClassName="active"
@@ -85,10 +90,11 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         to="/sockets"
       >
         <IconWrapper>
-          <SocketIcon isActive={activeIndex === 1} size={iconSize} />
+          <SocketNavIcon isActive={activeIndex === 1} size={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Sockets</Label>
       </Button>
+
       <Button
         onClick={() => setActiveIndex(2)}
         activeClassName="active"
@@ -96,10 +102,22 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         to="/contracts"
       >
         <IconWrapper>
-          <ContractIcon isActive={activeIndex === 2} size={iconSize} />
+          <ContractNavIcon isActive={activeIndex === 2} size={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Contracts</Label>
       </Button>
-    </React.Fragment>
+
+      {/* <Button
+        onClick={() => setActiveIndex(3)}
+        activeClassName="active"
+        data-testid="auction-nav-btn"
+        to="/reports"
+      >
+        <IconWrapper>
+          <CogIcon isActive={activeIndex === 3} size={iconSize} />
+        </IconWrapper>
+        <Label parent={parent}>Reports</Label>
+      </Button> */}
+    </Container>
   );
 }

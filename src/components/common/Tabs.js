@@ -1,11 +1,10 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import React from 'react';
+import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
   flex-shrink: 0;
-`
+`;
 
 const Tab = styled.button`
   font: inherit;
@@ -36,42 +35,26 @@ const Tab = styled.button`
   @media (min-height: 700px) {
     padding: 2.5rem;
   }
-`
+`;
 
-export default class Tabs extends React.Component {
-  static propTypes = {
-    onClick: PropTypes.func.isRequired,
-    active: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
-          .isRequired,
-        id: PropTypes.string.isRequired
-      })
-    ).isRequired
-  }
+export default function Tabs({ onClick, active, items }) {
+  onClick = ({ currentTarget }) => onClick(currentTarget.dataset.tab);
 
-  onClick = ({ currentTarget }) => this.props.onClick(currentTarget.dataset.tab)
-
-  render() {
-    const { active, items } = this.props
-
-    return (
-      <Container>
-        {items.map(({ label, id, disabled, ...other }) => (
-          <Tab
-            data-testid={`${id}-tab`}
-            isDisabled={disabled}
-            isActive={active === id}
-            data-tab={id}
-            onClick={disabled ? null : this.onClick}
-            key={id}
-            {...other}
-          >
-            {label}
-          </Tab>
-        ))}
-      </Container>
-    )
-  }
+  return (
+    <Container>
+      {items.map(({ label, id, disabled, ...other }) => (
+        <Tab
+          data-testid={`${id}-tab`}
+          isDisabled={disabled}
+          isActive={active === id}
+          data-tab={id}
+          onClick={disabled ? null : this.onClick}
+          key={id}
+          {...other}
+        >
+          {label}
+        </Tab>
+      ))}
+    </Container>
+  );
 }

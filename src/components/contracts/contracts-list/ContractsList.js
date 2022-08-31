@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
-import withContractsListState from 'lumerin-wallet-ui-logic/src/hocs/withContractsListState';
-import PropTypes from 'prop-types';
+import withContractsListState from '@lumerin/wallet-ui-logic/src/hocs/withContractsListState';
 import styled from 'styled-components';
 
 import ScanningContractsPlaceholder from './ScanningContractsPlaceholder';
 import NoContractsPlaceholder from './NoContractsPlaceholder';
 import { ItemFilter, Flex } from '../../common';
-import ReceiptModal from '../ReceiptModal';
-import LogoIcon from '../../icons/LogoIcon';
 import Header from './Header';
-import ContractsRow from './row/Row';
+import ContractsRow from './Row';
 
 const Container = styled.div`
   margin-top: 2.4rem;
   background-color: ${p => p.theme.colors.light};
+  height: 100%;
 
-  @media (min-width: 960px) {
+  @media (min-width: 800px) {
+  }
+  @media (min-width: 1200px) {
   }
 `;
 
@@ -24,10 +24,23 @@ const Contracts = styled.div`
   margin: 1.6rem 0 1.6rem;
   border: 1px solid ${p => p.theme.colors.lightBG};
   border-radius: 5px;
+  height: 60%;
 `;
 
 const ListContainer = styled.div`
   background-color: #ffffff;
+  height: 100%;
+  overflow-y: auto;
+  /*
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 800px) {
+  }
+  @media (min-width: 1200px) {
+  }
+  */
 `;
 
 const ContractsRowContainer = styled.div`
@@ -63,24 +76,10 @@ const Title = styled.div`
   }
 `;
 
-function ContractsList(props) {
-  const [displayAttestations, setDisplayAttestations] = useState(false);
-  const [activeModal, setActiveModal] = useState('');
+function ContractsList({ hasContracts, contracts, syncStatus }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   const [isReady, setIsReady] = useState(false);
   const [scrollElement, setScrollElement] = useState(window);
-  // static propTypes = {
-  //   hasContracts: PropTypes.bool.isRequired,
-  //   onWalletRefresh: PropTypes.func.isRequired,
-  //   isMultiChain: PropTypes.bool.isRequired,
-  //   syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
-  //   items: PropTypes.arrayOf(
-  //     PropTypes.shape({
-  //       ContractsType: PropTypes.string.isRequired,
-  //       hash: PropTypes.string.isRequired
-  //     })
-  //   ).isRequired
-  // };
 
   useEffect(() => {
     // We need to grab the scrolling div (in <Router/>) to sync with react-virtualized scroll
@@ -96,19 +95,15 @@ function ContractsList(props) {
   }, []);
 
   const onContractsClicked = ({ currentTarget }) => {
-    setActiveModal('receipt');
     setSelectedContracts(currentTarget.dataset.hash);
   };
 
-  const onCloseModal = () => setActiveModal(null);
-
-  const rowRenderer = contracts => ({ key, index, style }) => (
+  const rowRenderer = contractsList => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
-      {console.log('contracts: ', props.hasContracts)}
       <ContractsRow
         data-testid="Contracts-row"
         onClick={onContractsClicked}
-        contract={contracts[index]}
+        contract={contractsList[index]}
       />
     </ContractsRowContainer>
   );
@@ -118,7 +113,6 @@ function ContractsList(props) {
   const handleClick = e => {
     e.preventDefault();
     if (!window.isDev || !e.shiftKey || !e.altKey) return;
-    setDisplayAttestations(!displayAttestations);
   };
 
   if (!isReady) return null;
@@ -128,25 +122,18 @@ function ContractsList(props) {
         <Title onClick={handleClick}>Status</Title>
       </Flex.Row>
       <Contracts>
-        <ItemFilter
-          defaultFilter="status"
-          extractValue={filterExtractValue}
-          items={props.contracts.contracts}
-        >
+        <ItemFilter extractValue={filterExtractValue} items={contracts}>
           {({ filteredItems, onFilterChange, activeFilter }) => (
             <React.Fragment>
               <Header
-                onWalletRefresh={props.onWalletRefresh}
-                hasContracts={props.hasContracts}
                 onFilterChange={onFilterChange}
-                isMultiChain={props.isMultiChain}
                 activeFilter={activeFilter}
-                syncStatus={props.syncStatus}
+                syncStatus={syncStatus}
               />
 
               <ListContainer>
-                {!props.hasContracts &&
-                  (props.syncStatus === 'syncing' ? (
+                {!hasContracts &&
+                  (syncStatus === 'syncing' ? (
                     <ScanningContractsPlaceholder />
                   ) : (
                     <NoContractsPlaceholder />
@@ -183,11 +170,6 @@ function ContractsList(props) {
             </React.Fragment>
           )}
         </ItemFilter>
-        <ReceiptModal
-          onRequestClose={onCloseModal}
-          isOpen={activeModal === 'receipt'}
-          hash={selectedContracts}
-        />
       </Contracts>
     </Container>
   );

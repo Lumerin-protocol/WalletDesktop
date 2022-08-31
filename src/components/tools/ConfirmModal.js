@@ -1,20 +1,20 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import React from 'react'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import React from 'react';
 
-import { Modal, BaseBtn } from '../common'
+import { Modal, BaseBtn } from '../common';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
   padding: 2.4rem 1.6rem 1.6rem 1.6rem;
-`
+`;
 
 const Message = styled.div`
   color: ${p => p.theme.colors.copy};
   margin-bottom: 2.4rem;
   font-size: 1.6rem;
   line-height: 1.5;
-`
+`;
 
 const Button = styled(BaseBtn)`
   background-color: ${p => p.theme.colors.primary};
@@ -31,18 +31,18 @@ const Button = styled(BaseBtn)`
   &:hover {
     opacity: 0.9;
   }
-`
+`;
 
 export default class ConfirmModal extends React.Component {
   static propTypes = {
     onRequestClose: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired
-  }
+  };
 
   // eslint-disable-next-line complexity
   render() {
-    const { onRequestClose, onConfirm, isOpen } = this.props
+    const { onRequestClose, onConfirm, isOpen } = this.props;
 
     return (
       <Modal
@@ -64,6 +64,6 @@ export default class ConfirmModal extends React.Component {
           <Button onClick={onConfirm}>Confirm and Log Out</Button>
         </Container>
       </Modal>
-    )
+    );
   }
 }

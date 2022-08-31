@@ -1,37 +1,36 @@
-'use strict'
+'use strict';
 
-const restart = require('../electron-restart')
-const dbManager = require('../database')
-const logger = require('../../../logger')
-const storage = require('../storage')
-const auth = require('../auth')
-const wallet = require('../wallet')
+const restart = require('../electron-restart');
+const dbManager = require('../database');
+const logger = require('../../../logger');
+const storage = require('../storage');
+const auth = require('../auth');
+const wallet = require('../wallet');
 
-const validatePassword = data => auth.isValidPassword(data)
+const validatePassword = data => auth.isValidPassword(data);
 
 function clearCache() {
-  logger.verbose('Clearing database cache')
+  logger.verbose('Clearing database cache');
   return dbManager
     .getDb()
     .dropDatabase()
-    .then(restart)
+    .then(restart);
 }
 
-const persistState = data => storage.persistState(data).then(() => true)
+const persistState = data => storage.persistState(data).then(() => true);
 
 function changePassword({ oldPassword, newPassword }) {
   return validatePassword(oldPassword).then(function(isValid) {
     if (!isValid) {
-      return isValid
+      return isValid;
     }
     return auth.setPassword(newPassword).then(function() {
-      wallet.getWallets().forEach(function(walletId) {
-        const seed = wallet.getSeed(walletId, oldPassword)
-        wallet.setSeed(seed, newPassword)
-      })
-      return true
-    })
-  })
+      const seed = wallet.getSeed(oldPassword);
+      wallet.setSeed(seed, newPassword);
+
+      return true;
+    });
+  });
 }
 
 module.exports = {
@@ -39,4 +38,4 @@ module.exports = {
   changePassword,
   persistState,
   clearCache
-}
+};

@@ -5,14 +5,13 @@ import DisplayValue from './DisplayValue';
 import AmountFields from './AmountFields';
 import EntropyMeter from './EntropyMeter';
 import LastUpdated from './LastUpdated';
-import ItemFilter from './ItemFilter';
+import { ItemFilter } from './ItemFilter';
 import LightLayout from './LightLayout';
 import LoadingBar from './LoadingBar';
 import AltLayout from './AltLayout';
 import GasEditor from './GasEditor';
 import Selector from './Selector';
 import Tooltips from './Tooltips';
-import Drawer from './Drawer';
 import Modal from './Modal';
 import Tabs from './Tabs';
 import Text from './Text';
@@ -35,7 +34,6 @@ export {
   Tooltips,
   FieldBtn,
   BaseBtn,
-  Drawer,
   Label,
   Modal,
   Tabs,
