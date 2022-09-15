@@ -37,18 +37,6 @@ function isValidPassword(password) {
     .catch(function(err) {
       logger.warn('Could not verify password', err);
 
-      // TODO remove this check for an old hash before production release
-      // if (sha256.hash(password) === passwordHash) {
-      //   logger.debug("Upgrading password encryption");
-
-      //   return hash(password).then(function(newHash) {
-      //     setPasswordHash(newHash);
-
-      //     return true;
-      //   });
-      // }
-      // end of logic to remove
-
       return false;
     });
 }
