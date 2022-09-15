@@ -31,8 +31,7 @@
     "prepare": "patch-package && husky install",
     "release": "gh release create 1.0.3 ./dist/*.exe ./dist/*.dmg ./dist/*.deb",
     "release-init": "./scripts/release",
-    "clear-electron-cache": "rm -rf '~/Library/Application Support/lumerin-wallet-desktop'",
-    "test": "react-scripts test --env=jsdom src/client/auth.spec.js"
+    "clear-electron-cache": "rm -rf '~/Library/Application Support/lumerin-wallet-desktop'"
   },
   "dependencies": {
     "@electron/remote": "1.2.0",
