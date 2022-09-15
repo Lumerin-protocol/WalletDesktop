@@ -4,7 +4,7 @@ import get from 'lodash/get';
 
 import * as utils from './utils';
 import keys from './keys';
-// import { getSessionPassword } from './secure';
+import { getSessionPassword } from './secure';
 import './sentry';
 
 const createClient = function(createStore) {
@@ -89,8 +89,8 @@ const createClient = function(createStore) {
       'refresh-transaction',
       120000
     ),
-    refreshActiveContracts: utils.forwardToMainProcess(
-      'refresh-active-contracts',
+    refreshAllContracts: utils.forwardToMainProcess(
+      'refresh-all-contracts',
       120000
     ),
     onOnboardingCompleted: utils.forwardToMainProcess('onboarding-completed'),
@@ -100,6 +100,7 @@ const createClient = function(createStore) {
     changePassword: utils.forwardToMainProcess('change-password'),
     onLoginSubmit: utils.forwardToMainProcess('login-submit'),
     createContract: utils.forwardToMainProcess('create-contract', 750000),
+    cancelContract: utils.forwardToMainProcess('cancel-contract', 750000),
     getGasLimit: utils.forwardToMainProcess('get-gas-limit'),
     getGasPrice: utils.forwardToMainProcess('get-gas-price'),
     sendLmr: utils.forwardToMainProcess('send-lmr', 750000),
@@ -108,7 +109,7 @@ const createClient = function(createStore) {
   };
 
   const api = {
-    // getSessionPassword,
+    getSessionPassword,
     ...utils,
     ...forwardedMethods,
     isValidMnemonic: keys.isValidMnemonic,
