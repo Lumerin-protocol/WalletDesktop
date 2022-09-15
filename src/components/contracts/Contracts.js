@@ -36,14 +36,13 @@ const Title = styled.div`
 `;
 
 const ContractBtn = styled(BaseBtn)`
-  width: 90px;
   font-size: 1.2rem;
   padding: 1rem 1.4rem;
 
   border-radius: 5px;
   border: 1px solid ${p => p.theme.colors.primary};
-  background-color: ${p => p.theme.colors.light}
-  color: ${p => p.theme.colors.primary}
+  background-color: ${p => p.theme.colors.light};
+  color: ${p => p.theme.colors.primary};
 
   @media (min-width: 1040px) {
     margin-left: 0;
@@ -59,6 +58,7 @@ function Contracts({
   draftCount,
   address,
   client,
+  contractsRefresh,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -80,15 +80,30 @@ function Contracts({
   const handleContractDeploy = (e, contractDetails) => {
     e.preventDefault();
 
-    client.createContract({
-      price: contractDetails.price,
-      speed: contractDetails.speed,
-      duration: contractDetails.time,
-      sellerAddress: contractDetails.address
-    });
+    client
+      .createContract({
+        price: contractDetails.price,
+        speed: contractDetails.speed,
+        duration: contractDetails.time,
+        sellerAddress: contractDetails.address
+      })
+      .then(() => contractsRefresh());
 
     setIsModalActive(false);
   };
+
+  const handleContractCancellation = (e, data) => {
+    e.preventDefault();
+
+    client
+      .cancelContract({
+        contractId: data.contractId,
+        walletAddress: data.walletAddress,
+        closeOutType: data.closeOutType
+      })
+      .then(() => contractsRefresh());
+  };
+
   const handleContractSave = e => {
     e.preventDefault();
   };
@@ -109,6 +124,9 @@ function Contracts({
         hasContracts={hasContracts}
         onWalletRefresh={onWalletRefresh}
         syncStatus={syncStatus}
+        cancel={handleContractCancellation}
+        contractsRefresh={contractsRefresh}
+        address={address}
       />
 
       <CreateContractModal
