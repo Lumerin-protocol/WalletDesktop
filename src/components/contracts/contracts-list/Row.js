@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import withContractsRowState from '@lumerin/wallet-ui-logic/src/hocs/withContractsRowState';
 
 import { ClockIcon } from '../../icons/ClockIcon';
 import { Btn } from '../../common';
 import { CLOSEOUT_TYPE, CONTRACT_STATE } from '../../../enums';
+import Spinner from '../../common/Spinner';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -32,7 +33,7 @@ const SmallAssetContainer = styled.div`
   justify-content: center;
 `;
 
-const CancelButtons = styled.div`
+const ActionButtons = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
@@ -40,7 +41,7 @@ const CancelButtons = styled.div`
   gap: 8px;
 `;
 
-const CancelButton = styled(Btn)`
+const ActionButton = styled(Btn)`
   font-size: 1.3rem;
   padding: 1rem;
   line-height: 1.5rem;
@@ -53,9 +54,15 @@ const STATE_COLOR = {
 
 function Row({ contract, cancel, address }) {
   // TODO: Add better padding
+  const [isPending, setIsPending] = useState(false);
+
+  useEffect(() => {
+    setIsPending(false);
+  }, [contract]);
 
   const handleCancel = closeOutType => e => {
     e.preventDefault();
+    setIsPending(true);
     cancel(e, {
       contractId: contract.id,
       walletAddress: contract.seller,
@@ -69,10 +76,8 @@ function Row({ contract, cancel, address }) {
     );
   };
 
-  const isClaimAndCloseBtnDisabled = () => {
-    return (
-      contract.state !== CONTRACT_STATE.Avaliable || contract.balance === '0'
-    );
+  const isClaimBtnDisabled = () => {
+    return contract.balance === '0';
   };
 
   const isContractClosed = () => {
@@ -97,22 +102,29 @@ function Row({ contract, cancel, address }) {
       <Value>{contract.price}</Value>
       <Value>{contract.length}</Value>
       <Value>{contract.speed}</Value>
-      {contract.seller === address && !isContractClosed() && (
-        <CancelButtons>
-          <CancelButton
-            disabled={isCancelBtnDisabled()}
-            onClick={handleCancel(CLOSEOUT_TYPE.Close)}
-          >
-            Close
-          </CancelButton>
-          <CancelButton
-            disabled={isClaimAndCloseBtnDisabled()}
-            onClick={handleCancel(CLOSEOUT_TYPE.ClaimAndClose)}
-          >
-            Claim Funds
-          </CancelButton>
-        </CancelButtons>
-      )}
+      {contract.seller === address &&
+        (!isPending ? (
+          <ActionButtons>
+            {!isContractClosed() && (
+              <ActionButton
+                disabled={isCancelBtnDisabled()}
+                onClick={handleCancel(CLOSEOUT_TYPE.Close)}
+              >
+                Close
+              </ActionButton>
+            )}
+            <ActionButton
+              disabled={isClaimBtnDisabled()}
+              onClick={handleCancel(CLOSEOUT_TYPE.Claim)}
+            >
+              Claim Funds
+            </ActionButton>
+          </ActionButtons>
+        ) : (
+          <Value>
+            <Spinner size="25px" />
+          </Value>
+        ))}
     </Container>
   );
 }
