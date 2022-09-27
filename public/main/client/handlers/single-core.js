@@ -44,6 +44,23 @@ const createContract = async function(data, { api }) {
   )(data, { api });
 };
 
+const cancelContract = async function(data, { api }) {
+  data.walletId = wallet.getAddress().address;
+  data.password = await auth.getSessionPassword();
+
+  if (typeof data.walletId !== "string") {
+    throw new WalletError("WalletId is not defined");
+  }
+  return withAuth((privateKey) =>
+    api.contracts.cancelContract({
+      walletAddress: data.walletAddress,
+      contractId: data.contractId,
+      privateKey,
+      closeOutType: data.closeOutType,
+    })
+  )(data, { api });
+};
+
 function createWallet(data, core, isOpen = true) {
   const walletAddress = core.api.wallet.createAddress(data.seed);
   return Promise.all([
@@ -179,6 +196,7 @@ module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
   createContract,
+  cancelContract,
   onboardingCompleted,
   recoverFromMnemonic,
   onLoginSubmit,
