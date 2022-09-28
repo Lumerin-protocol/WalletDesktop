@@ -10,7 +10,7 @@ const Container = styled.div`
   color: ${p => p.theme.colors.copy};
   text-transform: uppercase;
   opacity: ${({ isPending }) => (isPending ? '0.5' : '1')};
-  text-align: right;
+  text-align: center;
 
   @media (min-width: 800px) {
     font-size: 1.1rem;

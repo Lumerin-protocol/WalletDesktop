@@ -10,33 +10,32 @@ import { LumerinDarkIcon } from '../../../icons/LumerinDarkIcon';
 const Container = styled.div`
   margin-left: 1.6rem;
   padding: 1.2rem 2.4rem 1.2rem 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: 5fr 5fr 5fr 20fr;
   align-items: center;
-  justify-content: space-between;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   cursor: pointer;
   height: 66px;
 `;
 
-const IconLogoContainer = styled.div`
-  padding: 2.4rem 1.2rem;
-  height: 100px;
-  width: 100px
+const IconContainer = styled.div`
   display: block;
+  text-align: center;
+  margin: 0 auto;
   flex-shrink: 0;
 `;
 
 const Row = ({ tx }) => (
   <Container>
-    <IconLogoContainer>
+    <IconContainer>
       <LumerinDarkIcon size="3rem" />
-    </IconLogoContainer>
-    <TxIcon type={tx.txType} />
-    <div>
-      <Amount />
-      <Details />
-    </div>
+    </IconContainer>
+    <IconContainer>
+      <TxIcon txType={tx.txType} />
+    </IconContainer>
+    <Amount {...tx} />
+    <Details {...tx} />
   </Container>
 );
 
-export default withTxRowState(Row);
+export default Row;

@@ -6,7 +6,6 @@ import React from 'react';
 
 export function DisplayValue(props) {
   let formattedValue;
-
   try {
     formattedValue = this.round(
       props.toWei ? sanitize(props.value) : props.fromWei(props.value),
@@ -16,7 +15,11 @@ export function DisplayValue(props) {
     formattedValue = null;
   }
 
-  return <>{props.value}</>;
+  return (
+    <>
+      {props.value} {props.post}
+    </>
+  );
 }
 
 export default withDisplayValueState(DisplayValue);
