@@ -18,6 +18,7 @@ const listeners = {
   'send-lmr': handlers.sendLmr,
   'send-eth': handlers.sendEth,
   'create-contract': handlers.createContract,
+  'cancel-contract': handlers.cancelContract,
 };
 
 let coreListeners = {};

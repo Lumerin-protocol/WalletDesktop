@@ -1,25 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const calcWidth = n => 100 / n;
-
 const Container = styled.div`
-  display: flex;
-  justify-content: start;
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr 1fr 1fr 2fr;
   width: 100%;
 `;
 
 const Tab = styled.button`
-  width: ${calcWidth(4)}%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font: inherit;
   line-height: 1.2rem;
   font-size: 1.2rem;
   font-weight: bold;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   letter-spacing: 1.4px;
   text-align: center;
   opacity: ${p => (p.isActive ? '1' : '0.75')};
-  padding: 1.6rem 1rem;
+  padding: 1.6rem 0;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -32,7 +32,6 @@ const Tab = styled.button`
   }
 
   @media (min-width: 800px) {
-    width: ${calcWidth(4)}%;
     font-size: 1.4rem;
   }
 `;
@@ -78,6 +77,7 @@ export default function Filter({ onFilterChange, activeFilter }) {
       >
         Speed (TH/s)
       </Tab>
+      <Tab>Actions</Tab>
     </Container>
   );
 }
