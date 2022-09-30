@@ -6,7 +6,6 @@ import { DisplayValue } from '../../../common';
 
 const Container = styled.div`
   line-height: 2.5rem;
-  text-align: right;
   opacity: ${({ isPending }) => (isPending ? '0.5' : '1')};
   color: ${p =>
     p.isPending
@@ -14,8 +13,8 @@ const Container = styled.div`
       : p.isFailed
       ? p.theme.colors.danger
       : p.theme.colors.primary};
-  display: flex;
-  justify-content: flex-end;
+  display: block;
+  text-align: center;
   font-size: 2.3vw;
 
   @media (min-width: 800px) {

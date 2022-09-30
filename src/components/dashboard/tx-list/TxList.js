@@ -42,11 +42,11 @@ const TxRowContainer = styled.div`
 const Title = styled.div`
   font-size: 2.4rem;
   line-height: 3rem;
-  color: ${p => p.theme.colors.darker}
+  color: ${p => p.theme.colors.darker};
   white-space: nowrap;
   margin: 0;
   font-weight: 600;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   margin-bottom: 4.8px;
   margin-right: 2.4rem;
   cursor: default;
@@ -121,7 +121,6 @@ export const TxList = ({
   };
 
   if (!isReady) return null;
-
   return (
     <Container data-testid="tx-list">
       <Flex.Row grow="1">
