@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 
-import withConnectionState from '@lumerin/wallet-ui-logic/src/hocs/withConnectionState';
+import withConnectionState from '../store/hocs/withConnectionState';
 
 import { ToastsContext } from '../components/toasts';
 

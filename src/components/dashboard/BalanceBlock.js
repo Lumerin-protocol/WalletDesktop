@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import withBalanceBlockState from '@lumerin/wallet-ui-logic/src/hocs/withBalanceBlockState';
+import withBalanceBlockState from '../../store/hocs/withBalanceBlockState';
 import styled from 'styled-components';
 import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 import { EtherIcon } from '../icons/EtherIcon';
@@ -130,7 +130,7 @@ function BalanceBlock({
 
   const LumerinMode = () => (
     <>
-      <LumerinLightIcon size="6rem" />
+      <LumerinLightIcon size="5rem" />
       <Balance>
         <Primary data-testid="lmr-balance">
           <DisplayValue shouldFormate={false} value={lmrBalance} />

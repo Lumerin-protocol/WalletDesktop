@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
-import withContractsListState from '@lumerin/wallet-ui-logic/src/hocs/withContractsListState';
+import withContractsListState from '../../../store/hocs/withContractsListState';
 import styled from 'styled-components';
 
 import ScanningContractsPlaceholder from './ScanningContractsPlaceholder';

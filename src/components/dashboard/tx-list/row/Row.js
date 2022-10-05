@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import withTxRowState from '@lumerin/wallet-ui-logic/src/hocs/withTxRowState';
+import withTxRowState from '../../../../store/hocs/withTxRowState';
 import Details from './Details';
 import Amount from './Amount';
 import { TxIcon } from './Icon';

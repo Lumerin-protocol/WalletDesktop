@@ -1,4 +1,4 @@
-import * as utils from '@lumerin/wallet-ui-logic/src/utils';
+import * as utils from '../../store/utils';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';

@@ -1,4 +1,4 @@
-import withWalletInfoState from '@lumerin/wallet-ui-logic/src/hocs/withWalletInfoState';
+import withWalletInfoState from '../../store/hocs/withWalletInfoState';
 import styled from 'styled-components';
 import React from 'react';
 

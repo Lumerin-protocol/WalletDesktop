@@ -6,7 +6,7 @@ import { ReceiveForm } from './ReceiveForm';
 import { ConfirmForm } from './ConfirmForm';
 import { SuccessForm } from './SuccessForm';
 
-import withTransactionModalState from '@lumerin/wallet-ui-logic/src/hocs/withTransactionModalState';
+import withTransactionModalState from '../../../store/hocs/withTransactionModalState';
 import QRCode from 'qrcode.react';
 
 import CopyIcon from '../../icons/CopyIcon';

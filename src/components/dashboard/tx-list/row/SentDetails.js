@@ -1,4 +1,4 @@
-import FilteredMessage from '@lumerin/wallet-ui-logic/src/components/FilteredMessage';
+import FilteredMessage from '../../../../components/common/FilteredMessage';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';

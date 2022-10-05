@@ -1,4 +1,4 @@
-import TermsAndConditions from '@lumerin/wallet-ui-logic/src/components/TermsAndConditions';
+import TermsAndConditions from '../../components/common/TermsAndConditions';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';

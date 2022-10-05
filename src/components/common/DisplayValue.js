@@ -1,5 +1,5 @@
-import withDisplayValueState from '@lumerin/wallet-ui-logic/src/hocs/withDisplayValueState';
-import { sanitize } from '@lumerin/wallet-ui-logic/src/utils';
+import withDisplayValueState from '../../store/hocs/withDisplayValueState';
+import { sanitize } from '../../store/utils';
 import smartRounder from 'smart-round';
 import PropTypes from 'prop-types';
 import React from 'react';

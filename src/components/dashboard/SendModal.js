@@ -1,4 +1,4 @@
-import withSendModalState from '@lumerin/wallet-ui-logic/src/hocs/withSendModalState';
+import withSendModalState from '../../store/src/hocs/withSendModalState';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal, { HeaderButton } from '../common/Modal';

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import withDashboardState from '@lumerin/wallet-ui-logic/src/hocs/withDashboardState';
+import withDashboardState from '../../store/hocs/withDashboardState';
 
 import { LayoutHeader } from '../common/LayoutHeader';
 import BalanceBlock from './BalanceBlock';

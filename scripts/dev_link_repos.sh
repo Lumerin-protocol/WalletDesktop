@@ -3,7 +3,7 @@
 # Change directory to the proxy group
 cd ..
 
-for $repo_name in contracts-js wallet-ui-logic wallet-core
+for $repo_name in contracts-js wallet-core
 do
   in_setup_and_out on $repo_name
 done
@@ -32,6 +32,5 @@ core_links() {
 desktop_links() {
   cd wallet-desktop
 
-  npm link @lumerin/wallet-ui-logic
   npm link @lumerin/wallet-core
 }

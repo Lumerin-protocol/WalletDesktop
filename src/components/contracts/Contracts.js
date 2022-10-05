@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import withContractsState from '@lumerin/wallet-ui-logic/src/hocs/withContractsState';
+import withContractsState from '../../store/hocs/withContractsState';
 import { BaseBtn } from '../common';
 import { LayoutHeader } from '../common/LayoutHeader';
 import TotalsBlock from './TotalsBlock';
