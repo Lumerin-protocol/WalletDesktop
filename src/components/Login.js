@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import withLoginState from '@lumerin/wallet-ui-logic/src/hocs/withLoginState';
+import withLoginState from '../store/hocs/withLoginState';
 
 import { TextInput, AltLayout, BaseBtn, Sp } from './common';
 

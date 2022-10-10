@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
-import withSocketsListState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsListState';
+import withSocketsListState from '../../../store/hocs/withSocketsListState';
 import styled from 'styled-components';
 
 import ScanningSocketsPlaceholder from './ScanningSocketsPlaceholder';

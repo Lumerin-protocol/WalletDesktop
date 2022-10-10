@@ -1,4 +1,4 @@
-import withOnboardingState from '@lumerin/wallet-ui-logic/src/hocs/withOnboardingState';
+import withOnboardingState from '../../store/hocs/withOnboardingState';
 import PropTypes from 'prop-types';
 import React from 'react';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import withSocketsRowState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsRowState';
+import withSocketsRowState from '../../../store/hocs/withSocketsRowState';
 import { SocketIcon } from '../../icons/SocketIcon';
 
 const columnCount = 4;

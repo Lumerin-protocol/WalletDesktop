@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
 import styled from 'styled-components';
 
-import withTxListState from '@lumerin/wallet-ui-logic/src/hocs/withTxListState';
+import withTxListState from '../../../store/hocs/withTxListState';
 import ScanningTxPlaceholder from './ScanningTxPlaceholder';
 import NoTxPlaceholder from './NoTxPlaceholder';
 import { ItemFilter, Flex } from '../../common';

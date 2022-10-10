@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { withClient } from '@lumerin/wallet-ui-logic/src/hocs/clientContext';
+import { withClient } from '../../store/hocs/clientContext';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 

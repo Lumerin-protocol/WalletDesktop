@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import withOfflineWarningState from '@lumerin/wallet-ui-logic/src/hocs/withOfflineWarningState';
+import withOfflineWarningState from '../store/hocs/withOfflineWarningState';
 
 import { BaseBtn } from './common';
 import CloseIcon from './icons/CloseIcon';

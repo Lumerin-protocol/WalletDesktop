@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import withContractsRowState from '@lumerin/wallet-ui-logic/src/hocs/withContractsRowState';
+import withContractsRowState from '../../../store/hocs/withContractsRowState';
 
 import { ClockIcon } from '../../icons/ClockIcon';
 import { Btn } from '../../common';

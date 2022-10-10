@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import withCreateContractModalState from '@lumerin/wallet-ui-logic/src/hocs/withCreateContractModalState';
+import withCreateContractModalState from '../../store/hocs/withCreateContractModalState';
 
 import { BaseBtn } from '../common';
 

@@ -33,6 +33,5 @@ wallet-core_links() {
 wallet-desktop_links() {
   cd wallet-desktop
 
-  npm link @lumerin/wallet-ui-logic
   npm link @lumerin/wallet-core
 }

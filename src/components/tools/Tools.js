@@ -1,5 +1,5 @@
 import { withRouter, NavLink } from 'react-router-dom';
-import withToolsState from '@lumerin/wallet-ui-logic/src/hocs/withToolsState';
+import withToolsState from '../../store/hocs/withToolsState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React, { useState, useContext } from 'react';

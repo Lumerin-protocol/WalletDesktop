@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from '@lumerin/wallet-ui-logic/src/theme';
+import theme from '../../../../ui/theme';
 import React from 'react';
 
 import LeftArrowIcon from '../../../icons/LeftArrowIcon';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import withSocketsState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsState';
+import withSocketsState from '../../store/hocs/withSocketsState';
 import TotalsBlock from './TotalsBlock';
 import SocketsList from './sockets-list/SocketsList';
 import { LayoutHeader } from '../common/LayoutHeader';
