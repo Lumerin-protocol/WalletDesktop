@@ -24,7 +24,7 @@ const Contracts = styled.div`
   margin: 1.6rem 0 1.6rem;
   border: 1px solid ${p => p.theme.colors.lightBG};
   border-radius: 5px;
-  height: 60%;
+  height: 75%;
 `;
 
 const ListContainer = styled.div`
@@ -129,7 +129,7 @@ function ContractsList({
   return (
     <Container data-testid="Contracts-list">
       <Flex.Row grow="1">
-        <Title onClick={handleClick}>Status</Title>
+        <Title onClick={handleClick}>Status: {syncStatus}</Title>
       </Flex.Row>
       <Contracts>
         <ItemFilter extractValue={filterExtractValue} items={contracts}>

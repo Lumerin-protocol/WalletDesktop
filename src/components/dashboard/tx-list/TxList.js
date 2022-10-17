@@ -28,9 +28,8 @@ const Transactions = styled.div`
 
 const ListContainer = styled.div`
   background-color: #ffffff;
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  height: 100%;
+  overflow-y: auto;
 `;
 
 const TxRowContainer = styled.div`
@@ -156,7 +155,7 @@ export const TxList = ({
                 >
                   {({ height, isScrolling, onChildScroll, scrollTop }) => {
                     if (!height) return null;
-
+                    console.log(isScrolling, filteredItems.length);
                     return (
                       // AutoSizer is required to make virtualized rows have responsive width
                       <AutoSizer disableHeight>

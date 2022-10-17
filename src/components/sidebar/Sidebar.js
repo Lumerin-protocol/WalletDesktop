@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import SecondaryNav from './SecondaryNav';
 import PrimaryNav from './PrimaryNav';
 import Logo from './Logo';
-import { LumerinLightIcon } from '../icons/LumerinLightIcon';
+import { SidebarLumerinLightIcon } from '../icons/SidebarLumerinLightIcon';
 
 const Container = styled.div`
   background: ${p => p.theme.colors.light};
@@ -78,7 +78,7 @@ export default function Sidebar() {
       </FullLogoContainer>
 
       <IconLogoContainer parent={Container}>
-        <LumerinLightIcon size="6rem" />
+        <SidebarLumerinLightIcon size="6rem" />
       </IconLogoContainer>
 
       <PrimaryNavContainer>
