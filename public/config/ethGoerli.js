@@ -8,7 +8,7 @@ const wsApiUrl = process.env.ROPSTEN_NODE_URL || 'wss://goerli.infura.io/ws/v3/9
 
 module.exports = {
   displayName: 'Goerli',
-  chainId: '420',
+  chainId: '5',
   symbol: 'ETH',
 
   // contract addresses
