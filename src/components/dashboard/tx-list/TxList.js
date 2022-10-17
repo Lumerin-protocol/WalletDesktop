@@ -155,7 +155,6 @@ export const TxList = ({
                 >
                   {({ height, isScrolling, onChildScroll, scrollTop }) => {
                     if (!height) return null;
-                    console.log(isScrolling, filteredItems.length);
                     return (
                       // AutoSizer is required to make virtualized rows have responsive width
                       <AutoSizer disableHeight>
