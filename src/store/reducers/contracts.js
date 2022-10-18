@@ -17,7 +17,7 @@ const reducer = handleActions(
       ...get(payload, 'contracts', {})
     }),
 
-    'contracts-scan-started': (state, {}) => ({
+    'contracts-scan-started': state => ({
       ...state,
       lastUpdated: parseInt(Date.now() / 1000, 10),
       syncStatus: 'syncing'

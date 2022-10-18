@@ -136,7 +136,7 @@ const ConfirmationWizard = props => {
   const { password, errors, status, error } = state;
 
   if (status === 'init') {
-    return props.renderForm(goToReview);
+    return props.RenderForm(goToReview);
   } else if (status === 'confirm') {
     return (
       <form onSubmit={onConfirmClick} data-testid="confirm-form">

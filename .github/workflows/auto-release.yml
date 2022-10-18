@@ -1,0 +1,42 @@
+name: Auto Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.deb
+          - os: windows-latest
+            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.exe
+          - os: macos-latest
+            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
+    runs-on: ${{ matrix.os }}   
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install packages
+        run: npm install
+      - name: Build Web
+        run: npm run web-build
+      - name: Build Mac
+        if: matrix.os == 'macos-latest'
+        run: npm run desktop-build-mac
+      - name: Build Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: npm run desktop-build-linux
+      - name: Build Windows
+        if: matrix.os == 'windows-latest'
+        run: npm run desktop-build-win
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/${{ matrix.artifact_name }}
+          tag: ${{ github.ref }}
+

@@ -96,7 +96,7 @@ const StyledParagraph = styled.p`
 `;
 
 const Tools = props => {
-  const renderForm = goToReview => {
+  const RenderForm = goToReview => {
     const defState = {
       activeModal: null,
       testSocket: '',
@@ -294,7 +294,7 @@ const Tools = props => {
         onWizardSubmit={onWizardSubmit}
         pendingTitle="Recovering..."
         successText="Wallet successfully recovered"
-        renderForm={renderForm}
+        RenderForm={RenderForm}
         validate={props.validate}
         noCancel
         styles={{

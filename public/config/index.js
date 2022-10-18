@@ -1,6 +1,6 @@
 'use strict';
 
-const enabledChain = (process.env.ENABLED_CHAIN || 'ethRopsten');
+const enabledChain = (process.env.ENABLED_CHAIN || 'ethGoerli');
 
 const chain = require(`./${enabledChain}`);
 
