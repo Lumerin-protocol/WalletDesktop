@@ -24,7 +24,7 @@ const Balance = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75em 1.6rem;
+  padding: 0.75em 1.6rem 0.75em 1rem;
   height: 90%;
   @media (min-width: 1040px) {
   }
@@ -33,25 +33,27 @@ const Balance = styled.div`
 const IconLogoContainer = styled.div`
   padding: 2.4rem 1.2rem;
   height: 100px;
-  display: none;
+  display: block !important;
   flex-shrink: 0;
 
-  @media (min-width: 800px) {
-    display: block;
-  }
+  /* @media (min-width: 800px) {
+    display: block !important;
+  } */
 `;
 
 const Primary = styled.div`
+  display: flex;
+  align-items: center;
   line-height: 1.5;
   font-weight: 600;
   letter-spacing: -1px;
-  color: ${p => p.theme.colors.darker}
+  color: ${p => p.theme.colors.darker};
   margin: 0 1.6rem;
   flex-grow: 1;
   position: relative;
   // top: ${relSize(-400)};
   // font-size: ${relSize(58)};
-  font-size: ${relSize(28)};
+  font-size: min(max(24px,4vw),30px);
 
   @media (min-width: 1440px) {
     font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
@@ -62,7 +64,7 @@ const Secondary = styled.div`
   display: block;
   line-height: 1;
   font-weight: 600;
-  color: ${p => p.theme.colors.darker}
+  color: ${p => p.theme.colors.darker};
   white-space: nowrap;
   position: relative;
   top: ${relSize(-400)};
@@ -80,10 +82,10 @@ const Secondary = styled.div`
 const LeftBtn = styled(BaseBtn)`
   height: 60%;
   font-size: 1.5rem;
-  margin-right: .4rem;
+  margin-right: 0.4rem;
   border-radius: 5px;
-  background-color: ${p => p.theme.colors.primary}
-  color: ${p => p.theme.colors.light}
+  background-color: ${p => p.theme.colors.primary};
+  color: ${p => p.theme.colors.light};
 
   @media (min-width: 1040px) {
     margin-left: 0;
@@ -93,11 +95,11 @@ const LeftBtn = styled(BaseBtn)`
 const RightBtn = styled(BaseBtn)`
   height: 60%;
   font-size: 1.5rem;
-  margin-left: .4rem;
+  margin-left: 0.4rem;
   border-radius: 5px;
   border: 1px solid ${p => p.theme.colors.primary};
-  background-color: ${p => p.theme.colors.light}
-  color: ${p => p.theme.colors.primary}
+  background-color: ${p => p.theme.colors.light};
+  color: ${p => p.theme.colors.primary};
 
   @media (min-width: 1040px) {
     margin-left: 0;
