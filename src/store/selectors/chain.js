@@ -59,6 +59,12 @@ export const getExplorerUrl = createSelector(
       : '#'
 );
 
+// Returns the ProxyRouter URL
+export const getProxyRouterUrl = createSelector(
+  getChainConfig,
+  chainConfigData => chainConfigData.proxyRouterUrl
+);
+
 // Returns the indexer connection status
 export const getIndexerConnectionStatus = createSelector(
   getChain,

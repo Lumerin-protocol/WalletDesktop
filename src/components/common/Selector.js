@@ -7,14 +7,15 @@ import { ErrorMsg, Label } from './TextInput';
 import SelectorCaret from '../icons/SelectorCaret';
 
 const MenuButton = styled(ReachUI.MenuButton)`
-  background-color: ${p => p.theme.colors.translucentPrimary};
-  color: ${p => p.theme.colors.light};
+  background-color: ${p => p.theme.colors.medium};
+  color: ${p => p.theme.colors.dark};
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.5px;
   text-shadow: ${p => p.theme.textShadow};
   padding: 0;
   border: none;
+  border-radius: 5px;
   display: block;
   height: 4.8rem;
   text-align: left;
@@ -54,12 +55,11 @@ const ValueContainer = styled.div`
 const CaretContainer = styled.div`
   background-color: transparent;
   padding: 1.6rem 1.2rem 1.6rem 1.3rem;
-  box-shadow: 1px 0 0 0 ${p => p.theme.colors.dark} inset;
+  svg {
+    fill: ${p => p.theme.colors.primary};
+  }
 
   [aria-expanded='true'] & {
-    background-color: ${p => p.theme.colors.light};
-    box-shadow: 0 -1px 0 0 ${p => p.theme.colors.dark} inset;
-
     svg {
       fill: ${p => p.theme.colors.primary};
     }
@@ -72,15 +72,17 @@ const CaretContainer = styled.div`
 
 const MenuList = styled(ReachUI.MenuList)`
   background-color: ${p => p.theme.colors.light};
-  padding: 1.6rem 0;
+  width: 100%;
 `;
 
 const MenuItem = styled(ReachUI.MenuItem)`
   color: ${p => p.theme.colors.copy};
+  width: 100%;
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.5px;
   padding: 1.2rem 1.6rem;
+  cursor: pointer;
 
   &[data-selected] {
     background-color: rgba(126, 97, 248, 0.1);

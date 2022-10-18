@@ -11,6 +11,7 @@ import Reports from './reports/Reports';
 import Indicies from './indicies/Indicies';
 import Tools from './tools/Tools';
 import Contracts from './contracts/Contracts';
+import Devices from './devices/Devices';
 
 const fadeIn = keyframes`
   from {
@@ -57,6 +58,7 @@ export const Layout = () => (
         <Route path="/indicies" component={Indicies} />
         <Route path="/tools" component={Tools} />
         <Route path="/change-pass" component={ChangePassword} />
+        <Route path="/devices" component={Devices} />
       </Switch>
     </Main>
     <OfflineWarning />
