@@ -8,6 +8,7 @@ const Container = styled.div`
   min-width: 600px;
   position: relative;
   padding: 0 2.4rem;
+  padding-top: 2rem;
 
   @media (min-width: 800px) {
   }

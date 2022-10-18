@@ -25,7 +25,7 @@ export const getMergeAllContracts = createSelector(
 // Returns if the current wallet/address has transactions on the active chain
 export const hasContracts = createSelector(
   getContracts,
-  contractsData => contractsData.length !== 0
+  contractsData => contractsData.actives.length !== 0
 );
 
 export const getActiveContractsCount = createSelector(

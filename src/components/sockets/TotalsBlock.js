@@ -6,7 +6,7 @@ const relSize = ratio => `calc(100vw / ${ratio})`;
 const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
   width: 100%;
-  height: 100px;
+  height: 120px;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
@@ -19,7 +19,7 @@ const Total = styled.div`
   background-color: ${p => p.theme.colors.xLight};
   flex-direction: column;
   height: 95%;
-  width: 125px;
+  /* width: 150px; */
   justify-content: space-between;
   padding: 1.4rem 2.6rem;
   margin-left: 1.4rem;
@@ -32,7 +32,7 @@ const TotalLabel = styled.div`
   display: block;
   line-height: 1.5;
   font-weight: 600;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   white-space: nowrap;
   position: relative;
   top: ${relSize(-400)};
@@ -49,9 +49,9 @@ const TotalLabel = styled.div`
 
 const TotalSubLabel = styled.div`
   display: block;
-  line-height: 1.0;
+  line-height: 1;
   font-weight: 400;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   white-space: nowrap;
   position: relative;
   top: ${relSize(-400)};
@@ -70,8 +70,8 @@ const TotalValue = styled.div`
   line-height: 1.5;
   font-weight: 600;
   letter-spacing: ${p => (p.large ? '-1px' : 'inherit')};
-  color: ${p => p.theme.colors.darker}
-  margin: .6rem 0;
+  color: ${p => p.theme.colors.darker};
+  margin: 0.6rem 0;
   flex-grow: 1;
   position: relative;
   font-size: ${relSize(24)};
