@@ -107,7 +107,7 @@ function Contracts({
   const handleContractSave = e => {
     e.preventDefault();
   };
-  console.log(syncStatus, hasContracts);
+
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
