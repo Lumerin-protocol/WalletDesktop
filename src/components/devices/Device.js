@@ -33,6 +33,10 @@ const DeviceContainer = styled.div`
 
   .image-row {
     position: relative;
+    div {
+      display: block;
+      padding: 0;
+    }
   }
 
   .image-row img {
@@ -42,7 +46,7 @@ const DeviceContainer = styled.div`
 
   .image-row .spinner {
     position: absolute;
-    bottom: 0.3em;
+    bottom: 0.5em;
     right: 0.3em;
   }
 
@@ -64,6 +68,10 @@ const DeviceContainer = styled.div`
   }
 
   .pool-row {
+    overflow-x: scroll;
+  }
+
+  .pool-user-row {
     overflow-x: scroll;
   }
 `;
@@ -92,7 +100,8 @@ const Device = ({
   isLoading,
   status = 'Miner status unavailable',
   isPrivilegedApiAvailable,
-  proxyRouterUrl
+  proxyRouterUrl,
+  setMinerPool
 }) => {
   return (
     <DeviceContainer>
@@ -100,7 +109,7 @@ const Device = ({
         <img src={imageSrc} alt="miner-img" />
         {isLoading && <Spinner className="spinner" size="1em"></Spinner>}
       </div>
-      <div className="status-row row">{status}</div>
+      {/* <div className="status-row row">{status}</div> */}
       <div className="statistics-row row">
         <p className="hash-rate">{hashRateGHS} Gh/s</p>
         <p className="ip">{ip}</p>
@@ -123,16 +132,16 @@ const Device = ({
       </dl>
       <div className="pool-row row">{poolAddress}</div>
       <div className="pool-user-row row">{poolUser}</div>
-      {'stratum+tcp://6.tcp.ngrok.io:16000' !== poolAddress && (
+      {poolAddress !== proxyRouterUrl && !isLoading && (
         <Btn
-          data-disabled={!!isPrivilegedApiAvailable}
+          data-disabled={!isPrivilegedApiAvailable}
           data-testid="configure-miner-btn"
           data-rh={
             isPrivilegedApiAvailable
               ? null
               : "Your local network doesn't have privileged API access. (W:192.168.0.0/24, W:127.0.0.1/24)"
           }
-          onClick={null}
+          onClick={() => setMinerPool(ip)}
         >
           Set ProxyRouter pool
         </Btn>

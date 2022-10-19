@@ -42,8 +42,12 @@ const DeviceDiscoveryResult = styled.div`
   flex-wrap: wrap;
   color: ${p => p.theme.colors.dark};
   margin: 1em 0;
-  height: 100%;
+  max-height: 470px;
   overflow-y: scroll;
+`;
+
+const ConfigureBtn = styled(Btn)`
+  margin-left: 10px;
 `;
 
 const Devices = props => {
@@ -56,6 +60,9 @@ const Devices = props => {
   const isInputVisible = range !== RANGE.LOCAL;
   const isDiscovering = props?.devices?.isDiscovering;
   const devices = Object.values(props?.devices?.devices) || [];
+  const notConfiguredDevices = devices.filter(
+    d => d.poolAddress !== props.proxyRouterUrl && d.isPrivilegedApiAvailable
+  );
 
   const onRangeChange = e => {
     setRange(e.value);
@@ -73,6 +80,17 @@ const Devices = props => {
       return props.client.startDiscovery({});
     }
     return props.client.startDiscovery({ fromIp, toIp });
+  };
+
+  const setMinerPool = host => {
+    return props.client.setMinerPool({ host, pool: props.proxyRouterUrl });
+  };
+
+  const setMinerPoolForAll = () => {
+    notConfiguredDevices.forEach(d =>
+      props.client.setMinerPool({ host: d.host, pool: props.proxyRouterUrl })
+    );
+    return;
   };
 
   const stopDiscovery = () => props.client.stopDiscovery({});
@@ -133,7 +151,14 @@ const Devices = props => {
                 <Spinner className="discovery-spinner" size="25px" />
               </>
             ) : (
-              <Btn onClick={startDiscovery}>Start Discovery</Btn>
+              <>
+                <Btn onClick={startDiscovery}>Start Discovery</Btn>
+                {notConfiguredDevices.length !== 0 && (
+                  <ConfigureBtn onClick={setMinerPoolForAll}>
+                    Configure all
+                  </ConfigureBtn>
+                )}
+              </>
             )}
           </Flex.Row>
         </DeviceDiscoveryControl>
@@ -153,6 +178,7 @@ const Devices = props => {
               poolUser={item.poolUser}
               isPrivilegedApiAvailable={item.isPrivilegedApiAvailable}
               proxyRouterUrl={props.proxyRouterUrl}
+              setMinerPool={setMinerPool}
             />
           ))}
         </DeviceDiscoveryResult>

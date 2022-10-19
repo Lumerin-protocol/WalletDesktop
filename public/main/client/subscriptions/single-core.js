@@ -21,6 +21,7 @@ const listeners = {
   'cancel-contract': handlers.cancelContract,
   "start-discovery": handlers.startDiscovery,
   "stop-discovery": handlers.stopDiscovery,
+  "set-miner-pool": handlers.setMinerPool,
 };
 
 let coreListeners = {};

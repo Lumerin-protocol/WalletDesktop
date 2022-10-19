@@ -107,7 +107,8 @@ const createClient = function(createStore) {
     sendEth: utils.forwardToMainProcess('send-eth', 750000),
     clearCache: utils.forwardToMainProcess('clear-cache'),
     startDiscovery: utils.forwardToMainProcess('start-discovery'),
-    stopDiscovery: utils.forwardToMainProcess('stop-discovery')
+    stopDiscovery: utils.forwardToMainProcess('stop-discovery'),
+    setMinerPool: utils.forwardToMainProcess('set-miner-pool')
   };
 
   const api = {

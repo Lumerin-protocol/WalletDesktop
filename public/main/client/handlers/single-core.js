@@ -198,6 +198,9 @@ const startDiscovery = (data, { api }) =>
 const stopDiscovery = (data, { api }) => 
   api.devices.stopDiscovery();
 
+const setMinerPool = (data, { api }) =>
+  api.devices.setMinerPool(data);
+
 module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
@@ -216,4 +219,5 @@ module.exports = {
   sendEth,
   startDiscovery,
   stopDiscovery,
+  setMinerPool,
 };

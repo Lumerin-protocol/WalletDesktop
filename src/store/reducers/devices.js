@@ -15,7 +15,13 @@ const reducer = handleActions(
   {
     [EVENT_DEVICES_DEVICE_UPDATED]: (state, action) => ({
       ...state,
-      devices: { ...state.devices, [action.payload.host]: action.payload }
+      devices: {
+        ...state.devices,
+        [action.payload.host]: {
+          ...(state.devices[action.payload.host] || {}),
+          ...action.payload
+        }
+      }
     }),
     [EVENT_DEVICES_STATE_UPDATED]: (state, { payload }) => ({
       ...state,
