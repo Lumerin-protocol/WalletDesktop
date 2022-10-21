@@ -12,7 +12,7 @@ module.exports = {
   implementationAddress: null,
 
   // urls
-  proxyRouterBaseUrl: 'http://localhost:8080',
+  proxyRouterUrl: 'http://localhost:8080',
   explorerUrl: 'https://etherscan.io/tx/{{hash}}',
   indexerUrl: 'https://indexer.metronome.io',
   wsApiUrl: 'wss://eth.wallet.metronome.io:8546',

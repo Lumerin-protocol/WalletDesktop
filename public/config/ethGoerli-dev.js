@@ -15,7 +15,7 @@ module.exports = {
   webFacingAddress: null,
 
   // urls
-  proxyRouterBaseUrl: process.env.PROXY_ROUTER_BASE_URL || 'proxyrouter.stg.lumerin.io:8080' || 'localhost:8080',
+  proxyRouterUrl: process.env.PROXY_ROUTER_BASE_URL || 'proxyrouter.stg.lumerin.io:8080' || 'localhost:8080',
   explorerUrl: 'https://goerli.etherscan.io/tx/{{hash}}',
   indexerUrl,
   wsApiUrl,
