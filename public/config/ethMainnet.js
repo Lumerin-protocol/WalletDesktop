@@ -1,21 +1,18 @@
 'use strict';
 
-const LumerinContracts = require('@lumerin/contracts')
-const { Lumerin, CloneFactory, Implementation, WebFacing } = LumerinContracts['mainnet'];
-
 module.exports = {
   displayName: 'Ethereum',
   chainId: 1,
   symbol: 'ETH',
 
   // contracts addresses
-  lmrTokenAddress: Lumerin.address,
-  cloneFactoryAddress: CloneFactory.address,
-  webFacingAddress: WebFacing.address,
-  ImplementationAddress: Implementation.address,
+  lmrTokenAddress: "0x4b1d0b9f081468d780ca1d5d79132b64301085d1",
+  cloneFactoryAddress: null,
+  webFacingAddress: null,
+  implementationAddress: null,
 
   // urls
-  proxyRouterUrl: 'http://localhost:8080',
+  proxyRouterBaseUrl: 'http://localhost:8080',
   explorerUrl: 'https://etherscan.io/tx/{{hash}}',
   indexerUrl: 'https://indexer.metronome.io',
   wsApiUrl: 'wss://eth.wallet.metronome.io:8546',
