@@ -22,7 +22,9 @@ export const subscribeToMainProcessMessages = function(store) {
     'wallet-transactions-changed',
     'eth-tx',
     'lmr-tx',
-    'coin-block'
+    'coin-block',
+    'devices-device-updated',
+    'devices-state-updated'
   ];
 
   // Subscribe to every IPC message defined above and dispatch a

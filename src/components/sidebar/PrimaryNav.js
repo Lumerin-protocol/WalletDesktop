@@ -107,6 +107,17 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         <Label parent={parent}>Contracts</Label>
       </Button>
 
+      <Button
+        onClick={() => setActiveIndex(3)}
+        activeClassName="active"
+        to="/devices"
+      >
+        <IconWrapper>
+          <ContractNavIcon isActive={activeIndex === 3} size={iconSize} />
+        </IconWrapper>
+        <Label parent={parent}>Devices</Label>
+      </Button>
+
       {/* <Button
         onClick={() => setActiveIndex(3)}
         activeClassName="active"

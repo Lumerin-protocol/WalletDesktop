@@ -135,6 +135,8 @@ function createClient (config) {
         subscriptions.subscribe(core);
       })
       .catch(function (err) {
+        console.log('panic')
+        console.log(err);
         console.log('Unknown chain =', err.message)
         logger.error('Could not start core', err.message);
       });

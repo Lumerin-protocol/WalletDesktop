@@ -46,10 +46,10 @@ const Circle = styled.circle`
   stroke: ${p => p.theme.colors.primary};
 `;
 
-export default function Spinner({ size = '12px' }) {
+export default function Spinner({ size = '12px', ...rest }) {
   return (
     <Container size={size}>
-      <Svg viewBox="25 25 50 50" size={size}>
+      <Svg viewBox="25 25 50 50" size={size} {...rest}>
         <Circle
           strokeMiterlimit="10"
           strokeWidth="6"

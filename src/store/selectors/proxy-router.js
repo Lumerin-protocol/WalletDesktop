@@ -13,7 +13,7 @@ export const getIsConnect = createSelector(
 
 export const getProxyRouterUrl = createSelector(
   getConfig,
-  configData => configData.proxyRouterUrl
+  configData => configData.chain.proxyRouterUrl
 );
 
 // Returns the array of transactions of the current chain/wallet/address.

@@ -5,6 +5,7 @@ import * as contracts from './contracts';
 import * as session from './session';
 import * as proxyRouter from './proxy-router';
 import * as wallet from './wallet';
+import * as devices from './devices';
 
 export default {
   ...connectivity,
@@ -13,5 +14,6 @@ export default {
   ...chain,
   ...wallet,
   ...proxyRouter,
-  ...contracts
+  ...contracts,
+  ...devices
 };

@@ -6,6 +6,7 @@ import config from './config';
 import proxyRouter from './proxy-router';
 import contracts from './contracts';
 import meta from './meta';
+import devices from './devices';
 
 export default combineReducers({
   connectivity,
@@ -13,6 +14,7 @@ export default combineReducers({
   config,
   chain,
   proxyRouter,
-  contracts
+  contracts,
+  devices
   // meta
 });

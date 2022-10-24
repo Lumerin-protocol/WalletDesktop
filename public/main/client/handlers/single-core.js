@@ -192,6 +192,15 @@ const sendLmr = async (data, { api }) =>
 
 const sendEth = (data, { api }) => withAuth(api.wallet.sendEth)(data, { api });
 
+const startDiscovery = (data, { api }) =>
+  api.devices.startDiscovery(data);
+
+const stopDiscovery = (data, { api }) => 
+  api.devices.stopDiscovery();
+
+const setMinerPool = (data, { api }) =>
+  api.devices.setMinerPool(data);
+
 module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
@@ -208,4 +217,7 @@ module.exports = {
   openWallet,
   sendLmr,
   sendEth,
+  startDiscovery,
+  stopDiscovery,
+  setMinerPool,
 };

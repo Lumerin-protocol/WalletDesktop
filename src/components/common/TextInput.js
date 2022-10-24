@@ -21,7 +21,7 @@ const Input = styled.input`
   margin-top: 0.8rem;
   width: 100%;
   line-height: 4rem;
-  color: ${p => p.theme.colors.dark};
+  color: ${p => (p.disabled ? p.theme.colors.copy : p.theme.colors.dark)};
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -65,7 +65,7 @@ const TextInput = props => {
     props.onChange({ id: props.id, value: e.target.value });
   };
 
-  const { label, value, type, id, error, other } = props;
+  const { label, value, type, id, error, other, disabled } = props;
 
   const hasErrors = error && error.length > 0;
 
@@ -76,6 +76,7 @@ const TextInput = props => {
       </Label>
       <InputControl
         hasErrors={hasErrors}
+        disabled={disabled}
         onChange={onChange}
         value={value || ''}
         type={type || 'text'}
@@ -105,7 +106,8 @@ TextInput.propTypes = {
   type: PropTypes.oneOf(['text', 'number', 'password', 'url']),
   rows: PropTypes.number,
   cols: PropTypes.number,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  disabled: PropTypes.bool
 };
 
 export default TextInput;
