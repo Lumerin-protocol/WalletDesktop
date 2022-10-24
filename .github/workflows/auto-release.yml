@@ -5,6 +5,9 @@ on:
     tags:
       - '*'
 
+env:
+  CI: false
+
 jobs:
   build:
     strategy:
