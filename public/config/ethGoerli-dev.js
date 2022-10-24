@@ -6,7 +6,7 @@ const wsApiUrl = process.env.ROPSTEN_NODE_URL || 'wss://goerli.infura.io/ws/v3/9
 module.exports = {
   displayName: 'Goerli',
   chainId: '5',
-  symbol: 'LMR',
+  symbol: 'ETH',
 
   // contract addresses
   lmrTokenAddress: "0xF3aCe2847F01D3ef1025c7070579611091A6422D",
