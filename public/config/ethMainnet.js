@@ -9,7 +9,6 @@ module.exports = {
   lmrTokenAddress: "0x4b1d0b9f081468d780ca1d5d79132b64301085d1",
   cloneFactoryAddress: null,
   webFacingAddress: null,
-  implementationAddress: null,
 
   // urls
   proxyRouterUrl: 'http://localhost:8080',
