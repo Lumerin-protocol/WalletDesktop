@@ -5,10 +5,11 @@ import { ToastsContext } from '../../toasts';
 import { BaseBtn } from '../../common';
 import { abbreviateAddress } from '../../../utils';
 import { SuccessLayer } from './SuccessLayer';
+import { coinToUSD } from '../../../utils';
 
 const HeaderWrapper = styled.div`
   display: flex;
-  postion: relative;
+  position: relative;
   height: 10%;
   align-content: center;
   margin-bottom: 40px;
@@ -89,6 +90,12 @@ const FooterLabel = styled.label`
   margin-bottom: 5px;
 `;
 
+const SubAmount = styled.div`
+  color: ${p => p.theme.colors.lumerin.helpertextGray};
+  font-size: 13px;
+  text-align: center;
+`;
+
 // export function ConfirmForm({ activeTab, address, lmrBalanceUSD, sendLmrDisabled, sendLmrDisabledReason, onTabSwitch, amountInput, onAmountInput, destinationAddress, onDestinationAddressInput, onInputChange, usdAmount, coinAmount, onMaxClick }) {
 export function SuccessForm(props) {
   const context = useContext(ToastsContext);
@@ -111,6 +118,10 @@ export function SuccessForm(props) {
 
     props.onAmountInput(e.target.value);
     props.onInputChange(e);
+  };
+
+  const LMRtoUSD = val => {
+    return coinToUSD(val, props.coinPrice);
   };
 
   if (!props.activeTab) {
@@ -142,9 +153,7 @@ export function SuccessForm(props) {
             value={props.amountInput}
           />
         </AmountContainer>
-        <AmountSublabel>
-          {convertToLMR(props.amountInput) || 0} LMR
-        </AmountSublabel>
+        <SubAmount>≈ {LMRtoUSD(props.amountInput)}$</SubAmount>
       </Column>
 
       <Footer>

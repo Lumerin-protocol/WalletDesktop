@@ -116,9 +116,8 @@ const withTransactionModalState = WrappedComponent => {
         ...validators.validateGasLimit(client, gasLimit)
       };
       const hasErrors = Object.keys(errors).length > 0;
-      console.log('validate errors: ', errors);
       if (hasErrors) this.setState({ errors });
-      return !hasErrors;
+      return hasErrors ? errors : false;
     };
 
     onMaxClick = () => {
@@ -138,7 +137,7 @@ const withTransactionModalState = WrappedComponent => {
         coinAmount: this.state.coinAmount,
         usdAmount: this.state.usdAmount
       });
-
+      console.log(this.props.client.fromWei('100000000', 'gwei'), 'wei');
       const { sendLmrFeatureStatus } = this.props;
 
       const sendLmrDisabledReason =
@@ -177,7 +176,7 @@ const withTransactionModalState = WrappedComponent => {
     coinSymbol: selectors.getCoinSymbol(state),
     lmrBalanceUSD: selectors.getWalletLmrBalance(state),
     lmrBalanceWei: selectors.getWalletLmrBalance(state),
-    coinPrice: 15.8, // selectors.getCoinRate(state),
+    coinPrice: selectors.getRate(state),
     from: selectors.getWalletAddress(state)
   });
 

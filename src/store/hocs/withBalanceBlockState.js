@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 const mapStateToProps = (state, { client }) => {
   return {
     ethBalance: selectors.getWalletEthBalance(state),
-    lmrBalance: selectors.getWalletLmrBalance(state)
+    lmrBalance: selectors.getWalletLmrBalance(state),
+    rate: selectors.getRate(state)
   };
 };
 

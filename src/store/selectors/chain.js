@@ -83,6 +83,12 @@ export const getTxConfirmations = createSelector(
       : blockHeight - txBlockNumber + 1
 );
 
+export const getRate = createSelector(
+  getChain,
+  getChainMeta,
+  (chainData, chainMetaData) => (chainData ? chainMetaData.rate : null)
+);
+
 // export const getChainWithBalances = createSelector(
 //   getChain,
 //   getConfig,

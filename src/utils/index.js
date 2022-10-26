@@ -47,12 +47,17 @@ export function isGreaterThanZero(amount) {
 
 export function getWeiUSDvalue(amount, rate) {
   const amountBN = toBN(amount);
-  const rateBN = toBN(toWei(typeof rate === 'string' ? rate : rate.toString()));
+  const rateBN = isWeiable(rate)
+    ? toWei(typeof rate === 'string' ? rate : rate.toString())
+    : toBN(rate);
   return amountBN.mul(rateBN).div(toBN(toWei('1')));
 }
 
 export function getUSDequivalent(amount, rate) {
-  const weiUSDvalue = getWeiUSDvalue(amount, rate);
+  const weiAmount = amount * 10 ** 8;
+  console.log('weiAmount', weiAmount);
+  const weiRate = rate * 10 ** 8;
+  const weiUSDvalue = getWeiUSDvalue(weiAmount, weiRate);
 
   return weiUSDvalue.isZero()
     ? '$0.00 (USD)'
@@ -62,6 +67,22 @@ export function getUSDequivalent(amount, rate) {
         .dp(2)
         .toString(10)} (USD)`;
 }
+
+export const coinToUSD = (amount, rate) => {
+  if (+amount === 0) {
+    return '0';
+  }
+  const result = Number(amount * rate).toFixed(2);
+  return result < 0.01 ? '< 0.01' : result.toString();
+};
+
+export const USDtoCoin = (amount, rate) => {
+  if (+amount === 0) {
+    return '0';
+  }
+  const result = Number(amount / rate).toFixed(2);
+  return result < 0.01 ? '< 0.01' : result.toString();
+};
 
 export function toUSD(amount, rate, errorValue, smallValue) {
   let isValidAmount;
