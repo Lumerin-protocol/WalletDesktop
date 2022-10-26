@@ -17,7 +17,7 @@
     "dev:setup": "./scripts/dev_setup.sh",
     "dev:link": "./scripts/dev_link_repos.sh",
     "debug": "concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . --inspect\"",
-    "dev": "npm run clear-electron-cache && concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && PROXY_ROUTER_BASE_URL=localhost:8080 DEBUG=true ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . \"",
+    "dev": "npm run clear-electron-cache && concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && DEBUG=true ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . \"",
     "web-build": "npm run clear-cache:eslint && react-scripts build",
     "desktop-build": "PYTHON_PATH=/usr/local/bin/python electron-builder -wlm --c.extraMetadata.main=build/electron.js",
     "desktop-build-mac": "electron-builder -m --c.extraMetadata.main=build/electron.js",

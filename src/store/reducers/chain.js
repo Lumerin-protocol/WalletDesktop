@@ -24,9 +24,9 @@ export default function(state = initialState, action) {
   switch (action.type) {
     // init state from persisted state and config
     case 'initial-state-received': {
-      if (!get(action, 'payload.config.enabledChain', '')) {
+      if (!get(action, 'payload.config.chain.chainId', '')) {
         throw new Error(
-          'config must contain an "enabledChain" property with one string value.'
+          'config must contain an "chainId" property with one string value.'
         );
       }
 
