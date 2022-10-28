@@ -5,7 +5,6 @@ import React from 'react';
 import Modal, { HeaderButton } from '../common/Modal';
 
 import { Drawer, Tabs } from '../common';
-import { coinToUSD } from '../../utils';
 import SendLMRForm from './SendLMRForm';
 
 class SendModal extends React.Component {

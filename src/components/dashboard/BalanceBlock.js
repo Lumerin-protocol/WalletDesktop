@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import withBalanceBlockState from '../../store/hocs/withBalanceBlockState';
 import styled from 'styled-components';
 import { LumerinLightIcon } from '../icons/LumerinLightIcon';
