@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
 
-import { coinToUSD } from '../../../../utils';
 import { DisplayValue } from '../../../common';
+import { toUSD } from '../../../../store/utils/syncAmounts';
 
 const ValueContainer = styled.div`
   display: flex;
@@ -91,7 +91,7 @@ export default class Amount extends React.Component {
                     }`
               }
             />
-            {/* <UsdValue>≈ {coinToUSD(this.props.value, this.props.rate)}$</UsdValue> */}
+            {/* <UsdValue>≈ {toUSD(this.props.value, this.props.rate)}$</UsdValue> */}
           </ValueContainer>
         )}
       </Container>
