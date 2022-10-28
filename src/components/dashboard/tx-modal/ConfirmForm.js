@@ -6,8 +6,6 @@ import BackIcon from '../../icons/BackIcon';
 import SwapIcon from '../../icons/SwapIcon';
 
 import { BaseBtn } from '../../common';
-import { coinToUSD, USDtoCoin } from '../../../utils';
-import { abbreviateAddress } from '../../../utils';
 import theme from '../../../ui/theme';
 
 const HeaderWrapper = styled.div`
@@ -133,7 +131,7 @@ const WalletInput = styled.input`
   border-style: solid;
   border-color: ${p => p.theme.colors.lightBG};
   border-width: 1px;
-  padding: 8px 60px 6px 60px;
+  padding: 8px 20px 6px 60px;
 `;
 
 const SendBtn = styled(BaseBtn)`
@@ -169,10 +167,12 @@ const IconContainer = styled.div`
   cursor: pointer;
 `;
 
+const LMR_MODE = 'coinAmount';
+const USD_MODE = 'usdAmount';
+
 // export function ConfirmForm({ activeTab, address, lmrBalanceUSD, sendLmrDisabled, sendLmrDisabledReason, onTabSwitch, amountInput, onAmountInput, destinationAddress, onDestinationAddressInput, onInputChange, usdAmount, coinAmount, onMaxClick }) {
 export function ConfirmForm(props) {
-  const { usdAmount } = props;
-  const [mode, setMode] = useState('LMR');
+  const [mode, setMode] = useState(LMR_MODE);
 
   const context = useContext(ToastsContext);
 
@@ -207,35 +207,22 @@ export function ConfirmForm(props) {
   const handleAmountInput = e => {
     e.preventDefault();
 
-    props.onInputChange(e.target);
-    props.onAmountInput(e.target.value);
-    // setAmountInput(e.target.value);
-    // props.onInputChange({ id: 'coinAmount', value: e.target.value });
+    const { value } = e.target;
+    props.onInputChange({ id: mode, value });
+    props.onAmountInput(value);
   };
 
   if (!props.activeTab) {
     return <></>;
   }
 
-  const LMRtoUSD = val => {
-    return coinToUSD(val, props.coinPrice);
-  };
-
-  const USDtoLMR = val => {
-    return USDtoCoin(val, props.coinPrice);
-  };
+  const sanitize = amount => (amount === '< 0.01' ? '0.01' : amount);
 
   const onModeChange = () => {
-    if (mode === 'LMR') {
-      setMode('USD');
-      const newAmount = coinToUSD(props.amountInput, props.coinPrice);
-      props.onAmountInput(newAmount !== '< 0.01' ? newAmount : '0.01');
-    }
-    if (mode === 'USD') {
-      setMode('LMR');
-      const newAmount = USDtoCoin(props.amountInput, props.coinPrice);
-      props.onAmountInput(newAmount !== '< 0.01' ? newAmount : '0.01');
-    }
+    const newMode = mode === LMR_MODE ? USD_MODE : LMR_MODE;
+    const newAmount = props[newMode];
+    setMode(newMode);
+    props.onAmountInput(sanitize(newAmount));
   };
 
   return (
@@ -250,7 +237,6 @@ export function ConfirmForm(props) {
       <Column>
         <AmountContainer>
           <AmountInput
-            id="usdAmount"
             type="number"
             placeholder={0}
             isActive={true}
@@ -258,33 +244,18 @@ export function ConfirmForm(props) {
             value={props.amountInput}
           />
         </AmountContainer>
-        <AmountSublabel>{mode}</AmountSublabel>
+        <AmountSublabel>{mode === LMR_MODE ? 'LMR' : 'USD'}</AmountSublabel>
         <IconContainer>
           <SwapIcon
             onClick={onModeChange}
             fill={theme.colors.lumerin.helpertextGray}
-          >
-            swap
-          </SwapIcon>
+          ></SwapIcon>
         </IconContainer>
-        {mode === 'LMR' ? (
-          <SubAmount>≈ {LMRtoUSD(props.amountInput)}$</SubAmount>
+        {mode === LMR_MODE ? (
+          <SubAmount>≈ {props.usdAmount}$</SubAmount>
         ) : (
-          <SubAmount>≈ {USDtoLMR(props.amountInput)} LMR</SubAmount>
+          <SubAmount>≈ {props.coinAmount} LMR</SubAmount>
         )}
-        {/* <AmountContainer>
-          <Currency isActive={amountInput > 0}>$</Currency>
-          <AmountInput
-            id="usdAmount"
-            placeholder={0}
-            isActive={true}
-            onChange={handleAmountInput}
-            value={amountInput}
-          />
-        </AmountContainer>
-        <AmountSublabel>
-         {coinToUSD(amountInput, props.coinPrice)}
-        </AmountSublabel> */}
 
         <FeeContainer>
           {/* <FeeRow>
@@ -316,7 +287,7 @@ export function ConfirmForm(props) {
           <FooterRow>
             <FooterLabel>LMR Balance</FooterLabel>
             <FooterLabel>
-              {props.lmrBalanceWei} ≈ ${LMRtoUSD(props.lmrBalanceWei)}
+              {props.lmrBalanceWei} ≈ ${props.lmrBalanceUSD}
             </FooterLabel>
           </FooterRow>
         }

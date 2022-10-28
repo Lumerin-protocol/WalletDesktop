@@ -77,7 +77,6 @@ function TransactionModal(props) {
             destinationAddress={destinationAddress}
             onDestinationAddressInput={onSetDestinationAddress}
             onAmountInput={setAmount}
-            lmrBalanceUSD={props.lmrBalanceUSD}
             amountInput={amount}
             {...props}
           />

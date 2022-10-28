@@ -3,7 +3,6 @@ import withBalanceBlockState from '../../store/hocs/withBalanceBlockState';
 import styled from 'styled-components';
 import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 import { EtherIcon } from '../icons/EtherIcon';
-import { coinToUSD } from '../../utils';
 
 import { BaseBtn, DisplayValue } from '../common';
 
@@ -55,7 +54,10 @@ const Primary = styled.div`
   position: relative;
   // top: ${relSize(-400)};
   // font-size: ${relSize(58)};
-  font-size: min(max(24px,4vw),30px);
+  font-size: min(max(20px,4vw),24px);
+  max-width: 120px;
+  min-width: 20px;
+  overflow: scroll;
 
   @media (min-width: 1440px) {
     font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
@@ -129,15 +131,11 @@ function BalanceBlock({
   sendDisabledReason,
   ethBalance,
   lmrBalance,
-  rate,
+  lmrBalanceUSD,
   onTabSwitch
 }) {
   const [assetMode, setAssetMode] = useState('LMR');
-  const [usdBalance, setUsdBalance] = useState(null);
 
-  useEffect(() => {
-    rate && setUsdBalance(coinToUSD(lmrBalance, rate));
-  }, [rate, lmrBalance]);
   const handleToggleAssetMode = e => setAssetMode(e.target.dataset.asset);
   const handleTabSwitch = e => {
     e.preventDefault();
@@ -152,7 +150,7 @@ function BalanceBlock({
         <Primary data-testid="lmr-balance">
           <DisplayValue shouldFormate={false} value={lmrBalance} />
         </Primary>
-        {usdBalance && <UsdValue>≈ {usdBalance}$</UsdValue>}
+        {lmrBalanceUSD && <UsdValue>≈ {lmrBalanceUSD}$</UsdValue>}
         {/* TODO: Fix ethBalance */}
         {/* <Secondary data-testid="eth-balance">ETH {ethBalance}</Secondary> */}
       </Balance>

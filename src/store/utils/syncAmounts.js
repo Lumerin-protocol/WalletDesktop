@@ -1,5 +1,6 @@
 import { sanitizeInput, sanitize } from './sanitizers';
 import BigNumber from 'bignumber.js';
+import web3Utils from 'web3-utils';
 
 const ERROR_VALUE_PLACEHOLDER = 'Invalid amount';
 const SMALL_VALUE_PLACEHOLDER = '< 0.01';
@@ -12,10 +13,16 @@ function getWeiUSDvalue(client, amount, rate) {
   return amountBN.mul(rateBN).div(client.toBN(client.toWei('1')));
 }
 
-function toUSD(client, amount, rate) {
+export function toUSD(amount, rate, client = web3Utils) {
+  if (+amount === 0) {
+    return 0;
+  }
+  if (typeof amount === 'number') {
+    amount = amount.toString();
+  }
+
   let isValidAmount;
   let weiUSDvalue;
-
   try {
     weiUSDvalue = getWeiUSDvalue(client, client.toWei(sanitize(amount)), rate);
     isValidAmount = weiUSDvalue.gte(client.toBN('0'));
@@ -34,7 +41,14 @@ function toUSD(client, amount, rate) {
   return expectedUSDamount;
 }
 
-function toCoin(client, amount, rate) {
+export function toCoin(amount, rate, client = web3Utils) {
+  if (+amount === 0) {
+    return 0;
+  }
+  if (typeof amount === 'number') {
+    amount = amount.toString();
+  }
+
   let isValidAmount;
   let weiAmount;
   try {
@@ -47,7 +61,7 @@ function toCoin(client, amount, rate) {
   const expectedCoinamount = isValidAmount
     ? weiAmount
         .dividedBy(new BigNumber(client.toWei(String(rate))))
-        .decimalPlaces(18)
+        .decimalPlaces(4)
         .toString(10)
     : ERROR_VALUE_PLACEHOLDER;
 
@@ -71,11 +85,11 @@ export function syncAmounts({ state, coinPrice, id, value, client }) {
     ...state,
     usdAmount:
       id === 'coinAmount'
-        ? toUSD(client, sanitizedValue, coinPrice)
+        ? toUSD(sanitizedValue, coinPrice, client)
         : state.usdAmount,
     coinAmount:
       id === 'usdAmount'
-        ? toCoin(client, sanitizedValue, coinPrice)
+        ? toCoin(sanitizedValue, coinPrice, client)
         : state.coinAmount
   };
 }

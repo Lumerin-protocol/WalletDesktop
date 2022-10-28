@@ -37,12 +37,17 @@ const withTransactionModalState = WrappedComponent => {
       copyBtnLabel: 'Copy to clipboard',
       gasEstimateError: false,
       useCustomGas: false,
-      coinAmount: null,
-      usdAmount: null,
-      toAddress: null,
+      coinAmount: 0,
+      usdAmount: 0,
+      toAddress: '',
       gasPrice: this.props.client.fromWei(this.props.chainGasPrice, 'gwei'),
       gasLimit: this.props.coinDefaultGasLimit,
-      errors: {}
+      errors: {
+        coinAmount: '',
+        toAddress: '',
+        gasLimit: '',
+        gasPrice: ''
+      }
     };
 
     state = this.initialState;
@@ -51,7 +56,6 @@ const withTransactionModalState = WrappedComponent => {
 
     onInputChange = ({ id, value }) => {
       const { coinPrice, client } = this.props;
-
       this.setState(state => {
         return {
           ...state,
@@ -92,26 +96,25 @@ const withTransactionModalState = WrappedComponent => {
         .catch(() => this.setState({ gasEstimateError: true }));
     }, 500);
 
-    onSubmit = () =>
-      this.props.client.sendLmr({
+    onSubmit = () => {
+      return this.props.client.sendLmr({
         gasPrice: this.props.client.toWei(this.state.gasPrice, 'gwei'),
         walletId: this.props.walletId,
-        //TODO: get actual exchange rate with the rates plugin
-        value: utils.sanitize(this.state.usdAmount),
+        value: utils.sanitize(this.state.coinAmount),
         chain: this.props.chain,
         from: this.props.from,
         gas: this.state.gasLimit,
         to: this.state.toAddress
       });
+    };
 
     validate = () => {
       const { coinAmount, toAddress, gasPrice, gasLimit } = this.state;
-      const { client, lmrBalanceWei, lmrBalanceUSD } = this.props;
+      const { client, lmrBalanceWei } = this.props;
 
-      // const max = client.fromWei(lmrBalanceWei)
       const errors = {
         ...validators.validateToAddress(client, toAddress),
-        ...validators.validateCoinAmount(client, coinAmount, lmrBalanceUSD),
+        ...validators.validateCoinAmount(client, coinAmount, lmrBalanceWei),
         ...validators.validateGasPrice(client, gasPrice),
         ...validators.validateGasLimit(client, gasLimit)
       };
@@ -137,7 +140,6 @@ const withTransactionModalState = WrappedComponent => {
         coinAmount: this.state.coinAmount,
         usdAmount: this.state.usdAmount
       });
-      console.log(this.props.client.fromWei('100000000', 'gwei'), 'wei');
       const { sendLmrFeatureStatus } = this.props;
 
       const sendLmrDisabledReason =
@@ -174,7 +176,7 @@ const withTransactionModalState = WrappedComponent => {
     chainGasPrice: selectors.getChainGasPrice(state),
     // availableCoin: selectors.getCoinBalanceWei(state),
     coinSymbol: selectors.getCoinSymbol(state),
-    lmrBalanceUSD: selectors.getWalletLmrBalance(state),
+    lmrBalanceUSD: selectors.getWalletLmrBalanceUSD(state),
     lmrBalanceWei: selectors.getWalletLmrBalance(state),
     coinPrice: selectors.getRate(state),
     from: selectors.getWalletAddress(state)
