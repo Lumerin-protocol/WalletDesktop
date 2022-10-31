@@ -53,7 +53,7 @@ const ConfigureBtn = styled(Btn)`
 const Devices = props => {
   const STRATUM_PROXY_ROUTER_PORT = 3333;
   const proxyRouterHost = new URL(props.proxyRouterUrl).hostname;
-  const proxyRouterPool = `stratum+tcp://${proxyRouterHost}:${STRATUM_PROXY_ROUTER_PORT}`;
+  const proxyRouterUrl = `stratum+tcp://${proxyRouterHost}:${STRATUM_PROXY_ROUTER_PORT}`;
 
   const [range, setRange] = useState(rangeSelectOptions[0].value);
   const [fromIpDefault, toIpDefault] = mapRangeNameToIpRange(RANGE.SUBNET_24);
@@ -65,7 +65,7 @@ const Devices = props => {
   const isDiscovering = props?.devices?.isDiscovering;
   const devices = Object.values(props?.devices?.devices) || [];
   const notConfiguredDevices = devices.filter(
-    d => d.poolAddress !== proxyRouterPool && d.isPrivilegedApiAvailable
+    d => d.poolAddress !== proxyRouterUrl && d.isPrivilegedApiAvailable
   );
 
   const onRangeChange = e => {
@@ -87,12 +87,12 @@ const Devices = props => {
   };
 
   const setMinerPool = host => {
-    return props.client.setMinerPool({ host, pool: proxyRouterPool });
+    return props.client.setMinerPool({ host, pool: proxyRouterUrl });
   };
 
   const setMinerPoolForAll = () => {
     notConfiguredDevices.forEach(d =>
-      props.client.setMinerPool({ host: d.host, pool: proxyRouterPool })
+      props.client.setMinerPool({ host: d.host, pool: proxyRouterUrl })
     );
     return;
   };
@@ -181,7 +181,7 @@ const Devices = props => {
               poolAddress={item.poolAddress}
               poolUser={item.poolUser}
               isPrivilegedApiAvailable={item.isPrivilegedApiAvailable}
-              proxyRouterPool={proxyRouterPool}
+              proxyRouterUrl={proxyRouterUrl}
               setMinerPool={setMinerPool}
             />
           ))}

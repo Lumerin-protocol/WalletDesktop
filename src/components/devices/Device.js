@@ -100,7 +100,7 @@ const Device = ({
   isLoading,
   status = 'Miner status unavailable',
   isPrivilegedApiAvailable,
-  proxyRouterPool,
+  proxyRouterUrl,
   setMinerPool
 }) => {
   return (
@@ -132,7 +132,7 @@ const Device = ({
       </dl>
       <div className="pool-row row">{poolAddress}</div>
       <div className="pool-user-row row">{poolUser}</div>
-      {poolAddress !== proxyRouterPool && !isLoading && (
+      {poolAddress !== proxyRouterUrl && !isLoading && (
         <Btn
           data-disabled={!isPrivilegedApiAvailable}
           data-testid="configure-miner-btn"
