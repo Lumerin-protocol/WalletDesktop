@@ -100,7 +100,7 @@ function createClient (config) {
   settings.presetDefaults();
 
   let core = {
-    chain: config.enabledChain,
+    chain: config.chain.chainId,
     core: createCore(),
     config: Object.assign({}, config.chain, config)
   };

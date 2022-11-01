@@ -5,23 +5,72 @@ on:
     tags:
       - '*'
 
+env:
+  CI: false
+
 jobs:
   build:
     strategy:
       matrix:
+        environment: [dev, stg, lmn]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.deb
+            asset_name: lumerin_v${{github.ref_name}}.deb
           - os: windows-latest
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.exe
+            asset_name: lumerin_v${{github.ref_name}}.exe
           - os: macos-latest
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
+            asset_name: lumerin_v${{github.ref_name}}.dmg
     runs-on: ${{ matrix.os }}   
+    environment: ${{ matrix.environment }}
+    env:
+      CHAIN_ID: ${{ secrets.CHAIN_ID }}
+      EXPLORER_URL: ${{ secrets.EXPLORER_URL }}
+      DISPLAY_NAME: ${{ secrets.DISPLAY_NAME }}
+      SYMBOL: ${{ secrets.SYMBOL }}
+      PROXY_ROUTER_URL: ${{ secrets.PROXY_ROUTER_URL }}
+      COIN_DEFAULT_GAS_LIMIT: ${{ secrets.COIN_DEFAULT_GAS_LIMIT }}
+      MAX_GAS_PRICE: ${{ secrets.MAX_GAS_PRICE }}
+      LMR_DEFAULT_GAS_LIMIT: ${{ secrets.LMR_DEFAULT_GAS_LIMIT }}
+      DEFAULT_GAS_PRICE: ${{ secrets.DEFAULT_GAS_PRICE }}
+      REQUIRED_PASSWORD_ENTROPY: ${{ secrets.REQUIRED_PASSWORD_ENTROPY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install packages
         run: npm install
+      - name: Set env from github
+        run: |
+          echo "CHAIN_ID=$CHAIN_ID" >> .env
+          echo "EXPLORER_URL=$EXPLORER_URL" >> .env
+          echo "DISPLAY_NAME=$DISPLAY_NAME" >> .env
+          echo "SYMBOL=$SYMBOL" >> .env
+          echo "PROXY_ROUTER_URL=$PROXY_ROUTER_URL" >> .env
+          echo "COIN_DEFAULT_GAS_LIMIT=$COIN_DEFAULT_GAS_LIMIT" >> .env
+          echo "MAX_GAS_PRICE=$MAX_GAS_PRICE" >> .env
+          echo "LMR_DEFAULT_GAS_LIMIT=$LMR_DEFAULT_GAS_LIMIT" >> .env
+          echo "DEFAULT_GAS_PRICE=$DEFAULT_GAS_PRICE" >> .env
+          echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
+        shell: bash
+      - name: Set env from gitlab
+        run: |
+          variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "ETH_NODE_ADDRESS" "PROXY_ROUTER_URL")
+          curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables" | jq -c '.[]' | 
+            while IFS= read -r line; do
+              scope=$(<<<"$line" jq -r .environment_scope);
+              if [ "${scope}" = "${{ matrix.environment }}" ] || [ "${scope}" = '*' ]
+              then
+                key=$(<<<"$line" jq -r .key);
+                if [[ " ${variables[*]} " =~ " ${key} " ]]; then
+                 value=$(<<<"$line" jq -r .value);
+                 echo "$key=$value" >> .env
+                fi
+              fi
+            done
+        shell: bash
       - name: Build Web
         run: npm run web-build
       - name: Build Mac
@@ -39,4 +88,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/${{ matrix.artifact_name }}
           tag: ${{ github.ref }}
+          asset_name: ${{ matrix.environment }}-${{ matrix.asset_name }}
 
