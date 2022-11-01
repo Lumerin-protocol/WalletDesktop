@@ -6,6 +6,7 @@ import * as utils from '../utils';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import React from 'react';
+import { lmrEightDecimals } from '../utils/coinValue';
 
 const withTransactionModalState = WrappedComponent => {
   class Container extends React.Component {
@@ -42,6 +43,7 @@ const withTransactionModalState = WrappedComponent => {
       toAddress: '',
       gasPrice: this.props.client.fromWei(this.props.chainGasPrice, 'gwei'),
       gasLimit: this.props.coinDefaultGasLimit,
+      estimatedFee: null,
       errors: {
         coinAmount: '',
         toAddress: '',
@@ -67,12 +69,13 @@ const withTransactionModalState = WrappedComponent => {
       });
 
       // Estimate gas limit again if parameters changed
-      if (['coinAmount'].includes(id)) this.getGasEstimate();
+      if (['coinAmount', 'toAddress'].includes(id)) {
+        this.getGasEstimate();
+      }
     };
 
-    getGasEstimate = debounce(() => {
+    getGasEstimate = debounce(async () => {
       const { coinAmount, toAddress } = this.state;
-
       if (
         !this.props.client.isAddress(toAddress) ||
         !utils.isWeiable(this.props.client, coinAmount)
@@ -80,20 +83,28 @@ const withTransactionModalState = WrappedComponent => {
         return;
       }
 
-      this.props.client
-        .getGasLimit({
-          value: this.props.client.toWei(utils.sanitize(coinAmount)),
+      try {
+        const { gasLimit } = await this.props.client.getLmrTransferGasLimit({
+          value: parseFloat(utils.sanitize(coinAmount)) * lmrEightDecimals,
           chain: this.props.chain,
           from: this.props.from,
           to: this.state.toAddress
-        })
-        .then(({ gasLimit }) =>
-          this.setState({
-            gasEstimateError: false,
-            gasLimit: gasLimit.toString()
-          })
-        )
-        .catch(() => this.setState({ gasEstimateError: true }));
+        });
+
+        const { gasPrice } = await this.props.client.getGasPrice({});
+        this.setState({
+          gasEstimateError: false,
+          gasLimit: gasLimit.toString(),
+          gasPrice: gasPrice.toString(),
+          estimatedFee: utils.calculateEthFee(
+            gasLimit,
+            gasPrice,
+            this.props.client
+          )
+        });
+      } catch (err) {
+        this.setState({ gasEstimateError: true });
+      }
     }, 500);
 
     onSubmit = () => {

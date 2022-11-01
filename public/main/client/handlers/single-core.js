@@ -201,6 +201,8 @@ const stopDiscovery = (data, { api }) =>
 const setMinerPool = (data, { api }) =>
   api.devices.setMinerPool(data);
 
+const getLmrTransferGasLimit = (data, { api }) => api.lumerin.estimateGasTransfer(data);
+
 module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
@@ -220,4 +222,5 @@ module.exports = {
   startDiscovery,
   stopDiscovery,
   setMinerPool,
+  getLmrTransferGasLimit,
 };

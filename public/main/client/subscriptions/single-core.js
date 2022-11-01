@@ -22,6 +22,7 @@ const listeners = {
   "start-discovery": handlers.startDiscovery,
   "stop-discovery": handlers.stopDiscovery,
   "set-miner-pool": handlers.setMinerPool,
+  "get-lmr-transfer-gas-limit": handlers.getLmrTransferGasLimit,
 };
 
 let coreListeners = {};

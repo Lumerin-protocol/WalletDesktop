@@ -9,7 +9,7 @@ export { getAmountFieldsProps } from './getAmountFieldsProps';
 export { getPurchaseEstimate } from './getPurchaseEstimate';
 export { getConversionRate } from './getConversionRate';
 export { mnemonicWords } from './mnemonicWords';
-export { syncAmounts } from './syncAmounts';
+export { syncAmounts, calculateEthFee } from './syncAmounts';
 
 export function hasFunds(value) {
   return value && new BigNumber(value).gt(new BigNumber(0));

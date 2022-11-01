@@ -129,6 +129,11 @@ export function SuccessForm(props) {
     return <></>;
   }
 
+  const onDone = () => {
+    props.onRequestClose();
+    props.resetForm();
+  };
+
   return (
     <>
       <Column>
@@ -156,7 +161,7 @@ export function SuccessForm(props) {
           You have successfully transferred LMR to{' '}
           {abbreviateAddress(props.toAddress)}
         </FooterLabel>
-        <DoneBtn data-modal={null} onClick={props.onRequestClose}>
+        <DoneBtn data-modal={null} onClick={onDone}>
           Done
         </DoneBtn>
       </Footer>
