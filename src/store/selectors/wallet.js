@@ -96,7 +96,7 @@ export const retryImportLmrFeatureStatus = createSelector(
   getIsOnline,
   getConfig,
   (isOnline, config) =>
-    config.enabledChain ? (isOnline ? 'ok' : 'no-coin') : 'offline'
+    config.chain.chainId ? (isOnline ? 'ok' : 'no-coin') : 'offline'
 );
 
 export const getMergedTransactions = createSelector(

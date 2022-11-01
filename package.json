@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "author": {
     "name": "Kodee McIntosh",
     "email": "kodee@lumerin.io",
@@ -17,7 +17,7 @@
     "dev:setup": "./scripts/dev_setup.sh",
     "dev:link": "./scripts/dev_link_repos.sh",
     "debug": "concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . --inspect\"",
-    "dev": "npm run clear-electron-cache && concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && PROXY_ROUTER_BASE_URL=localhost:8080 DEBUG=true ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . \"",
+    "dev": "npm run clear-electron-cache && concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && DEBUG=true ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . \"",
     "web-build": "npm run clear-cache:eslint && react-scripts build",
     "desktop-build": "PYTHON_PATH=/usr/local/bin/python electron-builder -wlm --c.extraMetadata.main=build/electron.js",
     "desktop-build-mac": "electron-builder -m --c.extraMetadata.main=build/electron.js",
@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@electron/remote": "1.2.0",
-    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.10",
+    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.12",
     "@reach/menu-button": "0.17.0",
     "axios": "0.27.2",
     "babel-preset-env": "1.7.0",
@@ -91,7 +91,7 @@
   "devDependencies": {
     "concurrently": "6.2.0",
     "electron": "13.1.4",
-    "electron-builder": "22.11.7",
+    "electron-builder": "23.0.2",
     "electron-devtools-installer": "3.2.0",
     "electron-notarize": "1.0.0",
     "expect": "22.4.3",
