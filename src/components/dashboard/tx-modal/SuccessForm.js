@@ -5,10 +5,11 @@ import { ToastsContext } from '../../toasts';
 import { BaseBtn } from '../../common';
 import { abbreviateAddress } from '../../../utils';
 import { SuccessLayer } from './SuccessLayer';
+import { toUSD } from '../../../store/utils/syncAmounts';
 
 const HeaderWrapper = styled.div`
   display: flex;
-  postion: relative;
+  position: relative;
   height: 10%;
   align-content: center;
   margin-bottom: 40px;
@@ -17,7 +18,7 @@ const HeaderWrapper = styled.div`
 const Header = styled.div`
   font-size: 1.6rem;
   font-weight: bold;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   text-align: center;
   width: 100%;
 `;
@@ -80,6 +81,7 @@ const Footer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: left;
+  text-align: center;
 `;
 
 const FooterLabel = styled.label`
@@ -87,6 +89,12 @@ const FooterLabel = styled.label`
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 5px;
+`;
+
+const SubAmount = styled.div`
+  color: ${p => p.theme.colors.lumerin.helpertextGray};
+  font-size: 13px;
+  text-align: center;
 `;
 
 // export function ConfirmForm({ activeTab, address, lmrBalanceUSD, sendLmrDisabled, sendLmrDisabledReason, onTabSwitch, amountInput, onAmountInput, destinationAddress, onDestinationAddressInput, onInputChange, usdAmount, coinAmount, onMaxClick }) {
@@ -113,13 +121,13 @@ export function SuccessForm(props) {
     props.onInputChange(e);
   };
 
+  const LMRtoUSD = val => {
+    return toUSD(val, props.coinPrice);
+  };
+
   if (!props.activeTab) {
     return <></>;
   }
-
-  const convertToLMR = val => {
-    return val * 15.8;
-  };
 
   return (
     <>
@@ -135,21 +143,18 @@ export function SuccessForm(props) {
         <AmountContainer>
           {/* <Currency isActive={props.amountInput > 0}>$</Currency> */}
           <AmountInput
-            id="usdAmount"
             placeholder={0}
-            isActive={props.amountInput > 0}
-            onChange={handleAmountInput}
-            value={props.amountInput}
+            isActive={props.coinAmount > 0}
+            value={props.coinAmount}
           />
         </AmountContainer>
-        <AmountSublabel>
-          {convertToLMR(props.amountInput) || 0} LMR
-        </AmountSublabel>
+        <SubAmount>≈ {LMRtoUSD(props.coinAmount)}$</SubAmount>
       </Column>
 
       <Footer>
         <FooterLabel>
-          You have successfully transferred LMR to {props.destinationAddress}
+          You have successfully transferred LMR to{' '}
+          {abbreviateAddress(props.toAddress)}
         </FooterLabel>
         <DoneBtn data-modal={null} onClick={props.onRequestClose}>
           Done

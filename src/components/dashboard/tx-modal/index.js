@@ -35,7 +35,7 @@ const Body = styled.div`
   justify-content: space-between;
   position: fixed;
   z-index: 20;
-  background-color: ${p => p.theme.colors.light}
+  background-color: ${p => p.theme.colors.light};
   width: 300px;
   height: 500px;
   border-radius: 5px;
@@ -77,8 +77,7 @@ function TransactionModal(props) {
             destinationAddress={destinationAddress}
             onDestinationAddressInput={onSetDestinationAddress}
             onAmountInput={setAmount}
-            lmrBalanceUSD={props.lmrBalanceUSD}
-            // amountInput={amount}
+            amountInput={amount}
             {...props}
           />
         )}

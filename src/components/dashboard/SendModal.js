@@ -1,4 +1,5 @@
-import withSendModalState from '../../store/src/hocs/withSendModalState';
+import withSendLMRFormState from '../../store/hocs/withSendLMRFormState';
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal, { HeaderButton } from '../common/Modal';
@@ -67,4 +68,4 @@ class SendModal extends React.Component {
   }
 }
 
-export default withSendModalState(SendModal);
+export default withSendLMRFormState(SendModal);

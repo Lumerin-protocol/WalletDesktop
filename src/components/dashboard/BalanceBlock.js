@@ -26,6 +26,7 @@ const Balance = styled.div`
   justify-content: space-between;
   padding: 0.75em 1.6rem 0.75em 1rem;
   height: 90%;
+  position: relative;
   @media (min-width: 1040px) {
   }
 `;
@@ -53,7 +54,10 @@ const Primary = styled.div`
   position: relative;
   // top: ${relSize(-400)};
   // font-size: ${relSize(58)};
-  font-size: min(max(24px,4vw),30px);
+  font-size: min(max(20px,4vw),24px);
+  max-width: 120px;
+  min-width: 20px;
+  overflow: scroll;
 
   @media (min-width: 1440px) {
     font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
@@ -77,6 +81,13 @@ const Secondary = styled.div`
   @media (min-width: 1440px) {
     font-size: 2.2rem;
   }
+`;
+
+const UsdValue = styled.div`
+  font-size: 12px;
+  color: #8e8e8e;
+  position: absolute;
+  top: 62px;
 `;
 
 const LeftBtn = styled(BaseBtn)`
@@ -120,9 +131,11 @@ function BalanceBlock({
   sendDisabledReason,
   ethBalance,
   lmrBalance,
+  lmrBalanceUSD,
   onTabSwitch
 }) {
   const [assetMode, setAssetMode] = useState('LMR');
+
   const handleToggleAssetMode = e => setAssetMode(e.target.dataset.asset);
   const handleTabSwitch = e => {
     e.preventDefault();
@@ -137,6 +150,7 @@ function BalanceBlock({
         <Primary data-testid="lmr-balance">
           <DisplayValue shouldFormate={false} value={lmrBalance} />
         </Primary>
+        {lmrBalanceUSD && <UsdValue>≈ {lmrBalanceUSD}$</UsdValue>}
         {/* TODO: Fix ethBalance */}
         {/* <Secondary data-testid="eth-balance">ETH {ethBalance}</Secondary> */}
       </Balance>

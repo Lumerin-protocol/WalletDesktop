@@ -62,11 +62,11 @@ const FooterSublabel = styled.label`
 `;
 
 const CopyBtn = styled(BaseBtn)`
-  background-color: ${p => p.theme.colors.light}
+  background-color: ${p => p.theme.colors.light};
   border-radius: 5px;
   border: 1px;
-    padding: 0 !important;
-    margin: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
   :hover {
     padding: 0 !important;
     margin: 0 !important;

@@ -23,10 +23,6 @@ export function getAmountFieldsProps({ lmrAmount, coinAmount, usdAmount }) {
         : '0.00',
     coinAmount: coinAmount === ERROR_VALUE_PLACEHOLDER ? '' : coinAmount,
     lmrAmount: lmrAmount === ERROR_VALUE_PLACEHOLDER ? '' : lmrAmount,
-    usdAmount:
-      usdAmount === ERROR_VALUE_PLACEHOLDER ||
-      usdAmount === SMALL_VALUE_PLACEHOLDER
-        ? ''
-        : usdAmount
+    usdAmount: usdAmount === ERROR_VALUE_PLACEHOLDER ? '0' : usdAmount
   };
 }
