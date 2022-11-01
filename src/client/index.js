@@ -108,7 +108,10 @@ const createClient = function(createStore) {
     clearCache: utils.forwardToMainProcess('clear-cache'),
     startDiscovery: utils.forwardToMainProcess('start-discovery'),
     stopDiscovery: utils.forwardToMainProcess('stop-discovery'),
-    setMinerPool: utils.forwardToMainProcess('set-miner-pool')
+    setMinerPool: utils.forwardToMainProcess('set-miner-pool'),
+    getLmrTransferGasLimit: utils.forwardToMainProcess(
+      'get-lmr-transfer-gas-limit'
+    )
   };
 
   const api = {

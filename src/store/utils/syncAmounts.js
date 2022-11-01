@@ -13,6 +13,12 @@ function getWeiUSDvalue(client, amount, rate) {
   return amountBN.mul(rateBN).div(client.toBN(client.toWei('1')));
 }
 
+export const calculateEthFee = (gasLimit, gasPrice, client = web3Utils) => {
+  const gasLimitBN = client.toBN(gasLimit);
+  const gasPriceBN = client.toBN(gasPrice);
+  return Number(client.fromWei(gasLimitBN.mul(gasPriceBN))).toFixed(6);
+};
+
 export function toUSD(amount, rate, client = web3Utils) {
   if (+amount === 0) {
     return 0;

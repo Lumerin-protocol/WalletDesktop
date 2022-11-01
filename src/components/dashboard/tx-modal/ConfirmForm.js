@@ -88,14 +88,17 @@ const SubAmount = styled.div`
 const FeeContainer = styled.div`
   display: flex;
   flex-direction: column;
+  padding-top: 5px;
 `;
+
 const FeeRow = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
+
 const FeeLabel = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: ${p => p.theme.colors.dark};
 `;
 
@@ -258,11 +261,13 @@ export function ConfirmForm(props) {
         )}
 
         <FeeContainer>
+          {props.estimatedFee && (
+            <FeeRow>
+              <FeeLabel>Estimated fee:</FeeLabel>
+              <FeeLabel>{props.estimatedFee} ETH</FeeLabel>
+            </FeeRow>
+          )}
           {/* <FeeRow>
-            <FeeLabel>Lumerin Fee</FeeLabel>
-            <FeeLabel>{props.gasPrice || 3.45}</FeeLabel>
-          </FeeRow>
-          <FeeRow>
             <FeeLabel>Network Fee</FeeLabel>
             <FeeLabel>{props.gasPrice || 9}</FeeLabel>
           </FeeRow>
@@ -283,14 +288,12 @@ export function ConfirmForm(props) {
       </WalletContainer>
 
       <Footer>
-        {
-          <FooterRow>
-            <FooterLabel>LMR Balance</FooterLabel>
-            <FooterLabel>
-              {props.lmrBalanceWei} ≈ ${props.lmrBalanceUSD}
-            </FooterLabel>
-          </FooterRow>
-        }
+        <FooterRow>
+          <FooterLabel>LMR Balance</FooterLabel>
+          <FooterLabel>
+            {props.lmrBalanceWei} ≈ ${props.lmrBalanceUSD}
+          </FooterLabel>
+        </FooterRow>
         <SendBtn data-modal="success" onClick={handleSendLmr}>
           Send now
         </SendBtn>
