@@ -58,7 +58,7 @@ jobs:
       - name: Set env from gitlab
         run: |
           variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "ETH_NODE_ADDRESS" "PROXY_ROUTER_URL")
-          curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables" | jq -c '.[]' | 
+          curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables?per_page=1000" | jq -c '.[]' | 
             while IFS= read -r line; do
               scope=$(<<<"$line" jq -r .environment_scope);
               if [ "${scope}" = "${{ matrix.environment }}" ] || [ "${scope}" = '*' ]
