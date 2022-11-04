@@ -55,7 +55,23 @@ const reducer = handleActions(
       actives: payload.actives,
       lastUpdated: parseInt(Date.now() / 1000, 10),
       syncStatus: payload.syncStatus
-    })
+    }),
+
+    'create-temp-contract': (state, { payload }) => {
+      return {
+        ...state,
+        actives: [...state.actives, payload]
+      };
+    },
+
+    'remove-contract': (state, { payload }) => {
+      return {
+        ...state,
+        actives: Object.assign(state.actives, []).filter(
+          contract => contract.id !== payload.id
+        )
+      };
+    }
   },
   initialState
 );

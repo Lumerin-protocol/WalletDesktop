@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import { uniqueId } from 'lodash';
 
 import withContractsState from '../../store/hocs/withContractsState';
 import { BaseBtn } from '../common';
@@ -8,6 +9,8 @@ import TotalsBlock from './TotalsBlock';
 import ContractsList from './contracts-list/ContractsList';
 import CreateContractModal from './CreateContractModal';
 import { View } from '../common/View';
+import { ToastsContext } from '../toasts';
+import { CONTRACT_STATE } from '../../enums';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -62,6 +65,8 @@ function Contracts({
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
+  const context = useContext(ToastsContext);
+
   // static propTypes = {
   //   sendDisabledReason: PropTypes.string,
   //   hasContracts: PropTypes.bool.isRequired,
@@ -77,17 +82,51 @@ function Contracts({
   const handleCloseModal = e => {
     setIsModalActive(false);
   };
+
+  const createTempContract = (id, contract) => {
+    client.store.dispatch({
+      type: 'create-temp-contract',
+      payload: {
+        id,
+        ...contract,
+        seller: contract.sellerAddress,
+        state: CONTRACT_STATE.Avaliable,
+        timestamp: 0,
+        isDeploying: true
+      }
+    });
+  };
+
+  const removeTempContract = (id, contract) => {
+    client.store.dispatch({
+      type: 'remove-contract',
+      payload: {
+        id,
+        ...contract
+      }
+    });
+  };
+
   const handleContractDeploy = (e, contractDetails) => {
     e.preventDefault();
 
+    const contract = {
+      price: contractDetails.price,
+      speed: contractDetails.speed,
+      duration: contractDetails.time,
+      sellerAddress: contractDetails.address
+    };
+
+    const tempContractId = uniqueId();
+    createTempContract(tempContractId, contract);
+
     client
-      .createContract({
-        price: contractDetails.price,
-        speed: contractDetails.speed,
-        duration: contractDetails.time,
-        sellerAddress: contractDetails.address
-      })
-      .then(() => contractsRefresh());
+      .createContract(contract)
+      .then(() => contractsRefresh())
+      .catch(error => {
+        context.toast('error', error.message || error);
+        removeTempContract(tempContractId, contract);
+      });
 
     setIsModalActive(false);
   };

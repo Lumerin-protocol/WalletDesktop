@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
+import React, { useState } from 'react';
+import { List as RVList, AutoSizer } from 'react-virtualized';
 import styled from 'styled-components';
 
 import withTxListState from '../../../store/hocs/withTxListState';
@@ -23,13 +23,11 @@ const Transactions = styled.div`
   margin: 1.6rem 0 1.6rem;
   border: 1px solid ${p => p.theme.colors.lightBG};
   border-radius: 5px;
-  height: 60%;
 `;
 
 const ListContainer = styled.div`
   background-color: #ffffff;
-  height: 100%;
-  overflow-y: auto;
+  height: calc(100vh - 370px);
 `;
 
 const TxRowContainer = styled.div`
@@ -78,22 +76,7 @@ export const TxList = ({
   //   ).isRequired
   // };
 
-  // For tests, where this component is rendered in isolation, we default to window
-  const elRef = useRef({} || window);
-
   const [selectedTx, setSelectedTx] = useState(null);
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    // We need to grab the scrolling div (in <Router/>) to sync with react-virtualized scroll
-    elRef.current = document.querySelector('[data-scrollelement]');
-    if (!elRef.current && process.env.NODE_ENV !== 'test') {
-      throw new Error(
-        "react-virtualized in transactions list requires the scrolling parent to have a 'data-scrollelement' attribute."
-      );
-    }
-    setIsReady(true);
-  }, []);
 
   const onTxClicked = ({ currentTarget }) => {
     // if (!window.isDev || !e.shiftKey || !e.altKey) return;
@@ -119,7 +102,6 @@ export const TxList = ({
     client.onTransactionLinkClick(e.currentTarget.dataset.hash);
   };
 
-  if (!isReady) return null;
   return (
     <Container data-testid="tx-list">
       <Flex.Row grow="1">
@@ -147,34 +129,17 @@ export const TxList = ({
                   ) : (
                     <NoTxPlaceholder />
                   ))}
-                <WindowScroller
-                  // WindowScroller is required to sync window scroll with virtualized list scroll.
-                  // scrollElement is required because in our layout we're scrolling a div, not window
-                  scrollElement={elRef.current}
-                  // scrollElement={scrollElement}
-                >
-                  {({ height, isScrolling, onChildScroll, scrollTop }) => {
-                    if (!height) return null;
-                    return (
-                      // AutoSizer is required to make virtualized rows have responsive width
-                      <AutoSizer disableHeight>
-                        {({ width }) => (
-                          <RVList
-                            rowRenderer={rowRenderer(filteredItems)}
-                            isScrolling={isScrolling}
-                            autoHeight
-                            scrollTop={scrollTop}
-                            rowHeight={66}
-                            rowCount={filteredItems.length}
-                            onScroll={onChildScroll}
-                            height={height || 500} // defaults for tests
-                            width={width || 500} // defaults for tests
-                          />
-                        )}
-                      </AutoSizer>
-                    );
-                  }}
-                </WindowScroller>
+                <AutoSizer>
+                  {({ width, height }) => (
+                    <RVList
+                      rowRenderer={rowRenderer(filteredItems)}
+                      rowHeight={66}
+                      rowCount={filteredItems.length}
+                      height={height || 500} // defaults for tests
+                      width={width || 500} // defaults for tests
+                    />
+                  )}
+                </AutoSizer>
               </ListContainer>
             </React.Fragment>
           )}
