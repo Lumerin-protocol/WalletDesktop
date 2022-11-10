@@ -152,8 +152,6 @@ const RightBtn = styled(BaseBtn)`
 `;
 
 function CreateContractModal(props) {
-  // console.log(Object.keys(props));
-  // console.log(props);
   const { isActive, save, deploy, close, client } = props;
 
   const [inputs, setInputs] = useState({

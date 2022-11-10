@@ -19,7 +19,7 @@ export const getMergeAllContracts = createSelector(
   getActiveContracts,
   getDraftContracts,
   (activeContracts, draftContracts) =>
-    sortBy([...activeContracts, ...draftContracts], 'timestamp').reverse()
+    [...activeContracts, ...draftContracts].reverse()
 );
 
 // Returns if the current wallet/address has transactions on the active chain

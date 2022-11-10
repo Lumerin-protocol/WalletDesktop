@@ -31,6 +31,7 @@ const SmallAssetContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 0 auto;
 `;
 
 const ActionButtons = styled.div`
@@ -93,17 +94,33 @@ function Row({ contract, cancel, address }) {
     return STATE_COLOR[contract.state];
   };
 
+  const getContractState = () => {
+    if (isContractClosed()) {
+      return 'Closed';
+    }
+
+    return Object.entries(CONTRACT_STATE).find(s => contract.state === s[1])[0];
+  };
+
   return (
     <Container>
       <Value>{contract.timestamp}</Value>
-      <SmallAssetContainer>
+      <SmallAssetContainer data-rh={getContractState()}>
         <ClockIcon size="3rem" fill={getClockColor()} />
       </SmallAssetContainer>
       <Value>{contract.price}</Value>
       <Value>{contract.length}</Value>
       <Value>{contract.speed}</Value>
       {contract.seller === address &&
-        (!isPending ? (
+        (isPending ? (
+          <Value>
+            <Spinner size="25px" />
+          </Value>
+        ) : contract.isDeploying ? (
+          <Value>
+            <Spinner size="25px" /> Deploying...
+          </Value>
+        ) : (
           <ActionButtons>
             {!isContractClosed() && (
               <ActionButton
@@ -120,10 +137,6 @@ function Row({ contract, cancel, address }) {
               Claim Funds
             </ActionButton>
           </ActionButtons>
-        ) : (
-          <Value>
-            <Spinner size="25px" />
-          </Value>
         ))}
     </Container>
   );
