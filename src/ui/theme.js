@@ -3,8 +3,11 @@ const darkShade = 'rgba(0, 0, 0, 0.2)';
 export default {
   colors: {
     transparent: 'transparent',
-    primary: '#04D0D8',
+    primary: '#0E4353',
+    primaryLight: '#53b1bd',
+    primaryDark: '#252b34',
     translucentPrimary: '#014353',
+    inactive: '#384764',
     // translucentPrimary: 'rgba(126, 97, 248, 0.2)',
     secondary: '#014353',
     tertiary: '#DB2642',
@@ -16,8 +19,8 @@ export default {
     lightShade: 'rgba(0, 0, 0, 0.1)',
     darkShade,
     darkSuccess: 'rgba(119, 132, 125, 0.68)',
-    success: '#45d48d',
-    warning: '#e8df4d',
+    success: '#399E5A',
+    warning: '#FFC857',
     danger: '#d46045',
     darkDanger: 'rgba(212, 96, 69, 0.12)',
     weak: '#888',

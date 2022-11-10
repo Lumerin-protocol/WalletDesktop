@@ -6,6 +6,7 @@ import Details from './Details';
 import Amount from './Amount';
 import { TxIcon } from './Icon';
 import { LumerinDarkIcon } from '../../../icons/LumerinDarkIcon';
+import { LumerinLightIcon } from '../../../icons/LumerinLightIcon';
 
 const Container = styled.div`
   margin-left: 1.6rem;
@@ -23,12 +24,13 @@ const IconContainer = styled.div`
   text-align: center;
   margin: 0 auto;
   flex-shrink: 0;
+  width: 40px;
 `;
 
 const Row = ({ tx }) => (
   <Container>
     <IconContainer>
-      <LumerinDarkIcon size="3rem" />
+      <LumerinLightIcon size="5rem" />
     </IconContainer>
     <IconContainer>
       <TxIcon txType={tx.txType} />

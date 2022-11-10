@@ -18,8 +18,9 @@ const TabWrapper = styled.div`
 
 const Tab = styled(BaseBtn)`
   color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.primary : theme.colors.dark};
+    isActive ? theme.colors.primary : theme.colors.inactive};
   font-weight: bold;
+  opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
 `;
 
 const QRContainer = styled.div`

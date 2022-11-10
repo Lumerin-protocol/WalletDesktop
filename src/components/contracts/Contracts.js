@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { uniqueId } from 'lodash';
 
 import withContractsState from '../../store/hocs/withContractsState';
-import { BaseBtn } from '../common';
+import { Btn } from '../common';
 import { LayoutHeader } from '../common/LayoutHeader';
 import TotalsBlock from './TotalsBlock';
 import ContractsList from './contracts-list/ContractsList';
@@ -11,6 +11,7 @@ import CreateContractModal from './CreateContractModal';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
+import { lmrEightDecimals } from '../../store/utils/coinValue';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -38,14 +39,9 @@ const Title = styled.div`
   }
 `;
 
-const ContractBtn = styled(BaseBtn)`
-  font-size: 1.2rem;
+const ContractBtn = styled(Btn)`
+  font-size: 1.3rem;
   padding: 1rem 1.4rem;
-
-  border-radius: 5px;
-  border: 1px solid ${p => p.theme.colors.primary};
-  background-color: ${p => p.theme.colors.light};
-  color: ${p => p.theme.colors.primary};
 
   @media (min-width: 1040px) {
     margin-left: 0;
@@ -89,6 +85,7 @@ function Contracts({
       payload: {
         id,
         ...contract,
+        length: contract.duration,
         seller: contract.sellerAddress,
         state: CONTRACT_STATE.Avaliable,
         timestamp: 0,
@@ -111,9 +108,9 @@ function Contracts({
     e.preventDefault();
 
     const contract = {
-      price: contractDetails.price,
-      speed: contractDetails.speed,
-      duration: contractDetails.time,
+      price: contractDetails.price * lmrEightDecimals,
+      speed: contractDetails.speed * 10 ** 12, // THs
+      duration: contractDetails.time * 3600, // Hours to seconds
       sellerAddress: contractDetails.address
     };
 
@@ -154,7 +151,7 @@ function Contracts({
         address={address}
         copyToClipboard={copyToClipboard}
       >
-        <ContractBtn onClick={handleOpenModal}>Create New Contract</ContractBtn>
+        <ContractBtn onClick={handleOpenModal}>Create Contract</ContractBtn>
       </LayoutHeader>
 
       {/* <TotalsBlock /> */}

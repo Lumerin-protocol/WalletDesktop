@@ -7,7 +7,7 @@ const DeviceContainer = styled.div`
   border: 1px solid #ccc;
   width: 11em;
   margin: 1em 0.5em 0 0;
-  color: #000;
+  color: ${p => p.theme.colors.primary};
   text-align: right;
   border-radius: 5px;
 

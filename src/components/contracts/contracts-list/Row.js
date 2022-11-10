@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import styled from 'styled-components';
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
 
@@ -6,6 +7,8 @@ import { ClockIcon } from '../../icons/ClockIcon';
 import { Btn } from '../../common';
 import { CLOSEOUT_TYPE, CONTRACT_STATE } from '../../../enums';
 import Spinner from '../../common/Spinner';
+import { lmrEightDecimals } from '../../../store/utils/coinValue';
+import theme from '../../../ui/theme';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -23,7 +26,7 @@ const Value = styled.label`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: black;
+  color: ${p => p.theme.colors.primary};
   font-size: 1.2rem;
 `;
 
@@ -43,14 +46,14 @@ const ActionButtons = styled.div`
 `;
 
 const ActionButton = styled(Btn)`
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   padding: 1rem;
   line-height: 1.5rem;
 `;
 
 const STATE_COLOR = {
-  [CONTRACT_STATE.Running]: '#8C2AF5',
-  [CONTRACT_STATE.Avaliable]: 'black'
+  [CONTRACT_STATE.Running]: theme.colors.warning,
+  [CONTRACT_STATE.Avaliable]: theme.colors.success
 };
 
 function Row({ contract, cancel, address }) {
@@ -86,7 +89,7 @@ function Row({ contract, cancel, address }) {
   };
 
   const getClockColor = () => {
-    const CLOSED_COLOR = '#984803';
+    const CLOSED_COLOR = theme.colors.dark;
     if (isContractClosed()) {
       return CLOSED_COLOR;
     }
@@ -102,15 +105,65 @@ function Row({ contract, cancel, address }) {
     return Object.entries(CONTRACT_STATE).find(s => contract.state === s[1])[0];
   };
 
+  const formatPrice = price => {
+    return `${Number(price) / lmrEightDecimals} LMR`;
+  };
+
+  const formatSpeed = speed => {
+    return Number(speed) / 10 ** 12;
+  };
+
+  const formatDuration = duration => {
+    const numLength = parseFloat(duration / 3600);
+    const days = Math.floor(numLength / 24);
+    const remainder = numLength % 24;
+    const hours = days >= 1 ? Math.floor(remainder) : Math.floor(numLength);
+    const minutes =
+      days >= 1
+        ? Math.floor(60 * (remainder - hours))
+        : Math.floor((numLength - Math.floor(numLength)) * 60);
+    const seconds = Math.floor(duration % 60);
+    const readableDays = days
+      ? days === 1
+        ? `${days} day`
+        : `${days} days`
+      : '';
+    const readableHours = hours
+      ? hours === 1
+        ? `${hours} hour`
+        : `${hours} hours`
+      : '';
+    const readableMinutes = minutes
+      ? minutes === 1
+        ? `${minutes} minute`
+        : `${minutes} minutes`
+      : '';
+    const readableSeconds =
+      !minutes && seconds
+        ? seconds === 1
+          ? `1 second`
+          : `${seconds} seconds`
+        : '';
+    const readableDate = `${readableDays} ${readableHours} ${readableMinutes} ${readableSeconds}`.trim();
+    return readableDate;
+  };
+
+  const formatTimestamp = timestamp => {
+    if (+timestamp === 0) {
+      return '';
+    }
+    return moment.unix(timestamp).format('L');
+  };
+
   return (
     <Container>
-      <Value>{contract.timestamp}</Value>
+      <Value>{formatTimestamp(contract.timestamp)}</Value>
       <SmallAssetContainer data-rh={getContractState()}>
         <ClockIcon size="3rem" fill={getClockColor()} />
       </SmallAssetContainer>
-      <Value>{contract.price}</Value>
-      <Value>{contract.length}</Value>
-      <Value>{contract.speed}</Value>
+      <Value>{formatPrice(contract.price)}</Value>
+      <Value>{formatDuration(contract.length)}</Value>
+      <Value>{formatSpeed(contract.speed)}</Value>
       {contract.seller === address &&
         (isPending ? (
           <Value>
