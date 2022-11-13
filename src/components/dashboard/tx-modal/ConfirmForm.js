@@ -13,6 +13,7 @@ const HeaderWrapper = styled.div`
   position: relative;
   height: 10%;
   align-content: center;
+  align-items: center;
 `;
 
 const Header = styled.div`
@@ -255,7 +256,7 @@ export function ConfirmForm(props) {
           ></SwapIcon>
         </IconContainer>
         {mode === LMR_MODE ? (
-          <SubAmount>≈ {props.usdAmount}$</SubAmount>
+          <SubAmount>≈ {props.usdAmount}</SubAmount>
         ) : (
           <SubAmount>≈ {props.coinAmount} LMR</SubAmount>
         )}
@@ -291,7 +292,7 @@ export function ConfirmForm(props) {
         <FooterRow>
           <FooterLabel>LMR Balance</FooterLabel>
           <FooterLabel>
-            {props.lmrBalanceWei} ≈ ${props.lmrBalanceUSD}
+            {props.lmrBalanceWei} ≈ {props.lmrBalanceUSD}
           </FooterLabel>
         </FooterRow>
         <SendBtn data-modal="success" onClick={handleSendLmr}>

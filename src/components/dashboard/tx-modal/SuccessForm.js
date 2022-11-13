@@ -153,7 +153,7 @@ export function SuccessForm(props) {
             value={props.coinAmount}
           />
         </AmountContainer>
-        <SubAmount>≈ {LMRtoUSD(props.coinAmount)}$</SubAmount>
+        <SubAmount>≈ {LMRtoUSD(props.coinAmount)}</SubAmount>
       </Column>
 
       <Footer>
