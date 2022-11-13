@@ -19,24 +19,12 @@ const withTxRowState = WrappedComponent => {
       WrappedComponent.name})`;
 
     render() {
-      const { tx, confirmations } = this.props;
-
-      return (
-        <WrappedComponent
-          isPending={utils.isPending(tx, confirmations)}
-          // isFailed={utils.isFailed(tx, confirmations)}
-          {...this.props}
-          {...tx}
-        />
-      );
+      return <WrappedComponent {...this.props} />;
     }
   }
 
   const mapStateToProps = (state, props) => ({
-    // avoid unnecessary re-renders once transaction is confirmed
-    confirmations: Math.min(6, selectors.getTxConfirmations(state, props)),
-    coinSymbol: selectors.getCoinSymbol(state),
-    tx: selectors.getTransactions(state)
+    explorerUrl: selectors.getExplorerUrl(state, { hash: props.tx.hash })
   });
 
   return connect(mapStateToProps)(Container);

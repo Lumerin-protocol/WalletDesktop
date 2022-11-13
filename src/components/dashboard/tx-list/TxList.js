@@ -61,7 +61,8 @@ export const TxList = ({
   hasTransactions,
   onWalletRefresh,
   syncStatus,
-  client
+  client,
+  explorerUrl
 }) => {
   // static propTypes = {
   //   hasTransactions: PropTypes.bool.isRequired,
@@ -75,22 +76,13 @@ export const TxList = ({
   //   ).isRequired
   // };
 
-  const [selectedTx, setSelectedTx] = useState(null);
-
-  const onTxClicked = ({ currentTarget }) => {
-    // if (!window.isDev || !e.shiftKey || !e.altKey) return;
-    setSelectedTx(currentTarget.dataset.hash);
-
-    client.onTransactionLinkClick(currentTarget.dataset.hash);
-  };
-
   const rowRenderer = transactionList => ({ key, style, index }) => (
     <TxRowContainer style={style} key={`${key}-${transactionList[index].hash}`}>
       <TxRow
         data-testid="tx-row"
         data-hash={transactionList[index].hash}
-        onClick={onTxClicked}
         tx={transactionList[index]}
+        explorerUrl={explorerUrl}
       />
     </TxRowContainer>
   );
