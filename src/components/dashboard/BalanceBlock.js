@@ -150,7 +150,7 @@ function BalanceBlock({
         <Primary data-testid="lmr-balance">
           <DisplayValue shouldFormate={false} value={lmrBalance} />
         </Primary>
-        {lmrBalanceUSD !== undefined && <UsdValue>≈ {lmrBalanceUSD}$</UsdValue>}
+        {lmrBalanceUSD !== undefined && <UsdValue>≈ {lmrBalanceUSD}</UsdValue>}
         {/* TODO: Fix ethBalance */}
         {/* <Secondary data-testid="eth-balance">ETH {ethBalance}</Secondary> */}
       </Balance>

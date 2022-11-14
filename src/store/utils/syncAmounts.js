@@ -3,7 +3,14 @@ import BigNumber from 'bignumber.js';
 import web3Utils from 'web3-utils';
 
 const ERROR_VALUE_PLACEHOLDER = 'Invalid amount';
-const SMALL_VALUE_PLACEHOLDER = '< 0.01';
+
+const usdFormatter = new Intl.NumberFormat(navigator.language, {
+  style: 'currency',
+  currency: 'USD',
+  currencyDisplay: 'narrowSymbol'
+});
+
+const getSmallUsdValuePlaceholder = () => `< ${usdFormatter.format(0.01)}`;
 
 function getWeiUSDvalue(client, amount, rate) {
   const amountBN = client.toBN(amount);
@@ -38,10 +45,14 @@ export function toUSD(amount, rate, client = web3Utils) {
 
   const expectedUSDamount = isValidAmount
     ? weiUSDvalue.isZero()
-      ? '0'
+      ? usdFormatter.format(0)
       : weiUSDvalue.lt(client.toBN(client.toWei('0.01')))
-      ? SMALL_VALUE_PLACEHOLDER
-      : new BigNumber(client.fromWei(weiUSDvalue.toString())).dp(2).toString(10)
+      ? getSmallUsdValuePlaceholder()
+      : usdFormatter.format(
+          new BigNumber(client.fromWei(weiUSDvalue.toString()))
+            .dp(2)
+            .toString(10)
+        )
     : ERROR_VALUE_PLACEHOLDER;
 
   return expectedUSDamount;
