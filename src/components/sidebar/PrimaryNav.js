@@ -83,7 +83,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         <Label parent={parent}>Wallet</Label>
       </Button>
 
-      <Button
+      {/* <Button
         onClick={() => setActiveIndex(1)}
         activeClassName="active"
         data-testid="auction-nav-btn"
@@ -93,7 +93,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
           <SocketNavIcon isActive={activeIndex === 1} size={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Sockets</Label>
-      </Button>
+      </Button> */}
 
       <Button
         onClick={() => setActiveIndex(2)}
@@ -113,7 +113,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         to="/devices"
       >
         <IconWrapper>
-          <ContractNavIcon isActive={activeIndex === 3} size={iconSize} />
+          <SocketNavIcon isActive={activeIndex === 3} size={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Devices</Label>
       </Button>

@@ -20,20 +20,22 @@ const Modal = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
   align-items: center;
   justify-content: center;
+  color: ${p => p.theme.colors.primaryDark};
 `;
+
 const Body = styled.div`
   position: fixed;
   z-index: 20;
   background-color: ${p => p.theme.colors.light};
   width: 50%;
   height: 80%;
-  border-radius: 5px;
+  border-radius: 15px;
   padding: 3rem 5%;
   max-width: 600px;
   max-height: 600px;
 
   @media (min-height: 700px) {
-    padding: 6.4rem 5rem;
+    padding: 5rem;
   }
 `;
 
@@ -43,22 +45,21 @@ const TitleWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 10%;
+  margin-bottom: 30px;
 `;
 const Title = styled.div`
   display: block;
   line-height: 2.4rem;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 900;
-  color: ${p => p.theme.colors.dark};
   cursor: default;
 `;
 
 const Subtitle = styled.div`
   display: block;
   line-height: 1.4rem;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 400;
-  color: ${p => p.theme.colors.dark};
   cursor: default;
 `;
 
@@ -68,7 +69,6 @@ const Form = styled.form`
   margin: 1rem 0 0;
   flex-direction: column;
   justify-content: space-between;
-  color: ${p => p.theme.colors.dark};
 `;
 
 const InputGroup = styled.div`
@@ -93,10 +93,11 @@ const Input = styled.input`
   padding: 4px 8px;
   margin: 0.4rem 0 0.2rem 0;
   outline: 0;
-  border-radius: 3px;
+  border-radius: 15px;
   border-style: solid;
   border-color: ${p => p.theme.colors.lightBG};
   border-width: 1px;
+  color: ${p => p.theme.colors.primaryDark};
   ::placeholder {
     color: ${p => p.theme.colors.lightBG};
   }
@@ -106,21 +107,19 @@ const Label = styled.label`
   line-height: 1.4rem;
   font-size: 1.2rem;
   font-weight: 900;
-  color: ${p => p.theme.colors.dark};
   cursor: default;
 `;
 
 const Sublabel = styled.label`
   line-height: 1.4rem;
-  font-size: 0.8rem;
+  font-size: 1.1rem;
   font-weight: 400;
-  color: ${p => p.theme.colors.dark};
+  opacity: 0.65;
   cursor: default;
   margin-bottom: 0.4rem;
 `;
 
 const SublabelGreen = styled(Sublabel)`
-  color: ${p => p.theme.colors.primary};
   font-weight: 800;
 `;
 
@@ -141,8 +140,8 @@ const LeftBtn = styled(BaseBtn)`
 const RightBtn = styled(BaseBtn)`
   width: 45%;
   height: 40px;
-  font-size: 1rem;
-  border-radius: 5px;
+  font-size: 1.5rem;
+  border-radius: 15px;
   background-color: ${p => p.theme.colors.primary};
   color: ${p => p.theme.colors.light};
 
@@ -203,7 +202,6 @@ function CreateContractModal(props) {
                 value={props.address}
                 readOnly
                 disable={true}
-                style={{ flex: 1, width: 'auto' }}
                 type="text"
                 name="address"
                 id="address"
@@ -221,7 +219,7 @@ function CreateContractModal(props) {
                 value={inputs.time}
                 onChange={handleInputs}
                 placeholder="# of hours"
-                type="text"
+                type="number"
                 name="time"
                 id="time"
               />
@@ -257,14 +255,13 @@ function CreateContractModal(props) {
           <Row>
             <InputGroup>
               <div>
-                <Label htmlFor="price">List Price: </Label>
-                <Sublabel>LMR Per TH/s</Sublabel>
+                <Label htmlFor="price">List Price (LMR) </Label>
               </div>
               <Input
                 value={inputs.price}
                 onChange={handleInputs}
-                placeholder="cost per terahash"
-                type="text"
+                placeholder="LMR Per TH/s"
+                type="number"
                 name="price"
                 id="price"
               />
@@ -281,13 +278,9 @@ function CreateContractModal(props) {
               height: '60px'
             }}
           >
-            <SublabelGreen style={{}}>
-              This is the price you will deploy your contract to the
-              marketplace.
-            </SublabelGreen>
             <Row style={{ justifyContent: 'center' }}>
               {/* <LeftBtn onClick={handleSaveDraft}>Save as Draft</LeftBtn> */}
-              <RightBtn type="submit">Create New Contract</RightBtn>
+              <RightBtn type="submit">Create Contract</RightBtn>
             </Row>
           </InputGroup>
         </Form>

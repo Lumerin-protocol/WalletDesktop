@@ -26,7 +26,8 @@ const Label = styled.div`
   cursor: default;
   font-weight: 600;
   opacity: 0;
-  color: ${p => p.theme.colors.dark} @media (min-width: 800px) {
+  color: ${p => p.theme.colors.dark};
+  @media (min-width: 800px) {
     opacity: 1;
   }
 `;
@@ -40,12 +41,12 @@ const Bg = styled.div`
 `;
 
 const Address = styled.div`
-  padding: 0 1.6rem;
+  padding: 0.4rem 1.6rem;
   font-size: 1.3rem;
   cursor: default;
   font-weight: 600;
   letter-spacing: normal;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   text-overflow: ellipsis;
   overflow: hidden;
   max-width: 240px;
@@ -55,11 +56,11 @@ const Address = styled.div`
 `;
 
 const CopyBtn = styled(BaseBtn)`
-  background-color: ${p => p.theme.colors.light}
+  background-color: ${p => p.theme.colors.light};
   border-radius: 5px;
   border: 1px;
   padding: 0 0;
-  margin-left: .8rem;
+  margin-left: 0.8rem;
 `;
 
 export const AddressHeader = ({ copyToClipboard, address }) => {

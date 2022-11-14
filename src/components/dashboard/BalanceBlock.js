@@ -46,9 +46,9 @@ const Primary = styled.div`
   display: flex;
   align-items: center;
   line-height: 1.5;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -1px;
-  color: ${p => p.theme.colors.darker};
+  color: ${p => p.theme.colors.primary};
   margin: 0 1.6rem;
   flex-grow: 1;
   position: relative;
@@ -95,7 +95,7 @@ const LeftBtn = styled(BaseBtn)`
   font-size: 1.5rem;
   margin-right: 0.4rem;
   border-radius: 5px;
-  background-color: ${p => p.theme.colors.primary};
+  background-color: ${p => p.theme.colors.translucentPrimary};
   color: ${p => p.theme.colors.light};
 
   @media (min-width: 1040px) {
@@ -108,9 +108,9 @@ const RightBtn = styled(BaseBtn)`
   font-size: 1.5rem;
   margin-left: 0.4rem;
   border-radius: 5px;
-  border: 1px solid ${p => p.theme.colors.primary};
+  border: 1px solid ${p => p.theme.colors.translucentPrimary};
   background-color: ${p => p.theme.colors.light};
-  color: ${p => p.theme.colors.primary};
+  color: ${p => p.theme.colors.translucentPrimary};
 
   @media (min-width: 1040px) {
     margin-left: 0;

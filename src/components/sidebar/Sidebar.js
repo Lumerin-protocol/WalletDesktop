@@ -3,15 +3,15 @@ import styled from 'styled-components';
 
 import SecondaryNav from './SecondaryNav';
 import PrimaryNav from './PrimaryNav';
-import Logo from './Logo';
 import { SidebarLumerinLightIcon } from '../icons/SidebarLumerinLightIcon';
+
+import { ReactComponent as LumerinLogoFull } from '../icons/LumerinLogoFull.svg';
 
 const Container = styled.div`
   background: ${p => p.theme.colors.light};
   width: 7rem;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   transition: width 0.2s;
   position: absolute;
   top: 0;
@@ -32,7 +32,7 @@ const Container = styled.div`
 `;
 
 const FullLogoContainer = styled.div`
-  padding: 2.2rem 2.2rem 2.8rem 2.2rem;
+  padding: 4rem 2.2rem 2.8rem 2.2rem;
   height: 100px;
   display: none;
   flex-shrink: 0;
@@ -74,7 +74,7 @@ export default function Sidebar() {
   return (
     <Container>
       <FullLogoContainer parent={Container}>
-        <Logo />
+        <LumerinLogoFull height="45px" />
       </FullLogoContainer>
 
       <IconLogoContainer parent={Container}>

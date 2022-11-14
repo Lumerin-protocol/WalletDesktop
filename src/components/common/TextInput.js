@@ -21,7 +21,7 @@ const Input = styled.input`
   margin-top: 0.8rem;
   width: 100%;
   line-height: 4rem;
-  color: ${p => (p.disabled ? p.theme.colors.copy : p.theme.colors.dark)};
+  color: ${p => (p.disabled ? p.theme.colors.copy : p.theme.colors.primary)};
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.5px;

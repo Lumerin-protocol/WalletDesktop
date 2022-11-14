@@ -48,6 +48,10 @@ const DeviceDiscoveryResult = styled.div`
 
 const ConfigureBtn = styled(Btn)`
   margin-left: 10px;
+  border-radius: 15px;
+  border: 1px solid ${p => p.theme.colors.primary};
+  background-color: ${p => p.theme.colors.light};
+  color: ${p => p.theme.colors.primary};
 `;
 
 const Devices = props => {

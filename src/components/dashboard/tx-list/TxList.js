@@ -39,11 +39,10 @@ const TxRowContainer = styled.div`
 const Title = styled.div`
   font-size: 2.4rem;
   line-height: 3rem;
-  color: ${p => p.theme.colors.darker};
   white-space: nowrap;
   margin: 0;
-  font-weight: 600;
-  color: ${p => p.theme.colors.dark};
+  font-weight: 500;
+  color: ${p => p.theme.colors.primary};
   margin-bottom: 4.8px;
   margin-right: 2.4rem;
   cursor: default;

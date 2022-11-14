@@ -7,7 +7,6 @@ const Container = styled.div`
 
 const Label = styled.div`
   line-height: 3rem;
-  font-family: Muli;
   font-size: 2.4rem;
   font-weight: 600;
   text-align: center;
