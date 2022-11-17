@@ -27,8 +27,8 @@ const IconContainer = styled.div`
   width: 40px;
 `;
 
-const Row = ({ tx }) => (
-  <Container>
+const Row = ({ tx, explorerUrl }) => (
+  <Container onClick={() => window.open(explorerUrl, '_blank')}>
     <IconContainer>
       <LumerinLightIcon size="5rem" />
     </IconContainer>
@@ -40,4 +40,4 @@ const Row = ({ tx }) => (
   </Container>
 );
 
-export default Row;
+export default withTxRowState(Row);
