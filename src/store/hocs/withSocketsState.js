@@ -39,21 +39,9 @@ const withSocketsState = WrappedComponent => {
     };
 
     render() {
-      const { sendLmrFeatureStatus } = this.props;
-
-      const sendDisabledReason =
-        sendLmrFeatureStatus === 'offline'
-          ? "Can't send while offline"
-          : sendLmrFeatureStatus === 'no-funds'
-          ? 'You need some funds to send'
-          : null;
-
       return (
         <WrappedComponent
-          sendDisabledReason={sendDisabledReason}
           copyToClipboard={this.props.client.copyToClipboard}
-          onSocketRefresh={this.onSocketRefresh}
-          sendDisabled={sendLmrFeatureStatus !== 'ok'}
           {...this.props}
           {...this.state}
         />
@@ -62,11 +50,7 @@ const withSocketsState = WrappedComponent => {
   }
 
   const mapStateToProps = state => ({
-    // sendLmrFeatureStatus: selectors.sendLmrFeatureStatus(state),
-    // hasSockets: selectors.hasSockets(state),
-    incomingCount: 1,
-    outgoingCount: 2,
-    routedCount: 3,
+    incomingCount: selectors.getConnections(state).length,
     syncStatus: selectors.getProxyRouterSyncStatus(state),
     address: selectors.getWalletAddress(state)
   });

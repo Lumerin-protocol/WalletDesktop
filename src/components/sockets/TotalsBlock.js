@@ -19,11 +19,10 @@ const Total = styled.div`
   background-color: ${p => p.theme.colors.xLight};
   flex-direction: column;
   height: 95%;
-  /* width: 150px; */
   justify-content: space-between;
   padding: 1.4rem 2.6rem;
-  margin-left: 1.4rem;
   border-radius: 5px;
+  min-width: 200px;
   @media (min-width: 1040px) {
   }
 `;
@@ -32,18 +31,13 @@ const TotalLabel = styled.div`
   display: block;
   line-height: 1.5;
   font-weight: 600;
-  color: ${p => p.theme.colors.dark};
+  color: ${p => p.theme.colors.primary};
   white-space: nowrap;
   position: relative;
   top: ${relSize(-400)};
-  font-size: ${relSize(76)};
-
-  @media (min-width: 800px) {
-    font-size: ${relSize(68)};
-  }
 
   @media (min-width: 1440px) {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
   }
 `;
 
@@ -51,18 +45,13 @@ const TotalSubLabel = styled.div`
   display: block;
   line-height: 1;
   font-weight: 400;
-  color: ${p => p.theme.colors.dark};
+  color: ${p => p.theme.colors.primary};
   white-space: nowrap;
   position: relative;
   top: ${relSize(-400)};
-  font-size: ${relSize(82)};
-
-  @media (min-width: 800px) {
-    font-size: ${relSize(82)};
-  }
 
   @media (min-width: 1440px) {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
   }
 `;
 
@@ -70,22 +59,14 @@ const TotalValue = styled.div`
   line-height: 1.5;
   font-weight: 600;
   letter-spacing: ${p => (p.large ? '-1px' : 'inherit')};
-  color: ${p => p.theme.colors.darker};
+  color: ${p => p.theme.colors.primary};
   margin: 0.6rem 0;
   flex-grow: 1;
   position: relative;
-  font-size: ${relSize(24)};
-
-  @media (min-width: 800px) {
-    font-size: ${relSize(44)};
-  }
-
-  @media (min-width: 1040px) {
-    font-size: ${({ large }) => relSize(large ? 40 : 52)};
-  }
+  font-size: 2.5rem;
 
   @media (min-width: 1440px) {
-    font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
+    font-size: ${({ large }) => (large ? '3.6rem' : '2.5rem')};
   }
 `;
 
@@ -105,7 +86,7 @@ const TotalsBlock = ({ incoming, outgoing, routed }) => {
           <TotalSubLabel>Incoming Connections</TotalSubLabel>
           <TotalValue>{incoming}</TotalValue>
         </Total>
-        <Total>
+        {/* <Total>
           <TotalLabel>Lumerin Pool</TotalLabel>
           <TotalSubLabel>Default Outgoing</TotalSubLabel>
           <TotalValue>{outgoing}</TotalValue>
@@ -114,7 +95,7 @@ const TotalsBlock = ({ incoming, outgoing, routed }) => {
           <TotalLabel>Alt Pool</TotalLabel>
           <TotalSubLabel>Routed</TotalSubLabel>
           <TotalValue>{routed}</TotalValue>
-        </Total>
+        </Total> */}
       </Container>
     </>
   );

@@ -16,16 +16,9 @@ const withSocketsRowState = WrappedComponent => {
       WrappedComponent.name})`;
 
     render() {
-      const { sockets, confirmations } = this.props;
+      const { sockets } = this.props;
 
-      return (
-        <WrappedComponent
-          isPending={utils.isPending(sockets, confirmations)}
-          // isFailed={utils.isFailed(sockets, confirmations)}
-          {...this.props}
-          {...sockets}
-        />
-      );
+      return <WrappedComponent {...this.props} {...sockets} />;
     }
   }
 

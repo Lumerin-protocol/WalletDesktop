@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const columnCount = 4;
+const columnCount = 3;
 const calcWidth = n => 100 / n;
 
 const Container = styled.div`
@@ -16,7 +16,7 @@ const Tab = styled.button`
   line-height: 1.2rem;
   font-size: 1.2rem;
   font-weight: bold;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.primary};
   letter-spacing: 1.4px;
   text-align: center;
   opacity: ${p => (p.isActive ? '1' : '0.75')};
@@ -63,7 +63,7 @@ export default function Filter({ onFilterChange, activeFilter }) {
       >
         Worker Address
       </Tab>
-      <Spacer />
+      {/* <Spacer /> */}
       <Tab
         isActive={activeFilter === 'status'}
         onClick={() => onFilterChange('status')}
