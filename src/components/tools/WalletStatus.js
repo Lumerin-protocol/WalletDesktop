@@ -59,17 +59,17 @@ const WalletStatus = function(props) {
           Web3 connection
         </Text>
         <Sp px={2} />
-        <Text>
+        {/* <Text>
           <IndicatorLed
             isConnected={props.isIndexerConnected}
             isOnline={props.isOnline}
           />
           Indexer connection
         </Text>
-        <Sp px={2} />
+        <Sp px={2} /> */}
         <Text>
           <IndicatorLed
-            isConnected={props.isIndexerConnected}
+            isConnected={props.isProxyRouterConnected}
             isOnline={props.isOnline}
           />
           Proxy-Router connection

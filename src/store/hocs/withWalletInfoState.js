@@ -5,6 +5,7 @@ import selectors from '../selectors';
 
 const mapStateToProps = (state, { client }) => ({
   isIndexerConnected: selectors.getIndexerConnectionStatus(state),
+  isProxyRouterConnected: selectors.getIsProxyRouterConnect(state),
   isWeb3Connected: selectors.getChainConnectionStatus(state),
   appVersion: client.getAppVersion(),
   chainName: selectors.getChainDisplayName(state),

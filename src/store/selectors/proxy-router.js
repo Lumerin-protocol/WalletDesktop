@@ -6,7 +6,7 @@ import { getConfig } from './config';
 // The items are mapped to contain properties useful for rendering.
 export const getProxyRouter = state => state.proxyRouter;
 
-export const getIsConnect = createSelector(
+export const getIsProxyRouterConnect = createSelector(
   getProxyRouter,
   proxyRouterData => proxyRouterData.isConnected
 );

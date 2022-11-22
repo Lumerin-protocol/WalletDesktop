@@ -4,50 +4,9 @@ import get from 'lodash/get';
 // TODO: remove dummy data
 const initialState = {
   lastUpdated: null,
-  syncStatus: null,
+  syncStatus: 'syncing',
   isConnected: false,
-  connections: [
-    // {
-    //   ipAddress: '127.0.0.1',
-    //   status: 'Running',
-    //   socketAddress: '192.168.5.50',
-    //   total: 30293,
-    //   accepted: 29901,
-    //   rejected: 290
-    // },
-    // {
-    //   ipAddress: '127.0.0.1',
-    //   status: 'Available',
-    //   socketAddress: '192.168.5.51',
-    //   total: 30293,
-    //   accepted: 29901,
-    //   rejected: 290
-    // },
-    // {
-    //   ipAddress: '127.0.0.1',
-    //   status: 'Available',
-    //   socketAddress: '192.168.5.51',
-    //   total: 30293,
-    //   accepted: 29901,
-    //   rejected: 290
-    // },
-    // {
-    //   ipAddress: '127.0.0.1',
-    //   status: 'Available',
-    //   socketAddress: '192.168.5.51',
-    //   total: 30293,
-    //   accepted: 29901,
-    //   rejected: 290
-    // },
-    // {
-    //   ipAddress: '127.0.0.1',
-    //   status: 'Running',
-    //   socketAddress: '192.168.5.50',
-    //   total: 30293,
-    //   accepted: 29901,
-    //   rejected: 290
-    // }
-  ]
+  connections: []
 };
 
 const reducer = handleActions(
