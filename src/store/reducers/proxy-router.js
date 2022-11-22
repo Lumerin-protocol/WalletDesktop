@@ -16,15 +16,12 @@ const reducer = handleActions(
       ...get(payload, 'proxyRouter', {})
     }),
 
-    'proxy-router-status-changed': (state, { payload }) => (
-      console.log('a', payload),
-      {
-        ...state,
-        lastUpdated: parseInt(Date.now() / 1000, 10),
-        isConnected: payload.isConnected,
-        syncStatus: payload.syncStatus
-      }
-    ),
+    'proxy-router-status-changed': (state, { payload }) => ({
+      ...state,
+      lastUpdated: parseInt(Date.now() / 1000, 10),
+      isConnected: payload.isConnected,
+      syncStatus: payload.syncStatus
+    }),
 
     'proxy-router-connections-changed': (state, { payload }) => ({
       ...state,
