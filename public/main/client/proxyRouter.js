@@ -1,5 +1,7 @@
 const { spawn } = require("child_process");
 
+const logger = require('../../logger.js');
+
 const runProxyRouter = (config) => {
   try {
     const resourcePath =
@@ -28,18 +30,18 @@ const runProxyRouter = (config) => {
     ]);
 
     ls.stdout.on("data", (data) => {
-      console.log(`stdout: ${data}`);
+      logger.debug(`ProxyRouter stdout: ${data}`);
     });
 
     ls.stderr.on("data", (data) => {
-      console.error(`stderr: ${data}`);
+      logger.debug(`ProxyRouter stderr: ${data}`);
     });
 
     ls.on("close", (code) => {
-      console.log(`child process exited with code ${code}`);
+      logger.debug(`ProxyRouter child process exited with code ${code}`);
     });
   } catch (err) {
-    console.log(err);
+    logger.debug(`ProxyRouter run error: ${err}`);
     throw err;
   }
 };
