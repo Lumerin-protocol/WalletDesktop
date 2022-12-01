@@ -28,6 +28,7 @@ const withOnboardingState = WrappedComponent => {
       areTermsAccepted: false,
       isMnemonicCopied: false,
       useUserMnemonic: false,
+      isMnemonicVerified: false,
       licenseCheckbox: false,
       termsCheckbox: false,
       passwordAgain: null,
@@ -35,6 +36,7 @@ const withOnboardingState = WrappedComponent => {
       userMnemonic: null,
       password: null,
       mnemonic: null,
+      proxyDefaultPool: null,
       errors: {}
     };
 
@@ -120,7 +122,22 @@ const withOnboardingState = WrappedComponent => {
 
       if (Object.keys(errors).length > 0) return this.setState({ errors });
 
+      return this.setState({ isMnemonicVerified: true });
+    };
+
+    onProxyRouterConfigured = e => {
+      if (e && e.preventDefault) e.preventDefault();
+
+      if (!this.state.proxyDefaultPool) {
+        const { errors } = this.state;
+        errors.proxyDefaultPool = 'Enter default pool';
+        return this.setState({ errors });
+      }
+
       return this.props.onOnboardingCompleted({
+        proxyRouterConfig: {
+          defaultPool: this.state.proxyDefaultPool
+        },
         password: this.state.password,
         mnemonic: this.state.useUserMnemonic
           ? utils.sanitizeMnemonic(this.state.userMnemonic)
@@ -142,6 +159,7 @@ const withOnboardingState = WrappedComponent => {
     getCurrentStep() {
       if (!this.state.areTermsAccepted) return 'ask-for-terms';
       if (!this.state.isPasswordDefined) return 'define-password';
+      if (this.state.isMnemonicVerified) return 'config-proxy-router';
       if (this.state.useUserMnemonic) return 'recover-from-mnemonic';
       if (this.state.isMnemonicCopied) return 'verify-mnemonic';
 
@@ -172,6 +190,7 @@ const withOnboardingState = WrappedComponent => {
           shouldSubmit={shouldSubmit}
           currentStep={this.getCurrentStep()}
           getTooltip={getTooltip}
+          onProxyRouterConfigured={this.onProxyRouterConfigured}
           {...this.state}
         />
       );

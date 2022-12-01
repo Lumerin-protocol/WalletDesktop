@@ -7,6 +7,7 @@ import CopyMnemonicStep from './CopyMnemonicStep';
 import UserMnemonicStep from './UserMnemonicStep';
 import PasswordStep from './PasswordStep';
 import TermsStep from './TermsStep';
+import ProxyRouterConfigStep from './ProxyRouterConfigStep';
 
 const Onboarding = props => {
   const page = () => {
@@ -21,6 +22,8 @@ const Onboarding = props => {
         return <VerifyMnemonicStep {...props} />;
       case 'recover-from-mnemonic':
         return <UserMnemonicStep {...props} />;
+      case 'config-proxy-router':
+        return <ProxyRouterConfigStep {...props} />;
       default:
         return null;
     }
@@ -35,7 +38,8 @@ Onboarding.propTypes = {
     'define-password',
     'verify-mnemonic',
     'ask-for-terms',
-    'copy-mnemonic'
+    'copy-mnemonic',
+    'config-proxy-router'
   ]).isRequired
 };
 
