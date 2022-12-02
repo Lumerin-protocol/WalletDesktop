@@ -219,7 +219,7 @@ const getAddressAndPrivateKey = async (data, { api }) => {
     });
 };
 
-const refreshProxyRouterConnection = async (data, { api }) => api['proxy-router'].refreshConnectionsStream()
+const refreshProxyRouterConnection = async (data, { api }) => api['proxy-router'].refreshConnectionsStream(data)
 
 module.exports = {
   // refreshAllSockets,

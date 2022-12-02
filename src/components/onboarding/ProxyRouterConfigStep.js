@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import React from 'react';
 
 import { TextInput, AltLayout, Btn, Sp } from '../common';
+import SecondaryBtn from './SecondaryBtn';
 import Message from './Message';
 
 const ProxyRouterConfigStep = props => {
@@ -29,6 +30,11 @@ const ProxyRouterConfigStep = props => {
             id="proxyDefaultPool"
           />
         </Sp>
+        <Sp mt={2}>
+          <SecondaryBtn onClick={props.onUseHostedProxyRouter} block>
+            Or use hosted proxy router
+          </SecondaryBtn>
+        </Sp>
         <Sp mt={6}>
           <Btn block submit>
             Continue
@@ -41,6 +47,7 @@ const ProxyRouterConfigStep = props => {
 
 ProxyRouterConfigStep.propTypes = {
   onProxyRouterConfigured: PropTypes.func.isRequired,
+  onUseHostedProxyRouter: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
   proxyDefaultPool: PropTypes.string,
   errors: utils.errorPropTypes('proxyDefaultPool')

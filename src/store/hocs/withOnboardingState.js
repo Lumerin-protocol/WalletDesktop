@@ -145,6 +145,18 @@ const withOnboardingState = WrappedComponent => {
       });
     };
 
+    onUseHostedProxyRouter = e => {
+      return this.props.onOnboardingCompleted({
+        proxyRouterConfig: {
+          useHostedProxyRouter: true
+        },
+        password: this.state.password,
+        mnemonic: this.state.useUserMnemonic
+          ? utils.sanitizeMnemonic(this.state.userMnemonic)
+          : this.state.mnemonic
+      });
+    };
+
     onInputChange = ({ id, value }) => {
       this.setState(state => ({
         ...state,
@@ -191,6 +203,7 @@ const withOnboardingState = WrappedComponent => {
           currentStep={this.getCurrentStep()}
           getTooltip={getTooltip}
           onProxyRouterConfigured={this.onProxyRouterConfigured}
+          onUseHostedProxyRouter={this.onUseHostedProxyRouter}
           {...this.state}
         />
       );

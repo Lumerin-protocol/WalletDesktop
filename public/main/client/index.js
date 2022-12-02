@@ -9,7 +9,10 @@ const subscriptions = require("./subscriptions");
 const settings = require("./settings");
 const storage = require("./storage");
 
-const { getAddressAndPrivateKey, refreshProxyRouterConnection } = require("./handlers/single-core");
+const {
+  getAddressAndPrivateKey,
+  refreshProxyRouterConnection,
+} = require("./handlers/single-core");
 
 const { runProxyRouter } = require("./proxyRouter");
 
@@ -38,7 +41,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
   }
 
   events.forEach((event) =>
-    emitter.on(event, function (data) {
+    emitter.on(event, function(data) {
       send(event, data);
     })
   );
@@ -46,24 +49,24 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
   function syncTransactions({ address }) {
     return storage
       .getSyncBlock(chain)
-      .then(function (from) {
+      .then(function(from) {
         send("transactions-scan-started", {});
 
         return api.explorer
           .syncTransactions(0, address, (number) =>
             storage.setSyncBlock(number, chain)
           )
-          .then(function () {
+          .then(function() {
             send("transactions-scan-finished", { success: true });
 
-            emitter.on("coin-block", function ({ number }) {
-              storage.setSyncBlock(number, chain).catch(function (err) {
+            emitter.on("coin-block", function({ number }) {
+              storage.setSyncBlock(number, chain).catch(function(err) {
                 logger.warn("Could not save new synced block", err);
               });
             });
           });
       })
-      .catch(function (err) {
+      .catch(function(err) {
         logger.warn("Could not sync transactions/events", err.stack);
         send("transactions-scan-finished", {
           error: err.message,
@@ -74,27 +77,34 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
       });
   }
 
-  emitter.on('open-wallet', syncTransactions)
+  emitter.on("open-wallet", syncTransactions);
 
-  emitter.on("wallet-error", function (err) {
+  emitter.on("wallet-error", function(err) {
     logger.warn(
       err.inner ? `${err.message} - ${err.inner.message}` : err.message
     );
   });
 
   emitter.on("open-proxy-router", async ({ password }) => {
-    const { address, privateKey } = await getAddressAndPrivateKey(
-      { password },
-      { api }
-    );
     const proxyRouterUserConfig = settings.getProxyRouterConfig();
-    runProxyRouter({
-      privateKey,
-      walletAddress: address,
-      ...coreConfig.chain,
-      ...proxyRouterUserConfig,
-    });
-    refreshProxyRouterConnection({}, { api })
+    if (!proxyRouterUserConfig.useHostedProxyRouter) {
+      const { address, privateKey } = await getAddressAndPrivateKey(
+        { password },
+        { api }
+      );
+      runProxyRouter({
+        privateKey,
+        walletAddress: address,
+        ...coreConfig.chain,
+        ...proxyRouterUserConfig,
+      });
+
+
+      const proxyRouterUrl = `http://localhost:8081`;
+      refreshProxyRouterConnection({ url: proxyRouterUrl }, { api });
+    } else {
+      refreshProxyRouterConnection({}, { api });
+    }
   });
 
   return {
@@ -110,7 +120,7 @@ function stopCore({ core, chain }) {
 }
 
 function createClient(config) {
-  ipcMain.on("log.error", function (_, args) {
+  ipcMain.on("log.error", function(_, args) {
     logger.error(args.message);
   });
 
@@ -122,16 +132,16 @@ function createClient(config) {
     config: Object.assign({}, config.chain, config),
   };
 
-  ipcMain.on("ui-ready", function (webContent, args) {
+  ipcMain.on("ui-ready", function(webContent, args) {
     const onboardingComplete = !!settings.getPasswordHash();
 
     storage
       .getState()
-      .catch(function (err) {
+      .catch(function(err) {
         logger.warn("Failed to get state", err.message);
         return {};
       })
-      .then(function (persistedState) {
+      .then(function(persistedState) {
         const payload = Object.assign({}, args, {
           data: {
             onboardingComplete,
@@ -142,17 +152,17 @@ function createClient(config) {
         webContent.sender.send("ui-ready", payload);
         logger.verbose(`<-- ui-ready ${stringify(payload)}`);
       })
-      .catch(function (err) {
+      .catch(function(err) {
         logger.error("Could not send ui-ready message back", err.message);
       })
-      .then(function () {
+      .then(function() {
         const { emitter, events, api } = startCore(core, webContent);
         core.emitter = emitter;
         core.events = events;
         core.api = api;
         subscriptions.subscribe(core);
       })
-      .catch(function (err) {
+      .catch(function(err) {
         console.log("panic");
         console.log(err);
         console.log("Unknown chain =", err.message);
@@ -160,7 +170,7 @@ function createClient(config) {
       });
   });
 
-  ipcMain.on("ui-unload", function () {
+  ipcMain.on("ui-unload", function() {
     stopCore(core);
     subscriptions.unsubscribe(core);
   });

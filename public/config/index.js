@@ -8,8 +8,7 @@ const chain = {
   lmrTokenAddress: process.env.LUMERIN_TOKEN_ADDRESS,
   cloneFactoryAddress: process.env.CLONE_FACTORY_ADDRESS,
 
-  // proxyRouterUrl: process.env.PROXY_ROUTER_URL,
-  proxyRouterUrl: 'http://localhost:8081',
+  proxyRouterUrl: process.env.PROXY_ROUTER_URL,
   explorerUrl: process.env.EXPLORER_URL,
   wsApiUrl: process.env.ETH_NODE_ADDRESS,
 
