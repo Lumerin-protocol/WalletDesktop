@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { uniqueId } from 'lodash';
 
@@ -12,6 +12,7 @@ import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
 import { lmrEightDecimals } from '../../store/utils/coinValue';
+import AvailableContracts from './MarketplaceContract';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -48,7 +49,7 @@ const ContractBtn = styled(Btn)`
   }
 `;
 
-function Contracts({
+function Marketplace({
   hasContracts,
   copyToClipboard,
   onWalletRefresh,
@@ -63,15 +64,9 @@ function Contracts({
   const [isModalActive, setIsModalActive] = useState(false);
   const context = useContext(ToastsContext);
 
-  // static propTypes = {
-  //   sendDisabledReason: PropTypes.string,
-  //   hasContracts: PropTypes.bool.isRequired,
-  //   copyToClipboard: PropTypes.func.isRequired,
-  //   onWalletRefresh: PropTypes.func.isRequired,
-  //   sendDisabled: PropTypes.bool.isRequired,
-  //   syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
-  //   address: PropTypes.string.isRequired
-  // };
+  useEffect(() => {
+    contractsRefresh();
+  }, []);
 
   const handleOpenModal = () => setIsModalActive(true);
 
@@ -147,23 +142,12 @@ function Contracts({
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
-        title="Contracts"
+        title="Marketplace"
         address={address}
         copyToClipboard={copyToClipboard}
-      >
-        <ContractBtn onClick={handleOpenModal}>Create Contract</ContractBtn>
-      </LayoutHeader>
+      ></LayoutHeader>
 
-      {/* <TotalsBlock /> */}
-
-      <ContractsList
-        hasContracts={hasContracts}
-        onWalletRefresh={onWalletRefresh}
-        syncStatus={syncStatus}
-        cancel={handleContractCancellation}
-        contractsRefresh={contractsRefresh}
-        address={address}
-      />
+      <AvailableContracts />
 
       <CreateContractModal
         isActive={isModalActive}
@@ -175,4 +159,4 @@ function Contracts({
   );
 }
 
-export default withContractsState(Contracts);
+export default withContractsState(Marketplace);

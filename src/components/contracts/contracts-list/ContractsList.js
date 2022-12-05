@@ -74,14 +74,20 @@ const Title = styled.div`
 `;
 
 function ContractsList({
-  hasContracts,
   contracts,
   syncStatus,
   cancel,
   address,
-  contractsRefresh
+  contractsRefresh,
+  showAddressContractsOnly,
+  noContractsMessage
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
+  console.log(contracts);
+  const contractsToShow = showAddressContractsOnly
+    ? contracts.filter(c => c.seller === address)
+    : contracts;
+  const hasContracts = contractsToShow.length;
 
   useEffect(() => {
     contractsRefresh();
@@ -116,7 +122,7 @@ function ContractsList({
         <Title onClick={handleClick}>Status: {syncStatus}</Title>
       </Flex.Row>
       <Contracts>
-        <ItemFilter extractValue={filterExtractValue} items={contracts}>
+        <ItemFilter extractValue={filterExtractValue} items={contractsToShow}>
           {({ filteredItems, onFilterChange, activeFilter }) => (
             <React.Fragment>
               <Header
@@ -130,14 +136,14 @@ function ContractsList({
                   (syncStatus === 'syncing' ? (
                     <ScanningContractsPlaceholder />
                   ) : (
-                    <NoContractsPlaceholder />
+                    <NoContractsPlaceholder message={noContractsMessage} />
                   ))}
                 <AutoSizer>
                   {({ width, height }) => (
                     <RVList
                       rowRenderer={rowRenderer(filteredItems)}
                       rowHeight={66}
-                      rowCount={contracts.length}
+                      rowCount={contractsToShow.length}
                       height={height || 500} // defaults for tests
                       width={width || 500} // defaults for tests
                     />
