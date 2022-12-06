@@ -37,6 +37,7 @@ jobs:
       LMR_DEFAULT_GAS_LIMIT: ${{ secrets.LMR_DEFAULT_GAS_LIMIT }}
       DEFAULT_GAS_PRICE: ${{ secrets.DEFAULT_GAS_PRICE }}
       REQUIRED_PASSWORD_ENTROPY: ${{ secrets.REQUIRED_PASSWORD_ENTROPY }}
+      NODE_ENV: production
     steps:
       - name: Checkout
         uses: actions/checkout@v3

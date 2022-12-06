@@ -115,6 +115,9 @@
     "directories": {
       "buildResources": "assets"
     },
+    "extraResources": [
+      "executables/**/*"
+    ],
     "mac": {
       "artifactName": "${name}_v${version}.${ext}",
       "category": "public.app-category.finance",

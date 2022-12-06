@@ -8,6 +8,7 @@ const config = require("../../../config");
 const wallet = require("../wallet");
 const noCore = require("./no-core");
 const WalletError = require("../WalletError");
+const { setProxyRouterConfig } = require("../settings");
 
 const withAuth = (fn) => (data, { api }) => {
   if (typeof data.walletId !== "string") {
@@ -68,16 +69,18 @@ function createWallet(data, core, isOpen = true) {
     wallet.setAddress(walletAddress),
   ])
     .then(() => core.emitter.emit("create-wallet", { address: walletAddress }))
-    .then(() => isOpen && openWallet(core));
+    .then(() => isOpen && openWallet(core, data.password));
 }
 
-async function openWallet({ emitter }) {
+async function openWallet({ emitter }, password) {
   const { address } = wallet.getAddress();
 
   emitter.emit("open-wallet", { address, isActive: true });
+  emitter.emit("open-proxy-router", { password });
 }
 
 const onboardingCompleted = (data, core) => {
+  setProxyRouterConfig(data.proxyRouterConfig);
   return auth
     .setPassword(data.password)
     .then(() =>
@@ -120,7 +123,7 @@ function onLoginSubmit({ password }, core) {
     if (!isValid) {
       return { error: new WalletError("Invalid password") };
     }
-    openWallet(core);
+    openWallet(core, password);
 
     return isValid;
   });
@@ -186,22 +189,37 @@ const getGasPrice = (data, { api }) => api.wallet.getGasPrice(data);
 
 const sendLmr = async (data, { api }) =>
   withAuth(api.lumerin.sendLmr)(
-    { ...data, walletId: wallet.getAddress().address, password: await auth.getSessionPassword() },
+    {
+      ...data,
+      walletId: wallet.getAddress().address,
+      password: await auth.getSessionPassword(),
+    },
     { api }
   );
 
 const sendEth = (data, { api }) => withAuth(api.wallet.sendEth)(data, { api });
 
-const startDiscovery = (data, { api }) =>
-  api.devices.startDiscovery(data);
+const startDiscovery = (data, { api }) => api.devices.startDiscovery(data);
 
-const stopDiscovery = (data, { api }) => 
-  api.devices.stopDiscovery();
+const stopDiscovery = (data, { api }) => api.devices.stopDiscovery();
 
-const setMinerPool = (data, { api }) =>
-  api.devices.setMinerPool(data);
+const setMinerPool = (data, { api }) => api.devices.setMinerPool(data);
 
-const getLmrTransferGasLimit = (data, { api }) => api.lumerin.estimateGasTransfer(data);
+const getLmrTransferGasLimit = (data, { api }) =>
+  api.lumerin.estimateGasTransfer(data);
+
+const getAddressAndPrivateKey = async (data, { api }) => {
+  return auth
+    .isValidPassword(data.password)
+    .then(() => {
+      return wallet.getSeed(data.password);
+    })
+    .then((seed, index) => {
+      return api.wallet.getAddressAndPrivateKey(seed, index);
+    });
+};
+
+const refreshProxyRouterConnection = async (data, { api }) => api['proxy-router'].refreshConnectionsStream(data)
 
 module.exports = {
   // refreshAllSockets,
@@ -223,4 +241,6 @@ module.exports = {
   stopDiscovery,
   setMinerPool,
   getLmrTransferGasLimit,
+  getAddressAndPrivateKey,
+  refreshProxyRouterConnection,
 };
