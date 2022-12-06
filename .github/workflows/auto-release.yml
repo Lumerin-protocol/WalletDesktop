@@ -37,7 +37,6 @@ jobs:
       LMR_DEFAULT_GAS_LIMIT: ${{ secrets.LMR_DEFAULT_GAS_LIMIT }}
       DEFAULT_GAS_PRICE: ${{ secrets.DEFAULT_GAS_PRICE }}
       REQUIRED_PASSWORD_ENTROPY: ${{ secrets.REQUIRED_PASSWORD_ENTROPY }}
-      NODE_ENV: production
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -55,6 +54,7 @@ jobs:
           echo "LMR_DEFAULT_GAS_LIMIT=$LMR_DEFAULT_GAS_LIMIT" >> .env
           echo "DEFAULT_GAS_PRICE=$DEFAULT_GAS_PRICE" >> .env
           echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
+          echo "NODE_ENV=production" >> .env
         shell: bash
       - name: Set env from gitlab
         run: |
@@ -69,6 +69,29 @@ jobs:
                  value=$(<<<"$line" jq -r .value);
                  echo "$key=$value" >> .env
                 fi
+              fi
+            done
+        shell: bash
+      - name: Fetch latest Proxy Router
+        run: |
+          if [ "${{ matrix.os }}" = "ubuntu-latest" ]
+          then
+            namePrefix="Linux_x86_64"
+          elif [ "${{ matrix.os }}" = "windows-latest" ]
+          then
+            namePrefix="Windows_x86_64"
+          elif [ "${{ matrix.os }}" = "macos-latest" ]
+          then
+            namePrefix="Darwin_x86_64"
+          fi
+
+          curl -H "Accept: application/vnd.github+json" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]' |
+            while IFS= read -r line; do
+              name=$(<<<"$line" jq -r .name);
+              if grep -q "$namePrefix" <<< "$name"
+              then
+                downloadUrl="$(<<<"$line" jq -r .browser_download_url)";
+                curl -o "$GITHUB_WORKSPACE/executables/proxy-router" $downloadUrl
               fi
             done
         shell: bash
@@ -90,4 +113,3 @@ jobs:
           file: dist/${{ matrix.artifact_name }}
           tag: ${{ github.ref }}
           asset_name: ${{ matrix.environment }}-${{ matrix.asset_name }}
-
