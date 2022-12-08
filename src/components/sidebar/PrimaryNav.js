@@ -98,33 +98,45 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         onClick={() => setActiveIndex(2)}
         activeClassName="active"
         data-testid="auction-nav-btn"
-        to="/seller-hub"
+        to="/buyer-hub"
       >
         <IconWrapper>
           <ContractNavIcon isActive={activeIndex === 2} size={iconSize} />
         </IconWrapper>
-        <Label parent={parent}>Seller Hub</Label>
+        <Label parent={parent}>Buyer Hub</Label>
       </Button>
 
       <Button
         onClick={() => setActiveIndex(3)}
         activeClassName="active"
         data-testid="auction-nav-btn"
-        to="/sockets"
+        to="/seller-hub"
       >
         <IconWrapper>
-          <SocketNavIcon isActive={activeIndex === 3} size={iconSize} />
+          <ContractNavIcon isActive={activeIndex === 3} size={iconSize} />
         </IconWrapper>
-        <Label parent={parent}>Sockets</Label>
+        <Label parent={parent}>Seller Hub</Label>
       </Button>
 
       <Button
         onClick={() => setActiveIndex(4)}
         activeClassName="active"
-        to="/devices"
+        data-testid="auction-nav-btn"
+        to="/sockets"
       >
         <IconWrapper>
           <SocketNavIcon isActive={activeIndex === 4} size={iconSize} />
+        </IconWrapper>
+        <Label parent={parent}>Sockets</Label>
+      </Button>
+
+      <Button
+        onClick={() => setActiveIndex(5)}
+        activeClassName="active"
+        to="/devices"
+      >
+        <IconWrapper>
+          <SocketNavIcon isActive={activeIndex === 5} size={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Devices</Label>
       </Button>

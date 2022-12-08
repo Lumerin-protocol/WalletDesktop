@@ -79,15 +79,11 @@ function ContractsList({
   cancel,
   address,
   contractsRefresh,
-  showAddressContractsOnly,
   noContractsMessage
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   console.log(contracts);
-  const contractsToShow = showAddressContractsOnly
-    ? contracts.filter(c => c.seller === address)
-    : contracts;
-  const hasContracts = contractsToShow.length;
+  const hasContracts = contracts.length;
 
   useEffect(() => {
     contractsRefresh();
@@ -122,7 +118,7 @@ function ContractsList({
         <Title onClick={handleClick}>Status: {syncStatus}</Title>
       </Flex.Row>
       <Contracts>
-        <ItemFilter extractValue={filterExtractValue} items={contractsToShow}>
+        <ItemFilter extractValue={filterExtractValue} items={contracts}>
           {({ filteredItems, onFilterChange, activeFilter }) => (
             <React.Fragment>
               <Header
@@ -143,7 +139,7 @@ function ContractsList({
                     <RVList
                       rowRenderer={rowRenderer(filteredItems)}
                       rowHeight={66}
-                      rowCount={contractsToShow.length}
+                      rowCount={contracts.length}
                       height={height || 500} // defaults for tests
                       width={width || 500} // defaults for tests
                     />

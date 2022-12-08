@@ -56,7 +56,8 @@ const withContractsState = WrappedComponent => {
     activeCount: selectors.getActiveContractsCount(state),
     draftCount: selectors.getDraftContractsCount(state),
     syncStatus: selectors.getContractsSyncStatus(state),
-    address: selectors.getWalletAddress(state)
+    address: selectors.getWalletAddress(state),
+    contracts: selectors.getMergeAllContracts(state)
   });
 
   return withClient(connect(mapStateToProps)(Container));

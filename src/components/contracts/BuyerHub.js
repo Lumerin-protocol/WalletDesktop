@@ -48,7 +48,7 @@ const ContractBtn = styled(Btn)`
   }
 `;
 
-function SellerHub({
+function BuyerHub({
   contracts,
   hasContracts,
   copyToClipboard,
@@ -63,6 +63,7 @@ function SellerHub({
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   const context = useContext(ToastsContext);
+  const contractsToShow = contracts.filter(x => x.seller === address);
 
   // static propTypes = {
   //   sendDisabledReason: PropTypes.string,
@@ -144,12 +145,11 @@ function SellerHub({
   const handleContractSave = e => {
     e.preventDefault();
   };
-  const contractsToShow = contracts.filter(c => c.seller === address);
 
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
-        title="Seller Hub"
+        title="Buyer Hub"
         address={address}
         copyToClipboard={copyToClipboard}
       >
@@ -179,4 +179,4 @@ function SellerHub({
   );
 }
 
-export default withContractsState(SellerHub);
+export default withContractsState(BuyerHub);

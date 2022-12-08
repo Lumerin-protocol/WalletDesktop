@@ -13,6 +13,7 @@ import Tools from './tools/Tools';
 import SellerHub from './contracts/SellerHub';
 import Marketplace from './contracts/Marketplace';
 import Devices from './devices/Devices';
+import BuyerHub from './contracts/BuyerHub';
 
 const fadeIn = keyframes`
   from {
@@ -54,6 +55,7 @@ export const Layout = () => (
         <Route path="/wallet" component={Dashboard} />
         <Route path="/sockets" component={Sockets} />
         <Route path="/seller-hub" component={SellerHub} />
+        <Route path="/buyer-hub" component={BuyerHub} />
         <Route path="/marketplace" component={Marketplace} />
         {/* TODO - Finish up reports */}
         <Route path="/reports" component={Reports} />

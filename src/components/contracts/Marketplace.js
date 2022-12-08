@@ -59,10 +59,14 @@ function Marketplace({
   address,
   client,
   contractsRefresh,
+  contracts,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   const context = useContext(ToastsContext);
+  const contractsToShow = contracts.filter(
+    x => Number(x.state) === 0 && x.seller !== address
+  );
 
   useEffect(() => {
     contractsRefresh();
@@ -147,7 +151,16 @@ function Marketplace({
         copyToClipboard={copyToClipboard}
       ></LayoutHeader>
 
-      <AvailableContracts />
+      <ContractsList
+        hasContracts={hasContracts}
+        onWalletRefresh={onWalletRefresh}
+        syncStatus={syncStatus}
+        cancel={handleContractCancellation}
+        contractsRefresh={contractsRefresh}
+        contracts={contractsToShow}
+        address={address}
+        noContractsMessage={'You have no contracts.'}
+      />
 
       <CreateContractModal
         isActive={isModalActive}
