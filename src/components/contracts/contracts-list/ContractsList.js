@@ -79,7 +79,8 @@ function ContractsList({
   cancel,
   address,
   contractsRefresh,
-  noContractsMessage
+  noContractsMessage,
+  customRowRenderer
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   console.log(contracts);
@@ -137,7 +138,11 @@ function ContractsList({
                 <AutoSizer>
                   {({ width, height }) => (
                     <RVList
-                      rowRenderer={rowRenderer(filteredItems)}
+                      rowRenderer={
+                        customRowRenderer
+                          ? customRowRenderer(filteredItems)
+                          : rowRenderer(filteredItems)
+                      }
                       rowHeight={66}
                       rowCount={contracts.length}
                       height={height || 500} // defaults for tests

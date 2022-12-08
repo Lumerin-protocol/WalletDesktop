@@ -12,7 +12,6 @@ import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
 import { lmrEightDecimals } from '../../store/utils/coinValue';
-import AvailableContracts from './MarketplaceContract';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};

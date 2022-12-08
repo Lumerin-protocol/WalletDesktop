@@ -63,7 +63,7 @@ function BuyerHub({
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   const context = useContext(ToastsContext);
-  const contractsToShow = contracts.filter(x => x.seller === address);
+  const contractsToShow = contracts.filter(x => x.buyer === address);
 
   // static propTypes = {
   //   sendDisabledReason: PropTypes.string,
