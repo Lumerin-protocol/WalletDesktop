@@ -61,8 +61,7 @@ export const TxList = ({
   hasTransactions,
   onWalletRefresh,
   syncStatus,
-  client,
-  explorerUrl
+  client
 }) => {
   // static propTypes = {
   //   hasTransactions: PropTypes.bool.isRequired,
@@ -82,7 +81,6 @@ export const TxList = ({
         data-testid="tx-row"
         data-hash={transactionList[index].hash}
         tx={transactionList[index]}
-        explorerUrl={explorerUrl}
       />
     </TxRowContainer>
   );

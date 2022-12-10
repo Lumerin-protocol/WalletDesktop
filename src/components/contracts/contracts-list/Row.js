@@ -55,7 +55,7 @@ const STATE_COLOR = {
   [CONTRACT_STATE.Avaliable]: theme.colors.success
 };
 
-function Row({ contract, cancel, address, ratio }) {
+function Row({ contract, cancel, address, ratio, explorerUrl }) {
   // TODO: Add better padding
   const [isPending, setIsPending] = useState(false);
 
@@ -93,7 +93,7 @@ function Row({ contract, cancel, address, ratio }) {
   };
 
   return (
-    <Container ratio={ratio}>
+    <Container ratio={ratio} onClick={() => window.open(explorerUrl, '_blank')}>
       <Value>{formatTimestamp(contract.timestamp)}</Value>
       <SmallAssetContainer data-rh={getContractState(contract)}>
         <ClockIcon size="3rem" fill={getClockColor(contract)} />

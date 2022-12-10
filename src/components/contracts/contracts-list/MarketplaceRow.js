@@ -35,7 +35,7 @@ const ActionButton = styled(Btn)`
   line-height: 1.5rem;
 `;
 
-function MarketplaceRow({ contract, ratio }) {
+function MarketplaceRow({ contract, ratio, explorerUrl }) {
   // TODO: Add better padding
   const [isPending, setIsPending] = useState(false);
 
@@ -44,7 +44,7 @@ function MarketplaceRow({ contract, ratio }) {
   }, [contract]);
 
   return (
-    <Container ratio={ratio}>
+    <Container ratio={ratio} onClick={() => window.open(explorerUrl, '_blank')}>
       <Value>{formatPrice(contract.price)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>

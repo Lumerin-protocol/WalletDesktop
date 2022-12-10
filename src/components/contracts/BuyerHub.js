@@ -1,50 +1,12 @@
 import React, { useState, useContext } from 'react';
-import styled from 'styled-components';
-import { uniqueId } from 'lodash';
 
 import withContractsState from '../../store/hocs/withContractsState';
-import { Btn } from '../common';
 import { LayoutHeader } from '../common/LayoutHeader';
 import ContractsList from './contracts-list/ContractsList';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import BuyerHubRow from './contracts-list/BuyerHubRow';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
-
-const Container = styled.div`
-  background-color: ${p => p.theme.colors.light};
-  min-height: 100%;
-  width: 100%;
-  position: relative;
-  padding: 0 2.4rem;
-`;
-
-const Title = styled.div`
-  font-size: 2.4rem;
-  line-height: 3rem;
-  white-space: nowrap;
-  margin: 0;
-  font-weight: 600;
-  color: ${p => p.theme.colors.dark};
-  margin-bottom: 4.8px;
-  margin-right: 2.4rem;
-  cursor: default;
-
-  @media (min-width: 800px) {
-  }
-  @media (min-width: 1200px) {
-    margin-right: 1.6rem;
-  }
-`;
-
-const ContractBtn = styled(Btn)`
-  font-size: 1.3rem;
-  padding: 1rem 1.4rem;
-
-  @media (min-width: 1040px) {
-    margin-left: 0;
-  }
-`;
 
 function BuyerHub({
   contracts,

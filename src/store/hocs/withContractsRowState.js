@@ -15,7 +15,9 @@ const withContractsRowState = WrappedComponent => {
   }
 
   const mapStateToProps = (state, props) => ({
-    // avoid unnecessary re-renders once transaction is confirmed
+    explorerUrl: selectors.getContractExplorerUrl(state, {
+      hash: props.contract.id
+    })
   });
 
   return connect(mapStateToProps)(Container);

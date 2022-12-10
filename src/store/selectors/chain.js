@@ -50,12 +50,23 @@ export const getChainConnectionStatus = createSelector(
 );
 
 // Returns the explorer URL for a specific transaction
-export const getExplorerUrl = createSelector(
+export const getTransactionExplorerUrl = createSelector(
   getChainConfig,
   (_, props) => props.hash,
   (chainConfigData, hash) =>
     chainConfigData.explorerUrl
       ? chainConfigData.explorerUrl.replace('{{hash}}', hash)
+      : '#'
+);
+
+export const getContractExplorerUrl = createSelector(
+  getChainConfig,
+  (_, props) => props.hash,
+  (chainConfigData, hash) =>
+    chainConfigData.explorerUrl
+      ? chainConfigData.explorerUrl
+          .replace('tx', 'address') // TODO: Replace with url builder
+          .replace('{{hash}}', hash)
       : '#'
 );
 

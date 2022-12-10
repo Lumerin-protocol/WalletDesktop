@@ -40,8 +40,7 @@ const STATE_COLOR = {
   [CONTRACT_STATE.Avaliable]: theme.colors.success
 };
 
-function BuyerHubRow({ contract, ratio }) {
-  // TODO: Add better padding
+function BuyerHubRow({ contract, ratio, explorerUrl }) {
   const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
@@ -58,7 +57,7 @@ function BuyerHubRow({ contract, ratio }) {
   };
 
   return (
-    <Container ratio={ratio}>
+    <Container ratio={ratio} onClick={() => window.open(explorerUrl, '_blank')}>
       <Value>{formatTimestamp(contract.timestamp)}</Value>
       <SmallAssetContainer data-rh={getContractState(contract)}>
         <ClockIcon size="3rem" fill={getClockColor(contract)} />
