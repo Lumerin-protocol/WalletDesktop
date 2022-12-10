@@ -12,41 +12,8 @@ import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
 import { lmrEightDecimals } from '../../store/utils/coinValue';
-
-const Container = styled.div`
-  background-color: ${p => p.theme.colors.light};
-  min-height: 100%;
-  width: 100%;
-  position: relative;
-  padding: 0 2.4rem;
-`;
-
-const Title = styled.div`
-  font-size: 2.4rem;
-  line-height: 3rem;
-  white-space: nowrap;
-  margin: 0;
-  font-weight: 600;
-  color: ${p => p.theme.colors.dark};
-  margin-bottom: 4.8px;
-  margin-right: 2.4rem;
-  cursor: default;
-
-  @media (min-width: 800px) {
-  }
-  @media (min-width: 1200px) {
-    margin-right: 1.6rem;
-  }
-`;
-
-const ContractBtn = styled(Btn)`
-  font-size: 1.3rem;
-  padding: 1rem 1.4rem;
-
-  @media (min-width: 1040px) {
-    margin-left: 0;
-  }
-`;
+import MarketplaceRow from './contracts-list/MarketplaceRow';
+import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 
 function Marketplace({
   hasContracts,
@@ -76,6 +43,13 @@ function Marketplace({
   const handleCloseModal = e => {
     setIsModalActive(false);
   };
+
+  const tabs = [
+    { value: 'price', name: 'Price', ratio: 1 },
+    { value: 'length', name: 'Duration', ratio: 1 },
+    { value: 'speed', name: 'Speed (TH/s)', ratio: 1 },
+    { value: 'action', name: 'Actions', ratio: 2 }
+  ];
 
   const createTempContract = (id, contract) => {
     client.store.dispatch({
@@ -142,6 +116,18 @@ function Marketplace({
     e.preventDefault();
   };
 
+  const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
+    <ContractsRowContainer style={style} key={`${key}-${index}`}>
+      <MarketplaceRow
+        data-testid="Marketplace-row"
+        onClick={console.log}
+        contract={contractsList[index]}
+        address={address}
+        ratio={ratio}
+      />
+    </ContractsRowContainer>
+  );
+
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
@@ -158,15 +144,17 @@ function Marketplace({
         contractsRefresh={contractsRefresh}
         contracts={contractsToShow}
         address={address}
-        noContractsMessage={'You have no contracts.'}
+        customRowRenderer={rowRenderer}
+        noContractsMessage={'No available contracts to buy.'}
+        tabs={tabs}
       />
 
-      <CreateContractModal
+      {/* <CreateContractModal
         isActive={isModalActive}
         save={handleContractSave}
         deploy={handleContractDeploy}
         close={handleCloseModal}
-      />
+      /> */}
     </View>
   );
 }

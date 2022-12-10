@@ -1,77 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { List as RVList, AutoSizer } from 'react-virtualized';
 import withContractsListState from '../../../store/hocs/withContractsListState';
-import styled from 'styled-components';
-
 import ScanningContractsPlaceholder from './ScanningContractsPlaceholder';
 import NoContractsPlaceholder from './NoContractsPlaceholder';
 import { ItemFilter, Flex } from '../../common';
 import Header from './Header';
 import ContractsRow from './Row';
-
-const Container = styled.div`
-  margin-top: 2.4rem;
-  background-color: ${p => p.theme.colors.light};
-  height: 100%;
-
-  @media (min-width: 800px) {
-  }
-  @media (min-width: 1200px) {
-  }
-`;
-
-const Contracts = styled.div`
-  margin: 1.6rem 0 1.6rem;
-  border: 1px solid ${p => p.theme.colors.lightBG};
-  border-radius: 5px;
-`;
-
-const ListContainer = styled.div`
-  background-color: #ffffff;
-  height: calc(100vh - 250px);
-
-  /*
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
-  @media (min-width: 800px) {
-  }
-  @media (min-width: 1200px) {
-  }
-  */
-`;
-
-const ContractsRowContainer = styled.div`
-  &:hover {
-    background-color: rgba(126, 97, 248, 0.1);
-  }
-`;
-
-const FooterLogo = styled.div`
-  padding: 4.8rem 0;
-  width: 3.2rem;
-  margin: 0 auto;
-`;
-
-const Title = styled.div`
-  font-size: 2rem;
-  line-height: 3rem;
-  color: ${p => p.theme.colors.primary};
-  white-space: nowrap;
-  margin: 0;
-  font-weight: 500;
-  margin-right: 2.4rem;
-  cursor: default;
-
-  @media (min-width: 1140px) {
-    margin-right: 0.8rem;
-  }
-
-  @media (min-width: 1200px) {
-    margin-right: 1.6rem;
-  }
-`;
+import {
+  Container,
+  ListContainer,
+  Contracts,
+  FooterLogo,
+  Title
+} from './ContractsList.styles';
+import { ContractsRowContainer } from './ContractsRow.styles';
 
 function ContractsList({
   contracts,
@@ -80,11 +22,22 @@ function ContractsList({
   address,
   contractsRefresh,
   noContractsMessage,
-  customRowRenderer
+  customRowRenderer,
+  tabs
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
-  console.log(contracts);
   const hasContracts = contracts.length;
+  const defaultTabs = [
+    { value: 'timestamp', name: 'Started', ratio: 2 },
+    { ratio: 1 },
+    { value: 'price', name: 'Price', ratio: 2 },
+    { value: 'length', name: 'Duration', ratio: 2 },
+    { value: 'speed', name: 'Speed (TH/s)', ratio: 2 },
+    { value: 'action', name: 'Actions', ratio: 4 }
+  ];
+
+  const tabsToShow = tabs || defaultTabs;
+  const ratio = tabsToShow.map(x => x.ratio);
 
   useEffect(() => {
     contractsRefresh();
@@ -94,7 +47,7 @@ function ContractsList({
     setSelectedContracts(currentTarget.dataset.hash);
   };
 
-  const rowRenderer = contractsList => ({ key, index, style }) => (
+  const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <ContractsRow
         data-testid="Contracts-row"
@@ -102,6 +55,7 @@ function ContractsList({
         contract={contractsList[index]}
         cancel={cancel}
         address={address}
+        ratio={ratio}
       />
     </ContractsRowContainer>
   );
@@ -126,6 +80,7 @@ function ContractsList({
                 onFilterChange={onFilterChange}
                 activeFilter={activeFilter}
                 syncStatus={syncStatus}
+                tabs={tabsToShow}
               />
 
               <ListContainer>
@@ -140,8 +95,8 @@ function ContractsList({
                     <RVList
                       rowRenderer={
                         customRowRenderer
-                          ? customRowRenderer(filteredItems)
-                          : rowRenderer(filteredItems)
+                          ? customRowRenderer(filteredItems, ratio)
+                          : rowRenderer(filteredItems, ratio)
                       }
                       rowHeight={66}
                       rowCount={contracts.length}

@@ -5,13 +5,11 @@ import { uniqueId } from 'lodash';
 import withContractsState from '../../store/hocs/withContractsState';
 import { Btn } from '../common';
 import { LayoutHeader } from '../common/LayoutHeader';
-import TotalsBlock from './TotalsBlock';
 import ContractsList from './contracts-list/ContractsList';
-import CreateContractModal from './CreateContractModal';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
-import { CONTRACT_STATE } from '../../enums';
-import { lmrEightDecimals } from '../../store/utils/coinValue';
+import BuyerHubRow from './contracts-list/BuyerHubRow';
+import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -61,90 +59,28 @@ function BuyerHub({
   contractsRefresh,
   ...props
 }) {
-  const [isModalActive, setIsModalActive] = useState(false);
   const context = useContext(ToastsContext);
   const contractsToShow = contracts.filter(x => x.buyer === address);
 
-  // static propTypes = {
-  //   sendDisabledReason: PropTypes.string,
-  //   hasContracts: PropTypes.bool.isRequired,
-  //   copyToClipboard: PropTypes.func.isRequired,
-  //   onWalletRefresh: PropTypes.func.isRequired,
-  //   sendDisabled: PropTypes.bool.isRequired,
-  //   syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
-  //   address: PropTypes.string.isRequired
-  // };
+  const tabs = [
+    { value: 'timestamp', name: 'Started', ratio: 2 },
+    { ratio: 1 },
+    { value: 'price', name: 'Price', ratio: 3 },
+    { value: 'length', name: 'Duration', ratio: 3 },
+    { value: 'speed', name: 'Speed (TH/s)', ratio: 3 }
+  ];
 
-  const handleOpenModal = () => setIsModalActive(true);
-
-  const handleCloseModal = e => {
-    setIsModalActive(false);
-  };
-
-  const createTempContract = (id, contract) => {
-    client.store.dispatch({
-      type: 'create-temp-contract',
-      payload: {
-        id,
-        ...contract,
-        length: contract.duration,
-        seller: contract.sellerAddress,
-        state: CONTRACT_STATE.Avaliable,
-        timestamp: 0,
-        isDeploying: true
-      }
-    });
-  };
-
-  const removeTempContract = (id, contract) => {
-    client.store.dispatch({
-      type: 'remove-contract',
-      payload: {
-        id,
-        ...contract
-      }
-    });
-  };
-
-  const handleContractDeploy = (e, contractDetails) => {
-    e.preventDefault();
-
-    const contract = {
-      price: contractDetails.price * lmrEightDecimals,
-      speed: contractDetails.speed * 10 ** 12, // THs
-      duration: contractDetails.time * 3600, // Hours to seconds
-      sellerAddress: contractDetails.address
-    };
-
-    const tempContractId = uniqueId();
-    createTempContract(tempContractId, contract);
-
-    client
-      .createContract(contract)
-      .then(() => contractsRefresh())
-      .catch(error => {
-        context.toast('error', error.message || error);
-        removeTempContract(tempContractId, contract);
-      });
-
-    setIsModalActive(false);
-  };
-
-  const handleContractCancellation = (e, data) => {
-    e.preventDefault();
-
-    client
-      .cancelContract({
-        contractId: data.contractId,
-        walletAddress: data.walletAddress,
-        closeOutType: data.closeOutType
-      })
-      .then(() => contractsRefresh());
-  };
-
-  const handleContractSave = e => {
-    e.preventDefault();
-  };
+  const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
+    <ContractsRowContainer style={style} key={`${key}-${index}`}>
+      <BuyerHubRow
+        data-testid="BuyerHub-row"
+        onClick={console.log}
+        contract={contractsList[index]}
+        address={address}
+        ratio={ratio}
+      />
+    </ContractsRowContainer>
+  );
 
   return (
     <View data-testid="contracts-container">
@@ -152,9 +88,7 @@ function BuyerHub({
         title="Buyer Hub"
         address={address}
         copyToClipboard={copyToClipboard}
-      >
-        <ContractBtn onClick={handleOpenModal}>Create Contract</ContractBtn>
-      </LayoutHeader>
+      ></LayoutHeader>
 
       {/* <TotalsBlock /> */}
 
@@ -162,18 +96,13 @@ function BuyerHub({
         hasContracts={hasContracts}
         onWalletRefresh={onWalletRefresh}
         syncStatus={syncStatus}
-        cancel={handleContractCancellation}
+        cancel={() => {}}
         contractsRefresh={contractsRefresh}
         address={address}
         contracts={contractsToShow}
+        customRowRenderer={rowRenderer}
         noContractsMessage={'You have no contracts.'}
-      />
-
-      <CreateContractModal
-        isActive={isModalActive}
-        save={handleContractSave}
-        deploy={handleContractDeploy}
-        close={handleCloseModal}
+        tabs={tabs}
       />
     </View>
   );

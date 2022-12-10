@@ -24,16 +24,14 @@ const Container = styled.div`
 `;
 
 export default function Header(props) {
-  // hasTransactions: PropTypes.bool.isRequired,
-  // onWalletRefresh: PropTypes.func.isRequired,
-  // onFilterChange: PropTypes.func.isRequired,
-  // activeFilter: PropTypes.string.isRequired,
-  // syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired
-
   return (
     <>
       <Container>
-        <Filter onFilterChange={props.onFilterChange} activeFilter={false} />
+        <Filter
+          onFilterChange={props.onFilterChange}
+          activeFilter={false}
+          tabs={props.tabs}
+        />
       </Container>
     </>
   );
