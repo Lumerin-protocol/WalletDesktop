@@ -7,7 +7,7 @@ import { Btn } from '../common';
 import { LayoutHeader } from '../common/LayoutHeader';
 import TotalsBlock from './TotalsBlock';
 import ContractsList from './contracts-list/ContractsList';
-import CreateContractModal from './CreateContractModal';
+import CreateContractModal from './modals/CreateContractModal';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';

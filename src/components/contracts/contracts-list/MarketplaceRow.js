@@ -35,7 +35,7 @@ const ActionButton = styled(Btn)`
   line-height: 1.5rem;
 `;
 
-function MarketplaceRow({ contract, ratio, explorerUrl }) {
+function MarketplaceRow({ contract, ratio, explorerUrl, onPurchase }) {
   // TODO: Add better padding
   const [isPending, setIsPending] = useState(false);
 
@@ -49,7 +49,13 @@ function MarketplaceRow({ contract, ratio, explorerUrl }) {
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
       <Value>
-        <ActionButton disabled={false} onClick={() => {}}>
+        <ActionButton
+          disabled={false}
+          onClick={e => {
+            e.stopPropagation();
+            onPurchase(contract);
+          }}
+        >
           Purchase
         </ActionButton>
       </Value>

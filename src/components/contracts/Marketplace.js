@@ -1,17 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
-import styled from 'styled-components';
-import { uniqueId } from 'lodash';
-
 import withContractsState from '../../store/hocs/withContractsState';
-import { Btn } from '../common';
 import { LayoutHeader } from '../common/LayoutHeader';
-import TotalsBlock from './TotalsBlock';
 import ContractsList from './contracts-list/ContractsList';
-import CreateContractModal from './CreateContractModal';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
-import { CONTRACT_STATE } from '../../enums';
-import { lmrEightDecimals } from '../../store/utils/coinValue';
+import PurchaseContractModal from './modals/PurchaseContractModal';
 import MarketplaceRow from './contracts-list/MarketplaceRow';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 
@@ -29,20 +22,35 @@ function Marketplace({
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
+  const [contractToPurchase, setContractToPurchase] = useState(undefined);
+
   const context = useContext(ToastsContext);
-  const contractsToShow = contracts.filter(
-    x => Number(x.state) === 0 && x.seller !== address
-  );
-
-  useEffect(() => {
-    contractsRefresh();
-  }, []);
-
-  const handleOpenModal = () => setIsModalActive(true);
+  const contractsToShow = [
+    {
+      id: '0xF568B28fa92C58A322661d1DBe22B22B4486c934',
+      price: '200000000',
+      speed: '100000000000000',
+      length: '21600',
+      buyer: '0x0000000000000000000000000000000000000000',
+      seller: '0x7525960Bb65713E0A0e226EF93A19a1440f1116d',
+      timestamp: '0',
+      state: '0',
+      encryptedPoolData: '',
+      limit: '0',
+      balance: '0'
+    }
+  ];
+  // contracts.filter(
+  //   x => Number(x.state) === 0 && x.seller !== address
+  // );
 
   const handleCloseModal = e => {
     setIsModalActive(false);
   };
+
+  useEffect(() => {
+    contractsRefresh();
+  }, []);
 
   const tabs = [
     { value: 'price', name: 'Price', ratio: 1 },
@@ -50,55 +58,6 @@ function Marketplace({
     { value: 'speed', name: 'Speed (TH/s)', ratio: 1 },
     { value: 'action', name: 'Actions', ratio: 2 }
   ];
-
-  const createTempContract = (id, contract) => {
-    client.store.dispatch({
-      type: 'create-temp-contract',
-      payload: {
-        id,
-        ...contract,
-        length: contract.duration,
-        seller: contract.sellerAddress,
-        state: CONTRACT_STATE.Avaliable,
-        timestamp: 0,
-        isDeploying: true
-      }
-    });
-  };
-
-  const removeTempContract = (id, contract) => {
-    client.store.dispatch({
-      type: 'remove-contract',
-      payload: {
-        id,
-        ...contract
-      }
-    });
-  };
-
-  const handleContractDeploy = (e, contractDetails) => {
-    e.preventDefault();
-
-    const contract = {
-      price: contractDetails.price * lmrEightDecimals,
-      speed: contractDetails.speed * 10 ** 12, // THs
-      duration: contractDetails.time * 3600, // Hours to seconds
-      sellerAddress: contractDetails.address
-    };
-
-    const tempContractId = uniqueId();
-    createTempContract(tempContractId, contract);
-
-    client
-      .createContract(contract)
-      .then(() => contractsRefresh())
-      .catch(error => {
-        context.toast('error', error.message || error);
-        removeTempContract(tempContractId, contract);
-      });
-
-    setIsModalActive(false);
-  };
 
   const handleContractCancellation = (e, data) => {
     e.preventDefault();
@@ -112,15 +71,15 @@ function Marketplace({
       .then(() => contractsRefresh());
   };
 
-  const handleContractSave = e => {
-    e.preventDefault();
-  };
-
   const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <MarketplaceRow
         data-testid="Marketplace-row"
-        onClick={console.log}
+        onPurchase={data => {
+          console.log(data);
+          setContractToPurchase(data);
+          setIsModalActive(true);
+        }}
         contract={contractsList[index]}
         address={address}
         ratio={ratio}
@@ -149,12 +108,13 @@ function Marketplace({
         tabs={tabs}
       />
 
-      {/* <CreateContractModal
+      <PurchaseContractModal
         isActive={isModalActive}
-        save={handleContractSave}
-        deploy={handleContractDeploy}
+        contract={contractToPurchase}
+        save={() => {}}
+        deploy={() => {}}
         close={handleCloseModal}
-      /> */}
+      />
     </View>
   );
 }
