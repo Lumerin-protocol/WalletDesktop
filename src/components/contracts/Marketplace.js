@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import withContractsState from '../../store/hocs/withContractsState';
 import { LayoutHeader } from '../common/LayoutHeader';
 import ContractsList from './contracts-list/ContractsList';
@@ -19,30 +20,50 @@ function Marketplace({
   client,
   contractsRefresh,
   contracts,
+  history,
+  lmrBalance,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   const [contractToPurchase, setContractToPurchase] = useState(undefined);
-
   const context = useContext(ToastsContext);
-  const contractsToShow = [
-    {
-      id: '0xF568B28fa92C58A322661d1DBe22B22B4486c934',
-      price: '200000000',
-      speed: '100000000000000',
-      length: '21600',
-      buyer: '0x0000000000000000000000000000000000000000',
-      seller: '0x7525960Bb65713E0A0e226EF93A19a1440f1116d',
-      timestamp: '0',
-      state: '0',
-      encryptedPoolData: '',
-      limit: '0',
-      balance: '0'
+  const contractsToShow = contracts.filter(
+    x => (Number(x.state) === 0 && x.seller !== address) || x.inProgress
+  );
+
+  const handlePurchase = (data, contract, url) => {
+    if (lmrBalance * 10 ** 8 < Number(contract.price)) {
+      setIsModalActive(false);
+      context.toast('error', 'Insufficient balance');
+      return;
     }
-  ];
-  // contracts.filter(
-  //   x => Number(x.state) === 0 && x.seller !== address
-  // );
+
+    client.store.dispatch({
+      type: 'purchase-temp-contract',
+      payload: {
+        id: contract.id,
+        address
+      }
+    });
+    client
+      .purchaseContract({
+        ...data,
+        contractId: contract.id,
+        speed: contract.speed,
+        price: contract.price,
+        length: contract.length,
+        url
+      })
+      .then(d => {
+        onWalletRefresh();
+        context.toast(
+          'success',
+          'Contract is succefully submitted to purchase'
+        );
+        history.push('/buyer-hub');
+      });
+    setIsModalActive(false);
+  };
 
   const handleCloseModal = e => {
     setIsModalActive(false);
@@ -111,12 +132,11 @@ function Marketplace({
       <PurchaseContractModal
         isActive={isModalActive}
         contract={contractToPurchase}
-        save={() => {}}
-        deploy={() => {}}
+        handlePurchase={handlePurchase}
         close={handleCloseModal}
       />
     </View>
   );
 }
 
-export default withContractsState(Marketplace);
+export default withRouter(withContractsState(Marketplace));

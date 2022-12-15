@@ -44,6 +44,23 @@ const createContract = async function(data, { api }) {
   )(data, { api });
 };
 
+const purchaseContract = async function(data, { api }) {
+  data.walletId = wallet.getAddress().address;
+  data.minerPassword = data.password;
+  data.password = await auth.getSessionPassword();
+
+  if (typeof data.walletId !== "string") {
+    throw new WalletError("WalletId is not defined");
+  }
+
+  return withAuth((privateKey) =>
+    api.contracts.purchaseContract({
+      ...data,
+      privateKey,
+    })
+  )(data, { api });
+};
+
 const cancelContract = async function(data, { api }) {
   data.walletId = wallet.getAddress().address;
   data.password = await auth.getSessionPassword();
@@ -206,6 +223,7 @@ const getLmrTransferGasLimit = (data, { api }) => api.lumerin.estimateGasTransfe
 module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
+  purchaseContract,
   createContract,
   cancelContract,
   onboardingCompleted,

@@ -8,6 +8,7 @@ import {
   formatTimestamp,
   formatPrice
 } from '../utils';
+import Spinner from '../../common/Spinner';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -48,17 +49,23 @@ function MarketplaceRow({ contract, ratio, explorerUrl, onPurchase }) {
       <Value>{formatPrice(contract.price)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
-      <Value>
-        <ActionButton
-          disabled={false}
-          onClick={e => {
-            e.stopPropagation();
-            onPurchase(contract);
-          }}
-        >
-          Purchase
-        </ActionButton>
-      </Value>
+      {contract.inProgress ? (
+        <Value>
+          <Spinner size="25px" /> Purchasing..
+        </Value>
+      ) : (
+        <Value>
+          <ActionButton
+            disabled={false}
+            onClick={e => {
+              e.stopPropagation();
+              onPurchase(contract);
+            }}
+          >
+            Purchase
+          </ActionButton>
+        </Value>
+      )}
     </Container>
   );
 }

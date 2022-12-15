@@ -19,15 +19,7 @@ import {
 } from './CreateContractModal.styles';
 
 function PurchaseContractModal(props) {
-  const {
-    isActive,
-    save,
-    deploy,
-    close,
-    client,
-    contract,
-    explorerUrl
-  } = props;
+  const { isActive, handlePurchase, close, contract, explorerUrl } = props;
 
   const preferredPools = [
     {
@@ -48,6 +40,16 @@ function PurchaseContractModal(props) {
     }
   ];
 
+  const toRfc2396 = formData => {
+    const regex = /(^.*):\/\/(.*$)/;
+    const poolAddressGroups = formData.address?.match(regex);
+    if (!poolAddressGroups) return;
+    const protocol = poolAddressGroups[1];
+    const host = poolAddressGroups[2];
+
+    return `${protocol}://${formData.username}:${formData.password}@${host}:${formData.port}`;
+  };
+
   const [inputs, setInputs] = useState({
     address: '',
     port: '',
@@ -59,17 +61,6 @@ function PurchaseContractModal(props) {
     e.preventDefault();
 
     setInputs({ ...inputs, [e.target.name]: e.target.value });
-  };
-
-  const handleDeploy = e => {
-    e.preventDefault();
-
-    deploy(e, inputs);
-  };
-
-  const handleSaveDraft = e => {
-    e.preventDefault();
-    save(e);
   };
 
   const handleClose = e => {
@@ -90,8 +81,6 @@ function PurchaseContractModal(props) {
     return <></>;
   }
 
-  console.log(inputs);
-
   return (
     <Modal onClick={handleClose}>
       <Body onClick={handlePropagation}>
@@ -105,7 +94,9 @@ function PurchaseContractModal(props) {
             Contract Address: {contract.id}
           </ContractLink>
         </TitleWrapper>
-        <Form onSubmit={handleDeploy}>
+        <Form
+          onSubmit={() => handlePurchase(inputs, contract, toRfc2396(inputs))}
+        >
           <Row>
             <InputGroup>
               <Label htmlFor="address">Preferred Pools</Label>
@@ -114,7 +105,9 @@ function PurchaseContractModal(props) {
                   Select a prefered poll
                 </option>
                 {preferredPools.map(p => (
-                  <option value={p.name}>{p.name}</option>
+                  <option key={p.name} value={p.name}>
+                    {p.name}
+                  </option>
                 ))}
               </Select>
             </InputGroup>
@@ -126,6 +119,7 @@ function PurchaseContractModal(props) {
               <Input
                 placeholder={'stratum+tcp://IPADDRESS'}
                 value={inputs.address}
+                onChange={handleInputs}
                 type="text"
                 name="address"
                 id="address"

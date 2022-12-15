@@ -100,6 +100,7 @@ const createClient = function(createStore) {
     changePassword: utils.forwardToMainProcess('change-password'),
     onLoginSubmit: utils.forwardToMainProcess('login-submit'),
     createContract: utils.forwardToMainProcess('create-contract', 750000),
+    purchaseContract: utils.forwardToMainProcess('purchase-contract', 750000),
     cancelContract: utils.forwardToMainProcess('cancel-contract', 750000),
     getGasLimit: utils.forwardToMainProcess('get-gas-limit'),
     getGasPrice: utils.forwardToMainProcess('get-gas-price'),

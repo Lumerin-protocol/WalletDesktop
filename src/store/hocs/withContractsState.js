@@ -39,11 +39,28 @@ const withContractsState = WrappedComponent => {
         );
     };
 
+    onWalletRefresh = () => {
+      this.setState({ refreshStatus: 'pending', refreshError: null });
+      this.props.client
+        .refreshAllTransactions({
+          address: this.props.address,
+          chain: this.props.chain
+        })
+        .then(() => this.setState({ refreshStatus: 'success' }))
+        .catch(() =>
+          this.setState({
+            refreshStatus: 'failure',
+            refreshError: 'Could not refresh'
+          })
+        );
+    };
+
     render() {
       return (
         <WrappedComponent
           copyToClipboard={this.props.client.copyToClipboard}
           contractsRefresh={this.contractsRefresh}
+          onWalletRefresh={this.onWalletRefresh}
           {...this.props}
           {...this.state}
         />
@@ -57,7 +74,8 @@ const withContractsState = WrappedComponent => {
     draftCount: selectors.getDraftContractsCount(state),
     syncStatus: selectors.getContractsSyncStatus(state),
     address: selectors.getWalletAddress(state),
-    contracts: selectors.getMergeAllContracts(state)
+    contracts: selectors.getMergeAllContracts(state),
+    lmrBalance: selectors.getWalletLmrBalance(state)
   });
 
   return withClient(connect(mapStateToProps)(Container));
