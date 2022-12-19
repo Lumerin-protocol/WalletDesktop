@@ -16,9 +16,6 @@ const chain = {
   lmrDefaultGasLimit: process.env.LMR_DEFAULT_GAS_LIMIT,
   defaultGasPrice: process.env.DEFAULT_GAS_PRICE,
   maxGasPrice: process.env.MAX_GAS_PRICE,
-
-  localSellerProxyRouterUrl: 'http://localhost:8081',
-  localBuyerProxyRouterUrl: 'http://localhost:8082'
 }
 
 module.exports = {

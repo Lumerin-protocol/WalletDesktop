@@ -7,9 +7,7 @@ import { EVENT_DEVICES_RESET } from '../events/devices';
 const mapStateToProps = state => ({
   devices: selectors.getDevicesList(state),
   address: selectors.getWalletAddress(state),
-  proxyRouterUrl: selectors.getIsLocalProxyRouter(state)
-    ? selectors.getLocalProxyRouterUrl(state)
-    : selectors.getProxyRouterUrl(state)
+  proxyRouterUrl: selectors.getProxyRouterUrl(state)
 });
 
 const mapDispatchToProps = dispatch => ({

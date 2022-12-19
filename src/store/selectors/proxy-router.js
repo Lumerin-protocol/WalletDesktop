@@ -11,19 +11,9 @@ export const getIsProxyRouterConnect = createSelector(
   proxyRouterData => proxyRouterData.isConnected
 );
 
-export const getIsLocalProxyRouter = createSelector(
-  getProxyRouter,
-  proxyRouterData => proxyRouterData.isLocal
-);
-
 export const getProxyRouterUrl = createSelector(
   getConfig,
   configData => configData.chain.proxyRouterUrl
-);
-
-export const getLocalProxyRouterUrl = createSelector(
-  getConfig,
-  configData => configData.chain.localSellerProxyRouter
 );
 
 // Returns the array of transactions of the current chain/wallet/address.

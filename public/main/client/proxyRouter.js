@@ -1,24 +1,8 @@
 const { spawn } = require("child_process");
 
-const logger = require("../../logger.js");
+const logger = require('../../logger.js');
 
-const PROXY_ROUTER_MODE = {
-  Buyer: "buyer",
-  Seller: "seller",
-};
-
-const MODE_TO_PORTS = {
-  [PROXY_ROUTER_MODE.Buyer]: [
-    "--proxy-address=0.0.0.0:3334",
-    `--web-address=0.0.0.0:8082`,
-  ],
-  [PROXY_ROUTER_MODE.Seller]: [
-    "--proxy-address=0.0.0.0:3333",
-    `--web-address=0.0.0.0:8081`,
-  ],
-};
-
-const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
+const runProxyRouter = (config) => {
   try {
     const resourcePath =
       process.env.NODE_ENV === "production"
@@ -35,30 +19,31 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
       "--pool-conn-timeout=5m",
       "--pool-max-duration=5m",
       "--pool-min-duration=2m",
+      "--proxy-address=0.0.0.0:3333",
       "--proxy-log-stratum=false",
       "--stratum-socket-buffer=4",
       "--validation-buffer-period=5m",
       `--wallet-address=${config.walletAddress}`,
       `--wallet-private-key=${config.privateKey}`,
+      `--web-address=0.0.0.0:8081`,
       "--log-level=debug",
-      ...MODE_TO_PORTS[mode],
     ]);
 
     ls.stdout.on("data", (data) => {
-      logger.debug(`ProxyRouter-${mode} stdout: ${data}`);
+      logger.debug(`ProxyRouter stdout: ${data}`);
     });
 
     ls.stderr.on("data", (data) => {
-      logger.debug(`ProxyRouter-${mode} stderr: ${data}`);
+      logger.debug(`ProxyRouter stderr: ${data}`);
     });
 
     ls.on("close", (code) => {
-      logger.debug(`ProxyRouter-${mode} child process exited with code ${code}`);
+      logger.debug(`ProxyRouter child process exited with code ${code}`);
     });
   } catch (err) {
-    logger.debug(`ProxyRouter-${mode} run error: ${err}`);
+    logger.debug(`ProxyRouter run error: ${err}`);
     throw err;
   }
 };
 
-module.exports = { runProxyRouter, PROXY_ROUTER_MODE };
+module.exports = { runProxyRouter };
