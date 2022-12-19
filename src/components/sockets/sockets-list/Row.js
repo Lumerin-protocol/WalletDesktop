@@ -55,20 +55,22 @@ const StatusPill = styled.span`
 
 const stateColors = {
   Running: theme.colors.primaryLight,
-  Available: theme.colors.success
+  Available: theme.colors.success,
+  Vetting: theme.colors.warning
 };
 
 const statusToState = status => {
   switch (status) {
     case 'free':
       return 'Available';
+    case 'vetting':
+      return 'Vetting';
     default:
       return 'Running';
   }
 };
 
 const Row = ({ socket }) => {
-  console.log(socket);
   return (
     <Container>
       <Value>{socket.ID}</Value>

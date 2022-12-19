@@ -21,6 +21,10 @@ function setPasswordHash (hash) {
   setKey('user.passwordHash', hash);
 }
 
+const setProxyRouterConfig = (config) => setKey('user.proxyRouterConfig', JSON.stringify(config));
+
+const getProxyRouterConfig = () => JSON.parse(getKey('user.proxyRouterConfig'));
+
 function upgradeSettings (defaultSettings, currentSettings) {
   let finalSettings = merge({}, currentSettings);
   // Remove no longer used settings as now are stored in config
@@ -86,5 +90,7 @@ function presetDefaults () {
 module.exports = {
   getPasswordHash,
   setPasswordHash,
-  presetDefaults
+  presetDefaults,
+  setProxyRouterConfig,
+  getProxyRouterConfig,
 };

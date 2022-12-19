@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "author": {
     "name": "Kodee McIntosh",
     "email": "kodee@lumerin.io",
@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@electron/remote": "1.2.0",
-    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.15",
+    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.15"
     "@reach/menu-button": "0.17.0",
     "axios": "0.27.2",
     "babel-preset-env": "1.7.0",
@@ -115,6 +115,9 @@
     "directories": {
       "buildResources": "assets"
     },
+    "extraResources": [
+      "executables/**/*"
+    ],
     "mac": {
       "artifactName": "${name}_v${version}.${ext}",
       "category": "public.app-category.finance",

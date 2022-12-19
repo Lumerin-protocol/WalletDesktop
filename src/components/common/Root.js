@@ -37,10 +37,10 @@ class Root extends React.Component {
       .catch(console.warn);
   }
 
-  onOnboardingCompleted = ({ password, mnemonic }) => {
+  onOnboardingCompleted = ({ password, mnemonic, proxyRouterConfig }) => {
     return (
       this.props.client
-        .onOnboardingCompleted({ password, mnemonic })
+        .onOnboardingCompleted({ password, mnemonic, proxyRouterConfig })
         .then(() => {
           this.setState({ onboardingComplete: true });
           this.props.dispatch({ type: 'session-started' });
