@@ -101,8 +101,14 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
 
       runProxyRouter(config, PROXY_ROUTER_MODE.Seller);
       runProxyRouter(config, PROXY_ROUTER_MODE.Buyer);
+      send("proxy-router-type-changed", {
+        isLocal: true,
+      });
 
-      refreshProxyRouterConnection({ url: config.localSellerProxyRouterUrl }, { api });
+      refreshProxyRouterConnection(
+        { url: config.localSellerProxyRouterUrl },
+        { api }
+      );
     } else {
       refreshProxyRouterConnection({}, { api });
     }

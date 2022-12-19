@@ -25,7 +25,8 @@ export const subscribeToMainProcessMessages = function(store) {
     'lmr-tx',
     'coin-block',
     'devices-device-updated',
-    'devices-state-updated'
+    'devices-state-updated',
+    'proxy-router-type-changed'
   ];
 
   // Subscribe to every IPC message defined above and dispatch a
