@@ -19,10 +19,10 @@ const Emoji = styled.svg`
   margin: 0 auto;
 `;
 
-export default function NoContractsPlaceholder() {
+export default function NoContractsPlaceholder({ message }) {
   return (
     <Container data-testid="no-contract-placeholder">
-      <Label>No contracts yet!</Label>
+      <Label>{`${message || 'No contracts yet!'}`}</Label>
     </Container>
   );
 }

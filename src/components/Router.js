@@ -10,8 +10,10 @@ import Sockets from './sockets/Sockets';
 import Reports from './reports/Reports';
 import Indicies from './indicies/Indicies';
 import Tools from './tools/Tools';
-import Contracts from './contracts/Contracts';
+import SellerHub from './contracts/SellerHub';
+import Marketplace from './contracts/Marketplace';
 import Devices from './devices/Devices';
+import BuyerHub from './contracts/BuyerHub';
 
 const fadeIn = keyframes`
   from {
@@ -52,7 +54,9 @@ export const Layout = () => (
         <Route path="/" exact render={() => <Redirect to="/wallet" />} />
         <Route path="/wallet" component={Dashboard} />
         <Route path="/sockets" component={Sockets} />
-        <Route path="/contracts" component={Contracts} />
+        <Route path="/seller-hub" component={SellerHub} />
+        <Route path="/buyer-hub" component={BuyerHub} />
+        <Route path="/marketplace" component={Marketplace} />
         {/* TODO - Finish up reports */}
         <Route path="/reports" component={Reports} />
         <Route path="/indicies" component={Indicies} />

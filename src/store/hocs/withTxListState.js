@@ -10,7 +10,6 @@ const withTxListState = Component => {
       <Component
         transactions={props.transactions}
         syncStatus={props.syncStatus}
-        explorerUrl={props.explorerUrl}
       />
     );
   };

@@ -77,7 +77,7 @@ const withReceiptState = WrappedComponent => {
 
     return {
       confirmations: selectors.getTxConfirmations(state, { tx }),
-      explorerUrl: selectors.getExplorerUrl(state, { hash }),
+      explorerUrl: selectors.getTransactionExplorerUrl(state, { hash }),
       coinSymbol: selectors.getCoinSymbol(state),
       address: selectors.getWalletAddress(state),
       tx

@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { uniqueId } from 'lodash';
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 40px 1fr 1fr 1fr 2fr;
+  grid-template-columns: ${p => p.ratio.map(x => `${x}fr`).join(' ')};
   width: 100%;
 `;
 
@@ -36,48 +37,15 @@ const Tab = styled.button`
   }
 `;
 
-const Spacer = styled.div`
-  width: 40px;
-`;
-
-export default function Filter({ onFilterChange, activeFilter }) {
-  // static propTypes = {
-  //   onFilterChange: PropTypes.func.isRequired,
-  //   activeFilter: PropTypes.oneOf([
-  //     'received',
-  //     'sent',
-  //     ''
-  //   ]).isRequired
-  // }
-
+export default function Filter({ onFilterChange, activeFilter, tabs }) {
   return (
-    <Container>
-      <Tab
-        isActive={activeFilter === 'timestamp'}
-        // onClick={() => onFilterChange('timestamp')}
-      >
-        Started
-      </Tab>
-      <Spacer />
-      <Tab
-        isActive={activeFilter === 'price'}
-        // onClick={() => onFilterChange('price')}
-      >
-        Price
-      </Tab>
-      <Tab
-        isActive={activeFilter === 'length'}
-        // onClick={() => onFilterChange('length')}
-      >
-        Duration
-      </Tab>
-      <Tab
-        isActive={activeFilter === 'speed'}
-        // onClick={() => onFilterChange('speed')}
-      >
-        Speed (TH/s)
-      </Tab>
-      <Tab>Actions</Tab>
+    <Container ratio={tabs.map(x => x.ratio)}>
+      {tabs &&
+        tabs.map(t => (
+          <Tab key={t.value || uniqueId()} isActive={activeFilter === t.value}>
+            {t.name}
+          </Tab>
+        ))}
     </Container>
   );
 }

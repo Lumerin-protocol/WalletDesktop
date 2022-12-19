@@ -38,8 +38,13 @@ const withCreateContractModalState = WrappedComponent => {
     }
   }
 
-  const mapStateToProps = state => ({
-    address: selectors.getWalletAddress(state)
+  const mapStateToProps = (state, props) => ({
+    address: selectors.getWalletAddress(state),
+    explorerUrl: props.contract
+      ? selectors.getContractExplorerUrl(state, {
+          hash: props.contract.id
+        })
+      : null
   });
 
   return connect(mapStateToProps)(withClient(Container));

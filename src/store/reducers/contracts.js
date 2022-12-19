@@ -57,6 +57,17 @@ const reducer = handleActions(
       syncStatus: payload.syncStatus
     }),
 
+    'purchase-temp-contract': (state, { payload }) => {
+      let array = state.actives;
+      let objIndex = array.findIndex(obj => obj.id == payload.id);
+      array[objIndex].inProgress = true;
+      array[objIndex].buyer = payload.address;
+      return {
+        ...state,
+        actives: [...array]
+      };
+    },
+
     'create-temp-contract': (state, { payload }) => {
       return {
         ...state,

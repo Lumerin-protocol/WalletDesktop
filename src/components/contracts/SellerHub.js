@@ -7,7 +7,7 @@ import { Btn } from '../common';
 import { LayoutHeader } from '../common/LayoutHeader';
 import TotalsBlock from './TotalsBlock';
 import ContractsList from './contracts-list/ContractsList';
-import CreateContractModal from './CreateContractModal';
+import CreateContractModal from './modals/CreateContractModal';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
@@ -48,7 +48,8 @@ const ContractBtn = styled(Btn)`
   }
 `;
 
-function Contracts({
+function SellerHub({
+  contracts,
   hasContracts,
   copyToClipboard,
   onWalletRefresh,
@@ -143,11 +144,12 @@ function Contracts({
   const handleContractSave = e => {
     e.preventDefault();
   };
+  const contractsToShow = contracts.filter(c => c.seller === address);
 
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
-        title="Contracts"
+        title="Seller Hub"
         address={address}
         copyToClipboard={copyToClipboard}
       >
@@ -163,6 +165,8 @@ function Contracts({
         cancel={handleContractCancellation}
         contractsRefresh={contractsRefresh}
         address={address}
+        contracts={contractsToShow}
+        noContractsMessage={'You have no contracts.'}
       />
 
       <CreateContractModal
@@ -175,4 +179,4 @@ function Contracts({
   );
 }
 
-export default withContractsState(Contracts);
+export default withContractsState(SellerHub);

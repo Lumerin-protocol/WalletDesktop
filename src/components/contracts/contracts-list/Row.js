@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
 import styled from 'styled-components';
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
 
-import { ClockIcon } from '../../icons/ClockIcon';
 import { Btn } from '../../common';
 import { CLOSEOUT_TYPE, CONTRACT_STATE } from '../../../enums';
 import Spinner from '../../common/Spinner';
-import { lmrEightDecimals } from '../../../store/utils/coinValue';
+import { ClockIcon } from '../../icons/ClockIcon';
 import theme from '../../../ui/theme';
-
+import {
+  formatDuration,
+  formatSpeed,
+  formatTimestamp,
+  formatPrice,
+  isContractClosed,
+  getContractState
+} from '../utils';
+import { SmallAssetContainer } from './ContractsRow.styles';
 const Container = styled.div`
   padding: 1.2rem 0;
   display: grid;
-  grid-template-columns: 1fr 40px 1fr 1fr 1fr 2fr;
+  grid-template-columns: ${p => p.ratio.map(x => `${x}fr`).join(' ')};
   text-align: center;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   cursor: pointer;
@@ -28,13 +34,6 @@ const Value = styled.label`
   justify-content: center;
   color: ${p => p.theme.colors.primary};
   font-size: 1.2rem;
-`;
-
-const SmallAssetContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 0 auto;
 `;
 
 const ActionButtons = styled.div`
@@ -56,7 +55,7 @@ const STATE_COLOR = {
   [CONTRACT_STATE.Avaliable]: theme.colors.success
 };
 
-function Row({ contract, cancel, address }) {
+function Row({ contract, cancel, address, ratio, explorerUrl }) {
   // TODO: Add better padding
   const [isPending, setIsPending] = useState(false);
 
@@ -84,82 +83,20 @@ function Row({ contract, cancel, address }) {
     return contract.balance === '0';
   };
 
-  const isContractClosed = () => {
-    return contract.seller === contract.buyer;
-  };
-
-  const getClockColor = () => {
+  const getClockColor = contract => {
     const CLOSED_COLOR = theme.colors.dark;
-    if (isContractClosed()) {
+    if (isContractClosed(contract)) {
       return CLOSED_COLOR;
     }
 
     return STATE_COLOR[contract.state];
   };
 
-  const getContractState = () => {
-    if (isContractClosed()) {
-      return 'Closed';
-    }
-
-    return Object.entries(CONTRACT_STATE).find(s => contract.state === s[1])[0];
-  };
-
-  const formatPrice = price => {
-    return `${Number(price) / lmrEightDecimals} LMR`;
-  };
-
-  const formatSpeed = speed => {
-    return Number(speed) / 10 ** 12;
-  };
-
-  const formatDuration = duration => {
-    const numLength = parseFloat(duration / 3600);
-    const days = Math.floor(numLength / 24);
-    const remainder = numLength % 24;
-    const hours = days >= 1 ? Math.floor(remainder) : Math.floor(numLength);
-    const minutes =
-      days >= 1
-        ? Math.floor(60 * (remainder - hours))
-        : Math.floor((numLength - Math.floor(numLength)) * 60);
-    const seconds = Math.floor(duration % 60);
-    const readableDays = days
-      ? days === 1
-        ? `${days} day`
-        : `${days} days`
-      : '';
-    const readableHours = hours
-      ? hours === 1
-        ? `${hours} hour`
-        : `${hours} hours`
-      : '';
-    const readableMinutes = minutes
-      ? minutes === 1
-        ? `${minutes} minute`
-        : `${minutes} minutes`
-      : '';
-    const readableSeconds =
-      !minutes && seconds
-        ? seconds === 1
-          ? `1 second`
-          : `${seconds} seconds`
-        : '';
-    const readableDate = `${readableDays} ${readableHours} ${readableMinutes} ${readableSeconds}`.trim();
-    return readableDate;
-  };
-
-  const formatTimestamp = timestamp => {
-    if (+timestamp === 0) {
-      return '';
-    }
-    return moment.unix(timestamp).format('L');
-  };
-
   return (
-    <Container>
+    <Container ratio={ratio} onClick={() => window.open(explorerUrl, '_blank')}>
       <Value>{formatTimestamp(contract.timestamp)}</Value>
-      <SmallAssetContainer data-rh={getContractState()}>
-        <ClockIcon size="3rem" fill={getClockColor()} />
+      <SmallAssetContainer data-rh={getContractState(contract)}>
+        <ClockIcon size="3rem" fill={getClockColor(contract)} />
       </SmallAssetContainer>
       <Value>{formatPrice(contract.price)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
@@ -175,7 +112,7 @@ function Row({ contract, cancel, address }) {
           </Value>
         ) : (
           <ActionButtons>
-            {!isContractClosed() && (
+            {!isContractClosed(contract) && (
               <ActionButton
                 disabled={isCancelBtnDisabled()}
                 onClick={handleCancel(CLOSEOUT_TYPE.Close)}
