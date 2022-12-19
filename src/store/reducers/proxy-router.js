@@ -5,6 +5,7 @@ import get from 'lodash/get';
 const initialState = {
   lastUpdated: null,
   syncStatus: 'syncing',
+  isLocal: false,
   isConnected: false,
   connections: []
 };
@@ -14,6 +15,11 @@ const reducer = handleActions(
     'initial-state-received': (state, { payload }) => ({
       ...state,
       ...get(payload, 'proxyRouter', {})
+    }),
+
+    'proxy-router-type-changed': (state, { payload }) => ({
+      ...state,
+      isLocal: payload.isLocal
     }),
 
     'proxy-router-status-changed': (state, { payload }) => ({
