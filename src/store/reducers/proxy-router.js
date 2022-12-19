@@ -5,6 +5,7 @@ import get from 'lodash/get';
 const initialState = {
   lastUpdated: null,
   syncStatus: 'syncing',
+  isLocal: false,
   isConnected: false,
   connections: []
 };
@@ -20,7 +21,8 @@ const reducer = handleActions(
       ...state,
       lastUpdated: parseInt(Date.now() / 1000, 10),
       isConnected: payload.isConnected,
-      syncStatus: payload.syncStatus
+      syncStatus: payload.syncStatus,
+      isLocal: payload.isLocal
     }),
 
     'proxy-router-connections-changed': (state, { payload }) => ({

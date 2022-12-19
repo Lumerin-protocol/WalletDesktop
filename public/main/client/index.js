@@ -14,7 +14,7 @@ const {
   refreshProxyRouterConnection,
 } = require("./handlers/single-core");
 
-const { runProxyRouter } = require("./proxyRouter");
+const { runProxyRouter, PROXY_ROUTER_MODE } = require("./proxyRouter");
 
 function startCore({ chain, core, config: coreConfig }, webContent) {
   logger.verbose(`Starting core ${chain}`);
@@ -92,16 +92,17 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         { password },
         { api }
       );
-      runProxyRouter({
+      const config = {
         privateKey,
         walletAddress: address,
         ...coreConfig.chain,
         ...proxyRouterUserConfig,
-      });
+      };
 
+      runProxyRouter(config, PROXY_ROUTER_MODE.Seller);
+      runProxyRouter(config, PROXY_ROUTER_MODE.Buyer);
 
-      const proxyRouterUrl = `http://localhost:8081`;
-      refreshProxyRouterConnection({ url: proxyRouterUrl }, { api });
+      refreshProxyRouterConnection({ url: config.localSellerProxyRouterUrl }, { api });
     } else {
       refreshProxyRouterConnection({}, { api });
     }
