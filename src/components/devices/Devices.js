@@ -54,6 +54,17 @@ const ConfigureBtn = styled(Btn)`
   color: ${p => p.theme.colors.primary};
 `;
 
+const Note = styled.div`
+  position: relative;
+  min-height: 1em;
+  margin: 1em 0em;
+  background: #f8f8f9;
+  padding: 1em 1.5em;
+  color: black;
+  border-radius: 4px;
+  box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.22) inset;
+`;
+
 const Devices = props => {
   const STRATUM_PROXY_ROUTER_PORT = 3333;
   const proxyRouterHost = new URL(props.proxyRouterUrl).hostname;
@@ -111,7 +122,11 @@ const Devices = props => {
           address={props.address}
           copyToClipboard={props.client.copyToClipboard}
         />
-
+        <Note>
+          In case of manual setup, please make sure you computer could be
+          reached from the miner`s network. Point your miner rigs to your
+          computer IP on port {props.sellerPort}.
+        </Note>
         <DeviceDiscoveryControl>
           <Sp mb={2}>
             <Flex.Row>

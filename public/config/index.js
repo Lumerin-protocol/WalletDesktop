@@ -17,8 +17,14 @@ const chain = {
   defaultGasPrice: process.env.DEFAULT_GAS_PRICE,
   maxGasPrice: process.env.MAX_GAS_PRICE,
 
-  localSellerProxyRouterUrl: 'http://localhost:8081',
-  localBuyerProxyRouterUrl: 'http://localhost:8082'
+
+  sellerProxyPort: process.env.SELLER_PROXY_DEFAULT_PORT,
+  buyerProxyPort: process.env.BUYER_PROXY_DEFAULT_PORT,
+  sellerWebPort: process.env.SELLER_WEB_DEFAULT_PORT,
+  buyerWebPort: process.env.BUYER_WEB_DEFAULT_PORT,
+
+  localSellerProxyRouterUrl: `http://localhost:${process.env.SELLER_WEB_DEFAULT_PORT}`,
+  localBuyerProxyRouterUrl: `http://localhost:${process.env.BUYER_WEB_DEFAULT_PORT}`
 }
 
 module.exports = {

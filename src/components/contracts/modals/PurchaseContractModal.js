@@ -125,8 +125,8 @@ function PurchaseContractModal(props) {
                 id="address"
               />
               <Sublabel>
-                Mining device address. The port number should be inputted in the
-                port number field.
+                Make sure that this address is publicly reachable and routable
+                to your device
               </Sublabel>
             </InputGroup>
           </Row>
@@ -141,6 +141,10 @@ function PurchaseContractModal(props) {
                 name="port"
                 id="port"
               />
+              <Sublabel>
+                Public port that should be routable to your local port{' '}
+                {props.buyerPort}
+              </Sublabel>
             </InputGroup>
           </Row>
           <Row>
