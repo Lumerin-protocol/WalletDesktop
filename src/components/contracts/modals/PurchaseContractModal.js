@@ -142,8 +142,7 @@ function PurchaseContractModal(props) {
                 id="port"
               />
               <Sublabel>
-                Public port that should be routable to your local port{' '}
-                {props.buyerPort}
+                Public port that should be routable to your local port {props.buyerPort}
               </Sublabel>
             </InputGroup>
           </Row>
