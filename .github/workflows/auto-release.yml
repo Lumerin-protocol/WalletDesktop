@@ -91,7 +91,7 @@ jobs:
               if grep -q "$namePrefix" <<< "$name"
               then
                 downloadUrl="$(<<<"$line" jq -r .browser_download_url)";
-                curl -o "$GITHUB_WORKSPACE/executables/proxy-router" $downloadUrl
+                curl -o "$GITHUB_WORKSPACE/executables/proxy-router" $downloadUrl -L
               fi
             done
         shell: bash
