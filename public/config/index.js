@@ -23,8 +23,8 @@ const chain = {
   sellerWebPort: process.env.SELLER_WEB_DEFAULT_PORT || 8081,
   buyerWebPort: process.env.BUYER_WEB_DEFAULT_PORT || 8082,
 
-  localSellerProxyRouterUrl: `http://localhost:${process.env.SELLER_WEB_DEFAULT_PORT}`,
-  localBuyerProxyRouterUrl: `http://localhost:${process.env.BUYER_WEB_DEFAULT_PORT}`
+  localSellerProxyRouterUrl: `http://localhost:${process.env.SELLER_WEB_DEFAULT_PORT || 8081}`,
+  localBuyerProxyRouterUrl: `http://localhost:${process.env.BUYER_WEB_DEFAULT_PORT || 8082}`
 }
 
 module.exports = {
