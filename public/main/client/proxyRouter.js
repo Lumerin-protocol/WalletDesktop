@@ -7,18 +7,18 @@ const PROXY_ROUTER_MODE = {
   Seller: "seller",
 };
 
-const MODE_TO_PORTS = {
-  [PROXY_ROUTER_MODE.Buyer]: [
-    "--proxy-address=0.0.0.0:3334",
-    `--web-address=0.0.0.0:8082`,
-  ],
-  [PROXY_ROUTER_MODE.Seller]: [
-    "--proxy-address=0.0.0.0:3333",
-    `--web-address=0.0.0.0:8081`,
-  ],
-};
-
 const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
+  const modes = {
+    [PROXY_ROUTER_MODE.Buyer]: [
+      `--proxy-address=0.0.0.0:${config.buyerProxyPort}`,
+      `--web-address=0.0.0.0:${config.buyerWebPort}`,
+    ],
+    [PROXY_ROUTER_MODE.Seller]: [
+      `--proxy-address=0.0.0.0:${config.sellerProxyPort}`,
+      `--web-address=0.0.0.0:${config.sellerWebPort}`,
+    ],
+  };
+
   try {
     const resourcePath =
       process.env.NODE_ENV === "production"
@@ -41,7 +41,7 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
       `--wallet-address=${config.walletAddress}`,
       `--wallet-private-key=${config.privateKey}`,
       "--log-level=debug",
-      ...MODE_TO_PORTS[mode],
+      ...modes[mode],
     ]);
 
     ls.stdout.on("data", (data) => {
