@@ -59,6 +59,10 @@ const IconLogoContainer = styled.div`
   }
 `;
 
+const NavContainer = styled.div`
+  overflow-y: scroll;
+`;
+
 const PrimaryNavContainer = styled.nav`
   flex-grow: 1;
   margin-top: 3rem;
@@ -81,21 +85,23 @@ export default function Sidebar() {
         <SidebarLumerinLightIcon size="6rem" />
       </IconLogoContainer>
 
-      <PrimaryNavContainer>
-        <PrimaryNav
-          parent={Container}
-          activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex}
-        />
-      </PrimaryNavContainer>
+      <NavContainer>
+        <PrimaryNavContainer>
+          <PrimaryNav
+            parent={Container}
+            activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
+          />
+        </PrimaryNavContainer>
 
-      <SecondaryNavContainer>
-        <SecondaryNav
-          activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex}
-          parent={Container}
-        />
-      </SecondaryNavContainer>
+        <SecondaryNavContainer>
+          <SecondaryNav
+            activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
+            parent={Container}
+          />
+        </SecondaryNavContainer>
+      </NavContainer>
     </Container>
   );
 }
