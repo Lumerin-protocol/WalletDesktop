@@ -23,7 +23,7 @@ export const getProxyRouterUrl = createSelector(
 
 export const getLocalProxyRouterUrl = createSelector(
   getConfig,
-  configData => configData.chain.localSellerProxyRouter
+  configData => configData.chain.localSellerProxyRouterUrl
 );
 
 // Returns the array of transactions of the current chain/wallet/address.
