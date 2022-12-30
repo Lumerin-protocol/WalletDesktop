@@ -135,6 +135,7 @@ function loadWindow() {
   });
 
   mainWindow.on("close", (event) => {
+    event.preventDefault();
     logger.error("close called: ", app.quitting);
     if (app.quitting) {
       const choice = dialog.showMessageBoxSync(mainWindow, {
@@ -146,15 +147,15 @@ function loadWindow() {
       });
       if (choice === 1) {
         logger.error("choice === 1", );
-        event.preventDefault();
+        // event.preventDefault();
       } else {
         logger.error("choice === 0", );
+        mainWindow.destroy();
         mainWindow = null;
         app.quit();
       }
     } else {
       logger.error("app.quitting false", );
-      event.preventDefault();
       mainWindow.hide();
     }
   });
@@ -168,12 +169,6 @@ function loadWindow() {
     app.quitting = true;
   });
 
-  app.on('window-all-closed', () => {
-    logger.error("window-all-closed", );
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
-});
 }
 
 function createWindow() {
