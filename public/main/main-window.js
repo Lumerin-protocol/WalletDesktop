@@ -155,6 +155,8 @@ function loadWindow() {
   });
 
   app.on("before-quit", () => (app.quitting = true));
+
+  app.on("will-quit", () => app.exit());
 }
 
 function createWindow() {
