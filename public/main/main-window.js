@@ -103,6 +103,8 @@ function loadWindow() {
     y: mainWindowState.y,
   });
 
+  require('@electron/remote/main').enable(mainWindow.webContents)
+
   mainWindowState.manage(mainWindow);
 
   analytics.init(mainWindow.webContents.getUserAgent());
