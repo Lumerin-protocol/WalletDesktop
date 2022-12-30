@@ -135,6 +135,7 @@ function loadWindow() {
   });
 
   mainWindow.on("close", (event) => {
+    logger.error("close called: ", app.quitting);
     if (app.quitting) {
       const choice = dialog.showMessageBoxSync(mainWindow, {
         type: "question",
@@ -144,9 +145,15 @@ function loadWindow() {
           "Are you sure you want to quit? Proxy Router will be terminated and you will stop running contracts",
       });
       if (choice === 1) {
+        logger.error("choice === 1", );
         event.preventDefault();
+      } else {
+        logger.error("choice === 0", );
+        mainWindow = null;
+        app.quit();
       }
     } else {
+      logger.error("app.quitting false", );
       event.preventDefault();
       mainWindow.hide();
     }
@@ -156,9 +163,17 @@ function loadWindow() {
     mainWindow.show();
   });
 
-  app.on("before-quit", () => (app.quitting = true));
+  app.on("before-quit", () => {
+    logger.error("before-quit", );
+    app.quitting = true;
+  });
 
-  app.on("will-quit", () => app.exit());
+  app.on('window-all-closed', () => {
+    logger.error("window-all-closed", );
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
+});
 }
 
 function createWindow() {
