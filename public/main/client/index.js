@@ -99,7 +99,10 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         ...proxyRouterUserConfig,
       };
 
-      runProxyRouter(config, PROXY_ROUTER_MODE.Seller);
+      runProxyRouter(
+        config,
+        PROXY_ROUTER_MODE.Seller
+      );
       runProxyRouter(config, PROXY_ROUTER_MODE.Buyer);
       send("proxy-router-type-changed", {
         isLocal: true,
