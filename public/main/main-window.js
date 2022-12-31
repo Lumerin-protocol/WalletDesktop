@@ -137,7 +137,7 @@ function loadWindow() {
   mainWindow.on("close", (event) => {
     event.preventDefault();
     logger.error("close called: ", app.quitting);
-    if (app.quitting) {
+    if (app.quitting || process.platform !== 'darwin') {
       const choice = dialog.showMessageBoxSync(mainWindow, {
         type: "question",
         buttons: ["Yes", "No"],
