@@ -21,7 +21,8 @@ function isImportRequestTransaction(rawTx) {
 function getTxType(rawTx, tokenData, myAddress) {
   if (isImportRequestTransaction(rawTx)) return 'import-requested';
   if (isSendTransaction(rawTx, tokenData, myAddress)) return 'sent';
-  if (isReceiveTransaction(rawTx, tokenData, myAddress)) return 'received';
+  if (isReceiveTransaction(rawTx, tokenData, myAddress.toLowerCase()))
+    return 'received';
   return 'unknown';
 }
 
