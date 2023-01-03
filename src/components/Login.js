@@ -19,7 +19,23 @@ const LoginBtn = styled(BaseBtn)`
   }
 `;
 
-function Login({ onInputChange, onSubmit, password, errors, status, error }) {
+const SecondaryBtn = styled(BaseBtn)`
+  font-size: 1.2rem;
+  color: ${p => p.theme.colors.dark}
+  :hover {
+    opacity: 0.75;
+  }
+`;
+
+function Login({
+  onInputChange,
+  onSubmit,
+  password,
+  errors,
+  status,
+  error,
+  logout
+}) {
   return (
     <AltLayout title="Enter your password">
       <form onSubmit={onSubmit} data-testid="login-form">
@@ -34,6 +50,11 @@ function Login({ onInputChange, onSubmit, password, errors, status, error }) {
             onChange={onInputChange}
             error={errors.password || error}
           />
+        </Sp>
+        <Sp mt={2}>
+          <SecondaryBtn onClick={() => logout({})} block>
+            Or setup new wallet
+          </SecondaryBtn>
         </Sp>
         <Sp mt={6}>
           <LoginBtn block submit disabled={status === 'pending'}>

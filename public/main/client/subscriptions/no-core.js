@@ -7,7 +7,8 @@ const listeners = {
   'validate-password': handlers.validatePassword,
   'change-password': handlers.changePassword,
   'persist-state': handlers.persistState,
-  'clear-cache': handlers.clearCache
+  'clear-cache': handlers.clearCache,
+  "logout": handlers.logout
 };
 
 // Subscribe to messages where no core has to react
