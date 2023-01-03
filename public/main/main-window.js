@@ -103,6 +103,8 @@ function loadWindow() {
     y: mainWindowState.y,
   });
 
+  require("@electron/remote/main").enable(mainWindow.webContents);
+
   mainWindowState.manage(mainWindow);
 
   analytics.init(mainWindow.webContents.getUserAgent());
@@ -133,7 +135,8 @@ function loadWindow() {
   });
 
   mainWindow.on("close", (event) => {
-    if (app.quitting) {
+    event.preventDefault();
+    if (app.quitting || process.platform !== "darwin") {
       const choice = dialog.showMessageBoxSync(mainWindow, {
         type: "question",
         buttons: ["Yes", "No"],
@@ -142,10 +145,13 @@ function loadWindow() {
           "Are you sure you want to quit? Proxy Router will be terminated and you will stop running contracts",
       });
       if (choice === 1) {
-        event.preventDefault();
+        return;
+      } else {
+        mainWindow.destroy();
+        mainWindow = null;
+        app.quit();
       }
     } else {
-      event.preventDefault();
       mainWindow.hide();
     }
   });
@@ -154,7 +160,9 @@ function loadWindow() {
     mainWindow.show();
   });
 
-  app.on("before-quit", () => (app.quitting = true));
+  app.on("before-quit", () => {
+    app.quitting = true;
+  });
 }
 
 function createWindow() {

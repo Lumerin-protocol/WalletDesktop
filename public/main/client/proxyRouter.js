@@ -55,6 +55,11 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
     ls.on("close", (code) => {
       logger.debug(`ProxyRouter-${mode} child process exited with code ${code}`);
     });
+
+    process.on('exit', () => {
+      ls.kill();
+    })
+    return ls;
   } catch (err) {
     logger.debug(`ProxyRouter-${mode} run error: ${err}`);
     throw err;
