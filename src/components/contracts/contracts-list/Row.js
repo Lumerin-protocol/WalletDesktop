@@ -64,6 +64,7 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
   }, [contract]);
 
   const handleCancel = closeOutType => e => {
+    e.stopPropagation();
     e.preventDefault();
     setIsPending(true);
     cancel(e, {
