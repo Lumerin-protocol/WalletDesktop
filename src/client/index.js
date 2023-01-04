@@ -112,7 +112,8 @@ const createClient = function(createStore) {
     setMinerPool: utils.forwardToMainProcess('set-miner-pool'),
     getLmrTransferGasLimit: utils.forwardToMainProcess(
       'get-lmr-transfer-gas-limit'
-    )
+    ),
+    logout: utils.forwardToMainProcess('logout')
   };
 
   const api = {

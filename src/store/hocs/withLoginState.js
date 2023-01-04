@@ -1,5 +1,6 @@
 import { validatePassword } from '../validators';
 import PropTypes from 'prop-types';
+import { withClient } from '../hocs/clientContext';
 import React from 'react';
 
 const withLoginState = WrappedComponent => {
@@ -36,6 +37,10 @@ const withLoginState = WrappedComponent => {
         );
     };
 
+    logout = () => {
+      return this.props.client.logout();
+    };
+
     onInputChange = ({ id, value }) => {
       this.setState(state => ({
         ...state,
@@ -58,13 +63,14 @@ const withLoginState = WrappedComponent => {
         <WrappedComponent
           onInputChange={this.onInputChange}
           onSubmit={this.onSubmit}
+          logout={this.logout}
           {...this.state}
         />
       );
     }
   }
 
-  return Container;
+  return withClient(Container);
 };
 
 export default withLoginState;

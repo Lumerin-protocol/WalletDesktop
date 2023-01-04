@@ -8,7 +8,7 @@ const config = require("../../../config");
 const wallet = require("../wallet");
 const noCore = require("./no-core");
 const WalletError = require("../WalletError");
-const { setProxyRouterConfig } = require("../settings");
+const { setProxyRouterConfig, cleanupDb } = require("../settings");
 
 const withAuth = (fn) => (data, { api }) => {
   if (typeof data.walletId !== "string") {
@@ -238,6 +238,10 @@ const getAddressAndPrivateKey = async (data, { api }) => {
 
 const refreshProxyRouterConnection = async (data, { api }) => api['proxy-router'].refreshConnectionsStream(data)
 
+const logout = async (data) => {
+  return cleanupDb();
+}
+
 module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
@@ -261,4 +265,5 @@ module.exports = {
   getLmrTransferGasLimit,
   getAddressAndPrivateKey,
   refreshProxyRouterConnection,
+  logout
 };
