@@ -12,10 +12,12 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
     [PROXY_ROUTER_MODE.Buyer]: [
       `--proxy-address=0.0.0.0:${config.buyerProxyPort}`,
       `--web-address=0.0.0.0:${config.buyerWebPort}`,
+      "--is-buyer=true",
     ],
     [PROXY_ROUTER_MODE.Seller]: [
       `--proxy-address=0.0.0.0:${config.sellerProxyPort}`,
       `--web-address=0.0.0.0:${config.sellerWebPort}`,
+      "--is-buyer=false",
     ],
   };
 
@@ -29,7 +31,6 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
       `--contract-address=${config.cloneFactoryAddress}`,
       `--eth-node-address=${config.wsApiUrl}`,
       "--hashrate-diff-threshold=0.10",
-      "--is-buyer=false",
       "--miner-vetting-duration=1m",
       `--pool-address=${config.defaultPool}`,
       "--pool-conn-timeout=5m",
@@ -53,12 +54,14 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
     });
 
     ls.on("close", (code) => {
-      logger.debug(`ProxyRouter-${mode} child process exited with code ${code}`);
+      logger.debug(
+        `ProxyRouter-${mode} child process exited with code ${code}`
+      );
     });
 
-    process.on('exit', () => {
+    process.on("exit", () => {
       ls.kill();
-    })
+    });
     return ls;
   } catch (err) {
     logger.debug(`ProxyRouter-${mode} run error: ${err}`);
