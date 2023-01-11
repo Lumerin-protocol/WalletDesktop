@@ -10,8 +10,8 @@ const LoginBtn = styled(BaseBtn)`
   font-weight: bold;
   height: 40px;
   border-radius: 5px;
-  background-color: ${p => p.theme.colors.primary}
-  color: ${p => p.theme.colors.light}
+  background-color: ${p => p.theme.colors.primary};
+  color: ${p => p.theme.colors.light};
 
   @media (min-width: 1040px) {
     margin-left: 0;
@@ -21,7 +21,7 @@ const LoginBtn = styled(BaseBtn)`
 
 const SecondaryBtn = styled(BaseBtn)`
   font-size: 1.2rem;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   :hover {
     opacity: 0.75;
   }
