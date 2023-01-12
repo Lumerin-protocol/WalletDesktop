@@ -24,7 +24,7 @@ const Modal = styled.div`
 const Body = styled.div`
   position: fixed;
   z-index: 20;
-  background-color: ${p => p.theme.colors.light}
+  background-color: ${p => p.theme.colors.light};
   width: 50%;
   height: 80%;
   border-radius: 5px;
@@ -47,7 +47,7 @@ const Title = styled.div`
   line-height: 2.4rem;
   font-size: 2rem;
   font-weight: 900;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   cursor: default;
 `;
 
@@ -56,7 +56,7 @@ const Subtitle = styled.div`
   line-height: 1.4rem;
   font-size: 1rem;
   font-weight: 400;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   cursor: default;
 `;
 
@@ -105,17 +105,17 @@ const Label = styled.label`
   line-height: 1.4rem;
   font-size: 1.2rem;
   font-weight: 900;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   cursor: default;
 `;
 
 const Sublabel = styled.label`
   line-height: 1.4rem;
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: 400;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   cursor: default;
-  margin-bottom: .4rem
+  margin-bottom: 0.4rem;
 `;
 
 const SublabelGreen = styled(Sublabel)`
@@ -129,8 +129,8 @@ const LeftBtn = styled(BaseBtn)`
   font-size: 1rem;
   border-radius: 5px;
   border: 1px solid ${p => p.theme.colors.primary};
-  background-color: ${p => p.theme.colors.light}
-  color: ${p => p.theme.colors.primary}
+  background-color: ${p => p.theme.colors.light};
+  color: ${p => p.theme.colors.primary};
 
   @media (min-width: 1040px) {
     margin-left: 0;
@@ -142,8 +142,8 @@ const RightBtn = styled(BaseBtn)`
   height: 40px;
   font-size: 1rem;
   border-radius: 5px;
-  background-color: ${p => p.theme.colors.primary}
-  color: ${p => p.theme.colors.light}
+  background-color: ${p => p.theme.colors.primary};
+  color: ${p => p.theme.colors.light};
 
   @media (min-width: 1040px) {
     margin-left: 0;
