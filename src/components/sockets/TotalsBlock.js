@@ -16,12 +16,12 @@ const Container = styled.div`
 `;
 
 const Total = styled.div`
-  background-color: ${p => p.theme.colors.xLight};
+  background-color: white;
   flex-direction: column;
   height: 95%;
   justify-content: space-between;
   padding: 1.4rem 2.6rem;
-  border-radius: 5px;
+  border-radius: 15px;
   min-width: 200px;
   @media (min-width: 1040px) {
   }
