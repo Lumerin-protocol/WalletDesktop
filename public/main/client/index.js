@@ -109,7 +109,10 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
       });
 
       refreshProxyRouterConnection(
-        { url: config.localSellerProxyRouterUrl },
+        { 
+          sellerNodeUrl: config.localSellerProxyRouterUrl,
+          buyerNodeUrl: config.localBuyerProxyRouterUrl
+        },
         { api }
       );
     } else {
