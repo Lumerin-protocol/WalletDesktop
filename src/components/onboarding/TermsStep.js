@@ -8,7 +8,7 @@ import Message from './Message';
 
 const DisclaimerWarning = styled.div`
   text-align: center;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   font-size: 16px;
   margin-top: 16px;
 `;
@@ -18,7 +18,7 @@ const DisclaimerMessage = styled.div`
   height: 130px;
   border-radius: 2px;
   background-color: rgba(0, 0, 0, 0.1);
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   overflow: auto;
   font-size: 12px;
   padding: 10px 16px 0 16px;
