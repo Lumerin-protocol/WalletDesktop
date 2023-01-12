@@ -3,26 +3,26 @@ import React from 'react';
 import { withClient } from '../../store/hocs/clientContext';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-
-import { BaseBtn } from '../common';
-import ToolIcon from '../icons/ToolIcon';
-import HelpIcon from '../icons/HelpIcon';
-import CogIcon from '../icons/CogIcon';
+import { IconPlugConnected } from '@tabler/icons';
+import { IconCpu2 } from '@tabler/icons';
+import { IconHelp } from '@tabler/icons';
+import { IconTools } from '@tabler/icons';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   max-height: 10%;
+  border-top: 1px solid #f4f4f4;
+  padding-top: 1rem;
 `;
 
 const Button = styled(NavLink)`
   display: flex;
-  min-height: 7.1rem;
+  min-height: 6rem;
   align-items: center;
   text-decoration: none;
-  letter-spacing: 1.6px;
-  color: ${p => p.theme.colors.darker};
+  color: ${p => p.theme.colors.inactive};
   padding: 1.6rem;
   border-top: 1px solid transparent;
 
@@ -41,7 +41,6 @@ const HelpLink = styled.span`
   min-height: 7.1rem;
   align-items: center;
   text-decoration: none;
-  letter-spacing: 1.6px;
   color: ${p => p.theme.colors.darker};
   padding: 1.6rem;
   border-top: 1px solid transparent;
@@ -58,8 +57,9 @@ const HelpLink = styled.span`
 `;
 
 const IconWrapper = styled.div`
-  margin-right: 1.6rem;
+  margin-right: 0.75rem;
   margin-left: 0.3rem;
+  width: 3rem;
   opacity: 0.5;
 
   ${Button}.active & {
@@ -70,6 +70,9 @@ const IconWrapper = styled.div`
 const Label = styled.span`
   opacity: 0;
   flex-grow: 1;
+  font-weight: 500;
+  text-align: left;
+  padding-bottom: 2px;
 
   ${({ parent }) => parent}:hover & {
     opacity: 0.5;
@@ -88,7 +91,14 @@ const Label = styled.span`
   }
 `;
 
-const iconSize = '3.2rem';
+const NavHeader = styled.h3`
+  color: ${p => p.theme.colors.primary};
+  padding-left: 2rem;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+`;
+
+const iconSize = '2rem';
 
 function SecondaryNav({
   parent,
@@ -96,28 +106,30 @@ function SecondaryNav({
   activeIndex,
   setActiveIndex
 }) {
-  // static propTypes = {
-  //   parent: PropTypes.object.isRequired,
-  //   client: PropTypes.shape({
-  //     onHelpLinkClick: PropTypes.func.isRequired
-  //   }).isRequired
-  // };
-
   return (
     <Container>
+      <NavHeader>Tools</NavHeader>
       <Button
         onClick={() => setActiveIndex(4)}
         activeClassName="active"
-        data-testid="indicies-nav-btn"
-        to="/indicies"
+        data-testid="auction-nav-btn"
+        to="/sockets"
       >
         <IconWrapper>
-          <CogIcon isActive={activeIndex === 4} size={iconSize} />
-          {/* <ReportsNavIcon isActive={activeIndex === 4} size={iconSize} /> */}
+          <IconPlugConnected width={iconSize} />
         </IconWrapper>
-        <Label parent={parent}>Indicies</Label>
+        <Label parent={parent}>Connections</Label>
       </Button>
-
+      <Button
+        onClick={() => setActiveIndex(5)}
+        activeClassName="active"
+        to="/devices"
+      >
+        <IconWrapper>
+          <IconCpu2 width={iconSize} />
+        </IconWrapper>
+        <Label parent={parent}>Devices</Label>
+      </Button>
       <Button
         onClick={() => setActiveIndex(5)}
         activeClassName="active"
@@ -126,16 +138,17 @@ function SecondaryNav({
         to="/tools"
       >
         <IconWrapper parent={parent}>
-          <ToolIcon isActive={activeIndex === 5} size={iconSize} />
+          <IconTools width={iconSize} />
         </IconWrapper>
-        <Label parent={parent}>Tools</Label>
+        <Label parent={parent}>Utilities</Label>
       </Button>
       <HelpLink data-testid="help-nav-btn" onClick={onHelpLinkClick}>
         <IconWrapper parent={parent}>
-          <HelpIcon size={iconSize} />
+          <IconHelp width={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Help</Label>
-      </HelpLink>
+      </HelpLink>{' '}
+      */}
     </Container>
   );
 }

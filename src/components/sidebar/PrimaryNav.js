@@ -1,11 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-
-import { WalletNavIcon } from '../icons/WalletNavIcon';
-import { SocketNavIcon } from '../icons/SocketNavIcon';
-import { ContractNavIcon } from '../icons/ContractNavIcon';
-import CogIcon from '../icons/CogIcon';
+import { IconFileReport } from '@tabler/icons';
+import { IconBuildingStore } from '@tabler/icons';
+import { IconChecklist } from '@tabler/icons';
+import { IconWallet } from '@tabler/icons';
 
 const Container = styled.div`
   display: flex;
@@ -16,12 +15,10 @@ const Container = styled.div`
 
 const Button = styled(NavLink)`
   display: flex;
-  min-height: 7.1rem;
+  min-height: 6rem;
   align-items: center;
   text-decoration: none;
-  letter-spacing: 1.6px;
-  // text-transform: uppercase;
-  color: ${p => p.theme.colors.darker};
+  color: ${p => p.theme.colors.inactive};
   padding: 1.6rem;
   border-top: 1px solid transparent;
 
@@ -36,8 +33,9 @@ const Button = styled(NavLink)`
 `;
 
 const IconWrapper = styled.div`
-  margin-right: 1.6rem;
+  margin-right: 0.75rem;
   margin-left: 0.3rem;
+  width: 3rem;
   opacity: 0.5;
 
   ${Button}.active & {
@@ -48,6 +46,9 @@ const IconWrapper = styled.div`
 const Label = styled.span`
   opacity: 0;
   flex-grow: 1;
+  font-weight: 500;
+  text-align: left;
+  padding-bottom: 2px;
 
   ${({ parent }) => parent}:hover & {
     opacity: 0.5;
@@ -66,7 +67,7 @@ const Label = styled.span`
   }
 `;
 
-const iconSize = '3.6rem';
+const iconSize = '2rem';
 
 export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
   return (
@@ -78,9 +79,11 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         to="/wallet"
       >
         <IconWrapper>
-          <WalletNavIcon isActive={activeIndex === 0} size={iconSize} />
+          <IconWallet width={iconSize} />
         </IconWrapper>
-        <Label parent={parent}>Wallet</Label>
+        <Label active={activeIndex === 0} parent={parent}>
+          Wallet
+        </Label>
       </Button>
 
       <Button
@@ -89,7 +92,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         to="/marketplace"
       >
         <IconWrapper>
-          <ContractNavIcon isActive={activeIndex === 1} size={iconSize} />
+          <IconBuildingStore width={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Marketplace</Label>
       </Button>
@@ -101,7 +104,7 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         to="/buyer-hub"
       >
         <IconWrapper>
-          <ContractNavIcon isActive={activeIndex === 2} size={iconSize} />
+          <IconFileReport width={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Buyer Hub</Label>
       </Button>
@@ -113,32 +116,9 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         to="/seller-hub"
       >
         <IconWrapper>
-          <ContractNavIcon isActive={activeIndex === 3} size={iconSize} />
+          <IconChecklist width={iconSize} />
         </IconWrapper>
         <Label parent={parent}>Seller Hub</Label>
-      </Button>
-
-      <Button
-        onClick={() => setActiveIndex(4)}
-        activeClassName="active"
-        data-testid="auction-nav-btn"
-        to="/sockets"
-      >
-        <IconWrapper>
-          <SocketNavIcon isActive={activeIndex === 4} size={iconSize} />
-        </IconWrapper>
-        <Label parent={parent}>Sockets</Label>
-      </Button>
-
-      <Button
-        onClick={() => setActiveIndex(5)}
-        activeClassName="active"
-        to="/devices"
-      >
-        <IconWrapper>
-          <SocketNavIcon isActive={activeIndex === 5} size={iconSize} />
-        </IconWrapper>
-        <Label parent={parent}>Devices</Label>
       </Button>
 
       {/* <Button

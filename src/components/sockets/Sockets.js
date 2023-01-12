@@ -43,7 +43,7 @@ const Sockets = ({
   return (
     <View data-testid="sockets-container">
       <LayoutHeader
-        title="Sockets"
+        title="Connections"
         address={address}
         copyToClipboard={copyToClipboard}
       />
