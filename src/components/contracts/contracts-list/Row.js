@@ -80,6 +80,13 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
     );
   };
 
+  const getClaimDisabledReason = () => {
+    if (contract.balance === '0') {
+      return 'Balance is empty';
+    }
+    return null;
+  };
+
   const isClaimBtnDisabled = () => {
     return contract.balance === '0';
   };
@@ -122,7 +129,8 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
               </ActionButton>
             )}
             <ActionButton
-              disabled={isClaimBtnDisabled()}
+              data-disabled={isClaimBtnDisabled()}
+              data-rh={getClaimDisabledReason()}
               onClick={handleCancel(CLOSEOUT_TYPE.Claim)}
             >
               Claim Funds
