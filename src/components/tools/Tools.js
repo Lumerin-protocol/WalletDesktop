@@ -164,7 +164,7 @@ const Tools = props => {
     return (
       <Container>
         <Sp mt={-4}>
-          <Subtitle>Recover a Wallet</Subtitle>
+          {/* <Subtitle>Recover a Wallet</Subtitle>
           <form data-testid="recover-form" onSubmit={goToReview}>
             <StyledParagraph>
               Enter a valid twelve-word recovery phrase to recover another
@@ -195,9 +195,8 @@ const Tools = props => {
                 )}
               </Flex.Row>
             </Sp>
-          </form>
+          </form> */}
           <Sp mt={5}>
-            <hr />
             <Subtitle>Change Password</Subtitle>
             <StyledParagraph>
               This will allow you to change the password you use to access the
@@ -223,7 +222,7 @@ const Tools = props => {
               isOpen={state.activeModal === 'confirm-rescan'}
             />
           </Sp>
-          <Sp mt={5}>
+          {/* <Sp mt={5}>
             <hr />
             <Subtitle>Run End-to-End Test</Subtitle>
             <StyledParagraph>
@@ -249,8 +248,9 @@ const Tools = props => {
               onConfirm={props.onRunTest}
               isOpen={state.activeModal === 'confirm-test'}
             />
-          </Sp>
-          <Sp mt={5}>
+          </Sp> */}
+          {/* TODO: intent: Connecct lumerin node in future */}
+          {/* <Sp mt={5}>
             <hr />
             <Subtitle>Restart Lumerin Node</Subtitle>
             <StyledParagraph>
@@ -262,7 +262,7 @@ const Tools = props => {
               Restart Node
             </StyledBtn>
             <Spinner show={isRestarting} />
-          </Sp>
+          </Sp> */}
           <Sp mt={5}>
             <hr />
             <h4>Wallet Information</h4>
