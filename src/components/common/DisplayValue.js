@@ -3,6 +3,13 @@ import { sanitize } from '../../store/utils';
 import smartRounder from 'smart-round';
 import PropTypes from 'prop-types';
 import React from 'react';
+import styled from 'styled-components';
+
+const LMR = styled.span`
+  font-size: 1.9rem;
+  line-height: 1.75rem;
+  margin-left: 5px;
+`;
 
 export function DisplayValue(props) {
   let formattedValue;
@@ -15,9 +22,13 @@ export function DisplayValue(props) {
     formattedValue = null;
   }
 
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  }
+
   return (
     <>
-      {props.value} {props.post}
+      {numberWithCommas(props.value)} {props.post} <LMR>LMR</LMR>
     </>
   );
 }

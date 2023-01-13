@@ -23,6 +23,11 @@ function PurchaseContractModal(props) {
 
   const preferredPools = [
     {
+      name: '-',
+      address: '',
+      port: ''
+    },
+    {
       name: 'Titan',
       address: 'stratum+tcp://mining.pool.titan.io',
       port: '4242'
@@ -102,7 +107,7 @@ function PurchaseContractModal(props) {
               <Label htmlFor="address">Preferred Pools</Label>
               <Select onChange={e => onSelectChange(e.target.value)}>
                 <option value="" hidden>
-                  Select a prefered poll
+                  Select a prefered pool
                 </option>
                 {preferredPools.map(p => (
                   <option key={p.name} value={p.name}>
@@ -142,13 +147,14 @@ function PurchaseContractModal(props) {
                 id="port"
               />
               <Sublabel>
-                Public port that should be routable to your local port {props.buyerPort}
+                Public port that should be routable to your local port{' '}
+                {props.buyerPort}
               </Sublabel>
             </InputGroup>
           </Row>
           <Row>
             <InputGroup>
-              <Label htmlFor="speed">Username</Label>
+              <Label htmlFor="speed">Username *</Label>
               <Input
                 value={inputs.username}
                 onChange={handleInputs}
@@ -157,10 +163,6 @@ function PurchaseContractModal(props) {
                 name="username"
                 id="username"
               />
-              <Sublabel>
-                Note: workerName is optional — it is fine if you do not provide
-                any.
-              </Sublabel>
             </InputGroup>
           </Row>
           <Row>

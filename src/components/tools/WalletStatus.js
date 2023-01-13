@@ -42,7 +42,7 @@ const WalletStatus = function(props) {
         timestamp={props.bestBlockTimestamp}
         render={({ timeAgo, diff }) => (
           <Text>
-            Best Block {props.height}
+            Block height {props.height}
             <MinedAgo diff={diff} as="span">
               mined {timeAgo}
             </MinedAgo>
