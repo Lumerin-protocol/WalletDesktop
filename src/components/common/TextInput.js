@@ -8,16 +8,15 @@ export const Label = styled.label`
   font-weight: 600;
   letter-spacing: 0.5px;
   color: ${p => (p.hasErrors ? p.theme.colors.danger : p.theme.colors.dark)};
-  text-shadow: ${p => p.theme.textShadow};
 `;
 
 const Input = styled.input`
   border: none;
   display: block;
-  border-radius: 5px;
+  border-radius: 15px;
   height: ${({ rows }) => (rows ? `${4 * rows + 0.8}rem` : '4.8rem')};
   padding: 0.8rem 1.6rem;
-  background-color: ${p => p.theme.colors.medium};
+  background-color: ${p => p.theme.colors.lightBlue};
   margin-top: 0.8rem;
   width: 100%;
   line-height: 4rem;
@@ -25,7 +24,6 @@ const Input = styled.input`
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.5px;
-  text-shadow: ${p => p.theme.textShadow};
   transition: box-shadow 300ms;
   resize: vertical;
   box-shadow: 0 2px 0 0px
