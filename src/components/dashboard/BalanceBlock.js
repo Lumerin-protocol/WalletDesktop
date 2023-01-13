@@ -13,16 +13,16 @@ const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
   background-color: #fff;
   height: 106px;
-  width: 100%;
-  padding: 6px 1.6rem 0 1.6rem;
+  max-width: 60%;
+  padding: 6px 1.6rem 6px 1.6rem;
   border-radius: 15px;
   display: flex;
   flex-direction: column;
 `;
 
-const SecondaryContrainer = styled.div`
+const SecondaryContainer = styled.div`
   display: flex;
-  height: 90px;
+  min-height: 90px;
   justify-content: space-between;
   align-items: center;
 `;
@@ -30,7 +30,6 @@ const SecondaryContrainer = styled.div`
 const WalletBalanceHeader = styled.div`
   font-size: 1.3rem;
   text-align: center;
-  height: 3px;
   color: ${p => p.theme.colors.primary};
 `;
 
@@ -41,7 +40,6 @@ const Balance = styled.div`
   justify-content: space-between;
   padding: 0.75em 1.6rem 0.75em 1rem;
   height: 90%;
-  position: relative;
   @media (min-width: 1040px) {
   }
 `;
@@ -66,17 +64,10 @@ const Primary = styled.div`
   color: ${p => p.theme.colors.primary};
   margin: 0 1.6rem;
   flex-grow: 1;
-  position: relative;
-  // top: ${relSize(-400)};
-  // font-size: ${relSize(58)};
-  font-size: min(max(20px,4vw),24px);
-  max-width: 150px;
+  font-size: min(max(20px, 4vw), 24px);
   min-width: 20px;
   overflow: scroll;
-
-  @media (min-width: 1440px) {
-    font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
-  }
+  font-size: 2.8rem;
 `;
 
 const Secondary = styled.div`
@@ -85,7 +76,6 @@ const Secondary = styled.div`
   font-weight: 600;
   color: ${p => p.theme.colors.darker};
   white-space: nowrap;
-  position: relative;
   top: ${relSize(-400)};
   font-size: ${relSize(48)};
 
@@ -101,7 +91,6 @@ const Secondary = styled.div`
 const UsdValue = styled.div`
   font-size: 12px;
   color: #8e8e8e;
-  position: absolute;
   top: 55px;
 `;
 
@@ -143,13 +132,13 @@ const BtnRow = styled.div`
 
 const LumerinContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  height: 90px;
+  min-height: 90px;
 `;
 
 const LMR = styled.span`
-  font-size: 1.9rem;
-  line-height: 1.75rem;
+  font-size: 1.25rem;
   margin-left: 5px;
 `;
 
@@ -172,9 +161,10 @@ function BalanceBlock({
 
   const LumerinMode = () => (
     <LumerinContainer>
-      <LumerinLightIcon size="5rem" />
       <Balance>
+        <WalletBalanceHeader>Wallet Balance</WalletBalanceHeader>
         <Primary data-testid="lmr-balance">
+          <LumerinLightIcon size="2rem" />
           <DisplayValue
             shouldFormate={true}
             value={lmrBalance}
@@ -196,7 +186,7 @@ function BalanceBlock({
           <DisplayValue shouldFormate={false} value={ethBalance} />
         </Primary>
         <Secondary data-testid="lmr-balance" hide>
-          <LumerinLightIcon size="2rem" /> {lmrBalance}
+          <LumerinLightIcon size="30px" /> {lmrBalance}
         </Secondary>
       </Balance>
     </>
@@ -205,8 +195,7 @@ function BalanceBlock({
   return (
     <>
       <Container>
-        <WalletBalanceHeader>Wallet Balance</WalletBalanceHeader>
-        <SecondaryContrainer>
+        <SecondaryContainer>
           <LumerinMode />
           <BtnRow>
             {/* <LeftBtn
@@ -236,7 +225,7 @@ function BalanceBlock({
               Send
             </RightBtn>
           </BtnRow>
-        </SecondaryContrainer>
+        </SecondaryContainer>
       </Container>
     </>
   );
