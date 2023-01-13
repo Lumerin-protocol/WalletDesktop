@@ -109,7 +109,7 @@ const LeftBtn = styled(BaseBtn)`
   height: 60%;
   font-size: 1.5rem;
   margin-right: 0.4rem;
-  border-radius: 5px;
+  border-radius: 5px !important;
   background-color: ${p => p.theme.colors.translucentPrimary};
   color: ${p => p.theme.colors.light};
 
@@ -122,7 +122,7 @@ const RightBtn = styled(BaseBtn)`
   height: 60%;
   font-size: 1.5rem;
   margin-left: 0.4rem;
-  border-radius: 5px;
+  border-radius: 5px !important;
   border: 1px solid ${p => p.theme.colors.translucentPrimary};
   background-color: ${p => p.theme.colors.light};
   color: ${p => p.theme.colors.translucentPrimary};
@@ -147,6 +147,12 @@ const LumerinContainer = styled.div`
   height: 90px;
 `;
 
+const LMR = styled.span`
+  font-size: 1.9rem;
+  line-height: 1.75rem;
+  margin-left: 5px;
+`;
+
 function BalanceBlock({
   sendDisabled,
   sendDisabledReason,
@@ -169,7 +175,11 @@ function BalanceBlock({
       <LumerinLightIcon size="5rem" />
       <Balance>
         <Primary data-testid="lmr-balance">
-          <DisplayValue shouldFormate={true} value={lmrBalance} />
+          <DisplayValue
+            shouldFormate={true}
+            value={lmrBalance}
+            post={<LMR>LMR</LMR>}
+          />
         </Primary>
         {lmrBalanceUSD !== undefined && <UsdValue>≈ {lmrBalanceUSD}</UsdValue>}
         {/* TODO: Fix ethBalance */}

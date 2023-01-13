@@ -5,12 +5,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-const LMR = styled.span`
-  font-size: 1.9rem;
-  line-height: 1.75rem;
-  margin-left: 5px;
-`;
-
 export function DisplayValue(props) {
   let formattedValue;
   try {
@@ -28,7 +22,7 @@ export function DisplayValue(props) {
 
   return (
     <>
-      {numberWithCommas(props.value)} {props.post} <LMR>LMR</LMR>
+      {numberWithCommas(props.value)} {props.post}
     </>
   );
 }
