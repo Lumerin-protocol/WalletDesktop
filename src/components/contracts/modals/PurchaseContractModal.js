@@ -96,7 +96,8 @@ function PurchaseContractModal(props) {
             the purchased hashpower to.
           </Subtitle>
           <ContractLink href={explorerUrl} target="_blank" rel="noreferrer">
-            Contract Address: {contract.id}
+            <h4>Contract Address:</h4>
+            <p>{contract.id}</p>
           </ContractLink>
         </TitleWrapper>
         <Form
@@ -104,10 +105,10 @@ function PurchaseContractModal(props) {
         >
           <Row>
             <InputGroup>
-              <Label htmlFor="address">Preferred Pools</Label>
+              <Label htmlFor="address">Preferred Pool</Label>
               <Select onChange={e => onSelectChange(e.target.value)}>
                 <option value="" hidden>
-                  Select a prefered pool
+                  Select a preferred pool
                 </option>
                 {preferredPools.map(p => (
                   <option key={p.name} value={p.name}>
@@ -184,7 +185,8 @@ function PurchaseContractModal(props) {
             style={{
               textAlign: 'center',
               justifyContent: 'space-between',
-              height: '60px'
+              height: '60px',
+              marginTop: '3rem'
             }}
           >
             <Row style={{ justifyContent: 'space-around' }}>
