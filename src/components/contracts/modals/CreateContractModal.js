@@ -77,7 +77,7 @@ function CreateContractModal(props) {
               </Sublabel>
             </InputGroup>
           </Row>
-          <Row style={{ maxWidth: '70%' }}>
+          <Row>
             <InputGroup>
               <Label htmlFor="time">Time</Label>
               <Input
