@@ -97,13 +97,14 @@ export const Input = styled.input`
   padding: 4px 8px;
   margin: 0.4rem 0 0.2rem 0;
   outline: 0;
+  border: 0px;
+  background: #eaf7fc;
   border-radius: 15px;
-  border-style: solid;
-  border-color: ${p => p.theme.colors.lightBG};
-  border-width: 1px;
-  color: ${p => p.theme.colors.primaryDark};
+  padding: 1rem 1.5rem;
+  margin-top: 0.25rem;
+
   ::placeholder {
-    color: ${p => p.theme.colors.lightBG};
+    color: rgba(1, 67, 83, 0.56);
   }
 `;
 
@@ -111,14 +112,12 @@ export const Select = styled.select`
   padding: 4px 8px;
   margin: 0.4rem 0 0.2rem 0;
   outline: 0;
+  border: 0px;
+  background: #eaf7fc;
   border-radius: 15px;
-  border-style: solid;
-  border-color: ${p => p.theme.colors.lightBG};
-  border-width: 1px;
-  color: ${p => p.theme.colors.primaryDark};
-  ::placeholder {
-    color: ${p => p.theme.colors.lightBG};
-  }
+  padding: 1rem 1.5rem;
+  margin-top: 0.25rem;
+  color: rgba(1, 67, 83, 0.56);
 `;
 
 export const Label = styled.label`

@@ -2,7 +2,11 @@ import React from 'react';
 
 export const LumerinLightIcon = ({ size = '6rem' }) => {
   return (
-    <svg size={size} viewBox="0 0 28 28">
+    <svg
+      size={size}
+      viewBox="0 0 28 28"
+      style={{ height: '50px', width: '50px' }}
+    >
       <defs>
         <linearGradient
           id="linear-gradient-1"

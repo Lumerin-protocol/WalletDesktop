@@ -12,11 +12,26 @@ const sizeMult = mult => `calc(5px * ${mult})`;
 const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
   background-color: #fff;
-  height: 100px;
-  width: 400px;
-  padding: 0 1.6rem 0 1.6rem;
+  height: 106px;
+  width: 100%;
+  padding: 6px 1.6rem 0 1.6rem;
   border-radius: 15px;
   display: flex;
+  flex-direction: column;
+`;
+
+const SecondaryContrainer = styled.div`
+  display: flex;
+  height: 90px;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const WalletBalanceHeader = styled.div`
+  font-size: 1.3rem;
+  text-align: center;
+  height: 3px;
+  color: ${p => p.theme.colors.primary};
 `;
 
 const Balance = styled.div`
@@ -55,7 +70,7 @@ const Primary = styled.div`
   // top: ${relSize(-400)};
   // font-size: ${relSize(58)};
   font-size: min(max(20px,4vw),24px);
-  max-width: 120px;
+  max-width: 150px;
   min-width: 20px;
   overflow: scroll;
 
@@ -87,14 +102,14 @@ const UsdValue = styled.div`
   font-size: 12px;
   color: #8e8e8e;
   position: absolute;
-  top: 62px;
+  top: 55px;
 `;
 
 const LeftBtn = styled(BaseBtn)`
   height: 60%;
   font-size: 1.5rem;
   margin-right: 0.4rem;
-  border-radius: 5px;
+  border-radius: 5px !important;
   background-color: ${p => p.theme.colors.translucentPrimary};
   color: ${p => p.theme.colors.light};
 
@@ -107,7 +122,7 @@ const RightBtn = styled(BaseBtn)`
   height: 60%;
   font-size: 1.5rem;
   margin-left: 0.4rem;
-  border-radius: 5px;
+  border-radius: 5px !important;
   border: 1px solid ${p => p.theme.colors.translucentPrimary};
   background-color: ${p => p.theme.colors.light};
   color: ${p => p.theme.colors.translucentPrimary};
@@ -124,6 +139,18 @@ const BtnRow = styled.div`
   height: 100%;
   align-items: center;
   justify-content: space-between;
+`;
+
+const LumerinContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 90px;
+`;
+
+const LMR = styled.span`
+  font-size: 1.9rem;
+  line-height: 1.75rem;
+  margin-left: 5px;
 `;
 
 function BalanceBlock({
@@ -144,17 +171,21 @@ function BalanceBlock({
   };
 
   const LumerinMode = () => (
-    <>
+    <LumerinContainer>
       <LumerinLightIcon size="5rem" />
       <Balance>
         <Primary data-testid="lmr-balance">
-          <DisplayValue shouldFormate={false} value={lmrBalance} />
+          <DisplayValue
+            shouldFormate={true}
+            value={lmrBalance}
+            post={<LMR>LMR</LMR>}
+          />
         </Primary>
         {lmrBalanceUSD !== undefined && <UsdValue>≈ {lmrBalanceUSD}</UsdValue>}
         {/* TODO: Fix ethBalance */}
         {/* <Secondary data-testid="eth-balance">ETH {ethBalance}</Secondary> */}
       </Balance>
-    </>
+    </LumerinContainer>
   );
 
   const EtherMode = () => (
@@ -174,36 +205,38 @@ function BalanceBlock({
   return (
     <>
       <Container>
-        <LumerinMode />
+        <WalletBalanceHeader>Wallet Balance</WalletBalanceHeader>
+        <SecondaryContrainer>
+          <LumerinMode />
+          <BtnRow>
+            {/* <LeftBtn
+              data-asset="ETH"
+              data-testid="receive-btn"
+              block
+            >
+              toggle {assetMode}
+            </LeftBtn> */}
+            <LeftBtn
+              data-modal="receive"
+              data-testid="receive-btn"
+              onClick={handleTabSwitch}
+              block
+            >
+              Receive
+            </LeftBtn>
 
-        <BtnRow>
-          {/* <LeftBtn
-            data-asset="ETH"
-            data-testid="receive-btn"
-            block
-          >
-            toggle {assetMode}
-          </LeftBtn> */}
-          <LeftBtn
-            data-modal="receive"
-            data-testid="receive-btn"
-            onClick={handleTabSwitch}
-            block
-          >
-            Receive
-          </LeftBtn>
-
-          <RightBtn
-            data-modal="send"
-            data-disabled={sendDisabled}
-            data-rh={sendDisabledReason}
-            data-testid="send-btn"
-            onClick={sendDisabled ? null : handleTabSwitch}
-            block
-          >
-            Send
-          </RightBtn>
-        </BtnRow>
+            <RightBtn
+              data-modal="send"
+              data-disabled={sendDisabled}
+              data-rh={sendDisabledReason}
+              data-testid="send-btn"
+              onClick={sendDisabled ? null : handleTabSwitch}
+              block
+            >
+              Send
+            </RightBtn>
+          </BtnRow>
+        </SecondaryContrainer>
       </Container>
     </>
   );

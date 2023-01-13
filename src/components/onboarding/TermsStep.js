@@ -7,7 +7,7 @@ import { AltLayout, Btn, Sp } from '../common';
 import Message from './Message';
 
 const DisclaimerWarning = styled.div`
-  text-align: center;
+  text-align: left;
   color: ${p => p.theme.colors.dark};
   font-size: 16px;
   margin-top: 16px;
@@ -49,7 +49,7 @@ const TermsStep = props => {
       </DisclaimerMessage>
 
       <Message>
-        <div>
+        <div style={{ display: 'flex' }}>
           <input
             data-testid="accept-terms-chb"
             onChange={onCheckboxToggle}
@@ -59,7 +59,7 @@ const TermsStep = props => {
           />
           <Subtext>I have read and accept these terms</Subtext>
         </div>
-        <div>
+        <div style={{ display: 'flex' }}>
           <input
             data-testid="accept-license-chb"
             onChange={onCheckboxToggle}
@@ -67,8 +67,11 @@ const TermsStep = props => {
             type="checkbox"
             id="licenseCheckbox"
           />
-          <Subtext>I have read and accept the </Subtext>
-          <a onClick={props.onTermsLinkClick}>software license</a>.
+          <Subtext>I have read and accept the</Subtext>
+          <a onClick={props.onTermsLinkClick} style={{ marginLeft: '5px' }}>
+            software license
+          </a>
+          .
         </div>
       </Message>
 

@@ -3,6 +3,7 @@ import { sanitize } from '../../store/utils';
 import smartRounder from 'smart-round';
 import PropTypes from 'prop-types';
 import React from 'react';
+import styled from 'styled-components';
 
 export function DisplayValue(props) {
   let formattedValue;
@@ -15,9 +16,13 @@ export function DisplayValue(props) {
     formattedValue = null;
   }
 
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  }
+
   return (
     <>
-      {props.value} {props.post}
+      {numberWithCommas(props.value)} {props.post}
     </>
   );
 }
