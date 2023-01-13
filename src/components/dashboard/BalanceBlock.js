@@ -11,11 +11,11 @@ const sizeMult = mult => `calc(5px * ${mult})`;
 
 const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
-  background-color: ${p => p.theme.colors.xLight};
+  background-color: #fff;
   height: 100px;
   width: 400px;
   padding: 0 1.6rem 0 1.6rem;
-  border-radius: 5px;
+  border-radius: 15px;
   display: flex;
 `;
 

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   margin-top: 2.4rem;
-  background-color: ${p => p.theme.colors.light};
   height: 100%;
 
   @media (min-width: 800px) {
@@ -14,12 +13,11 @@ export const Container = styled.div`
 
 export const Contracts = styled.div`
   margin: 1.6rem 0 1.6rem;
-  border: 1px solid ${p => p.theme.colors.lightBG};
-  border-radius: 5px;
+  border-radius: 15px;
+  background-color: #fff;
 `;
 
 export const ListContainer = styled.div`
-  background-color: #ffffff;
   height: calc(100vh - 250px);
 
   /*

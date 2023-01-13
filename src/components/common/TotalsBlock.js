@@ -28,7 +28,7 @@ const Total = styled.div`
   margin-right: 2rem;
   justify-content: space-between;
   padding: 1.4rem 2.6rem;
-  border-radius: 5px;
+  border-radius: 15px;
   @media (min-width: 1040px) {
   }
 `;

@@ -13,6 +13,8 @@ const Container = styled.div`
   margin-top: 2.4rem;
   background-color: ${p => p.theme.colors.light};
   height: 100%;
+  border-radius: 15px;
+  overflow-y: scroll;
 
   @media (min-width: 960px) {
   }
@@ -20,13 +22,11 @@ const Container = styled.div`
 
 const Sockets = styled.div`
   margin: 1.6rem 0 1.6rem;
-  border: 1px solid ${p => p.theme.colors.lightBG};
-  border-radius: 5px;
+  border-radius: 15px;
 `;
 
 const ListContainer = styled.div`
-  background-color: #ffffff;
-  height: calc(100vh - 320px);
+  height: calc(100vh - 370px);
 `;
 
 const SocketsRowContainer = styled.div`

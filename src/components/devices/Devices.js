@@ -14,7 +14,6 @@ import Spinner from '../common/Spinner';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${p => p.theme.colors.light};
   height: 100vh;
   max-width: 100vw;
   position: relative;
@@ -58,11 +57,10 @@ const Note = styled.div`
   position: relative;
   min-height: 1em;
   margin: 1em 0em;
-  background: #f8f8f9;
-  padding: 1em 1.5em;
-  color: black;
-  border-radius: 4px;
-  box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.22) inset;
+  background: #fff;
+  padding: 2rem 2.5rem;
+  color: ${p => p.theme.colors.primary};
+  border-radius: 15px;
 `;
 
 const Devices = props => {
@@ -123,8 +121,8 @@ const Devices = props => {
           copyToClipboard={props.client.copyToClipboard}
         />
         <Note>
-          In case of manual setup, please make sure you computer could be
-          reached from the miner`s network. Point your miner rigs to your
+          For manual configuration, please make sure your computer can be
+          reached from the miner's network. Point your mining rigs to your
           computer IP on port {props.sellerPort}.
         </Note>
         <DeviceDiscoveryControl>

@@ -43,7 +43,7 @@ const Title = styled.label`
   white-space: nowrap;
   margin: 0;
   font-weight: 600;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   margin-bottom: 4.8px;
   margin-right: 2.4rem;
   cursor: default;
@@ -75,9 +75,9 @@ const StyledBtn = styled(BaseBtn)`
   height: 40px;
   font-size: 1.5rem;
   border-radius: 5px;
-  padding: 0 .6rem;
-  background-color: ${p => p.theme.colors.primary}
-  color: ${p => p.theme.colors.light}
+  padding: 0 0.6rem;
+  background-color: ${p => p.theme.colors.primary};
+  color: ${p => p.theme.colors.light};
 
   @media (min-width: 1040px) {
     width: 35%;
@@ -92,6 +92,10 @@ const Subtitle = styled.h3`
 `;
 
 const StyledParagraph = styled.p`
+  color: ${p => p.theme.colors.dark};
+`;
+
+const WalletInfo = styled.h4`
   color: ${p => p.theme.colors.dark};
 `;
 
@@ -207,7 +211,6 @@ const Tools = props => {
             </NavLink>
           </Sp>
           <Sp mt={5}>
-            <hr />
             <Subtitle>Rescan Transactions List</Subtitle>
             <StyledParagraph>
               This will clear your local cache and rescan all your wallet
@@ -264,8 +267,7 @@ const Tools = props => {
             <Spinner show={isRestarting} />
           </Sp> */}
           <Sp mt={5}>
-            <hr />
-            <h4>Wallet Information</h4>
+            <WalletInfo>Wallet Information</WalletInfo>
             <WalletStatus />
           </Sp>
         </Sp>
