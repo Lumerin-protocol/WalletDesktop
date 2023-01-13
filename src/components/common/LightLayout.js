@@ -17,7 +17,7 @@ const Header = styled.header`
 `;
 
 const Title = styled.h1`
-  background-color: ${p => p.theme.colors.light}
+  background-color: ${p => p.theme.colors.light};
   color: ${p => p.theme.colors.dark};
   margin: 0;
   line-height: 3rem;

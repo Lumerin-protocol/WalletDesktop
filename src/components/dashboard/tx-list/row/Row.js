@@ -1,41 +1,42 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import withTxRowState from '@lumerin/wallet-ui-logic/src/hocs/withTxRowState';
+import withTxRowState from '../../../../store/hocs/withTxRowState';
 import Details from './Details';
 import Amount from './Amount';
 import { TxIcon } from './Icon';
 import { LumerinDarkIcon } from '../../../icons/LumerinDarkIcon';
+import { LumerinLightIcon } from '../../../icons/LumerinLightIcon';
 
 const Container = styled.div`
   margin-left: 1.6rem;
   padding: 1.2rem 2.4rem 1.2rem 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: 5fr 5fr 5fr 20fr;
   align-items: center;
-  justify-content: space-between;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   cursor: pointer;
   height: 66px;
 `;
 
-const IconLogoContainer = styled.div`
-  padding: 2.4rem 1.2rem;
-  height: 100px;
-  width: 100px
+const IconContainer = styled.div`
   display: block;
+  text-align: center;
+  margin: 0 auto;
   flex-shrink: 0;
+  width: 40px;
 `;
 
-const Row = ({ tx }) => (
-  <Container>
-    <IconLogoContainer>
-      <LumerinDarkIcon size="3rem" />
-    </IconLogoContainer>
-    <TxIcon type={tx.txType} />
-    <div>
-      <Amount />
-      <Details />
-    </div>
+const Row = ({ tx, explorerUrl }) => (
+  <Container onClick={() => window.open(explorerUrl, '_blank')}>
+    <IconContainer>
+      <LumerinLightIcon size="5rem" />
+    </IconContainer>
+    <IconContainer>
+      <TxIcon txType={tx.txType} />
+    </IconContainer>
+    <Amount {...tx} />
+    <Details {...tx} />
   </Container>
 );
 

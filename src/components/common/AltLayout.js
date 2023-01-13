@@ -2,15 +2,16 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
 
-import Banner from './Banner';
 import Flex from './Flex';
 import Sp from './Spacing';
+
+import { ReactComponent as LumerinLogoFull } from '../icons/LumerinLogoFull.svg';
 
 const Container = styled(Flex.Column)`
   min-height: 100vh;
   padding: 3.2rem;
   background: ${p => p.theme.colors.light};
-  top center;
+  top: center;
 `;
 
 const Body = styled.div`
@@ -34,6 +35,11 @@ const Title = styled.div`
   }
 `;
 
+const LogoContainer = styled.div`
+  padding-top: 80px;
+  padding-bottom: 20px;
+`;
+
 export default function AltLayout({ title, children, ...other }) {
   // static propTypes = {
   //   children: PropTypes.node.isRequired,
@@ -42,7 +48,9 @@ export default function AltLayout({ title, children, ...other }) {
 
   return (
     <Container align="center" {...other}>
-      <Banner />
+      <LogoContainer>
+        <LumerinLogoFull height="80px" width="250px" />
+      </LogoContainer>
       <Body>
         {title && <Title>{title}</Title>}
         <Sp mt={2}>{children}</Sp>

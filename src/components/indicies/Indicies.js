@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import withIndiciesState from '@lumerin/wallet-ui-logic/src/hocs/withIndiciesState';
+import withIndiciesState from '../../store/hocs/withIndiciesState';
 import { LayoutHeader } from '../common/LayoutHeader';
 import { View } from '../common/View';
 

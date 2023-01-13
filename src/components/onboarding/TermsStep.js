@@ -1,4 +1,4 @@
-import TermsAndConditions from '@lumerin/wallet-ui-logic/src/components/TermsAndConditions';
+import TermsAndConditions from '../../components/common/TermsAndConditions';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
@@ -7,8 +7,8 @@ import { AltLayout, Btn, Sp } from '../common';
 import Message from './Message';
 
 const DisclaimerWarning = styled.div`
-  text-align: center;
-  color: ${p => p.theme.colors.dark}
+  text-align: left;
+  color: ${p => p.theme.colors.dark};
   font-size: 16px;
   margin-top: 16px;
 `;
@@ -18,7 +18,7 @@ const DisclaimerMessage = styled.div`
   height: 130px;
   border-radius: 2px;
   background-color: rgba(0, 0, 0, 0.1);
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   overflow: auto;
   font-size: 12px;
   padding: 10px 16px 0 16px;
@@ -49,7 +49,7 @@ const TermsStep = props => {
       </DisclaimerMessage>
 
       <Message>
-        <div>
+        <div style={{ display: 'flex' }}>
           <input
             data-testid="accept-terms-chb"
             onChange={onCheckboxToggle}
@@ -59,7 +59,7 @@ const TermsStep = props => {
           />
           <Subtext>I have read and accept these terms</Subtext>
         </div>
-        <div>
+        <div style={{ display: 'flex' }}>
           <input
             data-testid="accept-license-chb"
             onChange={onCheckboxToggle}
@@ -67,8 +67,11 @@ const TermsStep = props => {
             type="checkbox"
             id="licenseCheckbox"
           />
-          <Subtext>I have read and accept the </Subtext>
-          <a onClick={props.onTermsLinkClick}>software license</a>.
+          <Subtext>I have read and accept the</Subtext>
+          <a onClick={props.onTermsLinkClick} style={{ marginLeft: '5px' }}>
+            software license
+          </a>
+          .
         </div>
       </Message>
 

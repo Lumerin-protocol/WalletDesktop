@@ -1,22 +1,25 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { ToastsContext } from '../../toasts';
 
 import BackIcon from '../../icons/BackIcon';
+import SwapIcon from '../../icons/SwapIcon';
+
 import { BaseBtn } from '../../common';
-import { abbreviateAddress } from '../../../utils';
+import theme from '../../../ui/theme';
 
 const HeaderWrapper = styled.div`
   display: flex;
-  postion: relative;
+  position: relative;
   height: 10%;
   align-content: center;
+  align-items: center;
 `;
 
 const Header = styled.div`
   font-size: 1.6rem;
   font-weight: bold;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   text-align: center;
   width: 100%;
 `;
@@ -47,6 +50,7 @@ const Currency = styled.span`
   color: ${({ isActive, theme }) =>
     isActive ? theme.colors.primary : theme.colors.dark};
 `;
+
 const AmountInput = styled.input`
   display: flex;
   font-weight: bold;
@@ -61,6 +65,14 @@ const AmountInput = styled.input`
   ::placeholder {
     color: ${p => p.theme.colors.dark};
   }
+
+  &[type='number']::-webkit-inner-spin-button,
+  &[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
 `;
 const AmountSublabel = styled.label`
   color: ${p => p.theme.colors.dark};
@@ -68,17 +80,26 @@ const AmountSublabel = styled.label`
   text-align: center;
 `;
 
+const SubAmount = styled.div`
+  color: ${p => p.theme.colors.lumerin.helpertextGray};
+  font-size: 13px;
+  text-align: center;
+`;
+
 const FeeContainer = styled.div`
   display: flex;
   flex-direction: column;
+  padding-top: 5px;
 `;
+
 const FeeRow = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
+
 const FeeLabel = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: ${p => p.theme.colors.dark};
 `;
 
@@ -114,7 +135,7 @@ const WalletInput = styled.input`
   border-style: solid;
   border-color: ${p => p.theme.colors.lightBG};
   border-width: 1px;
-  padding: 8px 60px 6px 60px;
+  padding: 8px 20px 6px 60px;
 `;
 
 const SendBtn = styled(BaseBtn)`
@@ -144,10 +165,19 @@ const FooterLabel = styled.label`
   margin-bottom: 5px;
 `;
 
+const IconContainer = styled.div`
+  margin: 0 auto;
+  padding: 5px;
+  cursor: pointer;
+`;
+
+const LMR_MODE = 'coinAmount';
+const USD_MODE = 'usdAmount';
+
 // export function ConfirmForm({ activeTab, address, lmrBalanceUSD, sendLmrDisabled, sendLmrDisabledReason, onTabSwitch, amountInput, onAmountInput, destinationAddress, onDestinationAddressInput, onInputChange, usdAmount, coinAmount, onMaxClick }) {
 export function ConfirmForm(props) {
-  const { usdAmount: amountInput = '', errors } = props;
-  console.log({ errors });
+  const [mode, setMode] = useState(LMR_MODE);
+
   const context = useContext(ToastsContext);
 
   const handleTabSwitch = e => {
@@ -157,13 +187,18 @@ export function ConfirmForm(props) {
   };
 
   const handleSendLmr = e => {
-    if (props.validate()) {
-      console.log('submitting');
+    const errorObj = props.validate();
+    if (!errorObj) {
       props.onSubmit();
+      handleTabSwitch(e);
     } else {
-      console.log('failed validation');
+      const message =
+        errorObj.coinAmount ||
+        errorObj.toAddress ||
+        errorObj.gasLimit ||
+        errorObj.gasPrice;
+      context.toast('error', message);
     }
-    handleTabSwitch(e);
   };
 
   const handleDestinationAddressInput = e => {
@@ -176,17 +211,22 @@ export function ConfirmForm(props) {
   const handleAmountInput = e => {
     e.preventDefault();
 
-    props.onInputChange(e.target);
-    props.onAmountInput(e.target.value);
-    // props.onInputChange({ id: 'coinAmount', value: e.target.value });
+    const { value } = e.target;
+    props.onInputChange({ id: mode, value });
+    props.onAmountInput(value);
   };
 
   if (!props.activeTab) {
     return <></>;
   }
 
-  const convertToLMR = val => {
-    return val * props.coinPrice;
+  const sanitize = amount => (amount === '< 0.01' ? '0.01' : amount);
+
+  const onModeChange = () => {
+    const newMode = mode === LMR_MODE ? USD_MODE : LMR_MODE;
+    const newAmount = props[newMode];
+    setMode(newMode);
+    props.onAmountInput(sanitize(newAmount));
   };
 
   return (
@@ -201,34 +241,34 @@ export function ConfirmForm(props) {
       <Column>
         <AmountContainer>
           <AmountInput
-            id="usdAmount"
+            type="number"
             placeholder={0}
             isActive={true}
             onChange={handleAmountInput}
-            value={amountInput}
+            value={props.amountInput}
           />
         </AmountContainer>
-        <AmountSublabel>LMR</AmountSublabel>
-        {/* <AmountContainer>
-          <Currency isActive={amountInput > 0}>$</Currency>
-          <AmountInput
-            id="usdAmount"
-            placeholder={0}
-            isActive={true}
-            onChange={handleAmountInput}
-            value={amountInput}
-          />
-        </AmountContainer> */}
-        {/* <AmountSublabel>
-          {+convertToLMR(props.amountInput).toFixed(2) || 0} LMR
-        </AmountSublabel> */}
+        <AmountSublabel>{mode === LMR_MODE ? 'LMR' : 'USD'}</AmountSublabel>
+        <IconContainer>
+          <SwapIcon
+            onClick={onModeChange}
+            fill={theme.colors.lumerin.helpertextGray}
+          ></SwapIcon>
+        </IconContainer>
+        {mode === LMR_MODE ? (
+          <SubAmount>≈ {props.usdAmount}</SubAmount>
+        ) : (
+          <SubAmount>≈ {props.coinAmount} LMR</SubAmount>
+        )}
 
         <FeeContainer>
+          {props.estimatedFee && (
+            <FeeRow>
+              <FeeLabel>Estimated fee:</FeeLabel>
+              <FeeLabel>{props.estimatedFee} ETH</FeeLabel>
+            </FeeRow>
+          )}
           {/* <FeeRow>
-            <FeeLabel>Lumerin Fee</FeeLabel>
-            <FeeLabel>{props.gasPrice || 3.45}</FeeLabel>
-          </FeeRow>
-          <FeeRow>
             <FeeLabel>Network Fee</FeeLabel>
             <FeeLabel>{props.gasPrice || 9}</FeeLabel>
           </FeeRow>
@@ -249,15 +289,12 @@ export function ConfirmForm(props) {
       </WalletContainer>
 
       <Footer>
-        {props.amountInput > 0 && (
-          <FooterRow>
-            <FooterLabel>LMR Balance</FooterLabel>
-            <FooterLabel>
-              {convertToLMR(props.amountInput).toFixed(2)} ≈ $
-              {props.amountInput}
-            </FooterLabel>
-          </FooterRow>
-        )}
+        <FooterRow>
+          <FooterLabel>LMR Balance</FooterLabel>
+          <FooterLabel>
+            {props.lmrBalanceWei} ≈ {props.lmrBalanceUSD}
+          </FooterLabel>
+        </FooterRow>
         <SendBtn data-modal="success" onClick={handleSendLmr}>
           Send now
         </SendBtn>

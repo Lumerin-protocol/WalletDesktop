@@ -1,6 +1,5 @@
-import withChangePasswordState from '@lumerin/wallet-ui-logic/src/hocs/withChangePasswordState';
+import withChangePasswordState from '../store/hocs/withChangePasswordState';
 import { withRouter } from 'react-router-dom';
-import * as utils from '@lumerin/wallet-ui-logic/src/utils';
 import styled from 'styled-components';
 import React, { useEffect, useContext } from 'react';
 

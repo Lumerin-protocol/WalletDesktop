@@ -3,10 +3,15 @@ import styled from 'styled-components';
 import React from 'react';
 
 import { DisplayValue } from '../../../common';
+import { toUSD } from '../../../../store/utils/syncAmounts';
+
+const ValueContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const Container = styled.div`
   line-height: 2.5rem;
-  text-align: right;
   opacity: ${({ isPending }) => (isPending ? '0.5' : '1')};
   color: ${p =>
     p.isPending
@@ -14,11 +19,12 @@ const Container = styled.div`
       : p.isFailed
       ? p.theme.colors.danger
       : p.theme.colors.primary};
-  display: flex;
-  justify-content: flex-end;
-  font-size: 2.3vw;
+  display: block;
+  text-align: center;
+  font-size: 1.6rem;
+  position: relative;
 
-  @media (min-width: 800px) {
+  /* @media (min-width: 800px) {
     font-size: 1.8vw;
   }
 
@@ -28,8 +34,15 @@ const Container = styled.div`
 
   @media (min-width: 1440px) {
     font-size: 2.2rem;
-  }
+  } */
 `;
+
+// const UsdValue = styled.div`
+//   font-size: 11px;
+//   color: #8e8e8e;
+//   position: absolute;
+//   top: 15px;
+// `;
 
 export default class Amount extends React.Component {
   // static propTypes = {
@@ -63,20 +76,23 @@ export default class Amount extends React.Component {
         {this.props.txType === 'unknown' || this.props.isProcessing ? (
           <div>New transaction</div>
         ) : (
-          <DisplayValue
-            value={this.props.value}
-            post={
-              this.props.txType === 'import-requested' ||
-              this.props.txType === 'imported' ||
-              this.props.txType === 'exported'
-                ? ' LMR'
-                : ` ${
-                    this.props.symbol === 'coin'
-                      ? this.props.coinSymbol
-                      : this.props.symbol
-                  }`
-            }
-          />
+          <ValueContainer>
+            <DisplayValue
+              value={this.props.value}
+              post={
+                this.props.txType === 'import-requested' ||
+                this.props.txType === 'imported' ||
+                this.props.txType === 'exported'
+                  ? ' LMR'
+                  : ` ${
+                      this.props.symbol === 'coin'
+                        ? this.props.coinSymbol
+                        : this.props.symbol
+                    }`
+              }
+            />
+            {/* <UsdValue>≈ {toUSD(this.props.value, this.props.rate)}$</UsdValue> */}
+          </ValueContainer>
         )}
       </Container>
     );

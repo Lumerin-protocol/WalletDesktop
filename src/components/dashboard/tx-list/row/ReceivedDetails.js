@@ -1,4 +1,4 @@
-import FilteredMessage from '@lumerin/wallet-ui-logic/src/components/FilteredMessage';
+import FilteredMessage from '../../../../components/common/FilteredMessage';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
@@ -25,9 +25,7 @@ export default class ReceivedDetails extends React.Component {
     return (
       <div>
         {this.props.isPending ? 'Pending' : 'Received'} from{' '}
-        <Address>
-          <FilteredMessage>Received from {this.props.from}</FilteredMessage>
-        </Address>
+        <Address>{this.props.from}</Address>
       </div>
     );
   }

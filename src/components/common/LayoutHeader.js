@@ -18,6 +18,7 @@ const Container = styled.div`
 const TitleRow = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 const Title = styled.label`
@@ -26,7 +27,7 @@ const Title = styled.label`
   white-space: nowrap;
   margin: 0;
   font-weight: 600;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.primary};
   margin-bottom: 4.8px;
   margin-right: 2.4rem;
   cursor: default;

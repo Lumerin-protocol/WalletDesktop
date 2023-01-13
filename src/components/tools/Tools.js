@@ -1,5 +1,5 @@
 import { withRouter, NavLink } from 'react-router-dom';
-import withToolsState from '@lumerin/wallet-ui-logic/src/hocs/withToolsState';
+import withToolsState from '../../store/hocs/withToolsState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React, { useState, useContext } from 'react';
@@ -36,13 +36,14 @@ const TitleContainer = styled.div`
   left: 0;
   top: 0;
 `;
+
 const Title = styled.label`
   font-size: 2.4rem;
   line-height: 3rem;
   white-space: nowrap;
   margin: 0;
   font-weight: 600;
-  color: ${p => p.theme.colors.dark}
+  color: ${p => p.theme.colors.dark};
   margin-bottom: 4.8px;
   margin-right: 2.4rem;
   cursor: default;
@@ -74,9 +75,9 @@ const StyledBtn = styled(BaseBtn)`
   height: 40px;
   font-size: 1.5rem;
   border-radius: 5px;
-  padding: 0 .6rem;
-  background-color: ${p => p.theme.colors.primary}
-  color: ${p => p.theme.colors.light}
+  padding: 0 0.6rem;
+  background-color: ${p => p.theme.colors.primary};
+  color: ${p => p.theme.colors.light};
 
   @media (min-width: 1040px) {
     width: 35%;
@@ -94,8 +95,12 @@ const StyledParagraph = styled.p`
   color: ${p => p.theme.colors.dark};
 `;
 
+const WalletInfo = styled.h4`
+  color: ${p => p.theme.colors.dark};
+`;
+
 const Tools = props => {
-  const renderForm = goToReview => {
+  const RenderForm = goToReview => {
     const defState = {
       activeModal: null,
       testSocket: '',
@@ -163,7 +168,7 @@ const Tools = props => {
     return (
       <Container>
         <Sp mt={-4}>
-          <Subtitle>Recover a Wallet</Subtitle>
+          {/* <Subtitle>Recover a Wallet</Subtitle>
           <form data-testid="recover-form" onSubmit={goToReview}>
             <StyledParagraph>
               Enter a valid twelve-word recovery phrase to recover another
@@ -194,9 +199,8 @@ const Tools = props => {
                 )}
               </Flex.Row>
             </Sp>
-          </form>
+          </form> */}
           <Sp mt={5}>
-            <hr />
             <Subtitle>Change Password</Subtitle>
             <StyledParagraph>
               This will allow you to change the password you use to access the
@@ -207,7 +211,6 @@ const Tools = props => {
             </NavLink>
           </Sp>
           <Sp mt={5}>
-            <hr />
             <Subtitle>Rescan Transactions List</Subtitle>
             <StyledParagraph>
               This will clear your local cache and rescan all your wallet
@@ -222,7 +225,7 @@ const Tools = props => {
               isOpen={state.activeModal === 'confirm-rescan'}
             />
           </Sp>
-          <Sp mt={5}>
+          {/* <Sp mt={5}>
             <hr />
             <Subtitle>Run End-to-End Test</Subtitle>
             <StyledParagraph>
@@ -248,8 +251,9 @@ const Tools = props => {
               onConfirm={props.onRunTest}
               isOpen={state.activeModal === 'confirm-test'}
             />
-          </Sp>
-          <Sp mt={5}>
+          </Sp> */}
+          {/* TODO: intent: Connecct lumerin node in future */}
+          {/* <Sp mt={5}>
             <hr />
             <Subtitle>Restart Lumerin Node</Subtitle>
             <StyledParagraph>
@@ -261,10 +265,9 @@ const Tools = props => {
               Restart Node
             </StyledBtn>
             <Spinner show={isRestarting} />
-          </Sp>
+          </Sp> */}
           <Sp mt={5}>
-            <hr />
-            <h4>Wallet Information</h4>
+            <WalletInfo>Wallet Information</WalletInfo>
             <WalletStatus />
           </Sp>
         </Sp>
@@ -293,7 +296,7 @@ const Tools = props => {
         onWizardSubmit={onWizardSubmit}
         pendingTitle="Recovering..."
         successText="Wallet successfully recovered"
-        renderForm={renderForm}
+        RenderForm={RenderForm}
         validate={props.validate}
         noCancel
         styles={{

@@ -18,6 +18,12 @@ const listeners = {
   'send-lmr': handlers.sendLmr,
   'send-eth': handlers.sendEth,
   'create-contract': handlers.createContract,
+  'purchase-contract': handlers.purchaseContract,
+  'cancel-contract': handlers.cancelContract,
+  "start-discovery": handlers.startDiscovery,
+  "stop-discovery": handlers.stopDiscovery,
+  "set-miner-pool": handlers.setMinerPool,
+  "get-lmr-transfer-gas-limit": handlers.getLmrTransferGasLimit,
 };
 
 let coreListeners = {};

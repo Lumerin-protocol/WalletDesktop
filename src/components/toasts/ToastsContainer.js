@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const ToastsContainer = styled.div`
   position: fixed;
@@ -7,7 +7,7 @@ const ToastsContainer = styled.div`
   width: 100%;
   max-width: 320px;
   margin-left: -160px;
-  z-index: 2;
-`
+  z-index: 11;
+`;
 
-export default ToastsContainer
+export default ToastsContainer;

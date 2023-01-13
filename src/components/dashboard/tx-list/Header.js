@@ -33,7 +33,10 @@ export default function Header(props) {
   return (
     <>
       <Container>
-        <Filter onFilterChange={props.onFilterChange} activeFilter={false} />
+        <Filter
+          onFilterChange={props.onFilterChange}
+          activeFilter={props.activeFilter}
+        />
       </Container>
     </>
   );

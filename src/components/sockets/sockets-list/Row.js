@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import withSocketsRowState from '@lumerin/wallet-ui-logic/src/hocs/withSocketsRowState';
+import withSocketsRowState from '../../../store/hocs/withSocketsRowState';
+import theme from '../../../ui/theme';
 import { SocketIcon } from '../../icons/SocketIcon';
 
-const columnCount = 4;
+const columnCount = 3;
 
 const calcWidth = n => 100 / n;
 
@@ -21,7 +22,7 @@ const Value = styled.label`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: ${calcWidth(columnCount) + 10}%;
+  width: ${calcWidth(columnCount)}%;
   color: black;
   font-size: 1.2rem;
 `;
@@ -31,7 +32,7 @@ const AssetContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  width: ${calcWidth(columnCount) + 10}%;
+  width: ${calcWidth(columnCount)}%;
 `;
 
 const SmallAssetContainer = styled.div`
@@ -39,7 +40,7 @@ const SmallAssetContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  width: ${calcWidth(columnCount)}%;
+  /* width: ${calcWidth(columnCount)}%; */
 `;
 
 const StatusPill = styled.span`
@@ -47,32 +48,38 @@ const StatusPill = styled.span`
   background-color: ${({ color }) => color};
   font-size: 1rem;
   padding: 0.6rem 1rem;
-  max-width: 75%;
+  width: 75%;
+  display: block;
+  margin: 0 auto;
 `;
 
-const statusColors = {
-  Running: '#11B4BF',
-  Available: '#66BE26',
-  Pending: '#8C2AF5',
-  Completed: '#DEE3EA'
+const stateColors = {
+  Running: theme.colors.primaryLight,
+  Available: theme.colors.success,
+  Vetting: theme.colors.warning
+};
+
+const statusToState = status => {
+  switch (status) {
+    case 'free':
+      return 'Available';
+    case 'vetting':
+      return 'Vetting';
+    default:
+      return 'Running';
+  }
 };
 
 const Row = ({ socket }) => {
   return (
     <Container>
-      <Value>{socket.ipAddress}</Value>
-      <SmallAssetContainer>
-        <SocketIcon size="3rem" fill="black" />
-      </SmallAssetContainer>
+      <Value>{socket.ID}</Value>
       <AssetContainer>
-        <StatusPill color={statusColors[socket.status]}>
-          {socket.status}
+        <StatusPill color={stateColors[statusToState(socket.Status)]}>
+          {statusToState(socket.Status)}
         </StatusPill>
       </AssetContainer>
-      <Value>{socket.socketAddress}</Value>
-      {/* <Value>{socket.total}</Value>
-      <Value>{socket.accepted}</Value>
-      <Value>{socket.rejected}</Value> */}
+      <Value>{socket.CurrentDestination}</Value>
     </Container>
   );
 };

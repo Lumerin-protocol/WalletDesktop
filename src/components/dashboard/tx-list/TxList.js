@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
+import React, { useState } from 'react';
+import { List as RVList, AutoSizer } from 'react-virtualized';
 import styled from 'styled-components';
 
-import withTxListState from '@lumerin/wallet-ui-logic/src/hocs/withTxListState';
+import withTxListState from '../../../store/hocs/withTxListState';
 import ScanningTxPlaceholder from './ScanningTxPlaceholder';
 import NoTxPlaceholder from './NoTxPlaceholder';
 import { ItemFilter, Flex } from '../../common';
@@ -12,7 +12,6 @@ import TxRow from './row/Row';
 const Container = styled.div`
   margin-top: 2.4rem;
   padding: 1.8rem 0;
-  background-color: ${p => p.theme.colors.light};
   height: 100%;
 
   @media (min-width: 960px) {
@@ -21,16 +20,12 @@ const Container = styled.div`
 
 const Transactions = styled.div`
   margin: 1.6rem 0 1.6rem;
-  border: 1px solid ${p => p.theme.colors.lightBG};
-  border-radius: 5px;
-  height: 60%;
+  border-radius: 15px;
+  background-color: #fff;
 `;
 
 const ListContainer = styled.div`
-  background-color: #ffffff;
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  height: calc(100vh - 370px);
 `;
 
 const TxRowContainer = styled.div`
@@ -42,11 +37,10 @@ const TxRowContainer = styled.div`
 const Title = styled.div`
   font-size: 2.4rem;
   line-height: 3rem;
-  color: ${p => p.theme.colors.darker}
   white-space: nowrap;
   margin: 0;
-  font-weight: 600;
-  color: ${p => p.theme.colors.dark}
+  font-weight: 500;
+  color: ${p => p.theme.colors.primary};
   margin-bottom: 4.8px;
   margin-right: 2.4rem;
   cursor: default;
@@ -79,36 +73,11 @@ export const TxList = ({
   //   ).isRequired
   // };
 
-  // For tests, where this component is rendered in isolation, we default to window
-  const elRef = useRef({} || window);
-
-  const [selectedTx, setSelectedTx] = useState(null);
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    // We need to grab the scrolling div (in <Router/>) to sync with react-virtualized scroll
-    elRef.current = document.querySelector('[data-scrollelement]');
-    if (!elRef.current && process.env.NODE_ENV !== 'test') {
-      throw new Error(
-        "react-virtualized in transactions list requires the scrolling parent to have a 'data-scrollelement' attribute."
-      );
-    }
-    setIsReady(true);
-  }, []);
-
-  const onTxClicked = ({ currentTarget }) => {
-    // if (!window.isDev || !e.shiftKey || !e.altKey) return;
-    setSelectedTx(currentTarget.dataset.hash);
-
-    client.onTransactionLinkClick(currentTarget.dataset.hash);
-  };
-
   const rowRenderer = transactionList => ({ key, style, index }) => (
     <TxRowContainer style={style} key={`${key}-${transactionList[index].hash}`}>
       <TxRow
         data-testid="tx-row"
         data-hash={transactionList[index].hash}
-        onClick={onTxClicked}
         tx={transactionList[index]}
       />
     </TxRowContainer>
@@ -119,8 +88,6 @@ export const TxList = ({
 
     client.onTransactionLinkClick(e.currentTarget.dataset.hash);
   };
-
-  if (!isReady) return null;
 
   return (
     <Container data-testid="tx-list">
@@ -149,35 +116,17 @@ export const TxList = ({
                   ) : (
                     <NoTxPlaceholder />
                   ))}
-                <WindowScroller
-                  // WindowScroller is required to sync window scroll with virtualized list scroll.
-                  // scrollElement is required because in our layout we're scrolling a div, not window
-                  scrollElement={elRef.current}
-                  // scrollElement={scrollElement}
-                >
-                  {({ height, isScrolling, onChildScroll, scrollTop }) => {
-                    if (!height) return null;
-
-                    return (
-                      // AutoSizer is required to make virtualized rows have responsive width
-                      <AutoSizer disableHeight>
-                        {({ width }) => (
-                          <RVList
-                            rowRenderer={rowRenderer(filteredItems)}
-                            isScrolling={isScrolling}
-                            autoHeight
-                            scrollTop={scrollTop}
-                            rowHeight={66}
-                            rowCount={filteredItems.length}
-                            onScroll={onChildScroll}
-                            height={height || 500} // defaults for tests
-                            width={width || 500} // defaults for tests
-                          />
-                        )}
-                      </AutoSizer>
-                    );
-                  }}
-                </WindowScroller>
+                <AutoSizer>
+                  {({ width, height }) => (
+                    <RVList
+                      rowRenderer={rowRenderer(filteredItems)}
+                      rowHeight={66}
+                      rowCount={filteredItems.length}
+                      height={height || 500} // defaults for tests
+                      width={width || 500} // defaults for tests
+                    />
+                  )}
+                </AutoSizer>
               </ListContainer>
             </React.Fragment>
           )}

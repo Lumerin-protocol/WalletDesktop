@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Message = styled.div`
   font-size: 1.6rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.5;
   color: ${p => p.theme.colors.dark};
 

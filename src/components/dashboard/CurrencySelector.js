@@ -1,5 +1,5 @@
 import styled, { createGlobalStyle, css } from 'styled-components';
-import withCurrencySelectorState from '@lumerin/wallet-ui-logic/src/hocs/withCurrencySelectorState';
+import withCurrencySelectorState from '../../store/hocs/withCurrencySelectorState';
 import * as ReachUI from '@reach/menu-button';
 import React from 'react';
 

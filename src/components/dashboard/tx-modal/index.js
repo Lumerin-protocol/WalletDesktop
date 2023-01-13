@@ -6,7 +6,7 @@ import { ReceiveForm } from './ReceiveForm';
 import { ConfirmForm } from './ConfirmForm';
 import { SuccessForm } from './SuccessForm';
 
-import withTransactionModalState from '@lumerin/wallet-ui-logic/src/hocs/withTransactionModalState';
+import withTransactionModalState from '../../../store/hocs/withTransactionModalState';
 import QRCode from 'qrcode.react';
 
 import CopyIcon from '../../icons/CopyIcon';
@@ -35,7 +35,7 @@ const Body = styled.div`
   justify-content: space-between;
   position: fixed;
   z-index: 20;
-  background-color: ${p => p.theme.colors.light}
+  background-color: ${p => p.theme.colors.light};
   width: 300px;
   height: 500px;
   border-radius: 5px;
@@ -77,8 +77,7 @@ function TransactionModal(props) {
             destinationAddress={destinationAddress}
             onDestinationAddressInput={onSetDestinationAddress}
             onAmountInput={setAmount}
-            lmrBalanceUSD={props.lmrBalanceUSD}
-            // amountInput={amount}
+            amountInput={amount}
             {...props}
           />
         )}

@@ -21,6 +21,10 @@ function setPasswordHash (hash) {
   setKey('user.passwordHash', hash);
 }
 
+const setProxyRouterConfig = (config) => setKey('user.proxyRouterConfig', JSON.stringify(config));
+
+const getProxyRouterConfig = () => JSON.parse(getKey('user.proxyRouterConfig'));
+
 function upgradeSettings (defaultSettings, currentSettings) {
   let finalSettings = merge({}, currentSettings);
   // Remove no longer used settings as now are stored in config
@@ -49,42 +53,34 @@ function upgradeSettings (defaultSettings, currentSettings) {
 
 function presetDefaults () {
   logger.verbose('Settings file', settings.file());
+  const currentSettings = settings.getSync();
+  const defaultSettings = require('./defaultSettings');
+  settings.setSync(merge(defaultSettings, currentSettings));
+  logger.verbose('Default settings applied');
+  logger.debug('Current settings', settings.getSync());
+}
 
+function cleanupDb() {
   const currentSettings = settings.getSync();
   const defaultSettings = require('./defaultSettings');
 
-  const currentSettingsVersion = currentSettings.settingsVersion || 0;
-
-  // User settings format was changed in v2
-  if (currentSettingsVersion <= 1) {
-    logger.warn('Removing old user settings');
-    delete currentSettings.user;
-  }
-
+  logger.warn('Removing old user settings');
+  delete currentSettings.user;
   // Overwrite old settings and clear db if settings file version changed
-  if (defaultSettings.settingsVersion > currentSettingsVersion) {
-    logger.verbose('Updating default settings');
-    upgradeSettings(defaultSettings, currentSettings);
-    const db = getDb();
-    db.collection('Balances');
-    db.collection('Rates');
-    db.collection('TokenBalances');
-    db.collection('Transactions');
-    db.collection('State');
-    db.dropDatabase()
-      .catch(function (err) {
-        logger.error('Possible database corruption', err.message);
-        restart();
-      });
-  } else {
-    settings.setSync(merge(defaultSettings, currentSettings));
-    logger.verbose('Default settings applied');
-    logger.debug('Current settings', settings.getSync());
-  }
+  upgradeSettings(defaultSettings, currentSettings);
+  const db = getDb();
+  db.dropDatabase()
+    .catch(function (err) {
+      logger.error('Possible database corruption', err.message);
+    });
+  restart(1);
 }
 
 module.exports = {
   getPasswordHash,
   setPasswordHash,
-  presetDefaults
+  presetDefaults,
+  setProxyRouterConfig,
+  getProxyRouterConfig,
+  cleanupDb
 };

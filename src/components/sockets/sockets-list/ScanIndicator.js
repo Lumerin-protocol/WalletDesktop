@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import styled from 'styled-components';
 
-import withScanIndicatorState from '@lumerin/wallet-ui-logic/src/hocs/withScanIndicatorState';
+import withScanIndicatorState from '../../../store/hocs/withScanIndicatorState';
 import { ToastsContext } from '../../toasts';
 import Spinner from '../../common/Spinner';
 

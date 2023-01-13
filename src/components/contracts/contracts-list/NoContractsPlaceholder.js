@@ -7,7 +7,6 @@ const Container = styled.div`
 
 const Label = styled.div`
   line-height: 3rem;
-  font-family: Muli;
   font-size: 2.4rem;
   font-weight: 600;
   text-align: center;
@@ -20,10 +19,10 @@ const Emoji = styled.svg`
   margin: 0 auto;
 `;
 
-export default function NoContractsPlaceholder() {
+export default function NoContractsPlaceholder({ message }) {
   return (
     <Container data-testid="no-contract-placeholder">
-      <Label>No contracts yet!</Label>
+      <Label>{`${message || 'No contracts yet!'}`}</Label>
     </Container>
   );
 }

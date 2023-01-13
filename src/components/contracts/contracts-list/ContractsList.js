@@ -1,109 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { List as RVList, AutoSizer, WindowScroller } from 'react-virtualized';
-import withContractsListState from '@lumerin/wallet-ui-logic/src/hocs/withContractsListState';
-import styled from 'styled-components';
-
+import { List as RVList, AutoSizer } from 'react-virtualized';
+import withContractsListState from '../../../store/hocs/withContractsListState';
 import ScanningContractsPlaceholder from './ScanningContractsPlaceholder';
 import NoContractsPlaceholder from './NoContractsPlaceholder';
 import { ItemFilter, Flex } from '../../common';
 import Header from './Header';
 import ContractsRow from './Row';
+import {
+  Container,
+  ListContainer,
+  Contracts,
+  FooterLogo,
+  Title
+} from './ContractsList.styles';
+import { ContractsRowContainer } from './ContractsRow.styles';
 
-const Container = styled.div`
-  margin-top: 2.4rem;
-  background-color: ${p => p.theme.colors.light};
-  height: 100%;
-
-  @media (min-width: 800px) {
-  }
-  @media (min-width: 1200px) {
-  }
-`;
-
-const Contracts = styled.div`
-  margin: 1.6rem 0 1.6rem;
-  border: 1px solid ${p => p.theme.colors.lightBG};
-  border-radius: 5px;
-  height: 60%;
-`;
-
-const ListContainer = styled.div`
-  background-color: #ffffff;
-  height: 100%;
-  overflow-y: auto;
-  /*
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
-  @media (min-width: 800px) {
-  }
-  @media (min-width: 1200px) {
-  }
-  */
-`;
-
-const ContractsRowContainer = styled.div`
-  &:hover {
-    background-color: rgba(126, 97, 248, 0.1);
-  }
-`;
-
-const FooterLogo = styled.div`
-  padding: 4.8rem 0;
-  width: 3.2rem;
-  margin: 0 auto;
-`;
-
-const Title = styled.div`
-  font-size: 2.4rem;
-  line-height: 3rem;
-  color: ${p => p.theme.colors.darker}
-  white-space: nowrap;
-  margin: 0;
-  font-weight: 600;
-  color: ${p => p.theme.colors.dark}
-  margin-bottom: 4.8px;
-  margin-right: 2.4rem;
-  cursor: default;
-
-  @media (min-width: 1140px) {
-    margin-right: 0.8rem;
-  }
-
-  @media (min-width: 1200px) {
-    margin-right: 1.6rem;
-  }
-`;
-
-function ContractsList({ hasContracts, contracts, syncStatus }) {
+function ContractsList({
+  contracts,
+  syncStatus,
+  cancel,
+  address,
+  contractsRefresh,
+  noContractsMessage,
+  customRowRenderer,
+  tabs
+}) {
   const [selectedContracts, setSelectedContracts] = useState([]);
-  const [isReady, setIsReady] = useState(false);
-  const [scrollElement, setScrollElement] = useState(window);
+  const hasContracts = contracts.length;
+  const defaultTabs = [
+    { value: 'timestamp', name: 'Started', ratio: 2 },
+    { ratio: 1 },
+    { value: 'price', name: 'Price', ratio: 2 },
+    { value: 'length', name: 'Duration', ratio: 2 },
+    { value: 'speed', name: 'Speed (TH/s)', ratio: 2 },
+    { value: 'action', name: 'Actions', ratio: 4 }
+  ];
+
+  const tabsToShow = tabs || defaultTabs;
+  const ratio = tabsToShow.map(x => x.ratio);
 
   useEffect(() => {
-    // We need to grab the scrolling div (in <Router/>) to sync with react-virtualized scroll
-    const element = document.querySelector('[data-scrollelement]');
-    if (!element && process.env.NODE_ENV !== 'test') {
-      throw new Error(
-        "react-virtualized in Contracts list requires the scrolling parent to have a 'data-scrollelement' attribute."
-      );
-    }
-    // For tests, where this component is rendered in isolation, we default to window
-    setScrollElement(element);
-    setIsReady(true);
+    contractsRefresh();
   }, []);
 
   const onContractsClicked = ({ currentTarget }) => {
     setSelectedContracts(currentTarget.dataset.hash);
   };
 
-  const rowRenderer = contractsList => ({ key, index, style }) => (
+  const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <ContractsRow
         data-testid="Contracts-row"
         onClick={onContractsClicked}
         contract={contractsList[index]}
+        cancel={cancel}
+        address={address}
+        ratio={ratio}
       />
     </ContractsRowContainer>
   );
@@ -115,11 +67,17 @@ function ContractsList({ hasContracts, contracts, syncStatus }) {
     if (!window.isDev || !e.shiftKey || !e.altKey) return;
   };
 
-  if (!isReady) return null;
+  const formatStatus = s => {
+    if (s === 'up-to-date') {
+      return 'up to date';
+    }
+    return s;
+  };
+
   return (
     <Container data-testid="Contracts-list">
       <Flex.Row grow="1">
-        <Title onClick={handleClick}>Status</Title>
+        <Title onClick={handleClick}>Status: {formatStatus(syncStatus)}</Title>
       </Flex.Row>
       <Contracts>
         <ItemFilter extractValue={filterExtractValue} items={contracts}>
@@ -129,6 +87,7 @@ function ContractsList({ hasContracts, contracts, syncStatus }) {
                 onFilterChange={onFilterChange}
                 activeFilter={activeFilter}
                 syncStatus={syncStatus}
+                tabs={tabsToShow}
               />
 
               <ListContainer>
@@ -136,35 +95,23 @@ function ContractsList({ hasContracts, contracts, syncStatus }) {
                   (syncStatus === 'syncing' ? (
                     <ScanningContractsPlaceholder />
                   ) : (
-                    <NoContractsPlaceholder />
+                    <NoContractsPlaceholder message={noContractsMessage} />
                   ))}
-                <WindowScroller
-                  // WindowScroller is required to sync window scroll with virtualized list scroll.
-                  // scrollElement is required because in our layout we're scrolling a div, not window
-                  scrollElement={scrollElement}
-                >
-                  {({ height, isScrolling, onChildScroll, scrollTop }) => {
-                    if (!height) return null;
-                    return (
-                      // AutoSizer is required to make virtualized rows have responsive width
-                      <AutoSizer disableHeight>
-                        {({ width }) => (
-                          <RVList
-                            rowRenderer={rowRenderer(filteredItems)}
-                            isScrolling={isScrolling}
-                            autoHeight
-                            scrollTop={scrollTop}
-                            rowHeight={66}
-                            rowCount={filteredItems.length}
-                            onScroll={onChildScroll}
-                            height={height || 500} // defaults for tests
-                            width={width || 500} // defaults for tests
-                          />
-                        )}
-                      </AutoSizer>
-                    );
-                  }}
-                </WindowScroller>
+                <AutoSizer>
+                  {({ width, height }) => (
+                    <RVList
+                      rowRenderer={
+                        customRowRenderer
+                          ? customRowRenderer(filteredItems, ratio)
+                          : rowRenderer(filteredItems, ratio)
+                      }
+                      rowHeight={66}
+                      rowCount={contracts.length}
+                      height={height || 500} // defaults for tests
+                      width={width || 500} // defaults for tests
+                    />
+                  )}
+                </AutoSizer>
                 <FooterLogo></FooterLogo>
               </ListContainer>
             </React.Fragment>

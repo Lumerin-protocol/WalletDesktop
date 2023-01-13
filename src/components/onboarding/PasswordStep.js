@@ -1,4 +1,4 @@
-import * as utils from '@lumerin/wallet-ui-logic/src/utils';
+import * as utils from '../../store/utils';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
@@ -7,7 +7,7 @@ import { EntropyMeter, TextInput, AltLayout, Btn, Sp } from '../common';
 import Message from './Message';
 
 const PasswordMessage = styled(Message)`
-  text-align: center;
+  text-align: left;
   color: ${p => p.theme.colors.dark};
 `;
 

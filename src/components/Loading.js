@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import withLoadingState from '@lumerin/wallet-ui-logic/src/hocs/withLoadingState';
+import withLoadingState from '../store/hocs/withLoadingState';
 
 import { LoadingBar, AltLayout, Flex } from './common';
 import ChecklistItem from './common/ChecklistItem';

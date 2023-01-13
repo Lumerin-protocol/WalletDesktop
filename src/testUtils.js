@@ -1,13 +1,13 @@
 /* eslint-disable require-path-exists/exists */
 /* eslint-disable import/no-unresolved */
-import { Provider as ClientProvider } from '@lumerin/wallet-ui-logic/src/hocs/clientContext';
-import { Provider, createStore } from '@lumerin/wallet-ui-logic/src/store';
+import { Provider as ClientProvider } from './store/hocs/clientContext';
+import { Provider, createStore } from './store/store';
 import { render, Simulate } from 'react-testing-library';
 import { ThemeProvider } from 'styled-components';
 import { MemoryRouter } from 'react-router';
 import createClient from './client';
 import { merge } from 'lodash';
-import theme from '@lumerin/wallet-ui-logic/src/theme';
+import theme from './ui/theme';
 import React from 'react';
 
 import config from '../config';

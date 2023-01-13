@@ -1,9 +1,9 @@
-import FilteredMessage from '@lumerin/wallet-ui-logic/src/components/FilteredMessage';
-import * as validators from '@lumerin/wallet-ui-logic/src/validators';
-import { withClient } from '@lumerin/wallet-ui-logic/src/hocs/clientContext';
+import FilteredMessage from '../../components/common/FilteredMessage';
+import * as validators from '../../store/validators';
+import { withClient } from '../../store/hocs/clientContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from '@lumerin/wallet-ui-logic/src/theme';
+import theme from '../../ui/theme';
 import React, { useState } from 'react';
 
 import { LoadingBar, TextInput, BaseBtn, Flex, Btn, Sp } from './index';
@@ -136,7 +136,7 @@ const ConfirmationWizard = props => {
   const { password, errors, status, error } = state;
 
   if (status === 'init') {
-    return props.renderForm(goToReview);
+    return props.RenderForm(goToReview);
   } else if (status === 'confirm') {
     return (
       <form onSubmit={onConfirmClick} data-testid="confirm-form">

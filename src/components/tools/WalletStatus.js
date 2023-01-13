@@ -1,4 +1,4 @@
-import withWalletInfoState from '@lumerin/wallet-ui-logic/src/hocs/withWalletInfoState';
+import withWalletInfoState from '../../store/hocs/withWalletInfoState';
 import styled from 'styled-components';
 import React from 'react';
 
@@ -42,7 +42,7 @@ const WalletStatus = function(props) {
         timestamp={props.bestBlockTimestamp}
         render={({ timeAgo, diff }) => (
           <Text>
-            Best Block {props.height}
+            Block height {props.height}
             <MinedAgo diff={diff} as="span">
               mined {timeAgo}
             </MinedAgo>
@@ -59,17 +59,17 @@ const WalletStatus = function(props) {
           Web3 connection
         </Text>
         <Sp px={2} />
-        <Text>
+        {/* <Text>
           <IndicatorLed
             isConnected={props.isIndexerConnected}
             isOnline={props.isOnline}
           />
           Indexer connection
         </Text>
-        <Sp px={2} />
+        <Sp px={2} /> */}
         <Text>
           <IndicatorLed
-            isConnected={props.isIndexerConnected}
+            isConnected={props.isProxyRouterConnected}
             isOnline={props.isOnline}
           />
           Proxy-Router connection

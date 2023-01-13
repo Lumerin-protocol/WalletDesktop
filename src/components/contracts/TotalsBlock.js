@@ -7,10 +7,10 @@ const Container = styled.div`
   margin: 1.6rem 0 1.6rem;
   width: 100%;
   height: 100px;
-  width: 100%;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
+
   @media (min-width: 1040px) {
   }
 `;

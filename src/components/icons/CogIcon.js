@@ -2,13 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import BaseIcon from './BaseIcon';
+import theme from '../../ui/theme';
 
 const CogIcon = ({ isActive, size }, props) => {
   const Circle = styled.div`
     background-color: ${p => p.theme.colors.medium};
     border-radius: 50%;
   `;
-  const fill = isActive ? '#11B4BF' : 'black';
+  const fill = isActive ? theme.colors.primary : theme.colors.inactive;
 
   return (
     <Circle>

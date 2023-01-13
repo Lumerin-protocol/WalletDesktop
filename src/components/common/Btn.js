@@ -14,6 +14,7 @@ export const BaseBtn = styled.button.attrs(({ submit }) => ({
   padding: 0;
   color: ${p => p.theme.colors.light};
   outline: none;
+  border-radius: 50px !important;
 
   &[data-disabled='true'],
   &[disabled] {
@@ -25,7 +26,7 @@ export const BaseBtn = styled.button.attrs(({ submit }) => ({
 export const Btn = styled(BaseBtn)`
   line-height: 2.5rem;
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 500;
   color: ${p => p.theme.colors.light};
   border-radius: 12px;
   background-color: ${p => p.theme.colors.primary};

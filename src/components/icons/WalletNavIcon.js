@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import theme from '../../ui/theme';
 
 import BaseIcon from './BaseIcon';
 
@@ -8,7 +9,7 @@ export const WalletNavIcon = ({ isActive, size }, props) => {
     background-color: ${p => p.theme.colors.medium};
     border-radius: 50%;
   `;
-  const fill = isActive ? '#11B4BF' : 'black';
+  const fill = isActive ? theme.colors.primary : theme.colors.inactive;
 
   return (
     <Circle>
