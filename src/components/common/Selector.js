@@ -84,7 +84,7 @@ const MenuItem = styled(ReachUI.MenuItem)`
   cursor: pointer;
 
   &[data-selected] {
-    background-color: rgba(126, 97, 248, 0.1);
+    background-color: #eaf7fc;
     color: ${p => p.theme.colors.primary};
     outline: none;
   }
