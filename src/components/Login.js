@@ -56,7 +56,7 @@ function Login({
             Or setup new wallet
           </SecondaryBtn>
         </Sp>
-        <Sp mt={6}>
+        <Sp mt={4}>
           <LoginBtn block submit disabled={status === 'pending'}>
             Login
           </LoginBtn>
