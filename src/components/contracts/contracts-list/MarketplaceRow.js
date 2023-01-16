@@ -30,9 +30,14 @@ const Value = styled.label`
   font-size: 1.2rem;
 `;
 
+const ContractValue = styled(Value)`
+  cursor: pointer;
+  text-decoration: underline;
+`;
+
 const ActionButton = styled(Btn)`
   font-size: 1.2rem;
-  padding: 1rem;
+  padding: 1rem 1.25rem;
   line-height: 1.5rem;
 `;
 
@@ -45,7 +50,10 @@ function MarketplaceRow({ contract, ratio, explorerUrl, onPurchase }) {
   }, [contract]);
 
   return (
-    <Container ratio={ratio} onClick={() => window.open(explorerUrl, '_blank')}>
+    <Container ratio={ratio}>
+      <ContractValue onClick={() => window.open(explorerUrl, '_blank')}>
+        View Contract
+      </ContractValue>
       <Value>{formatPrice(contract.price)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
