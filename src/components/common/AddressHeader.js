@@ -76,7 +76,6 @@ export const AddressHeader = ({ copyToClipboard, address }) => {
   return (
     <Container>
       <AddressContainer>
-        <Label>LMR Address</Label>
         <Bg>
           <Address data-testid="address">
             {abbreviateAddress(address, 10)}
