@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "author": {
     "name": "Kodee McIntosh",
     "email": "kodee@lumerin.io",
@@ -31,7 +31,7 @@
     "postinstall": "patch-package && electron-builder install-app-deps",
     "postinstallMacDist": "electron-builder install-app-deps --arch arm64",
     "prepare": "husky install",
-    "release": "gh release create 1.0.3 ./dist/*.exe ./dist/*.dmg ./dist/*.deb",
+    "release": "gh release create 1.0.16 ./dist/*.exe ./dist/*.dmg ./dist/*.deb",
     "release-init": "./scripts/release",
     "clear-electron-cache": "rm -rf '~/Library/Application Support/lumerin-wallet-desktop'",
     "clear-cache:eslint": "rm -rf node_modules/.cache/eslint-loader"
