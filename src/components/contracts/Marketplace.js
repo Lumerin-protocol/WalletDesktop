@@ -74,6 +74,7 @@ function Marketplace({
   }, []);
 
   const tabs = [
+    { value: 'contract', name: 'Contract', ratio: 2 },
     { value: 'price', name: 'Price', ratio: 1 },
     { value: 'length', name: 'Duration', ratio: 1 },
     { value: 'speed', name: 'Speed (TH/s)', ratio: 1 },

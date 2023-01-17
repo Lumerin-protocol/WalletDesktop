@@ -27,6 +27,7 @@ export default {
 
     // BACKGROUNDS
     medium: '#f4f4f4',
+    lightBlue: '#EAF7FC',
     lightBG: '#ededed',
     xLight: '#f7f7f7',
     darkGradient: 'linear-gradient(to bottom, #353535, #323232)',

@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-
-import CopyIcon from '../icons/CopyIcon';
 import { ToastsContext } from '../toasts';
 import { BaseBtn } from '.';
 import { abbreviateAddress } from '../../utils';
+import { IconCopy } from '@tabler/icons';
 
 const Container = styled.header`
   padding: 1.8rem;
@@ -17,50 +15,24 @@ const Container = styled.header`
 const AddressContainer = styled.div`
   display: flex;
   align-items: center;
-`;
-
-const Label = styled.div`
-  padding: 0.8rem;
-  font-size: 1.3rem;
-  letter-spacing: 0.5px;
-  cursor: default;
-  font-weight: 600;
-  opacity: 0;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 1.25rem;
   color: ${p => p.theme.colors.dark};
-  @media (min-width: 800px) {
-    opacity: 1;
-  }
-`;
-
-const Bg = styled.div`
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-  padding: 2px;
-  background-color: ${p => p.theme.colors.lightShade};
 `;
 
 const Address = styled.div`
-  padding: 0.4rem 1.6rem;
   font-size: 1.3rem;
+  margin-right: 1rem;
   cursor: default;
+  border-right: 1px;
   font-weight: 600;
-  letter-spacing: normal;
-  color: ${p => p.theme.colors.dark};
   text-overflow: ellipsis;
   overflow: hidden;
   max-width: 240px;
   @media (min-width: 960px) {
     max-width: 100%;
   }
-`;
-
-const CopyBtn = styled(BaseBtn)`
-  background-color: ${p => p.theme.colors.light};
-  border-radius: 5px;
-  border: 1px;
-  padding: 0 0;
-  margin-left: 0.8rem;
 `;
 
 export const AddressHeader = ({ copyToClipboard, address }) => {
@@ -76,16 +48,14 @@ export const AddressHeader = ({ copyToClipboard, address }) => {
   return (
     <Container>
       <AddressContainer>
-        <Label>LMR Address</Label>
-        <Bg>
-          <Address data-testid="address">
-            {abbreviateAddress(address, 10)}
-          </Address>
-        </Bg>
+        <Address data-testid="address">
+          {abbreviateAddress(address, 10)}
+        </Address>
+        <IconCopy
+          style={{ cursor: 'pointer' }}
+          onClick={onCopyToClipboardClick}
+        />
       </AddressContainer>
-      <CopyBtn onClick={onCopyToClipboardClick}>
-        <CopyIcon fill="black" size="3.8rem" />
-      </CopyBtn>
     </Container>
   );
 };
