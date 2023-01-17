@@ -15,7 +15,8 @@ import {
   RightBtn,
   ContractLink,
   LeftBtn,
-  Select
+  Select,
+  CloseModal
 } from './CreateContractModal.styles';
 
 function PurchaseContractModal(props) {
@@ -89,6 +90,7 @@ function PurchaseContractModal(props) {
   return (
     <Modal onClick={handleClose}>
       <Body onClick={handlePropagation}>
+        {CloseModal(handleClose)}
         <TitleWrapper>
           <Title>Purchase Hashpower</Title>
           <Subtitle>

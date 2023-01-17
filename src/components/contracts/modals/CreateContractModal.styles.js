@@ -1,6 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { BaseBtn } from '../../common';
+import { IconX } from '@tabler/icons';
+
+export const CloseModal = onClose => (
+  <IconX
+    width={'2rem'}
+    style={{
+      position: 'absolute',
+      top: '25px',
+      right: '30px',
+      cursor: 'pointer',
+      color: 'rgba(0, 0, 0, 0.54)'
+    }}
+    onClick={onClose}
+  />
+);
 
 export const Modal = styled.div`
   display: flex;

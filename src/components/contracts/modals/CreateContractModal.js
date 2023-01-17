@@ -12,7 +12,8 @@ import {
   Input,
   Label,
   Sublabel,
-  RightBtn
+  RightBtn,
+  CloseModal
 } from './CreateContractModal.styles';
 
 function CreateContractModal(props) {
@@ -55,6 +56,7 @@ function CreateContractModal(props) {
   return (
     <Modal onClick={handleClose}>
       <Body onClick={handlePropagation}>
+        {CloseModal(handleClose)}
         <TitleWrapper>
           <Title>Create new contract</Title>
           <Subtitle>Sell your hashpower on the Lumerin Marketplace</Subtitle>
