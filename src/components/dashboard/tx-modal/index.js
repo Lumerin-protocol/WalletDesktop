@@ -1,17 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { ToastsContext } from '../../toasts';
-import { SendForm } from './SendForm';
+
 import { ReceiveForm } from './ReceiveForm';
 import { ConfirmForm } from './ConfirmForm';
 import { SuccessForm } from './SuccessForm';
-
 import withTransactionModalState from '../../../store/hocs/withTransactionModalState';
-import QRCode from 'qrcode.react';
-
-import CopyIcon from '../../icons/CopyIcon';
-import { BaseBtn } from '../../common';
-import { abbreviateAddress } from '../../../utils';
 
 const Modal = styled.div`
   display: flex;
@@ -43,7 +36,6 @@ const Body = styled.div`
 `;
 
 function TransactionModal(props) {
-  const context = useContext(ToastsContext);
   const [amount, setAmount] = useState(null);
   const [destinationAddress, setDestinationAddress] = useState('');
 
@@ -55,30 +47,18 @@ function TransactionModal(props) {
     return <></>;
   }
 
-  const ConfirmationBody = () => <></>;
-
   return (
     <Modal onClick={props.onRequestClose}>
       <Body onClick={handlePropagation}>
-        {/* {props.activeTab === 'send' && (
-          <SendForm
-            destinationAddress={destinationAddress}
-            onDestinationAddressInput={onSetDestinationAddress}
-            amountInput={amount}
-            onAmountInput={setAmount}
-            lmrBalanceUSD={props.lmrBalanceUSD}
-            {...props}
-          />
-        )} */}
         {props.activeTab === 'receive' && <ReceiveForm {...props} />}
-        {/* {props.activeTab === 'confirm' && ( */}
         {props.activeTab === 'send' && (
           <ConfirmForm
+            {...props}
             destinationAddress={destinationAddress}
             onDestinationAddressInput={onSetDestinationAddress}
             onAmountInput={setAmount}
             amountInput={amount}
-            {...props}
+            onSubmit={props.onSubmit}
           />
         )}
         {props.activeTab === 'success' && (

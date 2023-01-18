@@ -1,27 +1,22 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { ToastsContext } from '../../toasts';
-
 import QRCode from 'qrcode.react';
 
+import { ToastsContext } from '../../toasts';
+import BackIcon from '../../icons/BackIcon';
 import CopyIcon from '../../icons/CopyIcon';
 import { BaseBtn } from '../../common';
+import {
+  HeaderWrapper,
+  Header,
+  BackBtn,
+  Footer,
+  FooterRow,
+  FooterLabel,
+  FooterBlock,
+  FooterSublabel
+} from './common';
 import { abbreviateAddress } from '../../../utils';
-
-const TabWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  height: 10%;
-  padding: 0 2rem;
-`;
-
-const Tab = styled(BaseBtn)`
-  color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.primary : theme.colors.inactive};
-  font-weight: bold;
-  opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
-`;
 
 const QRContainer = styled.div`
   display: flex;
@@ -32,34 +27,6 @@ const QRContainer = styled.div`
   & canvas {
     display: block;
   }
-`;
-
-const Footer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-`;
-
-const FooterRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const FooterBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const FooterLabel = styled.label`
-  color: ${p => p.theme.colors.dark};
-  font-size: 1.6rem;
-  font-weight: bold;
-`;
-
-const FooterSublabel = styled.label`
-  color: ${p => p.theme.colors.primary};
-  font-size: 1.4rem;
 `;
 
 const CopyBtn = styled(BaseBtn)`
@@ -77,20 +44,12 @@ const CopyBtn = styled(BaseBtn)`
 export function ReceiveForm({
   activeTab,
   address,
-  onTabSwitch,
-  sendLmrDisabled,
-  sendLmrDisabledReason,
+  onRequestClose,
   lmrBalanceUSD,
   lmrBalanceWei,
   copyToClipboard
 }) {
   const context = useContext(ToastsContext);
-
-  const handleTabSwitch = e => {
-    e.preventDefault();
-
-    onTabSwitch(e.target.dataset.modal);
-  };
 
   const handleCopyToClipboard = () => {
     copyToClipboard(address);
@@ -105,22 +64,12 @@ export function ReceiveForm({
 
   return (
     <>
-      <TabWrapper>
-        <Tab
-          data-modal="send"
-          isActive={activeTab === 'send'}
-          onClick={handleTabSwitch}
-        >
-          Send
-        </Tab>
-        <Tab
-          data-modal="receive"
-          isActive={activeTab === 'receive'}
-          onClick={handleTabSwitch}
-        >
-          Receive
-        </Tab>
-      </TabWrapper>
+      <HeaderWrapper>
+        <BackBtn data-modal="send" onClick={onRequestClose}>
+          <BackIcon size="2.4rem" fill="black" />
+        </BackBtn>
+        <Header>You are receiving</Header>
+      </HeaderWrapper>
       <QRContainer>
         <QRCode value={address} />
       </QRContainer>

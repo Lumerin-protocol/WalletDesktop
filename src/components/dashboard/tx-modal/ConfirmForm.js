@@ -1,54 +1,25 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { ToastsContext } from '../../toasts';
 
 import BackIcon from '../../icons/BackIcon';
 import SwapIcon from '../../icons/SwapIcon';
-
 import { BaseBtn } from '../../common';
+import Spinner from '../../common/Spinner';
 import theme from '../../../ui/theme';
-
-const HeaderWrapper = styled.div`
-  display: flex;
-  position: relative;
-  height: 10%;
-  align-content: center;
-  align-items: center;
-`;
-
-const Header = styled.div`
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: ${p => p.theme.colors.dark};
-  text-align: center;
-  width: 100%;
-`;
-
-const BackBtn = styled(BaseBtn)`
-  position: absolute;
-  color: ${p => p.theme.colors.dark};
-  font-weight: bold;
-  margin: 8px 0 0 5px;
-`;
+import {
+  HeaderWrapper,
+  BackBtn,
+  Header,
+  Footer,
+  FooterRow,
+  FooterLabel
+} from './common';
 
 const AmountContainer = styled.label`
   display: block;
   position: relative;
   font-weight: bold;
-`;
-
-const Currency = styled.span`
-  position: absolute;
-  z-index: 1;
-  top: 50%;
-  font-weight: bold;
-  cursor: text;
-  pointer-events: none;
-  margin-left: 20px;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.primary : theme.colors.dark};
 `;
 
 const AmountInput = styled.input`
@@ -146,59 +117,53 @@ const SendBtn = styled(BaseBtn)`
     isActive ? theme.colors.lumerin.helpertextGray : theme.colors.primary};
 `;
 
-const Footer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-`;
-
-const FooterRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const FooterLabel = styled.label`
-  color: ${p => p.theme.colors.dark};
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 5px;
-`;
-
 const IconContainer = styled.div`
   margin: 0 auto;
   padding: 5px;
   cursor: pointer;
 `;
 
+const SendContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 50px;
+  margin: 16px 0 0;
+`;
+
 const LMR_MODE = 'coinAmount';
 const USD_MODE = 'usdAmount';
 
-// export function ConfirmForm({ activeTab, address, lmrBalanceUSD, sendLmrDisabled, sendLmrDisabledReason, onTabSwitch, amountInput, onAmountInput, destinationAddress, onDestinationAddressInput, onInputChange, usdAmount, coinAmount, onMaxClick }) {
 export function ConfirmForm(props) {
   const [mode, setMode] = useState(LMR_MODE);
+  const [isPending, setIsPending] = useState(false);
 
   const context = useContext(ToastsContext);
 
-  const handleTabSwitch = e => {
+  const handleSendLmr = async e => {
     e.preventDefault();
 
-    props.onTabSwitch(e.target.dataset.modal);
-  };
-
-  const handleSendLmr = e => {
     const errorObj = props.validate();
-    if (!errorObj) {
-      props.onSubmit();
-      handleTabSwitch(e);
-    } else {
+    if (errorObj) {
       const message =
         errorObj.coinAmount ||
         errorObj.toAddress ||
         errorObj.gasLimit ||
         errorObj.gasPrice;
       context.toast('error', message);
+      return;
     }
+
+    try {
+      setIsPending(true);
+      await props.onSubmit();
+      props.onTabSwitch('success');
+    } catch (err) {
+      context.toast('error', err.message);
+    }
+
+    setIsPending(false);
   };
 
   const handleDestinationAddressInput = e => {
@@ -232,7 +197,7 @@ export function ConfirmForm(props) {
   return (
     <>
       <HeaderWrapper>
-        <BackBtn data-modal="send" onClick={handleTabSwitch}>
+        <BackBtn data-modal="send" onClick={props.onRequestClose}>
           <BackIcon size="2.4rem" fill="black" />
         </BackBtn>
         <Header>You are sending</Header>
@@ -268,14 +233,6 @@ export function ConfirmForm(props) {
               <FeeLabel>{props.estimatedFee} ETH</FeeLabel>
             </FeeRow>
           )}
-          {/* <FeeRow>
-            <FeeLabel>Network Fee</FeeLabel>
-            <FeeLabel>{props.gasPrice || 9}</FeeLabel>
-          </FeeRow>
-          <FeeRow>
-            <FeeLabel>Total</FeeLabel>
-            <FeeLabel>${(12.45 / 15.8).toFixed(2)}</FeeLabel>
-          </FeeRow> */}
         </FeeContainer>
       </Column>
 
@@ -295,9 +252,16 @@ export function ConfirmForm(props) {
             {props.lmrBalanceWei} ≈ {props.lmrBalanceUSD}
           </FooterLabel>
         </FooterRow>
-        <SendBtn data-modal="success" onClick={handleSendLmr}>
-          Send now
-        </SendBtn>
+        <FooterRow>
+          <SendContainer>
+            {isPending && <Spinner size="16px" />}
+            {!isPending && (
+              <SendBtn data-modal="success" onClick={handleSendLmr}>
+                Send now
+              </SendBtn>
+            )}
+          </SendContainer>
+        </FooterRow>
       </Footer>
     </>
   );
