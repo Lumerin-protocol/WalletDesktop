@@ -15,7 +15,7 @@ import {
   FooterLabel,
   FooterBlock,
   FooterSublabel
-} from './common';
+} from './common.styles';
 import { abbreviateAddress } from '../../../utils';
 
 const QRContainer = styled.div`

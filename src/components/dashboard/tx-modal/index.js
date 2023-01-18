@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { ReceiveForm } from './ReceiveForm';
-import { ConfirmForm } from './ConfirmForm';
+import { SendForm } from './SendForm';
 import { SuccessForm } from './SuccessForm';
 import withTransactionModalState from '../../../store/hocs/withTransactionModalState';
 
@@ -52,7 +52,7 @@ function TransactionModal(props) {
       <Body onClick={handlePropagation}>
         {props.activeTab === 'receive' && <ReceiveForm {...props} />}
         {props.activeTab === 'send' && (
-          <ConfirmForm
+          <SendForm
             {...props}
             destinationAddress={destinationAddress}
             onDestinationAddressInput={onSetDestinationAddress}
