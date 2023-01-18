@@ -14,7 +14,7 @@ import {
   Footer,
   FooterRow,
   FooterLabel
-} from './common';
+} from './common.styles';
 
 const AmountContainer = styled.label`
   display: block;
