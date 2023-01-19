@@ -40,8 +40,6 @@ const Balance = styled.div`
   justify-content: space-between;
   padding: 0.75em 1.6rem 0.75em 1rem;
   height: 90%;
-  @media (min-width: 1040px) {
-  }
 `;
 
 const IconLogoContainer = styled.div`
@@ -68,6 +66,11 @@ const Primary = styled.div`
   min-width: 20px;
   overflow: scroll;
   font-size: 2.8rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Secondary = styled.div`

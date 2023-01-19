@@ -32,12 +32,16 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
   );
 
   function send(eventName, data) {
-    if (!webContent) {
-      return;
+    try {
+      if (!webContent) {
+        return;
+      }
+      const payload = Object.assign({}, data, { chain });
+      webContent.sender.send(eventName, payload);
+      logger.verbose(`<-- ${eventName} ${stringify(payload)}`);
+    } catch (err) {
+      logger.error(err);
     }
-    const payload = Object.assign({}, data, { chain });
-    webContent.sender.send(eventName, payload);
-    logger.verbose(`<-- ${eventName} ${stringify(payload)}`);
   }
 
   events.forEach((event) =>
