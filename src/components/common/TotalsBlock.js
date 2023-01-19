@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { BaseBtn, Btn, DisplayValue } from '.';
-
 const convertLmrToEth = () => {};
 
 const relSize = ratio => `calc(100vw / ${ratio})`;

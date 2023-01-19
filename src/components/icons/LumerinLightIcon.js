@@ -1,8 +1,12 @@
 import React from 'react';
 
-export const LumerinLightIcon = ({ size = '6rem' }) => {
+export const LumerinLightIcon = size => {
   return (
-    <svg size={size} viewBox="0 0 28 28">
+    <svg
+      size={size}
+      viewBox="0 0 28 28"
+      style={{ height: '40px', width: '40px', marginRight: '1rem' }}
+    >
       <defs>
         <linearGradient
           id="linear-gradient-1"

@@ -30,7 +30,7 @@ const ListContainer = styled.div`
 
 const TxRowContainer = styled.div`
   &:hover {
-    background-color: rgba(126, 97, 248, 0.1);
+    background-color: #eaf7fc;
   }
 `;
 

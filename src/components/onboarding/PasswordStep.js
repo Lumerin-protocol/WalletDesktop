@@ -7,7 +7,7 @@ import { EntropyMeter, TextInput, AltLayout, Btn, Sp } from '../common';
 import Message from './Message';
 
 const PasswordMessage = styled(Message)`
-  text-align: center;
+  text-align: left;
   color: ${p => p.theme.colors.dark};
 `;
 

@@ -15,13 +15,19 @@ import {
   RightBtn,
   ContractLink,
   LeftBtn,
-  Select
+  Select,
+  CloseModal
 } from './CreateContractModal.styles';
 
 function PurchaseContractModal(props) {
   const { isActive, handlePurchase, close, contract, explorerUrl } = props;
 
   const preferredPools = [
+    {
+      name: '-',
+      address: '',
+      port: ''
+    },
     {
       name: 'Titan',
       address: 'stratum+tcp://mining.pool.titan.io',
@@ -84,6 +90,7 @@ function PurchaseContractModal(props) {
   return (
     <Modal onClick={handleClose}>
       <Body onClick={handlePropagation}>
+        {CloseModal(handleClose)}
         <TitleWrapper>
           <Title>Purchase Hashpower</Title>
           <Subtitle>
@@ -91,7 +98,8 @@ function PurchaseContractModal(props) {
             the purchased hashpower to.
           </Subtitle>
           <ContractLink href={explorerUrl} target="_blank" rel="noreferrer">
-            Contract Address: {contract.id}
+            <h4>Contract Address:</h4>
+            <p>{contract.id}</p>
           </ContractLink>
         </TitleWrapper>
         <Form
@@ -99,10 +107,10 @@ function PurchaseContractModal(props) {
         >
           <Row>
             <InputGroup>
-              <Label htmlFor="address">Preferred Pools</Label>
+              <Label htmlFor="address">Preferred Pool</Label>
               <Select onChange={e => onSelectChange(e.target.value)}>
                 <option value="" hidden>
-                  Select a prefered poll
+                  Select a preferred pool
                 </option>
                 {preferredPools.map(p => (
                   <option key={p.name} value={p.name}>
@@ -142,13 +150,14 @@ function PurchaseContractModal(props) {
                 id="port"
               />
               <Sublabel>
-                Public port that should be routable to your local port {props.buyerPort}
+                Public port that should be routable to your local port{' '}
+                {props.buyerPort}
               </Sublabel>
             </InputGroup>
           </Row>
           <Row>
             <InputGroup>
-              <Label htmlFor="speed">Username</Label>
+              <Label htmlFor="speed">Username *</Label>
               <Input
                 value={inputs.username}
                 onChange={handleInputs}
@@ -157,10 +166,6 @@ function PurchaseContractModal(props) {
                 name="username"
                 id="username"
               />
-              <Sublabel>
-                Note: workerName is optional — it is fine if you do not provide
-                any.
-              </Sublabel>
             </InputGroup>
           </Row>
           <Row>
@@ -182,7 +187,8 @@ function PurchaseContractModal(props) {
             style={{
               textAlign: 'center',
               justifyContent: 'space-between',
-              height: '60px'
+              height: '60px',
+              marginTop: '3rem'
             }}
           >
             <Row style={{ justifyContent: 'space-around' }}>

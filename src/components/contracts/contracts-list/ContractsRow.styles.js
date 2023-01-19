@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const ContractsRowContainer = styled.div`
   &:hover {
-    background-color: rgba(126, 97, 248, 0.1);
+    background-color: rgb(234, 247, 252);
   }
 `;
 

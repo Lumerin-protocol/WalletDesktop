@@ -1,6 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { BaseBtn } from '../../common';
+import { IconX } from '@tabler/icons';
+
+export const CloseModal = onClose => (
+  <IconX
+    width={'2rem'}
+    style={{
+      position: 'absolute',
+      top: '25px',
+      right: '30px',
+      cursor: 'pointer',
+      color: 'rgba(0, 0, 0, 0.54)'
+    }}
+    onClick={onClose}
+  />
+);
 
 export const Modal = styled.div`
   display: flex;
@@ -55,18 +70,24 @@ export const Title = styled.div`
 
 export const Subtitle = styled.div`
   display: block;
-  line-height: 1.4rem;
   font-size: 1.5rem;
   font-weight: 400;
-  cursor: default;
   margin-bottom: 10px;
 `;
 
 export const ContractLink = styled.a`
-  font-size: 0.8rem;
-  margin-bottom: 1rem;
   color: #014353;
-  font-weight: 500;
+  text-decoration: none;
+  h4 {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+  p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-decoration: underline;
+    margin-bottom: 0;
+  }
 `;
 
 export const Form = styled.form`
@@ -78,7 +99,7 @@ export const Form = styled.form`
 `;
 
 export const InputGroup = styled.div`
-  margin: 2rem 0 0;
+  margin: 1.5rem 0 0;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -95,36 +116,33 @@ export const Row = styled.div`
 
 export const Input = styled.input`
   padding: 4px 8px;
-  margin: 0.4rem 0 0.2rem 0;
   outline: 0;
+  border: 0px;
+  background: #eaf7fc;
   border-radius: 15px;
-  border-style: solid;
-  border-color: ${p => p.theme.colors.lightBG};
-  border-width: 1px;
-  color: ${p => p.theme.colors.primaryDark};
+  padding: 1.5rem 1.5rem;
+  margin-top: 0.25rem;
+
   ::placeholder {
-    color: ${p => p.theme.colors.lightBG};
+    color: rgba(1, 67, 83, 0.56);
   }
 `;
 
 export const Select = styled.select`
-  padding: 4px 8px;
   margin: 0.4rem 0 0.2rem 0;
   outline: 0;
+  border: 0px;
+  background: #eaf7fc;
   border-radius: 15px;
-  border-style: solid;
-  border-color: ${p => p.theme.colors.lightBG};
-  border-width: 1px;
-  color: ${p => p.theme.colors.primaryDark};
-  ::placeholder {
-    color: ${p => p.theme.colors.lightBG};
-  }
+  padding: 1.5rem 1.5rem;
+  margin-top: 0.25rem;
+  color: rgba(1, 67, 83, 0.56);
 `;
 
 export const Label = styled.label`
   line-height: 1.4rem;
   font-size: 1.2rem;
-  font-weight: 900;
+  font-weight: 400;
   cursor: default;
 `;
 

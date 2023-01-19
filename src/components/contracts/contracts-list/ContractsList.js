@@ -67,10 +67,17 @@ function ContractsList({
     if (!window.isDev || !e.shiftKey || !e.altKey) return;
   };
 
+  const formatStatus = s => {
+    if (s === 'up-to-date') {
+      return 'up to date';
+    }
+    return s;
+  };
+
   return (
     <Container data-testid="Contracts-list">
       <Flex.Row grow="1">
-        <Title onClick={handleClick}>Status: {syncStatus}</Title>
+        <Title onClick={handleClick}>Status: {formatStatus(syncStatus)}</Title>
       </Flex.Row>
       <Contracts>
         <ItemFilter extractValue={filterExtractValue} items={contracts}>
