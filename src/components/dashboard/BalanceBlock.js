@@ -66,16 +66,12 @@ const Primary = styled.div`
   font-size: min(max(20px, 4vw), 24px);
   min-width: 20px;
   overflow: scroll;
+  font-size: 2.8rem;
   -ms-overflow-style: none;
   scrollbar-width: none;
   ::-webkit-scrollbar {
     display: none;
   }
-
-  @media (min-width: 1440px) {
-    font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
-  }
-  font-size: 2.8rem;
 `;
 
 const Secondary = styled.div`
