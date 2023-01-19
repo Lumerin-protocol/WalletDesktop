@@ -1,11 +1,13 @@
 import React from 'react';
 
-export const LumerinLightIcon = size => {
+export const LumerinLightIcon = ({ size, ...props }) => {
   return (
     <svg
-      size={size}
+      xmlns="http://www.w3.org/2000/svg"
+      xmlSpace="preserve"
       viewBox="0 0 28 28"
-      style={{ height: '40px', width: '40px', marginRight: '1rem' }}
+      {...props}
+      width={size}
     >
       <defs>
         <linearGradient
