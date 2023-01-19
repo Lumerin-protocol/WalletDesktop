@@ -40,7 +40,6 @@ const Balance = styled.div`
   justify-content: space-between;
   padding: 0.75em 1.6rem 0.75em 1rem;
   height: 90%;
-  position: relative;
 `;
 
 const IconLogoContainer = styled.div`
