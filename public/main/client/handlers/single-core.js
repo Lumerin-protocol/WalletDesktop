@@ -8,7 +8,7 @@ const config = require("../../../config");
 const wallet = require("../wallet");
 const noCore = require("./no-core");
 const WalletError = require("../WalletError");
-const { setProxyRouterConfig, cleanupDb, getPasswordHash } = require("../settings");
+const { setProxyRouterConfig, cleanupDb } = require("../settings");
 
 const withAuth = (fn) => (data, { api }) => {
   if (typeof data.walletId !== "string") {
