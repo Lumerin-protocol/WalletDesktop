@@ -49,6 +49,11 @@ const reducer = handleActions(
       isActive: payload.isActive
     }),
 
+    'eth-balance-changed': (state, { payload }) => ({
+      ...state,
+      ethBalance: payload.ethBalance
+    }),
+
     'token-balance-changed': (state, { payload }) => ({
       ...state,
       token: {
