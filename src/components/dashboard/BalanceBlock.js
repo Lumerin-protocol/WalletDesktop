@@ -27,8 +27,6 @@ const Balance = styled.div`
   padding: 0.75em 1.6rem 0.75em 1rem;
   height: 90%;
   position: relative;
-  @media (min-width: 1040px) {
-  }
 `;
 
 const IconLogoContainer = styled.div`
@@ -58,6 +56,11 @@ const Primary = styled.div`
   max-width: 120px;
   min-width: 20px;
   overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  ::-webkit-scrollbar { 
+    display: none;
+  }
 
   @media (min-width: 1440px) {
     font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
