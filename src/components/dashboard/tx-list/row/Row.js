@@ -32,7 +32,7 @@ const Row = ({ tx, explorerUrl }) => (
   <Container onClick={() => window.open(explorerUrl, '_blank')}>
     <IconContainer>
       {tx.symbol === 'LMR' ? (
-        <LumerinLightIcon size="5rem" />
+        <LumerinLightIcon size="4rem" />
       ) : (
         <EtherIcon size="4rem"></EtherIcon>
       )}

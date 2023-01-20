@@ -1,10 +1,9 @@
 import { createSelector } from 'reselect';
-import uniqBy from 'lodash/uniqBy';
 import sortBy from 'lodash/sortBy';
 import get from 'lodash/get';
 
 import * as utils from '../utils';
-import { getChain, getRate } from './chain';
+import { getChain, getRate, getRateEth } from './chain';
 import { getConfig } from './config';
 import { getIsOnline } from './connectivity';
 import { getEthBalance, getLmrBalance } from '../utils/coinValue';
@@ -37,6 +36,12 @@ export const getWalletLmrBalanceUSD = createSelector(
   getWalletLmrBalance,
   getRate,
   (lmrBalance, rate) => toUSD(lmrBalance, rate)
+);
+
+export const getWalletEthBalanceUSD = createSelector(
+  getWalletEthBalance,
+  getRateEth,
+  (ethBalance, rateEth) => toUSD(ethBalance, rateEth)
 );
 
 // Returns the LMR balance of the active address in wei
