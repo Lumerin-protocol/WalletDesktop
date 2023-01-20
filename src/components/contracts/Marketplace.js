@@ -61,6 +61,13 @@ function Marketplace({
           'Contract is succefully submitted to purchase'
         );
         history.push('/buyer-hub');
+      })
+      .catch(e => {
+        client.store.dispatch({
+          type: 'purchase-contract-failed',
+          payload: { id: contract.id }
+        });
+        context.toast('error', `Failed to purchase with error: ${e.message}`);
       });
     setIsModalActive(false);
   };
