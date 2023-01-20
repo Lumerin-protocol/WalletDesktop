@@ -1,9 +1,6 @@
 import withDisplayValueState from '../../store/hocs/withDisplayValueState';
 import { sanitize } from '../../store/utils';
-import smartRounder from 'smart-round';
-import PropTypes from 'prop-types';
 import React from 'react';
-import styled from 'styled-components';
 
 export function DisplayValue(props) {
   let formattedValue;

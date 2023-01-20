@@ -30,7 +30,7 @@ const IconContainer = styled.div`
 const Row = ({ tx, explorerUrl }) => (
   <Container onClick={() => window.open(explorerUrl, '_blank')}>
     <IconContainer>
-      <LumerinLightIcon size="5rem" />
+      <LumerinLightIcon size="4rem" />
     </IconContainer>
     <IconContainer>
       <TxIcon txType={tx.txType} />
