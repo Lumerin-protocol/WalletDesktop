@@ -34,7 +34,7 @@ class Root extends React.Component {
         this.setState({ onboardingComplete });
       })
       .then(() => {
-        if (this.props.isIgnoreAuth === 'true') {
+        if (this.props.isAuthBypassed) {
           // TODO: replace dummy password
           this.props.client
             .onLoginSubmit({ password: 'password' })
@@ -94,7 +94,7 @@ class Root extends React.Component {
 const mapStateToProps = state => ({
   isSessionActive: selectors.isSessionActive(state),
   hasEnoughData: selectors.hasEnoughData(state),
-  isIgnoreAuth: selectors.getIgnoreAuth(state)
+  isAuthBypassed: selectors.getIsAuthBypassed(state)
 });
 
 export default connect(mapStateToProps)(withClient(Root));

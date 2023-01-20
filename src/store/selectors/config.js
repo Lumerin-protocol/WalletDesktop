@@ -10,4 +10,4 @@ export const getBuyerProxyPort = state => state.config.chain.buyerProxyPort;
 
 export const getSellerProxyPort = state => state.config.chain.sellerProxyPort;
 
-export const getIgnoreAuth = state => state.config.chain.ignoreAuth;
+export const getIsAuthBypassed = state => state.config.chain.bypassAuth;

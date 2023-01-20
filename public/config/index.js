@@ -26,7 +26,7 @@ const chain = {
   localSellerProxyRouterUrl: `http://localhost:${process.env.SELLER_WEB_DEFAULT_PORT || 8081}`,
   localBuyerProxyRouterUrl: `http://localhost:${process.env.BUYER_WEB_DEFAULT_PORT || 8082}`,
 
-  ignoreAuth: process.env.IGNORE_AUTH || false
+  bypassAuth: process.env.BYPASS_AUTH === "true"
 }
 
 module.exports = {
