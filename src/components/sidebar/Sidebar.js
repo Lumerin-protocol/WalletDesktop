@@ -60,7 +60,6 @@ const IconLogoContainer = styled.div`
 `;
 
 const NavContainer = styled.div`
-  overflow-y: scroll;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
