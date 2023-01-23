@@ -58,7 +58,7 @@ function Marketplace({
         onWalletRefresh();
         context.toast(
           'success',
-          'Contract is succefully submitted to purchase'
+          'Contract is successfully submitted to purchase'
         );
         history.push('/buyer-hub');
       })
