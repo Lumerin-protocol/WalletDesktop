@@ -1,17 +1,15 @@
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
 import get from 'lodash/get';
-import { getLmrBalance } from './coinValue';
+import { getEthBalance, getLmrBalance } from './coinValue';
 
 function isSendTransaction({ transaction }, tokenData, myAddress) {
   return transaction.from === myAddress;
 }
 
 function isReceiveTransaction({ transaction }, tokenData, myAddress) {
-  return (
-    (transaction.input && transaction.input.to === myAddress) ||
-    transaction.to === myAddress
-  );
+  const to = transaction.input?.to || transaction.to;
+  return to?.toLowerCase() === myAddress.toLowerCase();
 }
 
 function isImportRequestTransaction(rawTx) {
@@ -21,8 +19,7 @@ function isImportRequestTransaction(rawTx) {
 function getTxType(rawTx, tokenData, myAddress) {
   if (isImportRequestTransaction(rawTx)) return 'import-requested';
   if (isSendTransaction(rawTx, tokenData, myAddress)) return 'sent';
-  if (isReceiveTransaction(rawTx, tokenData, myAddress.toLowerCase()))
-    return 'received';
+  if (isReceiveTransaction(rawTx, tokenData, myAddress)) return 'received';
   return 'unknown';
 }
 
@@ -45,15 +42,17 @@ function getTo(rawTx, tokenData, txType) {
 }
 
 function getValue(rawTx, tokenData, txType) {
-  return ['received', 'sent'].includes(txType) &&
-    rawTx.transaction.input &&
-    rawTx.transaction.input.amount
-    ? rawTx.transaction.input.amount
-    : '0';
+  if (!['received', 'sent'].includes(txType)) {
+    return '0';
+  }
+
+  const value = rawTx.transaction.input?.amount || rawTx.transaction.value;
+  return value;
 }
 
-function getSymbol(tokenData, txType) {
-  return ['received', 'sent'].includes(txType) ? 'LMR' : 'coin';
+function getSymbol(rawTx, tokenData, txType) {
+  const isLmr = typeof rawTx.transaction.input === 'object';
+  return isLmr ? 'LMR' : 'ETH';
 }
 
 function getConvertedFrom(rawTx, txType) {
@@ -126,6 +125,8 @@ export const createTransactionParser = myAddress => rawTx => {
   const tokenData = Object.values(rawTx.meta.token || {})[0] || null;
   const txType = getTxType(rawTx, tokenData, myAddress);
   const timestamp = getTimestamp(rawTx, txType);
+  const symbol = getSymbol(rawTx, tokenData, txType);
+  const value = getValue(rawTx, tokenData, txType);
 
   return {
     contractCallFailed: getContractCallFailed(rawTx),
@@ -139,8 +140,8 @@ export const createTransactionParser = myAddress => rawTx => {
     timestamp,
     gasUsed: getGasUsed(rawTx),
     txType,
-    symbol: getSymbol(tokenData, txType),
-    value: getLmrBalance(getValue(rawTx, tokenData, txType)),
+    symbol,
+    value: symbol === 'LMR' ? getLmrBalance(value) : getEthBalance(value),
     from: getFrom(rawTx, tokenData, txType),
     hash: getTransactionHash(rawTx),
     meta: rawTx.meta,

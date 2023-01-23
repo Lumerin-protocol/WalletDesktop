@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
 
-import { ErrorMsg, Label } from './TextInput';
+import { ErrorMsg, Label } from './TextInput.styles';
 import SelectorCaret from '../icons/SelectorCaret';
 
 const MenuButton = styled(ReachUI.MenuButton)`

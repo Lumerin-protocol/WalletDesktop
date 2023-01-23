@@ -8,6 +8,7 @@ import { getConfig } from './config';
 import { getIsOnline } from './connectivity';
 import { getEthBalance, getLmrBalance } from '../utils/coinValue';
 import { toUSD } from '../utils/syncAmounts';
+import { uniqBy } from 'lodash';
 
 export const getWallet = createSelector(
   getChain,
@@ -65,7 +66,7 @@ export const getTransactions = createSelector(getWallet, walletData => {
 
   const mapped = sorted.map(transactionParser);
 
-  return mapped;
+  return uniqBy(mapped, 'hash');
 });
 
 // Returns if the current wallet/address has transactions on the active chain

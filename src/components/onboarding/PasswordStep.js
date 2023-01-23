@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
 
-import { EntropyMeter, TextInput, AltLayout, Btn, Sp } from '../common';
+import {
+  EntropyMeter,
+  TextInput,
+  AltLayout,
+  AltLayoutNarrow,
+  Btn,
+  Sp
+} from '../common';
 import Message from './Message';
 
 const PasswordMessage = styled(Message)`
@@ -24,46 +31,48 @@ const PasswordStep = props => {
 
   return (
     <AltLayout title="Define a Password" data-testid="onboarding-container">
-      <form onSubmit={onPasswordSubmit} data-testid="pass-form">
-        <PasswordMessage>
-          Enter a strong password until the meter turns <Green>green</Green>.
-        </PasswordMessage>
-        <Sp mt={2}>
-          <TextInput
-            data-testid="pass-field"
-            autoFocus
-            onChange={props.onInputChange}
-            noFocus
-            error={props.errors.password}
-            label="Password"
-            value={props.password}
-            type="password"
-            id="password"
-          />
-          {!props.errors.password && (
-            <EntropyMeter
-              targetEntropy={props.requiredPasswordEntropy}
-              password={props.password}
+      <AltLayoutNarrow>
+        <form onSubmit={onPasswordSubmit} data-testid="pass-form">
+          <PasswordMessage>
+            Enter a strong password until the meter turns <Green>green</Green>.
+          </PasswordMessage>
+          <Sp mt={2}>
+            <TextInput
+              data-testid="pass-field"
+              autoFocus
+              onChange={props.onInputChange}
+              noFocus
+              error={props.errors.password}
+              label="Password"
+              value={props.password}
+              type="password"
+              id="password"
             />
-          )}
-        </Sp>
-        <Sp mt={3}>
-          <TextInput
-            data-testid="pass-again-field"
-            onChange={props.onInputChange}
-            error={props.errors.passwordAgain}
-            label="Repeat password"
-            value={props.passwordAgain}
-            type="password"
-            id="passwordAgain"
-          />
-        </Sp>
-        <Sp mt={6}>
-          <Btn block submit>
-            Continue
-          </Btn>
-        </Sp>
-      </form>
+            {!props.errors.password && (
+              <EntropyMeter
+                targetEntropy={props.requiredPasswordEntropy}
+                password={props.password}
+              />
+            )}
+          </Sp>
+          <Sp mt={3}>
+            <TextInput
+              data-testid="pass-again-field"
+              onChange={props.onInputChange}
+              error={props.errors.passwordAgain}
+              label="Repeat password"
+              value={props.passwordAgain}
+              type="password"
+              id="passwordAgain"
+            />
+          </Sp>
+          <Sp mt={6}>
+            <Btn block submit>
+              Continue
+            </Btn>
+          </Sp>
+        </form>
+      </AltLayoutNarrow>
     </AltLayout>
   );
 };

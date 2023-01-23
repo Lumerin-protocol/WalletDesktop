@@ -1,70 +1,21 @@
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
+import { ErrorMsg, Input, Label, TextArea } from './TextInput.styles';
 
-export const Label = styled.label`
-  line-height: 1.6rem;
-  font-size: 1.3rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  color: ${p => (p.hasErrors ? p.theme.colors.danger : p.theme.colors.dark)};
-`;
-
-const Input = styled.input`
-  border: none;
-  display: block;
-  border-radius: 15px;
-  height: ${({ rows }) => (rows ? `${4 * rows + 0.8}rem` : '4.8rem')};
-  padding: 0.8rem 1.6rem;
-  background-color: ${p => p.theme.colors.lightBlue};
-  margin-top: 0.8rem;
-  width: 100%;
-  line-height: 4rem;
-  color: ${p => (p.disabled ? p.theme.colors.copy : p.theme.colors.primary)};
-  font-size: 1.3rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  transition: box-shadow 300ms;
-  resize: vertical;
-  box-shadow: 0 2px 0 0px
-    ${p => (p.hasErrors ? p.theme.colors.danger : 'transparent')};
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 2px 0 0px ${p => p.theme.colors.primary};
-    box-shadow: ${p =>
-      p.noFocus && p.value.length > 0
-        ? 'none'
-        : `0 2px 0 0px ${p.theme.colors.primary}`};
-  }
-
-  @media (min-height: 600px) {
-    height: ${({ rows }) => (rows ? `${4 * rows + 1.6}rem` : '5.6rem')};
-  }
-`;
-
-export const ErrorMsg = styled.div`
-  color: ${p => p.theme.colors.danger};
-  line-height: 1.6rem;
-  font-size: 1.3rem;
-  font-weight: 600;
-  text-align: right;
-  text-shadow: ${p => p.theme.textShadow};
-  margin-top: 0.4rem;
-  width: 100%;
-  margin-bottom: -2rem;
-`;
-
-const TextInput = props => {
-  const InputControl =
-    props.rows || props.cols ? Input.withComponent('textarea') : Input;
-
-  const onChange = e => {
-    props.onChange({ id: props.id, value: e.target.value });
-  };
-
-  const { label, value, type, id, error, other, disabled } = props;
-
+const TextInput = ({
+  id,
+  type = 'text',
+  rows,
+  cols,
+  label,
+  value,
+  onChange,
+  error,
+  disabled,
+  ['data-testid']: dataTestId,
+  ...rest
+}) => {
+  const InputControl = rows || cols ? TextArea : Input;
   const hasErrors = error && error.length > 0;
 
   return (
@@ -73,16 +24,18 @@ const TextInput = props => {
         {label}
       </Label>
       <InputControl
+        id={id}
+        rows={rows}
+        cols={cols}
+        value={value || ''}
+        type={type}
+        onChange={e => onChange({ id: id, value: e.target.value })}
         hasErrors={hasErrors}
         disabled={disabled}
-        onChange={onChange}
-        value={value || ''}
-        type={type || 'text'}
-        id={id}
-        {...other}
+        {...rest}
       />
       {hasErrors && (
-        <ErrorMsg data-testid={`${props['data-testid']}-error`}>
+        <ErrorMsg data-testid={`${dataTestId}-error`}>
           {typeof error === 'string' ? error : error.join('. ')}
         </ErrorMsg>
       )}
