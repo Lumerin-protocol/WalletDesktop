@@ -1,5 +1,6 @@
 import { BaseBtn, FieldBtn, Btn } from './Btn';
-import TextInput, { Label } from './TextInput';
+import { Label } from './TextInput.styles';
+import TextInput from './TextInput';
 import ConfirmationWizard from './ConfirmationWizard';
 import DisplayValue from './DisplayValue';
 import AmountFields from './AmountFields';
@@ -9,6 +10,7 @@ import { ItemFilter } from './ItemFilter';
 import LightLayout from './LightLayout';
 import LoadingBar from './LoadingBar';
 import AltLayout from './AltLayout';
+import AltLayoutNarrow from './AltLayoutNarrow';
 import GasEditor from './GasEditor';
 import Selector from './Selector';
 import Tooltips from './Tooltips';
@@ -29,6 +31,7 @@ export {
   LoadingBar,
   TextInput,
   AltLayout,
+  AltLayoutNarrow,
   GasEditor,
   Selector,
   Tooltips,
