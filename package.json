@@ -132,20 +132,6 @@
       "entitlements": "./entitlements.mac.plist",
       "entitlementsInherit": "./entitlements.mac.plist"
     },
-    "dmg": {
-      "contents": [
-        {
-          "x": 110,
-          "y": 150
-        },
-        {
-          "x": 240,
-          "y": 150,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
     "linux": {
       "artifactName": "${name}_v${version}.${ext}",
       "category": "Office;Finance",
