@@ -136,7 +136,11 @@ const recoverFromMnemonic = function(data, core) {
 };
 
 function onLoginSubmit({ password }, core) {
-  return auth.isValidPassword(password).then(function(isValid) {
+  var checkPassword = config.chain.ignoreAuth 
+  ? new Promise(r => r(true))
+  : auth.isValidPassword(password);
+  
+  return checkPassword.then(function(isValid) {
     if (!isValid) {
       return { error: new WalletError("Invalid password") };
     }

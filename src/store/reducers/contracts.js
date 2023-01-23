@@ -10,6 +10,8 @@ const initialState = {
   actives: []
 };
 
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+
 const reducer = handleActions(
   {
     'initial-state-received': (state, { payload }) => ({
@@ -58,10 +60,21 @@ const reducer = handleActions(
     }),
 
     'purchase-temp-contract': (state, { payload }) => {
-      let array = state.actives;
-      let objIndex = array.findIndex(obj => obj.id == payload.id);
+      const array = state.actives;
+      const objIndex = array.findIndex(obj => obj.id == payload.id);
       array[objIndex].inProgress = true;
       array[objIndex].buyer = payload.address;
+      return {
+        ...state,
+        actives: [...array]
+      };
+    },
+
+    'purchase-contract-failed': (state, { payload }) => {
+      const array = state.actives;
+      const objIndex = array.findIndex(obj => obj.id == payload.id);
+      array[objIndex].inProgress = false;
+      array[objIndex].buyer = ZERO_ADDRESS;
       return {
         ...state,
         actives: [...array]

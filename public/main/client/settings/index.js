@@ -23,7 +23,16 @@ function setPasswordHash (hash) {
 
 const setProxyRouterConfig = (config) => setKey('user.proxyRouterConfig', JSON.stringify(config));
 
-const getProxyRouterConfig = () => JSON.parse(getKey('user.proxyRouterConfig'));
+const getProxyRouterConfig = () => {
+  try {
+    const configJson = getKey('user.proxyRouterConfig');
+    return JSON.parse(configJson);
+  }
+  catch(e) {
+    console.error(e);
+    cleanupDb();
+  }
+} 
 
 function upgradeSettings (defaultSettings, currentSettings) {
   let finalSettings = merge({}, currentSettings);
