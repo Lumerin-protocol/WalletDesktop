@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import React from 'react';
 
@@ -78,7 +79,7 @@ export default class Amount extends React.Component {
         ) : (
           <ValueContainer>
             <DisplayValue
-              value={this.props.value}
+              value={new BigNumber(this.props.value).dp(8).toString(10)}
               post={
                 this.props.txType === 'import-requested' ||
                 this.props.txType === 'imported' ||
