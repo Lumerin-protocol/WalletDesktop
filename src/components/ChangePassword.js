@@ -3,7 +3,13 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import React, { useEffect, useContext } from 'react';
 
-import { EntropyMeter, LightLayout, TextInput, BaseBtn, Sp } from './common';
+import {
+  PasswordStrengthMeter,
+  LightLayout,
+  TextInput,
+  BaseBtn,
+  Sp
+} from './common';
 import { ToastsContext } from '../components/toasts';
 
 const Container = styled.div`
@@ -53,7 +59,6 @@ const StyledBtn = styled(BaseBtn)`
 `;
 
 function ChangePassword({
-  requiredPasswordEntropy,
   onInputChange,
   onSubmit,
   newPasswordAgain,
@@ -114,10 +119,7 @@ function ChangePassword({
               id="newPassword"
             />
             {!errors.newPassword && (
-              <EntropyMeter
-                targetEntropy={requiredPasswordEntropy}
-                password={newPassword}
-              />
+              <PasswordStrengthMeter password={newPassword} />
             )}
           </Sp>
           <Sp mt={3}>

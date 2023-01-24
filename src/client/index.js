@@ -53,8 +53,6 @@ const createClient = function(createStore) {
 
   const onLinkClick = url => window.openLink(url);
 
-  const getStringEntropy = fastPasswordEntropy;
-
   const copyToClipboard = text => Promise.resolve(window.copyToClipboard(text));
 
   const onInit = () => {
@@ -124,7 +122,6 @@ const createClient = function(createStore) {
     createMnemonic: keys.createMnemonic,
     onTermsLinkClick,
     onTransactionLinkClick,
-    getStringEntropy,
     copyToClipboard,
     onHelpLinkClick,
     getAppVersion: window.getAppVersion,

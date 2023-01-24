@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import React from 'react';
 
 import {
-  EntropyMeter,
+  PasswordStrengthMeter,
   TextInput,
   AltLayout,
   AltLayoutNarrow,
@@ -30,7 +30,7 @@ const PasswordStep = props => {
   };
 
   return (
-    <AltLayout title="Define a Password" data-testid="onboarding-container">
+    <AltLayout title="Create a Password" data-testid="onboarding-container">
       <AltLayoutNarrow>
         <form onSubmit={onPasswordSubmit} data-testid="pass-form">
           <PasswordMessage>
@@ -41,7 +41,6 @@ const PasswordStep = props => {
               data-testid="pass-field"
               autoFocus
               onChange={props.onInputChange}
-              noFocus
               error={props.errors.password}
               label="Password"
               value={props.password}
@@ -49,10 +48,7 @@ const PasswordStep = props => {
               id="password"
             />
             {!props.errors.password && (
-              <EntropyMeter
-                targetEntropy={props.requiredPasswordEntropy}
-                password={props.password}
-              />
+              <PasswordStrengthMeter password={props.password} />
             )}
           </Sp>
           <Sp mt={3}>
@@ -78,7 +74,6 @@ const PasswordStep = props => {
 };
 
 PasswordStep.propTypes = {
-  requiredPasswordEntropy: PropTypes.number.isRequired,
   onPasswordSubmit: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
   passwordAgain: PropTypes.string,
