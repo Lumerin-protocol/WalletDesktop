@@ -6,11 +6,36 @@ export const formatSpeed = speed => {
   return Number(speed) / 10 ** 12;
 };
 
-export const formatTimestamp = timestamp => {
+export const formatTimestamp = (timestamp, timer, state) => {
   if (+timestamp === 0) {
     return '';
   }
-  return moment.unix(timestamp).format('L');
+  if (state !== CONTRACT_STATE.Running) {
+    return '';
+  }
+  const startDate = moment.unix(timestamp).format('L');
+  const { days, hours, minutes } = timer;
+  if (timer.isRunning && (days || hours || minutes)) {
+    const readableDays = days
+      ? days === 1
+        ? `${days} day`
+        : `${days} days`
+      : '';
+    const readableHours = hours
+      ? hours === 1
+        ? `${hours} hour`
+        : `${hours} hours`
+      : '';
+    const readableMinutes = minutes
+      ? minutes === 1
+        ? `${minutes} minute`
+        : `${minutes} minutes`
+      : '';
+    const durationLeft = `${readableDays} ${readableHours} ${readableMinutes}`.trim();
+    return `${startDate} (${durationLeft} left)`;
+  } else {
+    return `${startDate} (expired)`;
+  }
 };
 
 export const formatPrice = price => {
@@ -57,9 +82,12 @@ export const isContractClosed = contract => {
 };
 
 export const getContractState = contract => {
-  if (isContractClosed(contract)) {
-    return 'Closed';
-  }
-
   return Object.entries(CONTRACT_STATE).find(s => contract.state === s[1])[0];
+};
+
+export const getContractEndTimestamp = contract => {
+  if (+contract.timestamp === 0) {
+    return 0;
+  }
+  return (+contract.timestamp + +contract.length) * 1000; // in ms
 };
