@@ -51,7 +51,7 @@ function MarketplaceRow({ contract, ratio, explorerUrl, onPurchase }) {
 
   return (
     <Container ratio={ratio}>
-      <ContractValue onClick={() => window.open(explorerUrl, '_blank')}>
+      <ContractValue onClick={() => window.openLink(explorerUrl)}>
         View Contract
       </ContractValue>
       <Value>{formatPrice(contract.price)}</Value>

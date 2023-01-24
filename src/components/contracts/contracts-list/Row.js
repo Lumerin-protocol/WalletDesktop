@@ -101,7 +101,7 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
   };
 
   return (
-    <Container ratio={ratio} onClick={() => window.open(explorerUrl, '_blank')}>
+    <Container ratio={ratio} onClick={() => window.openLink(explorerUrl)}>
       <Value>{formatTimestamp(contract.timestamp)}</Value>
       <SmallAssetContainer data-rh={getContractState(contract)}>
         <ClockIcon size="3rem" fill={getClockColor(contract)} />

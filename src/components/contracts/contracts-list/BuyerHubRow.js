@@ -58,7 +58,7 @@ function BuyerHubRow({ contract, ratio, explorerUrl }) {
   };
 
   return (
-    <Container ratio={ratio} onClick={() => window.open(explorerUrl, '_blank')}>
+    <Container ratio={ratio} onClick={() => window.openLink(explorerUrl)}>
       <Value>{formatTimestamp(contract.timestamp)}</Value>
       {contract.inProgress ? (
         <Value>
