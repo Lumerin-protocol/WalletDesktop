@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useTimer } from 'react-timer-hook';
+
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
 
 import { Btn } from '../../common';
@@ -13,7 +15,8 @@ import {
   formatTimestamp,
   formatPrice,
   isContractClosed,
-  getContractState
+  getContractState,
+  getContractEndTimestamp
 } from '../utils';
 import { SmallAssetContainer } from './ContractsRow.styles';
 const Container = styled.div`
@@ -92,17 +95,17 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
   };
 
   const getClockColor = contract => {
-    const CLOSED_COLOR = theme.colors.dark;
-    if (isContractClosed(contract)) {
-      return CLOSED_COLOR;
-    }
-
     return STATE_COLOR[contract.state];
   };
 
+  const contractEndTimestamp = getContractEndTimestamp(contract);
+  const timer = useTimer({ expiryTimestamp: new Date(contractEndTimestamp) });
+
   return (
     <Container ratio={ratio} onClick={() => window.openLink(explorerUrl)}>
-      <Value>{formatTimestamp(contract.timestamp)}</Value>
+      <Value>
+        {formatTimestamp(contract.timestamp, timer, contract.state)}
+      </Value>
       <SmallAssetContainer data-rh={getContractState(contract)}>
         <ClockIcon size="3rem" fill={getClockColor(contract)} />
       </SmallAssetContainer>

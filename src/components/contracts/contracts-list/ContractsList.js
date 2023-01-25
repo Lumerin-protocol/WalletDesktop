@@ -29,11 +29,11 @@ function ContractsList({
   const hasContracts = contracts.length;
   const defaultTabs = [
     { value: 'timestamp', name: 'Started', ratio: 2 },
-    { ratio: 1 },
+    { name: 'Status', ratio: 1 },
     { value: 'price', name: 'Price', ratio: 2 },
     { value: 'length', name: 'Duration', ratio: 2 },
     { value: 'speed', name: 'Speed (TH/s)', ratio: 2 },
-    { value: 'action', name: 'Actions', ratio: 4 }
+    { value: 'action', name: 'Actions', ratio: 3 }
   ];
 
   const tabsToShow = tabs || defaultTabs;

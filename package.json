@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@electron/remote": "2.0.9",
-    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.20",
+    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.21",
     "@reach/menu-button": "0.17.0",
     "@tabler/icons": "1.119.0",
     "axios": "0.27.2",
@@ -80,6 +80,7 @@
     "react-router": "4.3.1",
     "react-router-dom": "4.3.1",
     "react-scripts": "3.4.1",
+    "react-timer-hook": "3.0.5",
     "react-virtualized": "9.20.1",
     "redux": "4.2.0",
     "redux-actions": "2.3.0",

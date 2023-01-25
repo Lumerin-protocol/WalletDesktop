@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
+import { useTimer } from 'react-timer-hook';
 import styled from 'styled-components';
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
 import { ClockIcon } from '../../icons/ClockIcon';
@@ -12,7 +12,8 @@ import {
   formatTimestamp,
   formatPrice,
   getContractState,
-  isContractClosed
+  isContractClosed,
+  getContractEndTimestamp
 } from '../utils';
 import { SmallAssetContainer } from './ContractsRow.styles';
 
@@ -49,17 +50,17 @@ function BuyerHubRow({ contract, ratio, explorerUrl }) {
   }, [contract]);
 
   const getClockColor = contract => {
-    const CLOSED_COLOR = theme.colors.dark;
-    if (isContractClosed(contract)) {
-      return CLOSED_COLOR;
-    }
-
     return STATE_COLOR[contract.state];
   };
 
+  const contractEndTimestamp = getContractEndTimestamp(contract);
+  const timer = useTimer({ expiryTimestamp: new Date(contractEndTimestamp) });
+
   return (
     <Container ratio={ratio} onClick={() => window.openLink(explorerUrl)}>
-      <Value>{formatTimestamp(contract.timestamp)}</Value>
+      <Value>
+        {formatTimestamp(contract.timestamp, timer, contract.state)}
+      </Value>
       {contract.inProgress ? (
         <Value>
           <Spinner size="25px" /> Purchasing..
