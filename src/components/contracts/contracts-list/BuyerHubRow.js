@@ -57,7 +57,7 @@ function BuyerHubRow({ contract, ratio, explorerUrl }) {
   const timer = useTimer({ expiryTimestamp: new Date(contractEndTimestamp) });
 
   return (
-    <Container ratio={ratio} onClick={() => window.open(explorerUrl, '_blank')}>
+    <Container ratio={ratio} onClick={() => window.openLink(explorerUrl)}>
       <Value>
         {formatTimestamp(contract.timestamp, timer, contract.state)}
       </Value>
