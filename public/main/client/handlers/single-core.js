@@ -242,6 +242,8 @@ const getAddressAndPrivateKey = async (data, { api }) => {
 
 const refreshProxyRouterConnection = async (data, { api }) => api['proxy-router'].refreshConnectionsStream(data)
 
+const getLocalIp = async ({}, { api }) => api['proxy-router'].getLocalIp()
+
 const logout = async (data) => {
   return cleanupDb();
 }
@@ -269,5 +271,6 @@ module.exports = {
   getLmrTransferGasLimit,
   getAddressAndPrivateKey,
   refreshProxyRouterConnection,
-  logout
+  logout,
+  getLocalIp,
 };
