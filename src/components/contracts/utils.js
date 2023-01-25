@@ -2,6 +2,32 @@ import moment from 'moment';
 import { lmrEightDecimals } from '../../store/utils/coinValue';
 import { CONTRACT_STATE } from '../../enums';
 
+const getReadableDate = (days, hours, minutes, seconds) => {
+  const readableDays = days
+    ? days === 1
+      ? `${days} day`
+      : `${days} days`
+    : '';
+  const readableHours = hours
+    ? hours === 1
+      ? `${hours} hour`
+      : `${hours} hours`
+    : '';
+  const readableMinutes = minutes
+    ? minutes === 1
+      ? `${minutes} minute`
+      : `${minutes} minutes`
+    : '';
+  const readableSeconds =
+    !days && !hours && !minutes && seconds
+      ? seconds === 1
+        ? `1 second`
+        : `${seconds} seconds`
+      : '';
+  const readableDate = `${readableDays} ${readableHours} ${readableMinutes} ${readableSeconds}`.trim();
+  return readableDate;
+};
+
 export const formatSpeed = speed => {
   return Number(speed) / 10 ** 12;
 };
@@ -14,24 +40,9 @@ export const formatTimestamp = (timestamp, timer, state) => {
     return '';
   }
   const startDate = moment.unix(timestamp).format('L');
-  const { days, hours, minutes } = timer;
-  if (timer.isRunning && (days || hours || minutes)) {
-    const readableDays = days
-      ? days === 1
-        ? `${days} day`
-        : `${days} days`
-      : '';
-    const readableHours = hours
-      ? hours === 1
-        ? `${hours} hour`
-        : `${hours} hours`
-      : '';
-    const readableMinutes = minutes
-      ? minutes === 1
-        ? `${minutes} minute`
-        : `${minutes} minutes`
-      : '';
-    const durationLeft = `${readableDays} ${readableHours} ${readableMinutes}`.trim();
+  const { days, hours, minutes, seconds } = timer;
+  if (days || hours || minutes || seconds) {
+    const durationLeft = getReadableDate(days, hours, minutes, seconds);
     return `${startDate} (${durationLeft} left)`;
   } else {
     return `${startDate} (expired)`;
@@ -52,28 +63,7 @@ export const formatDuration = duration => {
       ? Math.floor(60 * (remainder - hours))
       : Math.floor((numLength - Math.floor(numLength)) * 60);
   const seconds = Math.floor(duration % 60);
-  const readableDays = days
-    ? days === 1
-      ? `${days} day`
-      : `${days} days`
-    : '';
-  const readableHours = hours
-    ? hours === 1
-      ? `${hours} hour`
-      : `${hours} hours`
-    : '';
-  const readableMinutes = minutes
-    ? minutes === 1
-      ? `${minutes} minute`
-      : `${minutes} minutes`
-    : '';
-  const readableSeconds =
-    !minutes && seconds
-      ? seconds === 1
-        ? `1 second`
-        : `${seconds} seconds`
-      : '';
-  const readableDate = `${readableDays} ${readableHours} ${readableMinutes} ${readableSeconds}`.trim();
+  const readableDate = getReadableDate(days, hours, minutes, seconds);
   return readableDate;
 };
 
