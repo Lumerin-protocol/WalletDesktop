@@ -136,7 +136,7 @@ const recoverFromMnemonic = function(data, core) {
 };
 
 function onLoginSubmit({ password }, core) {
-  var checkPassword = config.chain.ignoreAuth 
+  var checkPassword = config.chain.bypassAuth 
   ? new Promise(r => r(true))
   : auth.isValidPassword(password);
   
