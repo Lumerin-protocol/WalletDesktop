@@ -27,13 +27,8 @@ const mapScoreToMessage = score => {
 /**
  * Returns an interpolated CSS hue value between red & green
  * based on passwordEntropy / targetEntropy ratio
- *
- *   ratio === 0 -> red
- *   ratio  <  1 -> orange
- *   ratio >=  1 -> green
- *
- *   @param {number} ratio passwordEntropy / targetEntropy ratio
- *   @returns {number} interpolated CSS hue value between red & green
+ * @param {number} ratio passwordEntropy / targetEntropy ratio
+ * @returns {number} interpolated CSS hue value between red & green
  */
 function getHue(ratio) {
   // Hues are adapted to match the theme's success and danger colors
@@ -50,21 +45,26 @@ function getHue(ratio) {
  * @param {string} param.password
  */
 const PasswordStrengthMeter = ({ password }) => {
-  const { isStrong, score, suggestions } = GetPasswordStrength(password);
+  const { score } = GetPasswordStrength(password);
+
+  const hue = getHue(score / MaxScore);
+  // adding 1 so if the score is 0 the bar will not be zero width
+  const barWidthFraction = (score + 1) / (MaxScore + 1);
+
+  let colorCSS = `hsl(${hue}, 62%, 55%)`;
+  let barWidthCSS = `${barWidthFraction * 100}%`;
 
   let message = mapScoreToMessage(score);
-  let color = `hsl(${getHue(score / MaxScore)}, 62%, 55%)`;
-  let width = `${((score + 1) / (MaxScore + 1)) * 100}%`;
 
   if (!password) {
+    barWidthCSS = '0%';
     message = '';
-    width = '0%';
   }
 
   return (
     <Container>
-      <BarElem width={width} color={color} />
-      <Message color={color}>{message}</Message>
+      <BarElem width={barWidthCSS} color={colorCSS} />
+      <Message color={colorCSS}>{message}</Message>
     </Container>
   );
 };
