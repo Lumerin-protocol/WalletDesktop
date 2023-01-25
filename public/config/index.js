@@ -11,6 +11,7 @@ const chain = {
   proxyRouterUrl: process.env.PROXY_ROUTER_URL,
   explorerUrl: process.env.EXPLORER_URL,
   wsApiUrl: process.env.ETH_NODE_ADDRESS,
+  ipLookupUrl: process.env.IP_LOOKUP_URL,
 
   coinDefaultGasLimit: process.env.COIN_DEFAULT_GAS_LIMIT,
   lmrDefaultGasLimit: process.env.LMR_DEFAULT_GAS_LIMIT,

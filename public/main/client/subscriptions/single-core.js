@@ -24,6 +24,7 @@ const listeners = {
   "stop-discovery": handlers.stopDiscovery,
   "set-miner-pool": handlers.setMinerPool,
   "get-lmr-transfer-gas-limit": handlers.getLmrTransferGasLimit,
+  "get-local-ip": handlers.getLocalIp,
 };
 
 let coreListeners = {};
