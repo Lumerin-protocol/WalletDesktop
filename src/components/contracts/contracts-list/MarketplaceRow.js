@@ -2,12 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
 import { Btn } from '../../common';
-import {
-  formatDuration,
-  formatSpeed,
-  formatTimestamp,
-  formatPrice
-} from '../utils';
+import { formatDuration, formatSpeed, formatPrice } from '../utils';
 import Spinner from '../../common/Spinner';
 
 const Container = styled.div`

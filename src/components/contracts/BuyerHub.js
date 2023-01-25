@@ -26,7 +26,7 @@ function BuyerHub({
 
   const tabs = [
     { value: 'timestamp', name: 'Started', ratio: 2 },
-    { ratio: 1 },
+    { name: 'Status', ratio: 1 },
     { value: 'price', name: 'Price', ratio: 3 },
     { value: 'length', name: 'Duration', ratio: 3 },
     { value: 'speed', name: 'Speed (TH/s)', ratio: 3 }
