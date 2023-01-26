@@ -1,4 +1,3 @@
-import fastPasswordEntropy from 'fast-password-entropy';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 
