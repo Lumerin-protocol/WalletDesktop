@@ -29,7 +29,7 @@ const IconContainer = styled.div`
 `;
 
 const Row = ({ tx, explorerUrl }) => (
-  <Container onClick={() => window.open(explorerUrl, '_blank')}>
+  <Container onClick={() => window.openLink(explorerUrl)}>
     <IconContainer>
       {tx.symbol === 'LMR' ? (
         <LumerinLightIcon size="4rem" />

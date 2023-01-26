@@ -2,31 +2,7 @@ import moment from 'moment';
 import { lmrEightDecimals } from '../../store/utils/coinValue';
 import { CONTRACT_STATE } from '../../enums';
 
-export const formatSpeed = speed => {
-  return Number(speed) / 10 ** 12;
-};
-
-export const formatTimestamp = timestamp => {
-  if (+timestamp === 0) {
-    return '';
-  }
-  return moment.unix(timestamp).format('L');
-};
-
-export const formatPrice = price => {
-  return `${Number(price) / lmrEightDecimals} LMR`;
-};
-
-export const formatDuration = duration => {
-  const numLength = parseFloat(duration / 3600);
-  const days = Math.floor(numLength / 24);
-  const remainder = numLength % 24;
-  const hours = days >= 1 ? Math.floor(remainder) : Math.floor(numLength);
-  const minutes =
-    days >= 1
-      ? Math.floor(60 * (remainder - hours))
-      : Math.floor((numLength - Math.floor(numLength)) * 60);
-  const seconds = Math.floor(duration % 60);
+const getReadableDate = (days, hours, minutes, seconds) => {
   const readableDays = days
     ? days === 1
       ? `${days} day`
@@ -43,7 +19,7 @@ export const formatDuration = duration => {
       : `${minutes} minutes`
     : '';
   const readableSeconds =
-    !minutes && seconds
+    !days && !hours && !minutes && seconds
       ? seconds === 1
         ? `1 second`
         : `${seconds} seconds`
@@ -52,14 +28,56 @@ export const formatDuration = duration => {
   return readableDate;
 };
 
+export const formatSpeed = speed => {
+  return Number(speed) / 10 ** 12;
+};
+
+export const formatTimestamp = (timestamp, timer, state) => {
+  if (+timestamp === 0) {
+    return '';
+  }
+  if (state !== CONTRACT_STATE.Running) {
+    return '';
+  }
+  const startDate = moment.unix(timestamp).format('L');
+  const { days, hours, minutes, seconds } = timer;
+  if (days || hours || minutes || seconds) {
+    const durationLeft = getReadableDate(days, hours, minutes, seconds);
+    return `${startDate} (${durationLeft} left)`;
+  } else {
+    return `${startDate} (expired)`;
+  }
+};
+
+export const formatPrice = price => {
+  return `${Number(price) / lmrEightDecimals} LMR`;
+};
+
+export const formatDuration = duration => {
+  const numLength = parseFloat(duration / 3600);
+  const days = Math.floor(numLength / 24);
+  const remainder = numLength % 24;
+  const hours = days >= 1 ? Math.floor(remainder) : Math.floor(numLength);
+  const minutes =
+    days >= 1
+      ? Math.floor(60 * (remainder - hours))
+      : Math.floor((numLength - Math.floor(numLength)) * 60);
+  const seconds = Math.floor(duration % 60);
+  const readableDate = getReadableDate(days, hours, minutes, seconds);
+  return readableDate;
+};
+
 export const isContractClosed = contract => {
   return contract.seller === contract.buyer;
 };
 
 export const getContractState = contract => {
-  if (isContractClosed(contract)) {
-    return 'Closed';
-  }
-
   return Object.entries(CONTRACT_STATE).find(s => contract.state === s[1])[0];
+};
+
+export const getContractEndTimestamp = contract => {
+  if (+contract.timestamp === 0) {
+    return 0;
+  }
+  return (+contract.timestamp + +contract.length) * 1000; // in ms
 };

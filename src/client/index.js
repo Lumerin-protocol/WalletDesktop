@@ -113,7 +113,8 @@ const createClient = function(createStore) {
     getLmrTransferGasLimit: utils.forwardToMainProcess(
       'get-lmr-transfer-gas-limit'
     ),
-    logout: utils.forwardToMainProcess('logout')
+    logout: utils.forwardToMainProcess('logout'),
+    getLocalIp: utils.forwardToMainProcess('get-local-ip')
   };
 
   const api = {
