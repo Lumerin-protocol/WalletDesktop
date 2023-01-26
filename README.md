@@ -20,7 +20,7 @@ ROPSTEN_NODE_URL=
 
 ### Requirements
 
-* [Node.js](https://nodejs.org) LTS (v12 minimum, v14 recommended)
+- [Node.js](https://nodejs.org) LTS (v12 minimum, v14 recommended)
 
 ### Launch
 
@@ -45,9 +45,9 @@ npm i --global --production windows-build-tools
 
 The log output is in the next directories:
 
-* **Linux:** `~/.config/<app name>/logs/{process-type}.log`
-* **macOS:** `~/Library/Logs/<app name>/logs/{process-type}.log`
-* **Windows:** `%USERPROFILE%\AppData\Roaming\<app name>\logs\{process-type}.log`
+- **Linux:** `~/.config/<app name>/logs/{process-type}.log`
+- **macOS:** `~/Library/Logs/<app name>/logs/{process-type}.log`
+- **Windows:** `%USERPROFILE%\AppData\Roaming\<app name>\logs\{process-type}.log`
 
 `process-type` being equal to `main`, `renderer` or `worker`
 
@@ -55,9 +55,9 @@ More info [github.com/megahertz/electron-log](https://github.com/megahertz/elect
 
 ### Settings
 
-* **Linux**: `~/.config/lumerin-wallet-desktop/Settings`
-* **macOS**: `~/Library/Application Support/lumerin-wallet-desktop/Settings`
-* **Windows**: `%APPDATA%\\lumerin-wallet-desktop\\Settings`
+- **Linux**: `~/.config/lumerin-wallet-desktop/Settings`
+- **macOS**: `~/Library/Application Support/lumerin-wallet-desktop/Settings`
+- **Windows**: `%APPDATA%\\lumerin-wallet-desktop\\Settings`
 
 To completely remove the application and start over, remove the settings file too.
 
@@ -66,11 +66,15 @@ To completely remove the application and start over, remove the settings file to
 ```sh
 npm run release-init
 ```
+
 wait for container to build and run
+
 ```sh
 git ls-remote --tags --heads ssh://git@github.com/Lumerin-protocol/ContractsJS.git
 ```
+
 trust the github host and run
+
 ```sh
 # Run build process
 npm install && npm run dist
@@ -131,6 +135,23 @@ To sign the application, a certificate for the Microsoft Authenticode platform i
 The certificate, a `.p7b` file, will then be required during the build process.
 
 Current provider is [DigiCert](https://www.digicert.com).
+
+## Contributing
+
+We welcome contributions to the Lumerin Wallet. If you're interested in helping to improve the project, please take a look at the following guidelines to get started:
+
+1.  **Fork** the repository on GitHub
+2.  **Clone** the repository to your local machine
+3.  **Create a new branch** for your changes
+4.  **Make your changes** and **commit** them to your branch
+5.  **Push** your changes to your forked repository
+6.  **Open a pull request** on the original repository
+
+Please make sure that your code follows the existing code style and that all tests pass before opening a pull request.
+
+If you're not sure where to start, take a look at the [open issues](https://github.com/TitanInd/lumerin-wallet-desktop/issues) for the project.
+
+Thank you for your contributions!
 
 ## License
 
