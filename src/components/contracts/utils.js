@@ -50,7 +50,7 @@ export const formatTimestamp = (timestamp, timer, state) => {
 };
 
 export const formatPrice = price => {
-  return `${Number(price) / lmrEightDecimals} LMR`;
+  return `${Number(price) / lmrEightDecimals}`;
 };
 
 export const formatDuration = duration => {

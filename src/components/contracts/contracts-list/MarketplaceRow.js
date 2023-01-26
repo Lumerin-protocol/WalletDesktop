@@ -49,7 +49,7 @@ function MarketplaceRow({ contract, ratio, explorerUrl, onPurchase }) {
       <ContractValue onClick={() => window.openLink(explorerUrl)}>
         View Contract
       </ContractValue>
-      <Value>{formatPrice(contract.price)}</Value>
+      <Value>{formatPrice(contract.price)} LMR</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
       {contract.inProgress ? (

@@ -109,7 +109,7 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
       <SmallAssetContainer data-rh={getContractState(contract)}>
         <ClockIcon size="3rem" fill={getClockColor(contract)} />
       </SmallAssetContainer>
-      <Value>{formatPrice(contract.price)}</Value>
+      <Value>{formatPrice(contract.price)} LMR</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
       {contract.seller === address &&
