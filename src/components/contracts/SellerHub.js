@@ -132,7 +132,7 @@ function SellerHub({
   const handleContractCancellation = (e, data) => {
     e.preventDefault();
 
-    client
+    return client
       .cancelContract({
         contractId: data.contractId,
         walletAddress: data.walletAddress,
