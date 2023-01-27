@@ -74,7 +74,7 @@ function CreateContractModal(props) {
                 id="address"
               />
               <Sublabel>
-                Finds will be paid into this account once the contract is
+                Funds will be paid into this account once the contract is
                 fulfilled.
               </Sublabel>
             </InputGroup>
@@ -90,7 +90,7 @@ function CreateContractModal(props) {
                 name="time"
                 id="time"
               />
-              <Sublabel>Contract Length (min 1 hour)</Sublabel>
+              <Sublabel>Contract Length</Sublabel>
             </InputGroup>
           </Row>
           <Row>
