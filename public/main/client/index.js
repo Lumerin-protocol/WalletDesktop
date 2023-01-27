@@ -103,11 +103,11 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         ...proxyRouterUserConfig,
       };
 
-      runProxyRouter(
+      const seller = runProxyRouter(
         config,
         PROXY_ROUTER_MODE.Seller
       );
-      runProxyRouter(config, PROXY_ROUTER_MODE.Buyer);
+      const buyer = runProxyRouter(config, PROXY_ROUTER_MODE.Buyer);
       send("proxy-router-type-changed", {
         isLocal: true,
       });
@@ -119,6 +119,11 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         },
         { api }
       );
+
+      emitter.on("kill-proxy-router", () => {
+        seller.kill();
+        buyer.kill();
+      })
     } else {
       refreshProxyRouterConnection({}, { api });
     }

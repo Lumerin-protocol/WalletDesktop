@@ -114,7 +114,14 @@ const createClient = function(createStore) {
       'get-lmr-transfer-gas-limit'
     ),
     logout: utils.forwardToMainProcess('logout'),
-    getLocalIp: utils.forwardToMainProcess('get-local-ip')
+    getLocalIp: utils.forwardToMainProcess('get-local-ip'),
+    getProxyRouterSettings: utils.forwardToMainProcess(
+      'get-proxy-router-settings'
+    ),
+    saveProxyRouterSettings: utils.forwardToMainProcess(
+      'save-proxy-router-settings'
+    ),
+    restartProxyRouter: utils.forwardToMainProcess('restart-proxy-router')
   };
 
   const api = {

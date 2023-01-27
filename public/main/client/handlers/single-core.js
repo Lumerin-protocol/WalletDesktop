@@ -89,6 +89,13 @@ function createWallet(data, core, isOpen = true) {
     .then(() => isOpen && openWallet(core, data.password));
 }
 
+const restartProxyRouter = async (data, { emitter }) => {
+  const password = await auth.getSessionPassword();
+
+  emitter.emit("kill-proxy-router");
+  emitter.emit("open-proxy-router", { password });
+}
+
 async function openWallet({ emitter }, password) {
   const { address } = wallet.getAddress();
 
@@ -273,4 +280,5 @@ module.exports = {
   refreshProxyRouterConnection,
   logout,
   getLocalIp,
+  restartProxyRouter,
 };

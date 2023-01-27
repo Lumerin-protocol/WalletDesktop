@@ -8,7 +8,9 @@ const listeners = {
   'change-password': handlers.changePassword,
   'persist-state': handlers.persistState,
   'clear-cache': handlers.clearCache,
-  "logout": handlers.logout
+  "logout": handlers.logout,
+  "save-proxy-router-settings": handlers.saveProxyRouterSettings,
+  "get-proxy-router-settings": handlers.getProxyRouterSettings,
 };
 
 // Subscribe to messages where no core has to react
