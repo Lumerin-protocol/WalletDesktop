@@ -135,7 +135,8 @@ const withOnboardingState = WrappedComponent => {
 
       return this.props.onOnboardingCompleted({
         proxyRouterConfig: {
-          defaultPool: this.state.proxyDefaultPool
+          sellerDefaultPool: this.state.proxyDefaultPool,
+          buyerDefaultPool: this.state.proxyDefaultPool
         },
         password: this.state.password,
         mnemonic: this.state.useUserMnemonic
