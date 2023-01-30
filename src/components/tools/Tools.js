@@ -134,8 +134,6 @@ const Tools = props => {
           });
         })
         .catch(err => {
-          console.log('🚀 ~ file: Tools.js:137 ~ useEffect ~ err', err);
-
           context.toast('error', 'Failed to fetch proxy-router settings');
         });
     }, []);
@@ -167,7 +165,6 @@ const Tools = props => {
       })
         .then(() => {
           restartProxyRouter({}).catch(err => {
-            console.log(err);
             context.toast('error', 'Failed to restart proxy-router');
           });
         })
