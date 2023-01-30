@@ -5,7 +5,7 @@ import { LayoutHeader } from '../common/LayoutHeader';
 import ContractsList from './contracts-list/ContractsList';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
-import PurchaseContractModal from './modals/PurchaseContractModal';
+import PurchaseContractModal from './modals/PurchaseModal/PurchaseContractModal';
 import MarketplaceRow from './contracts-list/MarketplaceRow';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 
@@ -27,23 +27,34 @@ function Marketplace({
   const [isModalActive, setIsModalActive] = useState(false);
   const [contractToPurchase, setContractToPurchase] = useState(undefined);
   const context = useContext(ToastsContext);
-  const contractsToShow = [
-    {
-      id: '0xe5765F6b5C8E3a47ac1Eb54c1288D810c87804B8',
-      price: '200000000',
-      speed: '50000000000000',
-      length: '43200',
-      buyer: '0x4f4815a4Af42689A6B4dDA18f155730c9ca8aD2D',
-      seller: '0x4f4815a4Af42689A6B4dDA18f155730c9ca8aD2D',
-      timestamp: '1668210828',
-      state: '0',
-      encryptedPoolData: '',
-      limit: '0',
-      balance: '1200000000'
-    }
-  ];
+  const contractsToShow = contracts.filter(
+    x => (Number(x.state) === 0 && x.seller !== address) || x.inProgress
+  );
+  // const contractsToShow = [
+  //   {
+  //     id: '0xe5765F6b5C8E3a47ac1Eb54c1288D810c87804B8',
+  //     price: '200000000',
+  //     speed: '50000000000000',
+  //     length: '43200',
+  //     buyer: '0x4f4815a4Af42689A6B4dDA18f155730c9ca8aD2D',
+  //     seller: '0x4f4815a4Af42689A6B4dDA18f155730c9ca8aD2D',
+  //     timestamp: '1668210828',
+  //     state: '0',
+  //     encryptedPoolData: '',
+  //     limit: '0',
+  //     balance: '1200000000'
+  //   }
+  // ];
+  // useEffect(() => {
+  //   if (contractsToShow.length) {
+  //     setContractToPurchase(contractsToShow[0]);
+  //     setIsModalActive(true);
+  //     console.log(contractsToShow);
+  //   }
+  // }, [contracts]);
 
   const handlePurchase = (data, contract, url) => {
+    console.log(data, contract, url);
     if (lmrBalance * 10 ** 8 < Number(contract.price)) {
       setIsModalActive(false);
       context.toast('error', 'Insufficient balance');
@@ -129,14 +140,6 @@ function Marketplace({
       </ContractsRowContainer>
     );
   };
-
-  useEffect(() => {
-    if (contractsToShow.length) {
-      setContractToPurchase(contractsToShow[0]);
-      setIsModalActive(true);
-      console.log(contractsToShow);
-    }
-  }, [contracts]);
 
   return (
     <View data-testid="contracts-container">

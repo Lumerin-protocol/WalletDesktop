@@ -249,7 +249,8 @@ const logout = async (data) => {
 }
 
 const getPoolAddress = async (data) => {
-  return getProxyRouterConfig().defaultPool;
+  const config = getProxyRouterConfig();
+  return config.buyerDefaultPool || config.defaultPool;
 }
 
 module.exports = {
