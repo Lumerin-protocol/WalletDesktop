@@ -12,6 +12,7 @@ import { ConfirmationWizard, TextInput, Flex, BaseBtn, Sp } from '../common';
 import Spinner from '../common/Spinner';
 import { View } from '../common/View';
 import { ToastsContext } from '../../components/toasts';
+import ConfirmProxyConfigModal from './ConfirmProxyConfigModal';
 
 const Container = styled.div`
   padding: 3rem 0 0 0;
@@ -153,21 +154,17 @@ const Tools = props => {
       });
     };
 
-    const proxyRouterSaveClick = () => {
+    const saveProxyRouterConfig = () => {
+      onCloseModal();
       setProxyRouterSettings({
         ...proxyRouterSettings,
         proxyRouterEditMode: false,
         isFetching: true
       });
-      saveProxyRouterSettings({
+      return saveProxyRouterSettings({
         sellerDefaultPool: proxyRouterSettings.sellerDefaultPool,
         buyerDefaultPool: proxyRouterSettings.buyerDefaultPool
       })
-        .then(() => {
-          restartProxyRouter({}).catch(err => {
-            context.toast('error', 'Failed to restart proxy-router');
-          });
-        })
         .catch(() => {
           context.toast('error', 'Failed to save proxy-router settings');
         })
@@ -178,6 +175,14 @@ const Tools = props => {
             proxyRouterEditMode: false
           });
         });
+    };
+
+    const confirmProxyRouterRestart = () => {
+      saveProxyRouterConfig().then(() => {
+        restartProxyRouter({}).catch(err => {
+          context.toast('error', 'Failed to restart proxy-router');
+        });
+      });
     };
 
     const onRestartClick = async () => {
@@ -323,7 +328,11 @@ const Tools = props => {
                     rows={1}
                   />
                 </StyledParagraph>
-                <StyledBtn onClick={proxyRouterSaveClick}>Save</StyledBtn>
+                <StyledBtn
+                  onClick={() => onActiveModalClick('confirm-proxy-restart')}
+                >
+                  Save
+                </StyledBtn>
               </>
             )}
 
@@ -331,6 +340,12 @@ const Tools = props => {
               onRequestClose={onCloseModal}
               onConfirm={props.onRescanTransactions}
               isOpen={state.activeModal === 'confirm-rescan'}
+            />
+            <ConfirmProxyConfigModal
+              onRequestClose={onCloseModal}
+              onConfirm={confirmProxyRouterRestart}
+              onLater={saveProxyRouterConfig}
+              isOpen={state.activeModal === 'confirm-proxy-restart'}
             />
           </Sp>
           {/* <Sp mt={5}>
