@@ -180,3 +180,7 @@ export const RightBtn = styled(BaseBtn)`
     margin-left: 0;
   }
 `;
+
+export const ErrorLabel = styled(Sublabel)`
+  color: red;
+`;

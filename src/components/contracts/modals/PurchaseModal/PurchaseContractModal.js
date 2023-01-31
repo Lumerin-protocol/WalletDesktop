@@ -22,12 +22,15 @@ function PurchaseContractModal(props) {
 
   useEffect(() => {
     props.getLocalIp({}).then(ip => {
-      setInputs({ ...inputs, address: `stratum+tcp://${ip}:3334` });
+      setInputs({
+        ...inputs,
+        address: `stratum+tcp://${ip}:${props.buyerPort}`
+      });
     });
     props.getPoolAddress({}).then(pool => {
       setPool(pool);
     });
-  }, []);
+  }, [contract]);
 
   const toRfc2396 = formData => {
     const addressParts = formData.address
@@ -46,6 +49,12 @@ function PurchaseContractModal(props) {
   };
 
   const handleClose = e => {
+    setInputs({
+      address: '',
+      username: '',
+      password: ''
+    });
+    setIsPreview(false);
     close(e);
   };
   const handlePropagation = e => e.stopPropagation();
