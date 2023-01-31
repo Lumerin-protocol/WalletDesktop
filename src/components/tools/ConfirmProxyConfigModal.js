@@ -26,44 +26,44 @@ export const Row = styled.div`
   width: 100%;
 `;
 
-export default class ConfirmProxyConfigModal extends React.Component {
-  static propTypes = {
-    onRequestClose: PropTypes.func.isRequired,
-    onConfirm: PropTypes.func.isRequired,
-    onLater: PropTypes.func.isRequired,
-    isOpen: PropTypes.bool.isRequired
-  };
-
+const ConfirmProxyConfigModal = props => {
   // eslint-disable-next-line complexity
-  render() {
-    const { onRequestClose, onConfirm, onLater, isOpen } = this.props;
-    return (
-      <Modal
-        shouldReturnFocusAfterClose={false}
-        onRequestClose={onRequestClose}
-        styleOverrides={{
-          width: 450,
-          top: '35%'
-        }}
-        variant="primary"
-        isOpen={isOpen}
-        title="Proxy-router restart"
-      >
-        <Container data-testid="confirm-proxy-config-modal">
-          <Message>
-            Your changes will be applied after restarting Proxy-router. It may
-            affect your running contracts.
-          </Message>
-          <Message>
-            You can restart right now or changes will be applied after next
-            wallet run.
-          </Message>
-          <Row style={{ justifyContent: 'space-around' }}>
-            <RestartNowBtn onClick={onConfirm}>Restart now</RestartNowBtn>
-            <LaterBtn onClick={onLater}>Later</LaterBtn>
-          </Row>
-        </Container>
-      </Modal>
-    );
-  }
-}
+  const { onRequestClose, onConfirm, onLater, isOpen } = props;
+  return (
+    <Modal
+      shouldReturnFocusAfterClose={false}
+      onRequestClose={onRequestClose}
+      styleOverrides={{
+        width: 450,
+        top: '35%'
+      }}
+      variant="primary"
+      isOpen={isOpen}
+      title="Proxy-router restart"
+    >
+      <Container data-testid="confirm-proxy-config-modal">
+        <Message>
+          Your changes will be applied after restarting Proxy-router. It may
+          affect your running contracts.
+        </Message>
+        <Message>
+          You can restart right now or changes will be applied after next wallet
+          run.
+        </Message>
+        <Row style={{ justifyContent: 'space-around' }}>
+          <RestartNowBtn onClick={onConfirm}>Restart now</RestartNowBtn>
+          <LaterBtn onClick={onLater}>Later</LaterBtn>
+        </Row>
+      </Container>
+    </Modal>
+  );
+};
+
+ConfirmProxyConfigModal.propTypes = {
+  onRequestClose: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  onLater: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired
+};
+
+export default ConfirmProxyConfigModal;
