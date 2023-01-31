@@ -13,7 +13,7 @@ import AltLayout from './AltLayout';
 import AltLayoutNarrow from './AltLayoutNarrow';
 import GasEditor from './GasEditor';
 import Selector from './Selector';
-import Tooltips from './Tooltips';
+import { GlobalTooltips, Tooltip } from './Tooltips';
 import Modal from './Modal';
 import Tabs from './Tabs';
 import Text from './Text';
@@ -34,7 +34,8 @@ export {
   AltLayoutNarrow,
   GasEditor,
   Selector,
-  Tooltips,
+  GlobalTooltips,
+  Tooltip,
   FieldBtn,
   BaseBtn,
   Label,
