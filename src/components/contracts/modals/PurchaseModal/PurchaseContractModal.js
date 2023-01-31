@@ -38,13 +38,6 @@ function PurchaseContractModal(props) {
       .split(':');
     const address = addressParts[0];
     const port = addressParts[1];
-    // console.log(address, port);
-    // const regex = /(^.*):\/\/(.*$)/;
-    // const poolAddressGroups = address?.match(regex);
-    // if (!poolAddressGroups) return;
-    // const protocol = poolAddressGroups[1];
-    // const host = poolAddressGroups[2];
-    // console.log(poolAddressGroups);
     return `stratum+tcp://${formData.username}:${formData.password}@${address}:${port}`;
   };
 
