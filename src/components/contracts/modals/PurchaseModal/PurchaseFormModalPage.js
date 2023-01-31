@@ -16,10 +16,14 @@ import {
 import {
   Divider,
   HeaderFlex,
-  OrderSummary,
-  ProxyRouterContainer,
+  SmallTitle,
+  UrlContainer,
   Values,
-  EditBtn
+  EditBtn,
+  PoolInfoContainer,
+  UpperCaseTitle,
+  ActionsGroup,
+  ContractInfoContainer
 } from './common.styles';
 
 import { IconExternalLink } from '@tabler/icons';
@@ -78,39 +82,33 @@ export const PurchaseFormModalPage = ({
       <TitleWrapper>
         <Title>Purchase Hashpower</Title>
         <HeaderFlex>
-          <OrderSummary>ORDER SUMMARY</OrderSummary>
+          <UpperCaseTitle>Order summary</UpperCaseTitle>
           <ContractLink onClick={() => window.openLink(explorerUrl)}>
             <span style={{ marginRight: '4px' }}>View contract</span>
             <IconExternalLink width={'1.4rem'} />
           </ContractLink>
         </HeaderFlex>
         <Divider />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '10px'
-          }}
-        >
+        <ContractInfoContainer>
           <div>
-            <OrderSummary>Terms</OrderSummary>
+            <SmallTitle>Terms</SmallTitle>
             <Values>
               {formatSpeed(contract.speed)} for{' '}
               {formatDuration(contract.length)}
             </Values>
           </div>
           <div>
-            <OrderSummary>Price</OrderSummary>
+            <SmallTitle>Price</SmallTitle>
             <Values>
               {fromTokenBaseUnitsToLMR(contract.price)} LMR (≈ $
               {(fromTokenBaseUnitsToLMR(contract.price) * rate).toFixed(2)} USD)
             </Values>
           </div>
-        </div>
+        </ContractInfoContainer>
       </TitleWrapper>
       <Form onSubmit={submit}>
-        <ProxyRouterContainer style={{ marginTop: '50px' }}>
-          <OrderSummary>VALIDATOR ADDRESS (LUMERIN NODE)</OrderSummary>
+        <UrlContainer>
+          <UpperCaseTitle>validator address (lumerin node)</UpperCaseTitle>
           <Divider />
           {isEditPool ? (
             <Row key="addressRow">
@@ -130,39 +128,25 @@ export const PurchaseFormModalPage = ({
               </InputGroup>
             </Row>
           ) : (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginTop: '10px',
-                width: '100%'
-              }}
-            >
+            <PoolInfoContainer>
               <Values>{inputs.address}</Values>
               <EditBtn onClick={() => setIsEditPool(true)}>Edit</EditBtn>
-            </div>
+            </PoolInfoContainer>
           )}
-        </ProxyRouterContainer>
-        <ProxyRouterContainer style={{ marginTop: '50px' }}>
-          <OrderSummary>FORWARDING TO (MINING POOL)</OrderSummary>
+        </UrlContainer>
+        <UrlContainer style={{ marginTop: '50px' }}>
+          <UpperCaseTitle>Forwarding to (mining poll)</UpperCaseTitle>
           <Divider />
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '10px',
-              width: '100%'
-            }}
-          >
+          <PoolInfoContainer>
             <Values style={{ width: '85%', wordBreak: 'break-all' }}>
               {pool || 'Validation node default pool address'}
             </Values>
             <EditBtn onClick={() => onEditPool()}>Edit</EditBtn>
-          </div>
-        </ProxyRouterContainer>
+          </PoolInfoContainer>
+        </UrlContainer>
         <Row style={{ marginTop: '10px' }}>
           <InputGroup>
-            <OrderSummary>Username *</OrderSummary>
+            <SmallTitle>Username *</SmallTitle>
             <Input
               value={inputs.username}
               onChange={handleInputs}
@@ -177,7 +161,7 @@ export const PurchaseFormModalPage = ({
         </Row>
         <Row>
           <InputGroup>
-            <OrderSummary>Password</OrderSummary>
+            <SmallTitle>Password</SmallTitle>
             <Input
               value={inputs.password}
               onChange={handleInputs}
@@ -190,19 +174,12 @@ export const PurchaseFormModalPage = ({
             {errors.password && <ErrorLabel>{errors.password}</ErrorLabel>}
           </InputGroup>
         </Row>
-        <InputGroup
-          style={{
-            textAlign: 'center',
-            justifyContent: 'space-between',
-            height: '60px',
-            marginTop: '50px'
-          }}
-        >
+        <ActionsGroup>
           <Row style={{ justifyContent: 'space-between' }}>
             <LeftBtn onClick={handleClose}>Cancel</LeftBtn>
             <RightBtn type="submit">Review Order</RightBtn>
           </Row>
-        </InputGroup>
+        </ActionsGroup>
       </Form>
     </>
   );
