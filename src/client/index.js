@@ -1,4 +1,3 @@
-import fastPasswordEntropy from 'fast-password-entropy';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 
@@ -52,8 +51,6 @@ const createClient = function(createStore) {
     );
 
   const onLinkClick = url => window.openLink(url);
-
-  const getStringEntropy = fastPasswordEntropy;
 
   const copyToClipboard = text => Promise.resolve(window.copyToClipboard(text));
 
@@ -132,7 +129,6 @@ const createClient = function(createStore) {
     createMnemonic: keys.createMnemonic,
     onTermsLinkClick,
     onTransactionLinkClick,
-    getStringEntropy,
     copyToClipboard,
     onHelpLinkClick,
     getAppVersion: window.getAppVersion,

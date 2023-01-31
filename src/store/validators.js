@@ -1,4 +1,5 @@
 /* eslint-disable max-params */
+import { IsPasswordStrong } from '../lib/PasswordStrength';
 import { isWeiable, isHexable, sanitize, sanitizeMnemonic } from './utils';
 
 function validateAmount(client, amount, propName, max, errors = {}) {
@@ -119,9 +120,7 @@ export function validatePasswordCreation(
 ) {
   if (!password) {
     errors.password = 'Password is required';
-  } else if (
-    client.getStringEntropy(password) < config.requiredPasswordEntropy
-  ) {
+  } else if (!IsPasswordStrong(password)) {
     errors.password = 'Password is not strong enough';
   }
 

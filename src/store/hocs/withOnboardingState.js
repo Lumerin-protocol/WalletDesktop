@@ -16,7 +16,6 @@ const withOnboardingState = WrappedComponent => {
     //     createMnemonic: PropTypes.func.isRequired
     //   }).isRequired,
     //   config: PropTypes.shape({
-    //     requiredPasswordEntropy: PropTypes.number.isRequired
     //   }).isRequired
     // };
 
@@ -193,7 +192,6 @@ const withOnboardingState = WrappedComponent => {
       return (
         <WrappedComponent
           onUseUserMnemonicToggled={this.onUseUserMnemonicToggled}
-          requiredPasswordEntropy={this.props.config.requiredPasswordEntropy}
           onMnemonicCopiedToggled={this.onMnemonicCopiedToggled}
           onMnemonicAccepted={this.onMnemonicAccepted}
           onTermsLinkClick={this.props.client.onTermsLinkClick}

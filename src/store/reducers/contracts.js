@@ -64,6 +64,7 @@ const reducer = handleActions(
       const objIndex = array.findIndex(obj => obj.id == payload.id);
       array[objIndex].inProgress = true;
       array[objIndex].buyer = payload.address;
+      array[objIndex].timestamp = parseInt(Date.now() / 1000, 10);
       return {
         ...state,
         actives: [...array]
