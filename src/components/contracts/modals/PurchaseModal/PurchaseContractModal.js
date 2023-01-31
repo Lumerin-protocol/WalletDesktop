@@ -18,7 +18,6 @@ function PurchaseContractModal(props) {
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
-  const [previewData, setPreviewData] = useState(null);
   const [pool, setPool] = useState(null);
 
   useEffect(() => {
@@ -29,13 +28,6 @@ function PurchaseContractModal(props) {
       setPool(pool);
     });
   }, []);
-
-  const handlePreview = data => {
-    setPreviewData(data);
-    console.log(data);
-    setIsPreview(true);
-    // handlePurchase
-  };
 
   const toRfc2396 = formData => {
     const addressParts = formData.address
@@ -50,9 +42,7 @@ function PurchaseContractModal(props) {
     // const protocol = poolAddressGroups[1];
     // const host = poolAddressGroups[2];
     // console.log(poolAddressGroups);
-    return `${'stratum+tcp'}://${formData.username}:${
-      formData.password
-    }@${address}:${port}`;
+    return `stratum+tcp://${formData.username}:${formData.password}@${address}:${port}`;
   };
 
   const handleClose = e => {

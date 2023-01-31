@@ -30,31 +30,8 @@ function Marketplace({
   const contractsToShow = contracts.filter(
     x => (Number(x.state) === 0 && x.seller !== address) || x.inProgress
   );
-  // const contractsToShow = [
-  //   {
-  //     id: '0xe5765F6b5C8E3a47ac1Eb54c1288D810c87804B8',
-  //     price: '200000000',
-  //     speed: '50000000000000',
-  //     length: '43200',
-  //     buyer: '0x4f4815a4Af42689A6B4dDA18f155730c9ca8aD2D',
-  //     seller: '0x4f4815a4Af42689A6B4dDA18f155730c9ca8aD2D',
-  //     timestamp: '1668210828',
-  //     state: '0',
-  //     encryptedPoolData: '',
-  //     limit: '0',
-  //     balance: '1200000000'
-  //   }
-  // ];
-  // useEffect(() => {
-  //   if (contractsToShow.length) {
-  //     setContractToPurchase(contractsToShow[0]);
-  //     setIsModalActive(true);
-  //     console.log(contractsToShow);
-  //   }
-  // }, [contracts]);
 
   const handlePurchase = (data, contract, url) => {
-    console.log(data, contract, url);
     if (lmrBalance * 10 ** 8 < Number(contract.price)) {
       setIsModalActive(false);
       context.toast('error', 'Insufficient balance');
@@ -123,23 +100,20 @@ function Marketplace({
       .then(() => contractsRefresh());
   };
 
-  const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => {
-    return (
-      <ContractsRowContainer style={style} key={`${key}-${index}`}>
-        <MarketplaceRow
-          data-testid="Marketplace-row"
-          onPurchase={data => {
-            console.log(data);
-            setContractToPurchase(data);
-            setIsModalActive(true);
-          }}
-          contract={contractsList[index]}
-          address={address}
-          ratio={ratio}
-        />
-      </ContractsRowContainer>
-    );
-  };
+  const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
+    <ContractsRowContainer style={style} key={`${key}-${index}`}>
+      <MarketplaceRow
+        data-testid="Marketplace-row"
+        onPurchase={data => {
+          setContractToPurchase(data);
+          setIsModalActive(true);
+        }}
+        contract={contractsList[index]}
+        address={address}
+        ratio={ratio}
+      />
+    </ContractsRowContainer>
+  );
 
   return (
     <View data-testid="contracts-container">

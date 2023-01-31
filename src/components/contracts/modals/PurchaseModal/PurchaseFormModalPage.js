@@ -38,7 +38,6 @@ export const PurchaseFormModalPage = ({
   const [isEditPool, setIsEditPool] = useState(false);
   const handleInputs = e => {
     e.preventDefault();
-
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
@@ -76,7 +75,7 @@ export const PurchaseFormModalPage = ({
           <div>
             <OrderSummary>Price</OrderSummary>
             <Values>
-              {formatPrice(contract.price)} LMR (~ $
+              {formatPrice(contract.price)} LMR (≈ $
               {(formatPrice(contract.price) * rate).toFixed(2)} USD)
             </Values>
           </div>
