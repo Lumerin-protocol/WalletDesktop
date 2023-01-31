@@ -15,10 +15,10 @@ import Marketplace from './contracts/Marketplace';
 import Devices from './devices/Devices';
 import BuyerHub from './contracts/BuyerHub';
 
-const BubbleGraphic1 = '/images/Bubble_1.png';
-const BubbleGraphic2 = '/images/Bubble_2.png';
-const BubbleGraphic3 = '/images/Bubble_3.png';
-const BubbleGraphic4 = '/images/Bubble_4.png';
+const BubbleGraphic1 = 'images/Bubble_1.png';
+const BubbleGraphic2 = 'images/Bubble_2.png';
+const BubbleGraphic3 = 'images/Bubble_3.png';
+const BubbleGraphic4 = 'images/Bubble_4.png';
 
 const fadeIn = keyframes`
   from {
