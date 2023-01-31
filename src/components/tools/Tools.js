@@ -100,6 +100,15 @@ const WalletInfo = styled.h4`
   color: ${p => p.theme.colors.dark};
 `;
 
+const Input = styled(TextInput)`
+  outline: 0;
+  border: 0px;
+  background: #eaf7fc;
+  border-radius: 15px;
+  padding: 1.2rem 1.2rem;
+  margin-top: 0.25rem;
+`;
+
 const Tools = props => {
   const {
     getProxyRouterSettings,
@@ -304,7 +313,7 @@ const Tools = props => {
               <>
                 <StyledParagraph>
                   Seller default pool:{' '}
-                  <TextInput
+                  <Input
                     onChange={e =>
                       setProxyRouterSettings({
                         ...proxyRouterSettings,
@@ -312,12 +321,11 @@ const Tools = props => {
                       })
                     }
                     value={proxyRouterSettings.sellerDefaultPool}
-                    rows={1}
                   />
                 </StyledParagraph>
                 <StyledParagraph>
                   Buyer default pool:{' '}
-                  <TextInput
+                  <Input
                     onChange={e =>
                       setProxyRouterSettings({
                         ...proxyRouterSettings,
@@ -325,7 +333,6 @@ const Tools = props => {
                       })
                     }
                     value={proxyRouterSettings.buyerDefaultPool}
-                    rows={1}
                   />
                 </StyledParagraph>
                 <StyledBtn
