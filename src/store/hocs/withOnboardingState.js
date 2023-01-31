@@ -16,7 +16,6 @@ const withOnboardingState = WrappedComponent => {
     //     createMnemonic: PropTypes.func.isRequired
     //   }).isRequired,
     //   config: PropTypes.shape({
-    //     requiredPasswordEntropy: PropTypes.number.isRequired
     //   }).isRequired
     // };
 
@@ -136,7 +135,8 @@ const withOnboardingState = WrappedComponent => {
 
       return this.props.onOnboardingCompleted({
         proxyRouterConfig: {
-          defaultPool: this.state.proxyDefaultPool
+          sellerDefaultPool: this.state.proxyDefaultPool,
+          buyerDefaultPool: this.state.proxyDefaultPool
         },
         password: this.state.password,
         mnemonic: this.state.useUserMnemonic
@@ -192,7 +192,6 @@ const withOnboardingState = WrappedComponent => {
       return (
         <WrappedComponent
           onUseUserMnemonicToggled={this.onUseUserMnemonicToggled}
-          requiredPasswordEntropy={this.props.config.requiredPasswordEntropy}
           onMnemonicCopiedToggled={this.onMnemonicCopiedToggled}
           onMnemonicAccepted={this.onMnemonicAccepted}
           onTermsLinkClick={this.props.client.onTermsLinkClick}

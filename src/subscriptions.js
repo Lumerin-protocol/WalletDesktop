@@ -16,6 +16,7 @@ export const subscribeToMainProcessMessages = function(store) {
     'create-wallet',
     'open-wallet',
     'open-proxy-router',
+    'kill-proxy-router',
     'eth-balance-changed',
     'token-balance-changed',
     'token-contract-received',

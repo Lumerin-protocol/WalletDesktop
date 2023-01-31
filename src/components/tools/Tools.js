@@ -2,7 +2,7 @@ import { withRouter, NavLink } from 'react-router-dom';
 import withToolsState from '../../store/hocs/withToolsState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
 import ConfirmModal from './ConfirmModal';
@@ -100,6 +100,12 @@ const WalletInfo = styled.h4`
 `;
 
 const Tools = props => {
+  const {
+    getProxyRouterSettings,
+    saveProxyRouterSettings,
+    restartProxyRouter
+  } = props;
+
   const RenderForm = goToReview => {
     const defState = {
       activeModal: null,
@@ -113,8 +119,24 @@ const Tools = props => {
 
     const [state, setState] = useState(defState);
     const [isRestarting, restartNode] = useState(false);
-
+    const [proxyRouterSettings, setProxyRouterSettings] = useState({
+      proxyRouterEditMode: false,
+      isFetching: true
+    });
     const context = useContext(ToastsContext);
+
+    useEffect(() => {
+      getProxyRouterSettings()
+        .then(data => {
+          setProxyRouterSettings({
+            ...data,
+            isFetching: false
+          });
+        })
+        .catch(err => {
+          context.toast('error', 'Failed to fetch proxy-router settings');
+        });
+    }, []);
 
     const onCloseModal = () => {
       setState({ ...state, activeModal: null });
@@ -122,6 +144,40 @@ const Tools = props => {
 
     const onActiveModalClick = modal => {
       setState({ ...state, activeModal: modal });
+    };
+
+    const proxyRouterEditClick = () => {
+      setProxyRouterSettings({
+        ...proxyRouterSettings,
+        proxyRouterEditMode: true
+      });
+    };
+
+    const proxyRouterSaveClick = () => {
+      setProxyRouterSettings({
+        ...proxyRouterSettings,
+        proxyRouterEditMode: false,
+        isFetching: true
+      });
+      saveProxyRouterSettings({
+        sellerDefaultPool: proxyRouterSettings.sellerDefaultPool,
+        buyerDefaultPool: proxyRouterSettings.buyerDefaultPool
+      })
+        .then(() => {
+          restartProxyRouter({}).catch(err => {
+            context.toast('error', 'Failed to restart proxy-router');
+          });
+        })
+        .catch(() => {
+          context.toast('error', 'Failed to save proxy-router settings');
+        })
+        .finally(() => {
+          setProxyRouterSettings({
+            ...proxyRouterSettings,
+            isFetching: false,
+            proxyRouterEditMode: false
+          });
+        });
     };
 
     const onRestartClick = async () => {
@@ -219,6 +275,58 @@ const Tools = props => {
             <StyledBtn onClick={() => onActiveModalClick('confirm-rescan')}>
               Rescan Transactions
             </StyledBtn>
+            <ConfirmModal
+              onRequestClose={onCloseModal}
+              onConfirm={props.onRescanTransactions}
+              isOpen={state.activeModal === 'confirm-rescan'}
+            />
+          </Sp>
+          <Sp mt={5}>
+            <Subtitle>Proxy-Router configuration</Subtitle>
+            {proxyRouterSettings.isFetching ? (
+              <Spinner />
+            ) : !proxyRouterSettings.proxyRouterEditMode ? (
+              <>
+                <StyledParagraph>
+                  Seller default pool: "{proxyRouterSettings.sellerDefaultPool}"
+                </StyledParagraph>
+                <StyledParagraph>
+                  Buyer default pool: "{proxyRouterSettings.buyerDefaultPool}"
+                </StyledParagraph>
+                <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
+              </>
+            ) : (
+              <>
+                <StyledParagraph>
+                  Seller default pool:{' '}
+                  <TextInput
+                    onChange={e =>
+                      setProxyRouterSettings({
+                        ...proxyRouterSettings,
+                        sellerDefaultPool: e.value
+                      })
+                    }
+                    value={proxyRouterSettings.sellerDefaultPool}
+                    rows={1}
+                  />
+                </StyledParagraph>
+                <StyledParagraph>
+                  Buyer default pool:{' '}
+                  <TextInput
+                    onChange={e =>
+                      setProxyRouterSettings({
+                        ...proxyRouterSettings,
+                        buyerDefaultPool: e.value
+                      })
+                    }
+                    value={proxyRouterSettings.buyerDefaultPool}
+                    rows={1}
+                  />
+                </StyledParagraph>
+                <StyledBtn onClick={proxyRouterSaveClick}>Save</StyledBtn>
+              </>
+            )}
+
             <ConfirmModal
               onRequestClose={onCloseModal}
               onConfirm={props.onRescanTransactions}

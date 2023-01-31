@@ -1,11 +1,9 @@
 import * as utils from '../../store/utils';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import React from 'react';
 
-import { TextInput, AltLayout, Btn, Sp } from '../common';
+import { TextInput, AltLayout, Btn, Sp, AltLayoutNarrow } from '../common';
 import SecondaryBtn from './SecondaryBtn';
-import Message from './Message';
 
 const ProxyRouterConfigStep = props => {
   return (
@@ -13,34 +11,36 @@ const ProxyRouterConfigStep = props => {
       title="Configure Proxy Router"
       data-testid="onboarding-container"
     >
-      <form
-        onSubmit={props.onProxyRouterConfigured}
-        data-testid="pr-config-form"
-      >
-        <Sp mt={2}>
-          <TextInput
-            data-testid="pool-field"
-            autoFocus
-            onChange={props.onInputChange}
-            noFocus
-            error={props.errors.proxyDefaultPool}
-            label="Default Pool Address"
-            value={props.proxyDefaultPool}
-            type="text"
-            id="proxyDefaultPool"
-          />
-        </Sp>
-        <Sp mt={2}>
-          <SecondaryBtn onClick={props.onUseHostedProxyRouter} block>
-            Or use hosted proxy router
-          </SecondaryBtn>
-        </Sp>
-        <Sp mt={6}>
-          <Btn block submit>
-            Continue
-          </Btn>
-        </Sp>
-      </form>
+      <AltLayoutNarrow>
+        <form
+          onSubmit={props.onProxyRouterConfigured}
+          data-testid="pr-config-form"
+        >
+          <Sp mt={2}>
+            <TextInput
+              data-testid="pool-field"
+              autoFocus
+              onChange={props.onInputChange}
+              noFocus
+              error={props.errors.proxyDefaultPool}
+              label="Default Destination Address"
+              value={props.proxyDefaultPool}
+              type="text"
+              id="proxyDefaultPool"
+            />
+          </Sp>
+          <Sp mt={2}>
+            <SecondaryBtn onClick={props.onUseHostedProxyRouter} block>
+              Or use hosted proxy router
+            </SecondaryBtn>
+          </Sp>
+          <Sp mt={6}>
+            <Btn block submit>
+              Continue
+            </Btn>
+          </Sp>
+        </form>
+      </AltLayoutNarrow>
     </AltLayout>
   );
 };

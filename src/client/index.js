@@ -1,4 +1,3 @@
-import fastPasswordEntropy from 'fast-password-entropy';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 
@@ -52,8 +51,6 @@ const createClient = function(createStore) {
     );
 
   const onLinkClick = url => window.openLink(url);
-
-  const getStringEntropy = fastPasswordEntropy;
 
   const copyToClipboard = text => Promise.resolve(window.copyToClipboard(text));
 
@@ -115,7 +112,14 @@ const createClient = function(createStore) {
     ),
     logout: utils.forwardToMainProcess('logout'),
     getLocalIp: utils.forwardToMainProcess('get-local-ip'),
-    getPoolAddress: utils.forwardToMainProcess('get-pool-address')
+    getPoolAddress: utils.forwardToMainProcess('get-pool-address'),
+    getProxyRouterSettings: utils.forwardToMainProcess(
+      'get-proxy-router-settings'
+    ),
+    saveProxyRouterSettings: utils.forwardToMainProcess(
+      'save-proxy-router-settings'
+    ),
+    restartProxyRouter: utils.forwardToMainProcess('restart-proxy-router')
   };
 
   const api = {
@@ -126,7 +130,6 @@ const createClient = function(createStore) {
     createMnemonic: keys.createMnemonic,
     onTermsLinkClick,
     onTransactionLinkClick,
-    getStringEntropy,
     copyToClipboard,
     onHelpLinkClick,
     getAppVersion: window.getAppVersion,

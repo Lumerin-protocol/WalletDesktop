@@ -72,6 +72,9 @@ const withToolsState = WrappedComponent => {
           onInputChange={this.onInputChange}
           onSubmit={this.onSubmit}
           validate={this.validate}
+          getProxyRouterSettings={this.props.client.getProxyRouterSettings}
+          saveProxyRouterSettings={this.props.client.saveProxyRouterSettings}
+          restartProxyRouter={this.props.client.restartProxyRouter}
           {...this.state}
           {...this.props}
         />

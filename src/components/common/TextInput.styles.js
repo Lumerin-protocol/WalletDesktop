@@ -44,7 +44,6 @@ export const ErrorMsg = styled.div`
   font-size: 1.3rem;
   font-weight: 600;
   text-align: right;
-  text-shadow: ${p => p.theme.textShadow};
   margin-top: 0.4rem;
   width: 100%;
   margin-bottom: -2rem;

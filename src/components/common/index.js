@@ -4,7 +4,7 @@ import TextInput from './TextInput';
 import ConfirmationWizard from './ConfirmationWizard';
 import DisplayValue from './DisplayValue';
 import AmountFields from './AmountFields';
-import EntropyMeter from './EntropyMeter';
+import PasswordStrengthMeter from './PasswordStrengthMeter';
 import LastUpdated from './LastUpdated';
 import { ItemFilter } from './ItemFilter';
 import LightLayout from './LightLayout';
@@ -24,7 +24,7 @@ export {
   ConfirmationWizard,
   DisplayValue,
   AmountFields,
-  EntropyMeter,
+  PasswordStrengthMeter,
   LastUpdated,
   ItemFilter,
   LightLayout,

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { useTimer } from 'react-timer-hook';
+import { ToastsContext } from '../../toasts';
 
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
 
@@ -18,7 +19,12 @@ import {
   getContractState,
   getContractEndTimestamp
 } from '../utils';
-import { SmallAssetContainer } from './ContractsRow.styles';
+import {
+  ActionButton,
+  ActionButtons,
+  SmallAssetContainer
+} from './ContractsRow.styles';
+
 const Container = styled.div`
   padding: 1.2rem 0;
   display: grid;
@@ -39,20 +45,6 @@ const Value = styled.label`
   font-size: 1.2rem;
 `;
 
-const ActionButtons = styled.div`
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-`;
-
-const ActionButton = styled(Btn)`
-  font-size: 1.2rem;
-  padding: 1rem;
-  line-height: 1.5rem;
-`;
-
 const STATE_COLOR = {
   [CONTRACT_STATE.Running]: theme.colors.warning,
   [CONTRACT_STATE.Avaliable]: theme.colors.success
@@ -60,6 +52,7 @@ const STATE_COLOR = {
 
 function Row({ contract, cancel, address, ratio, explorerUrl }) {
   // TODO: Add better padding
+  const context = useContext(ToastsContext);
   const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
@@ -74,12 +67,21 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
       contractId: contract.id,
       walletAddress: contract.seller,
       closeOutType
+    }).catch(e => {
+      const action =
+        closeOutType === CLOSEOUT_TYPE.Claim ? 'claim funds' : 'close contract';
+      context.toast('error', `Failed to ${action}: ${e.message}`);
+      setIsPending(false);
     });
   };
 
-  const isCancelBtnDisabled = () => {
+  const contractEndTimestamp = getContractEndTimestamp(contract);
+  const timer = useTimer({ expiryTimestamp: new Date(contractEndTimestamp) });
+
+  const isContractExpired = () => {
     return (
-      contract.state !== CONTRACT_STATE.Avaliable || contract.balance !== '0'
+      contract.state !== CONTRACT_STATE.Avaliable &&
+      Date.now() > contractEndTimestamp
     );
   };
 
@@ -97,9 +99,6 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
   const getClockColor = contract => {
     return STATE_COLOR[contract.state];
   };
-
-  const contractEndTimestamp = getContractEndTimestamp(contract);
-  const timer = useTimer({ expiryTimestamp: new Date(contractEndTimestamp) });
 
   return (
     <Container ratio={ratio} onClick={() => window.openLink(explorerUrl)}>
@@ -123,11 +122,8 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
           </Value>
         ) : (
           <ActionButtons>
-            {!isContractClosed(contract) && (
-              <ActionButton
-                disabled={isCancelBtnDisabled()}
-                onClick={handleCancel(CLOSEOUT_TYPE.Close)}
-              >
+            {isContractExpired() && (
+              <ActionButton onClick={handleCancel(CLOSEOUT_TYPE.Close)}>
                 Close
               </ActionButton>
             )}

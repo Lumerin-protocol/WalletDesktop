@@ -12,11 +12,13 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
     [PROXY_ROUTER_MODE.Buyer]: [
       `--proxy-address=0.0.0.0:${config.buyerProxyPort}`,
       `--web-address=0.0.0.0:${config.buyerWebPort}`,
+      `--pool-address=${config.buyerDefaultPool}`,
       "--is-buyer=true",
     ],
     [PROXY_ROUTER_MODE.Seller]: [
       `--proxy-address=0.0.0.0:${config.sellerProxyPort}`,
       `--web-address=0.0.0.0:${config.sellerWebPort}`,
+      `--pool-address=${config.sellerDefaultPool}`,
       "--is-buyer=false",
     ],
   };
@@ -32,7 +34,6 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
       `--eth-node-address=${config.wsApiUrl}`,
       "--hashrate-diff-threshold=0.10",
       "--miner-vetting-duration=1m",
-      `--pool-address=${config.defaultPool}`,
       "--pool-conn-timeout=5m",
       "--pool-max-duration=5m",
       "--pool-min-duration=2m",
