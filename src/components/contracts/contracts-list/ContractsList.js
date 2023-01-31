@@ -32,7 +32,7 @@ function ContractsList({
     { name: 'Status', ratio: 1 },
     { value: 'price', name: 'Price', ratio: 2 },
     { value: 'length', name: 'Duration', ratio: 2 },
-    { value: 'speed', name: 'Speed (TH/s)', ratio: 2 },
+    { value: 'speed', name: 'Speed', ratio: 2 },
     { value: 'action', name: 'Actions', ratio: 3 }
   ];
 

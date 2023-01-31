@@ -91,7 +91,7 @@ function BuyerHubRow({ contract, ratio, explorerUrl, cancel }) {
         </SmallAssetContainer>
       )}
 
-      <Value>{formatPrice(contract.price)} LMR</Value>
+      <Value>{formatPrice(contract.price)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
       {isPending ? (

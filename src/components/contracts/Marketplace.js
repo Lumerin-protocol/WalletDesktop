@@ -84,7 +84,7 @@ function Marketplace({
     { value: 'contract', name: 'Contract', ratio: 2 },
     { value: 'price', name: 'Price', ratio: 1 },
     { value: 'length', name: 'Duration', ratio: 1 },
-    { value: 'speed', name: 'Speed (TH/s)', ratio: 1 },
+    { value: 'speed', name: 'Speed', ratio: 1 },
     { value: 'action', name: 'Actions', ratio: 2 }
   ];
 

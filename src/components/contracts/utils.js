@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { lmrEightDecimals } from '../../store/utils/coinValue';
+import { lmrDecimals } from '../../utils/coinValue';
 import { CONTRACT_STATE } from '../../enums';
 
 const getReadableDate = (days, hours, minutes, seconds) => {
@@ -29,7 +29,7 @@ const getReadableDate = (days, hours, minutes, seconds) => {
 };
 
 export const formatSpeed = speed => {
-  return Number(speed) / 10 ** 12;
+  return `${Number(speed) / 10 ** 12} TH/s`;
 };
 
 export const formatTimestamp = (timestamp, timer, state) => {
@@ -50,7 +50,7 @@ export const formatTimestamp = (timestamp, timer, state) => {
 };
 
 export const formatPrice = price => {
-  return `${Number(price) / lmrEightDecimals}`;
+  return `${Number(price) / lmrDecimals} LMR`;
 };
 
 export const formatDuration = duration => {

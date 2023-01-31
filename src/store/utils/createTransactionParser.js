@@ -1,7 +1,10 @@
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
 import get from 'lodash/get';
-import { getEthBalance, getLmrBalance } from './coinValue';
+import {
+  fromTokenBaseUnitsToETH,
+  fromTokenBaseUnitsToLMR
+} from '../../utils/coinValue';
 
 function isSendTransaction({ transaction }, tokenData, myAddress) {
   return transaction.from === myAddress;
@@ -141,7 +144,10 @@ export const createTransactionParser = myAddress => rawTx => {
     gasUsed: getGasUsed(rawTx),
     txType,
     symbol,
-    value: symbol === 'LMR' ? getLmrBalance(value) : getEthBalance(value),
+    value:
+      symbol === 'LMR'
+        ? fromTokenBaseUnitsToLMR(value)
+        : fromTokenBaseUnitsToETH(value),
     from: getFrom(rawTx, tokenData, txType),
     hash: getTransactionHash(rawTx),
     meta: rawTx.meta,

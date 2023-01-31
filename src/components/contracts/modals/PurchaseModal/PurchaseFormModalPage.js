@@ -23,7 +23,8 @@ import {
 } from './common.styles';
 
 import { IconExternalLink } from '@tabler/icons';
-import { formatDuration, formatSpeed, formatPrice } from '../../utils';
+import { formatDuration, formatSpeed } from '../../utils';
+import { fromTokenBaseUnitsToLMR } from '../../../../utils/coinValue';
 
 export const PurchaseFormModalPage = ({
   inputs,
@@ -94,15 +95,15 @@ export const PurchaseFormModalPage = ({
           <div>
             <OrderSummary>Terms</OrderSummary>
             <Values>
-              {formatSpeed(contract.speed)} TH/s for{' '}
+              {formatSpeed(contract.speed)} for{' '}
               {formatDuration(contract.length)}
             </Values>
           </div>
           <div>
             <OrderSummary>Price</OrderSummary>
             <Values>
-              {formatPrice(contract.price)} LMR (≈ $
-              {(formatPrice(contract.price) * rate).toFixed(2)} USD)
+              {fromTokenBaseUnitsToLMR(contract.price)} LMR (≈ $
+              {(fromTokenBaseUnitsToLMR(contract.price) * rate).toFixed(2)} USD)
             </Values>
           </div>
         </div>

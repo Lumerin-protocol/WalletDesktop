@@ -80,7 +80,7 @@ export const PurchasePreviewModalPage = props => (
               key={'price'}
               style={{ marginRight: '4px', height: '1.4rem' }}
             />
-            {formatPrice(props.contract.price)} LMR
+            {formatPrice(props.contract.price)}
           </Values>
         </div>
       </div>
