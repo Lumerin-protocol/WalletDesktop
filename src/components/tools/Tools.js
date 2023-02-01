@@ -12,6 +12,7 @@ import { ConfirmationWizard, TextInput, Flex, BaseBtn, Sp } from '../common';
 import Spinner from '../common/Spinner';
 import { View } from '../common/View';
 import { ToastsContext } from '../../components/toasts';
+import ConfirmProxyConfigModal from './ConfirmProxyConfigModal';
 
 const Container = styled.div`
   padding: 3rem 0 0 0;
@@ -99,6 +100,15 @@ const WalletInfo = styled.h4`
   color: ${p => p.theme.colors.dark};
 `;
 
+const Input = styled(TextInput)`
+  outline: 0;
+  border: 0px;
+  background: #eaf7fc;
+  border-radius: 15px;
+  padding: 1.2rem 1.2rem;
+  margin-top: 0.25rem;
+`;
+
 const Tools = props => {
   const {
     getProxyRouterSettings,
@@ -153,21 +163,17 @@ const Tools = props => {
       });
     };
 
-    const proxyRouterSaveClick = () => {
+    const saveProxyRouterConfig = () => {
+      onCloseModal();
       setProxyRouterSettings({
         ...proxyRouterSettings,
         proxyRouterEditMode: false,
         isFetching: true
       });
-      saveProxyRouterSettings({
+      return saveProxyRouterSettings({
         sellerDefaultPool: proxyRouterSettings.sellerDefaultPool,
         buyerDefaultPool: proxyRouterSettings.buyerDefaultPool
       })
-        .then(() => {
-          restartProxyRouter({}).catch(err => {
-            context.toast('error', 'Failed to restart proxy-router');
-          });
-        })
         .catch(() => {
           context.toast('error', 'Failed to save proxy-router settings');
         })
@@ -178,6 +184,14 @@ const Tools = props => {
             proxyRouterEditMode: false
           });
         });
+    };
+
+    const confirmProxyRouterRestart = () => {
+      saveProxyRouterConfig().then(() => {
+        restartProxyRouter({}).catch(err => {
+          context.toast('error', 'Failed to restart proxy-router');
+        });
+      });
     };
 
     const onRestartClick = async () => {
@@ -299,7 +313,7 @@ const Tools = props => {
               <>
                 <StyledParagraph>
                   Seller default pool:{' '}
-                  <TextInput
+                  <Input
                     onChange={e =>
                       setProxyRouterSettings({
                         ...proxyRouterSettings,
@@ -307,12 +321,11 @@ const Tools = props => {
                       })
                     }
                     value={proxyRouterSettings.sellerDefaultPool}
-                    rows={1}
                   />
                 </StyledParagraph>
                 <StyledParagraph>
                   Buyer default pool:{' '}
-                  <TextInput
+                  <Input
                     onChange={e =>
                       setProxyRouterSettings({
                         ...proxyRouterSettings,
@@ -320,10 +333,13 @@ const Tools = props => {
                       })
                     }
                     value={proxyRouterSettings.buyerDefaultPool}
-                    rows={1}
                   />
                 </StyledParagraph>
-                <StyledBtn onClick={proxyRouterSaveClick}>Save</StyledBtn>
+                <StyledBtn
+                  onClick={() => onActiveModalClick('confirm-proxy-restart')}
+                >
+                  Save
+                </StyledBtn>
               </>
             )}
 
@@ -331,6 +347,12 @@ const Tools = props => {
               onRequestClose={onCloseModal}
               onConfirm={props.onRescanTransactions}
               isOpen={state.activeModal === 'confirm-rescan'}
+            />
+            <ConfirmProxyConfigModal
+              onRequestClose={onCloseModal}
+              onConfirm={confirmProxyRouterRestart}
+              onLater={saveProxyRouterConfig}
+              isOpen={state.activeModal === 'confirm-proxy-restart'}
             />
           </Sp>
           {/* <Sp mt={5}>
