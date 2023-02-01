@@ -11,7 +11,7 @@ import CreateContractModal from './modals/CreateContractModal';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
-import { lmrEightDecimals } from '../../store/utils/coinValue';
+import { lmrDecimals } from '../../utils/coinValue';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -109,7 +109,7 @@ function SellerHub({
     e.preventDefault();
 
     const contract = {
-      price: contractDetails.price * lmrEightDecimals,
+      price: contractDetails.price * lmrDecimals,
       speed: contractDetails.speed * 10 ** 12, // THs
       duration: contractDetails.time * 3600, // Hours to seconds
       sellerAddress: contractDetails.address

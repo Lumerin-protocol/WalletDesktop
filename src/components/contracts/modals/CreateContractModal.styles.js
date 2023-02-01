@@ -39,7 +39,7 @@ export const Body = styled.div`
   position: fixed;
   z-index: 20;
   background-color: ${p => p.theme.colors.light};
-  width: 50%;
+  width: 45%;
   height: fit-content;
   border-radius: 15px;
   padding: 3rem 5%;
@@ -65,7 +65,7 @@ export const Title = styled.div`
   font-size: 2.5rem;
   font-weight: 900;
   cursor: default;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 `;
 
 export const Subtitle = styled.div`
@@ -75,19 +75,14 @@ export const Subtitle = styled.div`
   margin-bottom: 10px;
 `;
 
-export const ContractLink = styled.a`
+export const ContractLink = styled.div`
+  line-height: 1.4rem;
+  font-size: 1.4rem;
+  font-weight: 100;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   color: #014353;
-  text-decoration: none;
-  h4 {
-    font-size: 0.9rem;
-    font-weight: 400;
-  }
-  p {
-    font-size: 1.1rem;
-    font-weight: 500;
-    text-decoration: underline;
-    margin-bottom: 0;
-  }
 `;
 
 export const Form = styled.form`
@@ -184,4 +179,9 @@ export const RightBtn = styled(BaseBtn)`
   @media (min-width: 1040px) {
     margin-left: 0;
   }
+`;
+
+export const ErrorLabel = styled(Sublabel)`
+  padding: 5px 0 0 5px;
+  color: red;
 `;

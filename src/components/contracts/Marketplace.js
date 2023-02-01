@@ -5,7 +5,7 @@ import { LayoutHeader } from '../common/LayoutHeader';
 import ContractsList from './contracts-list/ContractsList';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
-import PurchaseContractModal from './modals/PurchaseContractModal';
+import PurchaseContractModal from './modals/PurchaseModal/PurchaseContractModal';
 import MarketplaceRow from './contracts-list/MarketplaceRow';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 
@@ -84,7 +84,7 @@ function Marketplace({
     { value: 'contract', name: 'Contract', ratio: 2 },
     { value: 'price', name: 'Price', ratio: 1 },
     { value: 'length', name: 'Duration', ratio: 1 },
-    { value: 'speed', name: 'Speed (TH/s)', ratio: 1 },
+    { value: 'speed', name: 'Speed', ratio: 1 },
     { value: 'action', name: 'Actions', ratio: 2 }
   ];
 
@@ -105,7 +105,6 @@ function Marketplace({
       <MarketplaceRow
         data-testid="Marketplace-row"
         onPurchase={data => {
-          console.log(data);
           setContractToPurchase(data);
           setIsModalActive(true);
         }}

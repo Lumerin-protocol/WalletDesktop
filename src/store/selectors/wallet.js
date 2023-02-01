@@ -6,7 +6,10 @@ import * as utils from '../utils';
 import { getChain, getRate, getRateEth } from './chain';
 import { getConfig } from './config';
 import { getIsOnline } from './connectivity';
-import { getEthBalance, getLmrBalance } from '../utils/coinValue';
+import {
+  fromTokenBaseUnitsToETH,
+  fromTokenBaseUnitsToLMR
+} from '../../utils/coinValue';
 import { toUSD } from '../utils/syncAmounts';
 import { uniqBy } from 'lodash';
 
@@ -24,13 +27,13 @@ export const getWalletAddress = createSelector(
 // Returns the LMR balance of the active address in wei
 export const getWalletEthBalance = createSelector(
   getWallet,
-  walletData => getEthBalance(walletData.ethBalance)
-  // (walletData) => walletData.ethBalance / lmrEightDecimals
+  walletData => fromTokenBaseUnitsToETH(walletData.ethBalance)
+  // (walletData) => walletData.ethBalance / lmrDecimals
 );
 
 // Returns the LMR balance of the active address in wei
 export const getWalletLmrBalance = createSelector(getWallet, walletData =>
-  getLmrBalance(get(walletData, 'token.lmrBalance', 0))
+  fromTokenBaseUnitsToLMR(get(walletData, 'token.lmrBalance', 0))
 );
 
 export const getWalletLmrBalanceUSD = createSelector(

@@ -6,7 +6,7 @@ import * as utils from '../utils';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import React from 'react';
-import { lmrEightDecimals } from '../utils/coinValue';
+import { lmrDecimals } from '../../utils/coinValue';
 
 const withTransactionModalState = WrappedComponent => {
   class Container extends React.Component {
@@ -85,7 +85,7 @@ const withTransactionModalState = WrappedComponent => {
 
       try {
         const { gasLimit } = await this.props.client.getLmrTransferGasLimit({
-          value: parseFloat(utils.sanitize(coinAmount)) * lmrEightDecimals,
+          value: parseFloat(utils.sanitize(coinAmount)) * lmrDecimals,
           chain: this.props.chain,
           from: this.props.from,
           to: this.state.toAddress

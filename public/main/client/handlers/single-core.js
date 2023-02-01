@@ -8,7 +8,7 @@ const config = require("../../../config");
 const wallet = require("../wallet");
 const noCore = require("./no-core");
 const WalletError = require("../WalletError");
-const { setProxyRouterConfig, cleanupDb } = require("../settings");
+const { setProxyRouterConfig, cleanupDb, getProxyRouterConfig } = require("../settings");
 
 const withAuth = (fn) => (data, { api }) => {
   if (typeof data.walletId !== "string") {
@@ -255,6 +255,11 @@ const logout = async (data) => {
   return cleanupDb();
 }
 
+const getPoolAddress = async (data) => {
+  const config = getProxyRouterConfig();
+  return config.buyerDefaultPool || config.defaultPool;
+}
+
 module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
@@ -280,5 +285,6 @@ module.exports = {
   refreshProxyRouterConnection,
   logout,
   getLocalIp,
+  getPoolAddress,
   restartProxyRouter,
 };

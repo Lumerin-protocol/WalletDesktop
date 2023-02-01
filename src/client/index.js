@@ -112,6 +112,7 @@ const createClient = function(createStore) {
     ),
     logout: utils.forwardToMainProcess('logout'),
     getLocalIp: utils.forwardToMainProcess('get-local-ip'),
+    getPoolAddress: utils.forwardToMainProcess('get-pool-address'),
     getProxyRouterSettings: utils.forwardToMainProcess(
       'get-proxy-router-settings'
     ),

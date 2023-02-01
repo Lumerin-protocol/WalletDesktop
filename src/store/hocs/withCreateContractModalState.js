@@ -31,6 +31,8 @@ const withCreateContractModalState = WrappedComponent => {
       return (
         <WrappedComponent
           copyToClipboard={this.props.client.copyToClipboard}
+          getLocalIp={this.props.client.getLocalIp}
+          getPoolAddress={this.props.client.getPoolAddress}
           {...this.props}
           {...this.state}
         />
@@ -41,6 +43,8 @@ const withCreateContractModalState = WrappedComponent => {
   const mapStateToProps = (state, props) => ({
     address: selectors.getWalletAddress(state),
     buyerPort: selectors.getBuyerProxyPort(state),
+    lmrRate: selectors.getRate(state),
+    isLocalProxyRouter: selectors.getIsLocalProxyRouter(state),
     explorerUrl: props.contract
       ? selectors.getContractExplorerUrl(state, {
           hash: props.contract.id
