@@ -54,7 +54,7 @@ export const PurchasePreviewModalPage = ({
               key={'speed'}
               style={{ marginRight: '4px', height: '1.4rem' }}
             />
-            {formatSpeed(contract.speed)} TH/s
+            {formatSpeed(contract.speed)}
           </Values>
         </div>
         <div>
@@ -79,7 +79,7 @@ export const PurchasePreviewModalPage = ({
         </div>
       </ContractInfoContainer>
     </TitleWrapper>
-    <PreviewCont onSubmit={() => {}}>
+    <PreviewCont>
       <UrlContainer>
         <UpperCaseTitle>validator address (lumerin node)</UpperCaseTitle>
         <Divider />
