@@ -124,13 +124,23 @@ const withOnboardingState = WrappedComponent => {
       return this.setState({ isMnemonicVerified: true });
     };
 
+    validateDefaultPoolAddress() {
+      const errors = validators.validatePoolAddress(
+        this.state.proxyDefaultPool
+      );
+      if (errors.proxyDefaultPool) {
+        this.setState({ errors });
+        return false;
+      }
+      return true;
+    }
+
     onProxyRouterConfigured = e => {
       if (e && e.preventDefault) e.preventDefault();
 
-      if (!this.state.proxyDefaultPool) {
-        const { errors } = this.state;
-        errors.proxyDefaultPool = 'Enter default pool';
-        return this.setState({ errors });
+      const isValid = this.validateDefaultPoolAddress();
+      if (!isValid) {
+        return;
       }
 
       return this.props.onOnboardingCompleted({
