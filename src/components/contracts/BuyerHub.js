@@ -29,7 +29,7 @@ function BuyerHub({
     { name: 'Status', ratio: 1 },
     { value: 'price', name: 'Price', ratio: 3 },
     { value: 'length', name: 'Duration', ratio: 3 },
-    { value: 'speed', name: 'Speed (TH/s)', ratio: 3 },
+    { value: 'speed', name: 'Speed', ratio: 3 },
     { value: 'action', name: 'Actions', ratio: 3 }
   ];
 

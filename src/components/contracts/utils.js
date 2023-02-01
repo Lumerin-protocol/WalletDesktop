@@ -29,7 +29,7 @@ const getReadableDate = (days, hours, minutes, seconds) => {
 };
 
 export const formatSpeed = speed => {
-  return Number(speed) / 10 ** 12;
+  return `${Number(speed) / 10 ** 12} TH/s`;
 };
 
 export const formatTimestamp = (timestamp, timer, state) => {
