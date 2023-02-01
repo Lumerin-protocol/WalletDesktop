@@ -182,5 +182,6 @@ export const RightBtn = styled(BaseBtn)`
 `;
 
 export const ErrorLabel = styled(Sublabel)`
+  padding: 5px 0 0 5px;
   color: red;
 `;

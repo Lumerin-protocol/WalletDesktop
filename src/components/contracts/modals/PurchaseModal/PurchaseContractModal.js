@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import withCreateContractModalState from '../../../../store/hocs/withCreateContractModalState';
 import { Modal, Body, CloseModal } from '../CreateContractModal.styles';
 import { withRouter } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 import { PurchaseFormModalPage } from './PurchaseFormModalPage';
 import { PurchasePreviewModalPage } from './PurchasePreviewModalPage';
@@ -20,12 +21,20 @@ function PurchaseContractModal(props) {
   const [isPreview, setIsPreview] = useState(false);
   const [pool, setPool] = useState(null);
 
+  const {
+    register,
+    handleSubmit,
+    formState,
+    setValue,
+    getValues,
+    reset,
+    trigger
+  } = useForm({ mode: 'onBlur' });
+
   useEffect(() => {
     props.getLocalIp({}).then(ip => {
-      setInputs({
-        ...inputs,
-        address: `stratum+tcp://${ip}:${props.buyerPort}`
-      });
+      setValue('address', `stratum+tcp://${ip}:${props.buyerPort}`);
+      trigger('address');
     });
     props.getPoolAddress({}).then(pool => {
       setPool(pool);
@@ -42,11 +51,7 @@ function PurchaseContractModal(props) {
   };
 
   const handleClose = e => {
-    setInputs({
-      address: '',
-      username: '',
-      password: ''
-    });
+    reset();
     setIsPreview(false);
     close(e);
   };
@@ -56,12 +61,6 @@ function PurchaseContractModal(props) {
     history.push('/tools');
   };
 
-  const [inputs, setInputs] = useState({
-    address: '',
-    username: '',
-    password: ''
-  });
-
   if (!isActive) {
     return <></>;
   }
@@ -69,7 +68,7 @@ function PurchaseContractModal(props) {
   const pagesProps = {
     explorerUrl,
     onEditPool,
-    inputs,
+    inputs: getValues(),
     pool,
     contract,
     rate: lmrRate
@@ -84,6 +83,7 @@ function PurchaseContractModal(props) {
             {...pagesProps}
             onBackToForm={() => setIsPreview(false)}
             onPurchase={() => {
+              const inputs = getValues();
               handlePurchase(inputs, contract, toRfc2396(inputs));
             }}
           />
@@ -91,7 +91,9 @@ function PurchaseContractModal(props) {
           <PurchaseFormModalPage
             {...pagesProps}
             close={close}
-            setInputs={setInputs}
+            register={register}
+            handleSubmit={handleSubmit}
+            formState={formState}
             onFinished={() => setIsPreview(true)}
           />
         )}

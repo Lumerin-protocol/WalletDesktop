@@ -39,29 +39,24 @@ export const PurchaseFormModalPage = ({
   pool,
   explorerUrl,
   onEditPool,
-  close
+  handleSubmit,
+  register,
+  close,
+  formState
 }) => {
   const [isEditPool, setIsEditPool] = useState(false);
-  const [errors, setErrors] = useState({
-    poolAddress: '',
-    username: '',
-    password: ''
-  });
-  const handleInputs = e => {
-    e.preventDefault();
-    const newInputs = { ...inputs, [e.target.name]: e.target.value };
-    const newErrors = {
-      username:
-        newInputs.username.length > 64
-          ? 'Username length should be less that 64'
-          : '',
-      password:
-        newInputs.password.length > 64
-          ? 'Password length should be less that 64'
-          : ''
-    };
-    setInputs(newInputs);
-    setErrors(newErrors);
+
+  const validateAddress = address => {
+    if (!address.includes('stratum+tcp://')) return false;
+    const credsPart = address.replace('stratum+tcp://', '');
+    const regexPortNumber = /:\d+/;
+    const portMatch = credsPart.match(regexPortNumber);
+    if (!portMatch) return false;
+
+    const port = portMatch[0].replace(':', '');
+    if (Number(port) < 0 || Number(port) > 65536) return false;
+
+    return true;
   };
 
   const handleClose = e => {
@@ -69,11 +64,7 @@ export const PurchaseFormModalPage = ({
     close();
   };
 
-  const submit = () => {
-    if (!inputs.username) {
-      setErrors({ ...errors, username: 'Username is required' });
-      return;
-    }
+  const submit = data => {
     onFinished();
   };
 
@@ -106,7 +97,7 @@ export const PurchaseFormModalPage = ({
           </div>
         </ContractInfoContainer>
       </TitleWrapper>
-      <Form onSubmit={submit}>
+      <Form onSubmit={handleSubmit(submit)}>
         <UrlContainer>
           <UpperCaseTitle>validator address (lumerin node)</UpperCaseTitle>
           <Divider />
@@ -114,16 +105,20 @@ export const PurchaseFormModalPage = ({
             <Row key="addressRow">
               <InputGroup key="addressGroup">
                 <Input
-                  value={inputs.address}
-                  onChange={handleInputs}
+                  {...register('address', {
+                    required: true,
+                    validate: validateAddress
+                  })}
                   placeholder={'stratum+tcp://IP_ADDRESS:PORT'}
                   type="text"
                   name="address"
                   key="address"
                   id="address"
                 />
-                {errors.poolAddress && (
-                  <ErrorLabel>{errors.poolAddress}</ErrorLabel>
+                {formState?.errors?.address?.type === 'validate' && (
+                  <ErrorLabel>
+                    Address should match stratum+tcp://IP_ADDRESS:PORT
+                  </ErrorLabel>
                 )}
               </InputGroup>
             </Row>
@@ -148,36 +143,43 @@ export const PurchaseFormModalPage = ({
           <InputGroup>
             <SmallTitle>Username *</SmallTitle>
             <Input
-              value={inputs.username}
-              onChange={handleInputs}
-              placeholder="account.worker"
+              {...register('username', { required: true, maxLength: 64 })}
+              placeholder="account"
               type="text"
               name="username"
               key="username"
               id="username"
             />
-            {errors.username && <ErrorLabel>{errors.username}</ErrorLabel>}
+            {formState?.errors?.username?.type === 'required' && (
+              <ErrorLabel>Username is required</ErrorLabel>
+            )}
+            {formState?.errors?.username?.type === 'maxLength' && (
+              <ErrorLabel>Username length should be less than 64</ErrorLabel>
+            )}
           </InputGroup>
         </Row>
         <Row>
           <InputGroup>
             <SmallTitle>Password</SmallTitle>
             <Input
-              value={inputs.password}
-              onChange={handleInputs}
+              {...register('password', { maxLength: 64 })}
               placeholder="optional"
               type="password"
               key="password"
               name="password"
               id="password"
             />
-            {errors.password && <ErrorLabel>{errors.password}</ErrorLabel>}
+            {formState?.errors?.password?.type === 'maxLength' && (
+              <ErrorLabel>Password length should be less than 64</ErrorLabel>
+            )}
           </InputGroup>
         </Row>
         <ActionsGroup>
           <Row style={{ justifyContent: 'space-between' }}>
             <LeftBtn onClick={handleClose}>Cancel</LeftBtn>
-            <RightBtn type="submit">Review Order</RightBtn>
+            <RightBtn type="submit" disabled={!formState?.isValid}>
+              Review Order
+            </RightBtn>
           </Row>
         </ActionsGroup>
       </Form>
