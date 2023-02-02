@@ -13,7 +13,7 @@ import { subscribeToMainProcessMessages } from './subscriptions';
 
 import Web3ConnectionNotifier from './components/Web3ConnectionNotifier';
 import { ToastsProvider } from './components/toasts';
-import { Tooltips } from './components/common';
+import { GlobalTooltips } from './components/common';
 import Onboarding from './components/onboarding/Onboarding';
 import Loading from './components/Loading';
 import Router from './components/Router';
@@ -35,7 +35,7 @@ ReactDOM.render(
             RouterComponent={Router}
             LoginComponent={Login}
           />
-          <Tooltips />
+          <GlobalTooltips />
           <Web3ConnectionNotifier />
         </ToastsProvider>
       </ThemeProvider>

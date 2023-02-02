@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { GetPasswordStrength, MaxScore } from '../../lib/PasswordStrength';
 import { BarElem, Container, Message } from './PasswordStrengthMeter.styles';
@@ -43,9 +43,16 @@ function getHue(ratio) {
  * @component
  * @param {Object} param
  * @param {string} param.password
+ * @param {(result: import("../../lib/PasswordStrength").ScoreResult)=>void} param.onChange
  */
-const PasswordStrengthMeter = ({ password }) => {
-  const { score } = GetPasswordStrength(password);
+const PasswordStrengthMeter = ({ password, onChange }) => {
+  const [score, setScore] = useState(0);
+
+  useEffect(() => {
+    const res = GetPasswordStrength(password);
+    setScore(res.score);
+    onChange(res);
+  }, [password]);
 
   const hue = getHue(score / MaxScore);
   // adding 1 so if the score is 0 the bar will not be zero width
