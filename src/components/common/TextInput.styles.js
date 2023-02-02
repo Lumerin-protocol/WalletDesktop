@@ -47,4 +47,5 @@ export const ErrorMsg = styled.div`
   margin-top: 0.4rem;
   width: 100%;
   margin-bottom: -2rem;
+  display: inline-block;
 `;

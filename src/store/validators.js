@@ -134,3 +134,21 @@ export function validateUseMinimum(useMinimum, estimate, errors = {}) {
 
   return errors;
 }
+
+export const validatePoolAddress = (address, errors = {}) => {
+  const defaultPoolFormat = 'stratum+tcp://{worker}:{password}@{host}:{port}';
+  const expectedFormat = `Expected format: ${defaultPoolFormat}`;
+
+  if (!address) {
+    errors.proxyDefaultPool = `Enter default destination. ${expectedFormat}`;
+    return errors;
+  }
+
+  const pattern = /^stratum\+tcp:\/\/([\w.-]+):(\w+)@([\w.-]+):(\d+)$/;
+  const result = pattern.test(address);
+
+  if (!result) {
+    errors.proxyDefaultPool = `Invalid destination address. ${expectedFormat}`;
+  }
+  return errors;
+};

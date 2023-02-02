@@ -1,6 +1,8 @@
 import * as utils from '../../store/utils';
 import PropTypes from 'prop-types';
 import React from 'react';
+import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
 
 import { TextInput, AltLayout, Btn, Sp, AltLayoutNarrow } from '../common';
 import SecondaryBtn from './SecondaryBtn';
@@ -23,6 +25,7 @@ const ProxyRouterConfigStep = props => {
               onChange={props.onInputChange}
               noFocus
               error={props.errors.proxyDefaultPool}
+              placeholder="stratum+tcp://{worker}:{password}@{host}:{port}"
               label="Default Destination Address"
               value={props.proxyDefaultPool}
               type="text"
