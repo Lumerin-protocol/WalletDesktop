@@ -72,10 +72,6 @@ const PrimaryNavContainer = styled.nav`
   margin-top: 3rem;
 `;
 
-const SecondaryNavContainer = styled.nav`
-  padding-bottom: 1.2rem;
-`;
-
 export default function Sidebar() {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -98,13 +94,13 @@ export default function Sidebar() {
           />
         </PrimaryNavContainer>
 
-        <SecondaryNavContainer>
+        <nav>
           <SecondaryNav
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             parent={Container}
           />
-        </SecondaryNavContainer>
+        </nav>
       </NavContainer>
     </Container>
   );

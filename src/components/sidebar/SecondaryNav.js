@@ -14,7 +14,6 @@ const Container = styled.div`
   justify-content: space-between;
   max-height: 10%;
   border-top: 1px solid #f4f4f4;
-  padding-top: 1rem;
 `;
 
 const Button = styled(NavLink)`
@@ -72,7 +71,6 @@ const Label = styled.span`
   flex-grow: 1;
   font-weight: 500;
   text-align: left;
-  padding-bottom: 2px;
 
   ${({ parent }) => parent}:hover & {
     opacity: 0.5;
