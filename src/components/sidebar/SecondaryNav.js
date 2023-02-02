@@ -148,7 +148,6 @@ function SecondaryNav({
         </IconWrapper>
         <Label parent={parent}>Help</Label>
       </HelpLink>{' '}
-      */}
     </Container>
   );
 }
