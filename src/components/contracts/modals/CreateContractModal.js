@@ -115,7 +115,7 @@ function CreateContractModal(props) {
               <Input
                 value={inputs.price}
                 onChange={handleInputs}
-                placeholder="LMR Per TH/s"
+                placeholder="LMR Charged for Hash Power"
                 type="number"
                 name="price"
                 id="price"
