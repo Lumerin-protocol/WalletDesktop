@@ -1,15 +1,16 @@
-import * as utils from '../../store/utils';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import React from 'react';
-
+import PropTypes from 'prop-types';
+import 'react-hint/css/index.css';
+import * as utils from '../../store/utils';
 import {
   PasswordStrengthMeter,
   TextInput,
   AltLayout,
   AltLayoutNarrow,
   Btn,
-  Sp
+  Sp,
+  Tooltip
 } from '../common';
 import Message from './Message';
 
@@ -23,7 +24,13 @@ const Green = styled.div`
   color: ${p => p.theme.colors.success};
 `;
 
+const PasswordInputWrap = styled.div`
+  position: relative;
+`;
+
 const PasswordStep = props => {
+  const [typed, setTyped] = useState(false);
+  const [suggestion, setSuggestion] = useState('');
   const onPasswordSubmit = e => {
     e.preventDefault();
     props.onPasswordSubmit({ clearOnError: false });
@@ -36,21 +43,35 @@ const PasswordStep = props => {
           <PasswordMessage>
             Enter a strong password until the meter turns <Green>green</Green>.
           </PasswordMessage>
-          <Sp mt={2}>
-            <TextInput
-              data-testid="pass-field"
-              autoFocus
-              onChange={props.onInputChange}
-              error={props.errors.password}
-              label="Password"
-              value={props.password}
-              type="password"
-              id="password"
-            />
-            {!props.errors.password && (
-              <PasswordStrengthMeter password={props.password} />
-            )}
-          </Sp>
+          <PasswordInputWrap>
+            <Sp mt={2}>
+              <Tooltip content={suggestion} show={typed && suggestion.length} />
+              <TextInput
+                data-testid="pass-field"
+                autoFocus
+                onChange={e => {
+                  if (!typed) {
+                    setTyped(true);
+                  }
+                  return props.onInputChange(e);
+                }}
+                error={props.errors.password}
+                label="Password"
+                value={props.password}
+                type="password"
+                id="password"
+              />
+              {!props.errors.password && (
+                <PasswordStrengthMeter
+                  password={props.password}
+                  onChange={res => {
+                    const string = res?.suggestions?.join(`\n`);
+                    setSuggestion(string);
+                  }}
+                />
+              )}
+            </Sp>
+          </PasswordInputWrap>
           <Sp mt={3}>
             <TextInput
               data-testid="pass-again-field"
