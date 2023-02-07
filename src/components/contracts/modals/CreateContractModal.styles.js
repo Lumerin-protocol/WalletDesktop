@@ -147,7 +147,7 @@ export const Sublabel = styled.label`
   font-weight: 400;
   opacity: 0.65;
   cursor: default;
-  margin-bottom: 0.4rem;
+  padding: 5px 0 0 5px;
 `;
 
 export const SublabelGreen = styled(Sublabel)`
