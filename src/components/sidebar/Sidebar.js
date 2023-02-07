@@ -14,6 +14,7 @@ const Container = styled.div`
   flex-direction: column;
   transition: width 0.2s;
   position: absolute;
+  overflow-y: hidden;
   top: 0;
   left: 0;
   bottom: 0;
