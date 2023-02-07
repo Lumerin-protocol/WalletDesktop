@@ -11,7 +11,6 @@ import TxRow from './row/Row';
 
 const Container = styled.div`
   margin-top: 2.4rem;
-  padding: 1.8rem 0;
   height: 100%;
 
   @media (min-width: 960px) {

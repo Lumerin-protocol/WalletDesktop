@@ -12,7 +12,6 @@ import SocketsRow from './Row';
 const Container = styled.div`
   margin-top: 2.4rem;
   background-color: ${p => p.theme.colors.light};
-  height: 100%;
   border-radius: 15px;
   overflow-y: scroll;
 
@@ -21,12 +20,12 @@ const Container = styled.div`
 `;
 
 const Sockets = styled.div`
-  margin: 1.6rem 0 1.6rem;
+  margin-top: 1.6rem;
   border-radius: 15px;
 `;
 
 const ListContainer = styled.div`
-  height: calc(100vh - 370px);
+  height: calc(100vh - 355px);
 `;
 
 const SocketsRowContainer = styled.div`
