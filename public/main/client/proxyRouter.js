@@ -39,7 +39,7 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
       "--pool-min-duration=2m",
       "--proxy-log-stratum=false",
       "--stratum-socket-buffer=4",
-      "--validation-buffer-period=15m",
+      "--validation-buffer-period=9m",
       `--wallet-address=${config.walletAddress}`,
       `--wallet-private-key=${config.privateKey}`,
       "--log-level=debug",
