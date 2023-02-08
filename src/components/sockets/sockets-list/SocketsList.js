@@ -13,7 +13,6 @@ const Container = styled.div`
   margin-top: 2.4rem;
   background-color: ${p => p.theme.colors.light};
   border-radius: 15px;
-  overflow-y: scroll;
 
   @media (min-width: 960px) {
   }
