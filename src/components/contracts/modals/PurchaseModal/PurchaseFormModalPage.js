@@ -130,7 +130,7 @@ export const PurchaseFormModalPage = ({
           )}
         </UrlContainer>
         <UrlContainer style={{ marginTop: '50px' }}>
-          <UpperCaseTitle>Forwarding to (mining poll)</UpperCaseTitle>
+          <UpperCaseTitle>Forwarding to (mining pool)</UpperCaseTitle>
           <Divider />
           <PoolInfoContainer>
             <Values style={{ width: '85%', wordBreak: 'break-all' }}>
