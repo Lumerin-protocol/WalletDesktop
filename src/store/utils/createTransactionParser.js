@@ -7,7 +7,8 @@ import {
 } from '../../utils/coinValue';
 
 function isSendTransaction({ transaction }, tokenData, myAddress) {
-  return transaction.from === myAddress;
+  const from = transaction.input?.from || transaction.from;
+  return from.toLowerCase() === myAddress.toLowerCase();
 }
 
 function isReceiveTransaction({ transaction }, tokenData, myAddress) {
@@ -20,28 +21,24 @@ function isImportRequestTransaction(rawTx) {
 }
 
 function getTxType(rawTx, tokenData, myAddress) {
-  if (isImportRequestTransaction(rawTx)) return 'import-requested';
-  if (isSendTransaction(rawTx, tokenData, myAddress)) return 'sent';
-  if (isReceiveTransaction(rawTx, tokenData, myAddress)) return 'received';
+  if (isImportRequestTransaction(rawTx)) {
+    return 'import-requested';
+  }
+  if (isSendTransaction(rawTx, tokenData, myAddress)) {
+    return 'sent';
+  }
+  if (isReceiveTransaction(rawTx, tokenData, myAddress)) {
+    return 'received';
+  }
   return 'unknown';
 }
 
 function getFrom(rawTx, tokenData, txType) {
-  return txType === 'received' && tokenData && tokenData.from
-    ? tokenData.from
-    : rawTx.transaction.from
-    ? rawTx.transaction.from
-    : null;
+  return rawTx.transaction.input?.from || rawTx.transaction.from;
 }
 
 function getTo(rawTx, tokenData, txType) {
-  return txType === 'sent' &&
-    rawTx.transaction.input &&
-    rawTx.transaction.input.to
-    ? rawTx.transaction.input.to
-    : rawTx.transaction.to
-    ? rawTx.transaction.to
-    : null;
+  return rawTx.transaction.input?.to || rawTx.transaction.to;
 }
 
 function getValue(rawTx, tokenData, txType) {
