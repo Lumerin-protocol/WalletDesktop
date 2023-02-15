@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { IconExternalLink } from '@tabler/icons';
+
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
 import { Btn } from '../../common';
 import { formatDuration, formatSpeed, formatPrice } from '../utils';
 import Spinner from '../../common/Spinner';
+import { abbreviateAddress } from '../../../utils';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -28,6 +31,8 @@ const Value = styled.label`
 const ContractValue = styled(Value)`
   cursor: pointer;
   text-decoration: underline;
+  flex-direction: row;
+  gap: 5px;
 `;
 
 const ActionButton = styled(Btn)`
@@ -47,7 +52,7 @@ function MarketplaceRow({ contract, ratio, explorerUrl, onPurchase }) {
   return (
     <Container ratio={ratio}>
       <ContractValue onClick={() => window.openLink(explorerUrl)}>
-        View Contract
+        {abbreviateAddress(contract.id)} <IconExternalLink width={'1.4rem'} />
       </ContractValue>
       <Value>{formatPrice(contract.price)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
