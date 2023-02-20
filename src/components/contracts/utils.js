@@ -81,3 +81,23 @@ export const getContractEndTimestamp = contract => {
   }
   return (+contract.timestamp + +contract.length) * 1000; // in ms
 };
+
+export const truncateAddress = (address, desiredLength) => {
+  let index;
+  switch (desiredLength) {
+    case 'SHORT':
+      return `${address.substring(0, 5)}...`;
+    case 'MEDIUM':
+      index = 5;
+      break;
+    case 'LONG':
+      index = 10;
+      break;
+    default:
+      index = 10;
+  }
+  return `${address.substring(0, index)}...${address.substring(
+    address.length - index,
+    address.length
+  )}`;
+};
