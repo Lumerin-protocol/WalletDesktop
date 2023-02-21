@@ -6,6 +6,7 @@ export const Container = styled.div`
   background-color: #fff;
   padding: 6px 1.6rem 6px 1.6rem;
   border-radius: 15px;
+  max-width: 600px;
 `;
 
 export const SecondaryContainer = styled.div`

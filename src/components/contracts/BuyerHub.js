@@ -25,12 +25,13 @@ function BuyerHub({
   );
 
   const tabs = [
+    { value: 'id', name: 'Contract', ratio: 3 },
     { value: 'timestamp', name: 'Started', ratio: 3 },
     { name: 'Status', ratio: 1 },
-    { value: 'price', name: 'Price', ratio: 3 },
-    { value: 'length', name: 'Duration', ratio: 3 },
-    { value: 'speed', name: 'Speed', ratio: 3 },
-    { value: 'action', name: 'Actions', ratio: 3 }
+    { value: 'price', name: 'Price', ratio: 2 },
+    { value: 'length', name: 'Duration', ratio: 2 },
+    { value: 'speed', name: 'Speed', ratio: 2 },
+    { value: 'action', name: 'Actions', ratio: 2 }
   ];
 
   const handleContractCancellation = (e, data) => {
