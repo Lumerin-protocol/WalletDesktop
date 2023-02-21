@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTimer } from 'react-timer-hook';
+import { IconExternalLink } from '@tabler/icons';
 import { ToastsContext } from '../../toasts';
 import styled from 'styled-components';
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
@@ -21,6 +22,7 @@ import {
   ActionButtons,
   SmallAssetContainer
 } from './ContractsRow.styles';
+import { abbreviateAddress } from '../../../utils';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -40,6 +42,13 @@ const Value = styled.label`
   justify-content: center;
   color: ${p => p.theme.colors.primary};
   font-size: 1.2rem;
+`;
+
+const ContractValue = styled(Value)`
+  cursor: pointer;
+  text-decoration: underline;
+  flex-direction: row;
+  gap: 5px;
 `;
 
 const STATE_COLOR = {
@@ -75,9 +84,11 @@ function BuyerHubRow({ contract, ratio, explorerUrl, cancel }) {
 
   const contractEndTimestamp = getContractEndTimestamp(contract);
   const timer = useTimer({ expiryTimestamp: new Date(contractEndTimestamp) });
-
   return (
-    <Container ratio={ratio} onClick={() => window.openLink(explorerUrl)}>
+    <Container ratio={ratio}>
+      <ContractValue onClick={() => window.openLink(explorerUrl)}>
+        {abbreviateAddress(contract.id)} <IconExternalLink width={'1.4rem'} />
+      </ContractValue>
       <Value>
         {formatTimestamp(contract.timestamp, timer, contract.state)}
       </Value>
