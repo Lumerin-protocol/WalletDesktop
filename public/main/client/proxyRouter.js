@@ -48,9 +48,6 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
       ...modes[mode],
     ]);
 
-MINER_SUBMIT_ERR_LIMIT=0
-
-
     ls.stdout.on("data", (data) => {
       logger.debug(`ProxyRouter-${mode} stdout: ${data}`);
     });
