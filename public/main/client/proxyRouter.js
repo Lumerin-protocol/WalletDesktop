@@ -13,12 +13,14 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
       `--proxy-address=0.0.0.0:${config.buyerProxyPort}`,
       `--web-address=0.0.0.0:${config.buyerWebPort}`,
       `--pool-address=${config.buyerDefaultPool}`,
+      "--hashrate-diff-threshold=0.10",
       "--is-buyer=true",
     ],
     [PROXY_ROUTER_MODE.Seller]: [
       `--proxy-address=0.0.0.0:${config.sellerProxyPort}`,
       `--web-address=0.0.0.0:${config.sellerWebPort}`,
       `--pool-address=${config.sellerDefaultPool}`,
+      "--hashrate-diff-threshold=0.03",
       "--is-buyer=false",
     ],
   };
@@ -32,19 +34,22 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
     const ls = spawn(`${resourcePath}/executables/proxy-router`, [
       `--contract-address=${config.cloneFactoryAddress}`,
       `--eth-node-address=${config.wsApiUrl}`,
-      "--hashrate-diff-threshold=0.10",
-      "--miner-vetting-duration=1m",
-      "--pool-conn-timeout=5m",
-      "--pool-max-duration=5m",
+      "--miner-vetting-duration=5m",
+      "--pool-conn-timeout=15m",
+      "--pool-max-duration=7m",
       "--pool-min-duration=2m",
       "--proxy-log-stratum=false",
       "--stratum-socket-buffer=4",
       "--validation-buffer-period=10m",
+      "--miner-submit-err-limit=0",
       `--wallet-address=${config.walletAddress}`,
       `--wallet-private-key=${config.privateKey}`,
       "--log-level=debug",
       ...modes[mode],
     ]);
+
+MINER_SUBMIT_ERR_LIMIT=0
+
 
     ls.stdout.on("data", (data) => {
       logger.debug(`ProxyRouter-${mode} stdout: ${data}`);
