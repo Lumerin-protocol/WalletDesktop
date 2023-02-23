@@ -1,5 +1,6 @@
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
+import pickBy from 'lodash/pickBy';
 
 import * as utils from './utils';
 import keys from './keys';
@@ -21,11 +22,21 @@ const createClient = function(createStore) {
       'data.config.statePersistanceDebounce',
       0
     );
+
+    // keysToPersist keys that are passed from global redux state to main process.
+    // For now only chain data is used.
+    // TODO: subscribe for changes only within listed branch of redux state
+    const keysToPersist = ['chain'];
+
     store.subscribe(
       debounce(
         function() {
+          const passedState = pickBy(store.getState(), function(value, key) {
+            return keysToPersist.includes(key);
+          });
+
           utils
-            .forwardToMainProcess('persist-state')(store.getState())
+            .forwardToMainProcess('persist-state')(passedState)
             .catch(err =>
               // eslint-disable-next-line no-console
               console.warn(`Error persisting state: ${err.message}`)
