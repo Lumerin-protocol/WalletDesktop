@@ -1,3 +1,4 @@
+const { app } = require("electron");
 const fs = require("fs");
 const { spawn } = require("child_process");
 
@@ -9,8 +10,9 @@ const PROXY_ROUTER_MODE = {
 };
 
 const openLogFile = (name) => {
-  const path = `./${name}.log`;
+  const path = `${app.getPath('logs')}/${name}.log`;
 
+  logger.debug(`Writing logs to ${path}`);
   if (fs.existsSync(path)) {
     const stats = fs.statSync(path);
     const fileSizeInBytes = stats.size;
