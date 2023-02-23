@@ -195,6 +195,7 @@ const Tools = props => {
     };
 
     const onRestartClick = async () => {
+      onCloseModal();
       restartNode(true);
 
       await restartProxyRouter({}).catch(() => {
@@ -338,9 +339,22 @@ const Tools = props => {
             {isRestarting ? (
               <Spinner size="20px" />
             ) : (
-              <StyledBtn onClick={() => onRestartClick()}>Restart</StyledBtn>
+              <StyledBtn
+                onClick={() =>
+                  onActiveModalClick('confirm-proxy-direct-restart')
+                }
+              >
+                Restart
+              </StyledBtn>
             )}
+            <ConfirmProxyConfigModal
+              onRequestClose={onCloseModal}
+              onConfirm={onRestartClick}
+              onLater={onCloseModal}
+              isOpen={state.activeModal === 'confirm-proxy-direct-restart'}
+            />
           </Sp>
+
           {/* <Sp mt={5}>
             <hr />
             <Subtitle>Run End-to-End Test</Subtitle>

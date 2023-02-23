@@ -43,13 +43,10 @@ const ConfirmProxyConfigModal = props => {
     >
       <Container data-testid="confirm-proxy-config-modal">
         <Message>
-          Your changes will be applied after restarting Proxy-router. It may
-          affect your running contracts.
+          You are going to restart Proxy Router. It may affect your running
+          contracts.
         </Message>
-        <Message>
-          You can restart right now or changes will be applied after next wallet
-          run.
-        </Message>
+        <Message>You can restart right now or later.</Message>
         <Row style={{ justifyContent: 'space-around' }}>
           <RestartNowBtn onClick={onConfirm}>Restart now</RestartNowBtn>
           <LaterBtn onClick={onLater}>Later</LaterBtn>
