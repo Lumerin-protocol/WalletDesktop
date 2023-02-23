@@ -1,3 +1,5 @@
+const { app } = require("electron");
+const fs = require("fs");
 const { spawn } = require("child_process");
 
 const logger = require("../../logger.js");
@@ -5,6 +7,32 @@ const logger = require("../../logger.js");
 const PROXY_ROUTER_MODE = {
   Buyer: "buyer",
   Seller: "seller",
+};
+
+const openLogFile = (name) => {
+  const path = `${app.getPath('logs')}/${name}.log`;
+
+  logger.debug(`Writing logs to ${path}`);
+  if (fs.existsSync(path)) {
+    const stats = fs.statSync(path);
+    const fileSizeInBytes = stats.size;
+
+    const fileSizeInMegabytes = fileSizeInBytes / (1024 * 1024);
+    if (fileSizeInMegabytes > 10) {
+      fs.unlinkSync(path);
+    }
+  }
+  return fs.openSync(path, "a");
+};
+
+const isProxyRouterHealthy = async (api, url) => {
+  try {
+    const healthCheck = await api["proxy-router"].healthCheck(url);
+    return healthCheck?.data?.status === "healthy";
+  } catch (err) {
+    logger.error(err);
+    return false;
+  }
 };
 
 const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
@@ -31,45 +59,39 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
         ? process.resourcesPath // Prod Mode
         : `${__dirname}/../../..`; // Dev Mode
 
-    const ls = spawn(`${resourcePath}/executables/proxy-router`, [
-      `--contract-address=${config.cloneFactoryAddress}`,
-      `--eth-node-address=${config.wsApiUrl}`,
-      "--miner-vetting-duration=5m",
-      "--pool-conn-timeout=15m",
-      "--pool-max-duration=7m",
-      "--pool-min-duration=2m",
-      "--proxy-log-stratum=false",
-      "--stratum-socket-buffer=4",
-      "--validation-buffer-period=10m",
-      "--miner-submit-err-limit=0",
-      `--wallet-address=${config.walletAddress}`,
-      `--wallet-private-key=${config.privateKey}`,
-      "--log-level=debug",
-      ...modes[mode],
-    ]);
+    const out = openLogFile(`${mode}-out`);
+    const err = openLogFile(`${mode}-err`);
 
-    ls.stdout.on("data", (data) => {
-      logger.debug(`ProxyRouter-${mode} stdout: ${data}`);
-    });
+    const ls = spawn(
+      `${resourcePath}/executables/proxy-router`,
+      [
+        `--contract-address=${config.cloneFactoryAddress}`,
+        `--eth-node-address=${config.wsApiUrl}`,
+        "--miner-vetting-duration=5m",
+        "--pool-conn-timeout=15m",
+        "--pool-max-duration=7m",
+        "--pool-min-duration=2m",
+        "--proxy-log-stratum=false",
+        "--stratum-socket-buffer=4",
+        "--validation-buffer-period=10m",
+        "--miner-submit-err-limit=0",
+        `--wallet-address=${config.walletAddress}`,
+        `--wallet-private-key=${config.privateKey}`,
+        "--log-level=debug",
+        ...modes[mode],
+      ],
+      {
+        detached: true,
+        stdio: ["ignore", out, err],
+      }
+    );
 
-    ls.stderr.on("data", (data) => {
-      logger.debug(`ProxyRouter-${mode} stderr: ${data}`);
-    });
-
-    ls.on("close", (code) => {
-      logger.debug(
-        `ProxyRouter-${mode} child process exited with code ${code}`
-      );
-    });
-
-    process.on("exit", () => {
-      ls.kill();
-    });
-    return ls;
+    ls.unref();
+    return;
   } catch (err) {
     logger.debug(`ProxyRouter-${mode} run error: ${err}`);
     throw err;
   }
 };
 
-module.exports = { runProxyRouter, PROXY_ROUTER_MODE };
+module.exports = { runProxyRouter, PROXY_ROUTER_MODE, isProxyRouterHealthy };
