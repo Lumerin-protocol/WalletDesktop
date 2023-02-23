@@ -93,7 +93,9 @@ const restartProxyRouter = async (data, { emitter }) => {
   const password = await auth.getSessionPassword();
 
   emitter.emit("kill-proxy-router");
-  emitter.emit("open-proxy-router", { password });
+  setTimeout(() => {
+    emitter.emit("open-proxy-router", { password });
+  }, 2000)
 }
 
 async function openWallet({ emitter }, password) {

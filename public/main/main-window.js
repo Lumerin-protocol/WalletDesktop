@@ -142,7 +142,7 @@ function loadWindow() {
         buttons: ["Yes", "No"],
         title: "Confirm",
         message:
-          "Are you sure you want to quit? Proxy Router will be terminated and you will stop running contracts",
+          "Are you sure you want to quit?",
       });
       if (choice === 1) {
         return;

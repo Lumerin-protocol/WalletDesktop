@@ -28,9 +28,6 @@ function onRendererEvent (eventName, handler, chain) {
     if (ignoreChain(chain, data)) {
       return;
     }
-    if (checkIfLoggableEvent(eventName)) {
-      logger.verbose(`--> ${eventName}:${id} ${getLogData()}`);
-    }
     const result = handler(data);
 
     result
@@ -39,9 +36,6 @@ function onRendererEvent (eventName, handler, chain) {
           return;
         }
         event.sender.send(eventName, { id, data: res });
-        if (checkIfLoggableEvent(eventName)) {
-          logger.verbose(`<-- ${eventName}:${id} ${stringify(res)}`);
-        }
       })
       .catch(function (err) {
         if (event.sender.isDestroyed()) {

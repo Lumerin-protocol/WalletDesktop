@@ -195,41 +195,17 @@ const Tools = props => {
     };
 
     const onRestartClick = async () => {
+      onCloseModal();
       restartNode(true);
 
-      let conf = {
-        headers: {
-          'content-type': 'application/json',
-          accept: 'application/json'
-        }
-      };
-
-      const restartHost =
-        process.env.LUMERIN_RESTART_HOST || 'http://localhost';
-      const restartPort = process.env.LUMERIN_RESTART_PORT || '8081';
-
-      await axios
-        .post(
-          `${restartHost}:${restartPort}/signal`,
-          {
-            type: 'restart'
-          },
-          conf
-        )
-        .then(response => {
-          if (process.env.DEBUG) {
-            console.log(`received ${response} after restart`);
-          }
-          context.toast('success', response.data.message);
-        })
-        .catch(error => {
-          context.toast('error', error.message);
-        });
+      await restartProxyRouter({}).catch(() => {
+        context.toast('error', 'Failed to restart proxy-router');
+      });
 
       // for UX
       setTimeout(() => {
         restartNode(false);
-      }, 800);
+      }, 6000);
     };
 
     const { onInputChange, mnemonic, errors } = props;
@@ -355,6 +331,30 @@ const Tools = props => {
               isOpen={state.activeModal === 'confirm-proxy-restart'}
             />
           </Sp>
+          <Sp mt={5}>
+            <Subtitle>Restart Proxy Router</Subtitle>
+            <StyledParagraph>
+              Restart the connected Proxy Router.
+            </StyledParagraph>
+            {isRestarting ? (
+              <Spinner size="20px" />
+            ) : (
+              <StyledBtn
+                onClick={() =>
+                  onActiveModalClick('confirm-proxy-direct-restart')
+                }
+              >
+                Restart
+              </StyledBtn>
+            )}
+            <ConfirmProxyConfigModal
+              onRequestClose={onCloseModal}
+              onConfirm={onRestartClick}
+              onLater={onCloseModal}
+              isOpen={state.activeModal === 'confirm-proxy-direct-restart'}
+            />
+          </Sp>
+
           {/* <Sp mt={5}>
             <hr />
             <Subtitle>Run End-to-End Test</Subtitle>
@@ -381,20 +381,6 @@ const Tools = props => {
               onConfirm={props.onRunTest}
               isOpen={state.activeModal === 'confirm-test'}
             />
-          </Sp> */}
-          {/* TODO: intent: Connecct lumerin node in future */}
-          {/* <Sp mt={5}>
-            <hr />
-            <Subtitle>Restart Lumerin Node</Subtitle>
-            <StyledParagraph>
-              Restart the connected Lumerin Node.
-            </StyledParagraph>
-
-            <br />
-            <StyledBtn onClick={() => onRestartClick()} disabled={isRestarting}>
-              Restart Node
-            </StyledBtn>
-            <Spinner show={isRestarting} />
           </Sp> */}
           <Sp mt={5}>
             <WalletInfo>Wallet Information</WalletInfo>
