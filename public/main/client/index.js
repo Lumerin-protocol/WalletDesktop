@@ -146,12 +146,10 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
     await proxyRouterApi
       .kill(coreConfig.chain.sellerProxyPort)
       .catch(logger.error);
-    console.log("🚀 ~ file: index.js:157 ~ emitter.on ~ kill-proxy-router1:");
 
     await proxyRouterApi
       .kill(coreConfig.chain.buyerProxyPort)
       .catch(logger.error);
-    console.log("🚀 ~ file: index.js:157 ~ emitter.on ~ kill-proxy-router2:");
   });
 
   return {
