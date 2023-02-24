@@ -48,7 +48,9 @@ function PurchaseContractModal(props) {
       .split(':');
     const address = addressParts[0];
     const port = addressParts[1];
-    return `stratum+tcp://${formData.worker}:${''}@${address}:${port}`;
+    const password = '';
+    // Temporary set url with {username}:{password} as this to preserve backward compatibility
+    return `stratum+tcp://${formData.worker}:${password}@${address}:${port}`;
   };
 
   const handleClose = e => {
