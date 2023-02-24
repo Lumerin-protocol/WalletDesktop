@@ -3,7 +3,7 @@ name: Auto Release
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 env:
   CI: false
@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         environment: [dev]
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest, macos-latest]
         include:
           - os: ubuntu-latest
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.deb
@@ -24,7 +24,11 @@ jobs:
           - os: macos-latest
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
             asset_name: lumerin_v${{github.ref_name}}.dmg
-    runs-on: ${{ matrix.os }}   
+          - os: macos-latest
+            arch: arm
+            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
+            asset_name: lumerin_v${{github.ref_name}}.dmg
+    runs-on: ${{ matrix.os }}
     environment: ${{ matrix.environment }}
     env:
       CHAIN_ID: ${{ secrets.CHAIN_ID }}
@@ -83,11 +87,13 @@ jobs:
           elif [ "${{ matrix.os }}" = "windows-latest" ]
           then
             namePrefix="Windows_x86_64"
+          elif [ "${{ matrix.os }}" = "macos-latest"] && ["${{ matrix.arc }}" = "arm"]
+          then
+            namePrefix="Darwin_arm64"
           elif [ "${{ matrix.os }}" = "macos-latest" ]
           then
             namePrefix="Darwin_x86_64"
           fi
-
           curl -H "Accept: application/vnd.github+json" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]' |
             while IFS= read -r line; do
               name=$(<<<"$line" jq -r .name);
@@ -107,6 +113,9 @@ jobs:
       - name: Build Mac
         if: matrix.os == 'macos-latest'
         run: npm run desktop-build-mac
+      - name: Build Mac arm
+        if: matrix.os == 'macos-latest' && matrix.arch == 'arm'
+        run: npm run desktop-build-mac-arm
       - name: Build Linux
         if: matrix.os == 'ubuntu-latest'
         run: npm run desktop-build-linux
