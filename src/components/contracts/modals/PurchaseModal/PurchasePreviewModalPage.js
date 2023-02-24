@@ -27,6 +27,12 @@ import {
   ContractInfoContainer
 } from './common.styles';
 
+const calculateAddress = (address, contractId) => {
+  if (!address || !contractId) return null;
+  const noProtocolPart = address.replace('stratum+tcp://', '');
+  return `stratum+tcp://${contractId}:@${noProtocolPart}`;
+};
+
 export const PurchasePreviewModalPage = ({
   explorerUrl,
   contract,
@@ -84,7 +90,9 @@ export const PurchasePreviewModalPage = ({
         <UpperCaseTitle>validator address (lumerin node)</UpperCaseTitle>
         <Divider />
         <PoolInfoContainer>
-          <Values>{inputs.address}</Values>
+          <Values style={{ wordBreak: 'break-all' }}>
+            {calculateAddress(inputs.address, contract.id)}
+          </Values>
         </PoolInfoContainer>
       </UrlContainer>
       <UrlContainer>
@@ -94,19 +102,9 @@ export const PurchasePreviewModalPage = ({
           <SmallTitle>Pool Address</SmallTitle>
           <Values style={{ wordBreak: 'break-all' }}>{pool}</Values>
         </div>
-        <div style={{ marginTop: '10px' }}>
-          <SmallTitle>Username</SmallTitle>
-          <Values>{inputs.username}</Values>
-        </div>
-        <div style={{ marginTop: '10px' }}>
-          <SmallTitle>Password</SmallTitle>
-          <Values>
-            {inputs.password.split('').reduce((acc, _) => acc + '*', '')}
-          </Values>
-        </div>
       </UrlContainer>
       <ActionsGroup>
-        <Row style={{ justifyContent: 'space-between' }}>
+        <Row style={{ justifyContent: 'space-between', marginTop: '3rem' }}>
           <LeftBtn onClick={onBackToForm}>Edit Order</LeftBtn>
           <RightBtn onClick={onPurchase}>Confirm Purchase</RightBtn>
         </Row>

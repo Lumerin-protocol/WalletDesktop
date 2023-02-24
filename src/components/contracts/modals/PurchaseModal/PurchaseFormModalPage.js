@@ -141,41 +141,20 @@ export const PurchaseFormModalPage = ({
         </UrlContainer>
         <Row style={{ marginTop: '10px' }}>
           <InputGroup>
-            <SmallTitle>Username *</SmallTitle>
+            <SmallTitle>Worker name</SmallTitle>
             <Input
-              {...register('username', { required: true, maxLength: 64 })}
-              placeholder="account"
+              {...register('worker', { required: true })}
+              placeholder="worker"
+              disabled={true}
               type="text"
-              name="username"
-              key="username"
-              id="username"
+              name="worker"
+              key="worker"
+              id="worker"
             />
-            {formState?.errors?.username?.type === 'required' && (
-              <ErrorLabel>Username is required</ErrorLabel>
-            )}
-            {formState?.errors?.username?.type === 'maxLength' && (
-              <ErrorLabel>Username length should be less than 64</ErrorLabel>
-            )}
-          </InputGroup>
-        </Row>
-        <Row>
-          <InputGroup>
-            <SmallTitle>Password</SmallTitle>
-            <Input
-              {...register('password', { maxLength: 64 })}
-              placeholder="optional"
-              type="password"
-              key="password"
-              name="password"
-              id="password"
-            />
-            {formState?.errors?.password?.type === 'maxLength' && (
-              <ErrorLabel>Password length should be less than 64</ErrorLabel>
-            )}
           </InputGroup>
         </Row>
         <ActionsGroup>
-          <Row style={{ justifyContent: 'space-between' }}>
+          <Row style={{ justifyContent: 'space-between', marginTop: '3rem' }}>
             <LeftBtn onClick={handleClose}>Cancel</LeftBtn>
             <RightBtn type="submit" disabled={!formState?.isValid}>
               Review Order
