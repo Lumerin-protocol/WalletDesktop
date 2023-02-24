@@ -21,6 +21,7 @@
     "web-build": "npm run clear-cache:eslint && react-scripts build",
     "desktop-build": "PYTHON_PATH=/usr/local/bin/python electron-builder -wlm --c.extraMetadata.main=build/electron.js",
     "desktop-build-mac": "electron-builder -m --c.extraMetadata.main=build/electron.js",
+    "desktop-build-mac-arm": "electron-builder -m --c.extraMetadata.main=build/electron.js --arm64",
     "desktop-build-linux": "electron-builder -l --c.extraMetadata.main=build/electron.js",
     "desktop-build-win": "electron-builder -w --c.extraMetadata.main=build/electron.js",
     "dist": "npm run web-build && npm run desktop-build",

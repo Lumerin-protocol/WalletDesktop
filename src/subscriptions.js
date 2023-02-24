@@ -20,7 +20,6 @@ export const subscribeToMainProcessMessages = function(store) {
     'token-balance-changed',
     'token-contract-received',
     'token-transactions-changed',
-    'wallet-transactions-changed',
     'eth-tx',
     'lmr-tx',
     'coin-block',
