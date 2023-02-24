@@ -11,20 +11,25 @@ env:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         environment: [dev]
-        os: [ubuntu-latest, windows-latest, macos-latest, macos-latest]
+        target: [ubuntu, windows, macos, macos-arm]
         include:
-          - os: ubuntu-latest
+          - target: ubuntu
+            os: ubuntu-latest
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.deb
             asset_name: lumerin_v${{github.ref_name}}.deb
-          - os: windows-latest
+          - target: windows
+            os: windows-latest
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.exe
             asset_name: lumerin_v${{github.ref_name}}.exe
-          - os: macos-latest
+          - target: macos
+            os: macos-latest
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
             asset_name: lumerin_v${{github.ref_name}}.dmg
-          - os: macos-latest
+          - target: macos-arm
+            os: macos-latest
             arch: arm
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
             asset_name: lumerin_v${{github.ref_name}}_arm.dmg
@@ -81,16 +86,16 @@ jobs:
         shell: bash
       - name: Fetch latest Proxy Router
         run: |
-          if [ "${{ matrix.os }}" = "ubuntu-latest" ]
+          if [ "${{ matrix.target }}" = "ubuntu" ]
           then
             namePrefix="Linux_x86_64"
-          elif [ "${{ matrix.os }}" = "windows-latest" ]
+          elif [ "${{ matrix.target }}" = "windows" ]
           then
             namePrefix="Windows_x86_64"
-          elif [ "${{ matrix.os }}" = "macos-latest" -a "${{ matrix.arc }}" = "arm" ]
+          elif [ "${{ matrix.target }}" = "macos-arm" ]
           then
             namePrefix="Darwin_arm64"
-          elif [ "${{ matrix.os }}" = "macos-latest" ]
+          elif [ "${{ matrix.target }}" = "macos" ]
           then
             namePrefix="Darwin_x86_64"
           fi
@@ -111,16 +116,16 @@ jobs:
       - name: Build Web
         run: npm run web-build
       - name: Build Mac
-        if: matrix.os == 'macos-latest' && matrix.arch != 'arm'
+        if: matrix.target == 'macos'
         run: npm run desktop-build-mac
       - name: Build Mac arm
-        if: matrix.os == 'macos-latest' && matrix.arch == 'arm'
+        if: matrix.target == 'macos-arm'
         run: npm run desktop-build-mac-arm
       - name: Build Linux
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.target == 'ubuntu'
         run: npm run desktop-build-linux
       - name: Build Windows
-        if: matrix.os == 'windows-latest'
+        if: matrix.target == 'windows'
         run: npm run desktop-build-win
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
