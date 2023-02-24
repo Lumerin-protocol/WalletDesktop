@@ -39,6 +39,7 @@ function PurchaseContractModal(props) {
     props.getPoolAddress({}).then(pool => {
       setPool(pool);
     });
+    setValue('worker', contract?.id);
   }, [contract]);
 
   const toRfc2396 = formData => {
@@ -47,7 +48,7 @@ function PurchaseContractModal(props) {
       .split(':');
     const address = addressParts[0];
     const port = addressParts[1];
-    return `stratum+tcp://${formData.username}:${formData.password}@${address}:${port}`;
+    return `stratum+tcp://${formData.worker}:${''}@${address}:${port}`;
   };
 
   const handleClose = e => {
