@@ -87,7 +87,7 @@ jobs:
           elif [ "${{ matrix.os }}" = "windows-latest" ]
           then
             namePrefix="Windows_x86_64"
-          elif [ "${{ matrix.os }}" = "macos-latest"] && ["${{ matrix.arc }}" = "arm"]
+          elif [ "${{ matrix.os }}" = "macos-latest" -a "${{ matrix.arc }}" = "arm" ]
           then
             namePrefix="Darwin_arm64"
           elif [ "${{ matrix.os }}" = "macos-latest" ]
