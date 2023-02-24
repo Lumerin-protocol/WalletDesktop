@@ -142,16 +142,6 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
     }
   });
 
-  emitter.on("kill-proxy-router", async () => {
-    await proxyRouterApi
-      .kill(coreConfig.chain.sellerProxyPort)
-      .catch(logger.error);
-
-    await proxyRouterApi
-      .kill(coreConfig.chain.buyerProxyPort)
-      .catch(logger.error);
-  });
-
   return {
     emitter,
     events,
