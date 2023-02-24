@@ -102,12 +102,16 @@ jobs:
           then
             namePrefix="Darwin_x86_64"
           fi
+          echo "name suffix $namePrefix"
           curl -H "Accept: application/vnd.github+json" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]' |
             while IFS= read -r line; do
+              echo "line $line"
               name=$(<<<"$line" jq -r .name);
+              echo "name $name"
               if grep -q "$namePrefix" <<< "$name"
               then
                 downloadUrl="$(<<<"$line" jq -r .browser_download_url)";
+                echo "downloadUrl $downloadUrl"
                 if [ "${namePrefix}" = 'Windows_x86_64' ]; then
                   curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" $downloadUrl -L
                 else
