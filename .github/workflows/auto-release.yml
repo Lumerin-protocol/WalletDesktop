@@ -27,7 +27,7 @@ jobs:
           - os: macos-latest
             arch: arm
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
-            asset_name: lumerin_v${{github.ref_name}}.dmg
+            asset_name: lumerin_v${{github.ref_name}}_arm.dmg
     runs-on: ${{ matrix.os }}
     environment: ${{ matrix.environment }}
     env:
