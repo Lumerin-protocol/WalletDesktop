@@ -21,14 +21,25 @@ const openLink = function (url) {
 };
 
 contextBridge.exposeInMainWorld('ipcRenderer', {
-  removeListener (eventName, listener) {
-    return ipcRenderer.removeListener(eventName, listener);
-  },
   send (eventName, payload) {
     return ipcRenderer.send(eventName, payload);
   },
   on (eventName, listener) {
-    return ipcRenderer.on(eventName, listener);
+    // For some reason the listener passed into this function doesn't work
+    // if you want to use it to unsubscribe later (likely due to chrome/node connection). 
+    // So we wrap it in a function and provide an unsubscribe function both to event handler
+    // and as a returned value
+    function unsubscribe(){
+      ipcRenderer.removeListener(eventName, subscription)
+    }
+
+    function subscription(event, payload) {
+      listener(event, payload, unsubscribe);
+    }
+
+    ipcRenderer.on(eventName, subscription);
+
+    return unsubscribe;
   }
 });
 

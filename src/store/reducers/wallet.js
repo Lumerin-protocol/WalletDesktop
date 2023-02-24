@@ -1,16 +1,18 @@
 import { handleActions } from 'redux-actions';
 import get from 'lodash/get';
+import keyBy from 'lodash/keyBy';
+import merge from 'lodash/merge';
 
 export const initialState = {
   syncStatus: 'up-to-date',
   isActive: false,
   address: '',
   ethBalance: 0,
-  transactions: [],
+  transactions: {},
   token: {
     contract: '',
     lmrBalance: 0,
-    transactions: [],
+    transactions: {},
     symbol: 'LMR'
   }
 };
@@ -19,15 +21,9 @@ export const initialState = {
  * Should filter transactions without receipt if we received ones
  */
 const mergeTransactions = (stateTxs, payloadTxs) => {
-  return [...stateTxs, ...payloadTxs].filter(tx => {
-    if (tx.receipt) {
-      return true;
-    }
-    const isTransactionWithReceiptReceived = payloadTxs.find(
-      t => t.receipt && t.transaction.hash === tx.transaction.hash
-    );
-    return !isTransactionWithReceiptReceived;
-  });
+  const txWithReceipts = payloadTxs.filter(tx => tx.receipt);
+  const txMap = keyBy(txWithReceipts, item => item.transaction.hash);
+  return merge({}, stateTxs, txMap);
 };
 
 const reducer = handleActions(
@@ -70,11 +66,6 @@ const reducer = handleActions(
       }
     }),
 
-    'wallet-transactions-changed': (state, { payload }) => ({
-      ...state,
-      transactions: mergeTransactions(state.transactions, payload.transactions)
-    }),
-
     'token-transactions-changed': (state, { payload }) => ({
       ...state,
       token: {
@@ -98,7 +89,6 @@ const reducer = handleActions(
 
     'transactions-scan-finished': (state, { payload }) => ({
       ...state,
-      transactions: payload.transactions,
       syncStatus: payload.success ? 'up-to-date' : 'failed'
     })
   },

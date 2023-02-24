@@ -11,7 +11,6 @@ import {
   fromTokenBaseUnitsToLMR
 } from '../../utils/coinValue';
 import { toUSD } from '../utils/syncAmounts';
-import { uniqBy } from 'lodash';
 
 export const getWallet = createSelector(
   getChain,
@@ -59,7 +58,7 @@ export const getLmrBalanceWei = getWalletLmrBalance;
 export const getTransactions = createSelector(getWallet, walletData => {
   const transactionParser = utils.createTransactionParser(walletData.address);
 
-  const transactions = get(walletData, 'token.transactions', []);
+  const transactions = Object.values(walletData?.token?.transactions) || [];
 
   const sorted = sortBy(transactions, [
     'transaction.blockNumber',
@@ -67,9 +66,7 @@ export const getTransactions = createSelector(getWallet, walletData => {
     'transaction.nonce'
   ]).reverse();
 
-  const mapped = sorted.map(transactionParser);
-
-  return uniqBy(mapped, 'hash');
+  return sorted.map(transactionParser);
 });
 
 // Returns if the current wallet/address has transactions on the active chain

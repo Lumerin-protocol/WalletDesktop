@@ -1,7 +1,5 @@
 import utils from 'web3-utils';
-
 import cuid from 'cuid';
-
 import Deferred from '../lib/Deferred';
 
 export const fromWei = (str, unit = 'ether') => utils.fromWei(str, unit);
@@ -18,21 +16,35 @@ export function forwardToMainProcess(eventName, timeout = 10000) {
   };
 }
 
-/*
+/**
  * Sends a message to Main Process and returns a Promise.
  *
  * This makes it easier to handle IPC inside components
  * without the need of manual (un)subscriptions.
+ * @param {string} eventName
+ * @param {*} data
+ * @param {number} timeout
+ * @param {import('electron').IpcRenderer} ipcRenderer
+ * @returns
  */
-export function sendToMainProcess(eventName, data, timeout = 10000) {
+export function sendToMainProcess(
+  eventName,
+  data,
+  timeout = 10000,
+  ipcRenderer = window.ipcRenderer
+) {
   const id = cuid();
 
   const deferred = new Deferred();
   let timeoutId;
 
-  function listener(ev, { id: _id, data: _data, error }) {
-    if (timeoutId) window.clearTimeout(timeoutId);
-    if (_id !== id) return;
+  function listener(ev, { id: _id, data: _data, error }, unsubscribe) {
+    if (timeoutId) {
+      window.clearTimeout(timeoutId);
+    }
+    if (_id !== id) {
+      return;
+    }
 
     const responseError = error || (_data && _data.error);
 
@@ -42,20 +54,19 @@ export function sendToMainProcess(eventName, data, timeout = 10000) {
       deferred.resolve(_data);
     }
 
-    window.ipcRenderer.removeListener(eventName, listener);
+    return unsubscribe();
   }
 
-  window.ipcRenderer.on(eventName, listener);
-  window.ipcRenderer.send(eventName, { id, data });
+  const unsubscribe = ipcRenderer.on(eventName, listener);
+  ipcRenderer.send(eventName, { id, data });
 
   if (timeout) {
     timeoutId = setTimeout(() => {
-      // eslint-disable-next-line no-console
       console.warn(`Event "${eventName}" timed out after ${timeout}ms.`);
       deferred.reject(
         new Error('Operation timed out. Please try again later.')
       );
-      window.ipcRenderer.removeListener(eventName, listener);
+      unsubscribe();
     }, timeout);
   }
 
