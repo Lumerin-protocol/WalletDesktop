@@ -89,13 +89,13 @@ function createWallet(data, core, isOpen = true) {
     .then(() => isOpen && openWallet(core, data.password));
 }
 
-const restartProxyRouter = async (data, { emitter }) => {
+const restartProxyRouter = async (data, { emitter, api }) => {
   const password = await auth.getSessionPassword();
 
-  emitter.emit("kill-proxy-router");
-  setTimeout(() => {
-    emitter.emit("open-proxy-router", { password });
-  }, 2000)
+  api['proxy-router'].kill(config.chain.buyerProxyPort).catch(logger.error);
+  await api['proxy-router'].kill(config.chain.sellerProxyPort).catch(logger.error);
+
+  emitter.emit("open-proxy-router", { password });
 }
 
 async function openWallet({ emitter }, password) {
