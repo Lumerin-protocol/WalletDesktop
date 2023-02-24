@@ -111,7 +111,7 @@ jobs:
       - name: Build Web
         run: npm run web-build
       - name: Build Mac
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-latest' && matrix.arch != 'arm'
         run: npm run desktop-build-mac
       - name: Build Mac arm
         if: matrix.os == 'macos-latest' && matrix.arch == 'arm'
