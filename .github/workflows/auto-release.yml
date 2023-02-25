@@ -54,7 +54,7 @@ jobs:
           node-version: 16
       - name: Install packages
         run: npm install
-      - name: Postinstall
+      - name: Post install
         if: matrix.target == 'macos-arm'
         run: npm run postinstallMacDist
       - name: Set env from github
@@ -102,18 +102,13 @@ jobs:
           then
             namePrefix="Darwin_x86_64"
           fi
-          echo "name suffix $namePrefix"
-          echo "github token ${{ secrets.GITHUB_TOKEN }}"
           curl --fail --retry 5 --retry-all-errors -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]'
           curl --fail --retry 5 --retry-all-errors -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]' |
             while IFS= read -r line; do
-              echo "line $line"
               name=$(<<<"$line" jq -r .name);
-              echo "name $name"
               if grep -q "$namePrefix" <<< "$name"
               then
                 downloadUrl="$(<<<"$line" jq -r .browser_download_url)";
-                echo "downloadUrl $downloadUrl"
                 if [ "${namePrefix}" = 'Windows_x86_64' ]; then
                   curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" $downloadUrl -L
                 else
