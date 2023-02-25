@@ -103,8 +103,8 @@ jobs:
             namePrefix="Darwin_x86_64"
           fi
           echo "name suffix $namePrefix"
-          curl -H "Accept: application/vnd.github+json" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]'
-          curl -H "Accept: application/vnd.github+json" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]' |
+          curl -H --fail --retry 5 --retry-all-errors "Accept: application/vnd.github+json" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]'
+          curl -H --fail --retry 5 --retry-all-errors "Accept: application/vnd.github+json" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]' |
             while IFS= read -r line; do
               echo "line $line"
               name=$(<<<"$line" jq -r .name);
