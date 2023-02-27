@@ -22,7 +22,6 @@ const WalletBalance = ({
   ethBalanceUSD
 }) => (
   <BalanceContainer>
-    <WalletBalanceHeader>Wallet Balance</WalletBalanceHeader>
     <CoinsRow>
       <Primary data-testid="lmr-balance">
         <Balance
