@@ -29,8 +29,7 @@ jobs:
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
             asset_name: lumerin_v${{github.ref_name}}.dmg
           - target: macos-arm
-            os: macos-latest
-            arch: arm
+            os: mac-arm
             artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
             asset_name: lumerin_v${{github.ref_name}}_arm.dmg
     runs-on: ${{ matrix.os }}
