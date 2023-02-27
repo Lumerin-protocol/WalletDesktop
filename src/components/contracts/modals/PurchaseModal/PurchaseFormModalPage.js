@@ -129,6 +129,15 @@ export const PurchaseFormModalPage = ({
             </PoolInfoContainer>
           )}
         </UrlContainer>
+        <UrlContainer style={{ marginTop: '30px' }}>
+          <SmallTitle>Worker Name</SmallTitle>
+          <Values
+            key={contract?.id}
+            style={{ width: '85%', wordBreak: 'break-all' }}
+          >
+            {contract?.id}
+          </Values>
+        </UrlContainer>
         <UrlContainer style={{ marginTop: '50px' }}>
           <UpperCaseTitle>Forwarding to (mining pool)</UpperCaseTitle>
           <Divider />
@@ -139,20 +148,6 @@ export const PurchaseFormModalPage = ({
             <EditBtn onClick={() => onEditPool()}>Edit</EditBtn>
           </PoolInfoContainer>
         </UrlContainer>
-        <Row style={{ marginTop: '10px' }}>
-          <InputGroup>
-            <SmallTitle>Worker name</SmallTitle>
-            <Input
-              {...register('worker', { required: true })}
-              placeholder="worker"
-              disabled={true}
-              type="text"
-              name="worker"
-              key="worker"
-              id="worker"
-            />
-          </InputGroup>
-        </Row>
         <ActionsGroup>
           <Row style={{ justifyContent: 'space-between', marginTop: '3rem' }}>
             <LeftBtn onClick={handleClose}>Cancel</LeftBtn>

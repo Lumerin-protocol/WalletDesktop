@@ -61,6 +61,8 @@ const withContractsState = WrappedComponent => {
           copyToClipboard={this.props.client.copyToClipboard}
           contractsRefresh={this.contractsRefresh}
           onWalletRefresh={this.onWalletRefresh}
+          getLocalIp={this.props.client.getLocalIp}
+          getPoolAddress={this.props.client.getPoolAddress}
           {...this.props}
           {...this.state}
         />
@@ -78,7 +80,13 @@ const withContractsState = WrappedComponent => {
     lmrBalance: selectors.getWalletLmrBalance(state)
   });
 
-  return withClient(connect(mapStateToProps)(Container));
+  const mapDispatchToProps = dispatch => ({
+    setIp: ip => dispatch({ type: 'ip-received', payload: ip }),
+    setDefaultBuyerPool: pool =>
+      dispatch({ type: 'buyer-default-pool-received', payload: pool })
+  });
+
+  return withClient(connect(mapStateToProps, mapDispatchToProps)(Container));
 };
 
 export default withContractsState;

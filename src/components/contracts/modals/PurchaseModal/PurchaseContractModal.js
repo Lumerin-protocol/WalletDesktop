@@ -15,11 +15,11 @@ function PurchaseContractModal(props) {
     contract,
     explorerUrl,
     lmrRate,
-    history
+    history,
+    pool
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
-  const [pool, setPool] = useState(null);
 
   const {
     register,
@@ -29,18 +29,20 @@ function PurchaseContractModal(props) {
     getValues,
     reset,
     trigger
-  } = useForm({ mode: 'onBlur' });
+  } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
-    props.getLocalIp({}).then(ip => {
-      setValue('address', `stratum+tcp://${ip}:${props.buyerPort}`);
-      trigger('address');
-    });
-    props.getPoolAddress({}).then(pool => {
-      setPool(pool);
-    });
+    setValue('address', `stratum+tcp://${props.ip}:${props.buyerPort}`);
+    trigger('address');
+
     setValue('worker', contract?.id);
+    trigger('worker');
   }, [contract]);
+
+  useEffect(() => {
+    setValue('address', `stratum+tcp://${props.ip}:${props.buyerPort}`);
+    trigger('address');
+  }, [isActive]);
 
   const toRfc2396 = formData => {
     const addressParts = formData.address

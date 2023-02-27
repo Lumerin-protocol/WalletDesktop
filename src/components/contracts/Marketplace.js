@@ -78,6 +78,8 @@ function Marketplace({
 
   useEffect(() => {
     contractsRefresh();
+    props.getLocalIp({}).then(props.setIp);
+    props.getPoolAddress({}).then(props.setDefaultBuyerPool);
   }, []);
 
   const tabs = [
