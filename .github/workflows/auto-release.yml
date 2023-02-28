@@ -101,7 +101,6 @@ jobs:
           then
             namePrefix="Darwin_x86_64"
           fi
-          curl --fail --retry 5 --retry-all-errors -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]'
           curl --fail --retry 5 --retry-all-errors -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]' |
             while IFS= read -r line; do
               name=$(<<<"$line" jq -r .name);
