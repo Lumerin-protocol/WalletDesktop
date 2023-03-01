@@ -66,6 +66,7 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
       `${resourcePath}/executables/proxy-router`,
       [
         `--contract-address=${config.cloneFactoryAddress}`,
+        "--contract-hashrate-adjustment=1.1",
         `--eth-node-address=${config.wsApiUrl}`,
         "--miner-vetting-duration=5m",
         "--pool-conn-timeout=15m",
