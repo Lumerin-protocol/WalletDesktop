@@ -125,7 +125,7 @@
     "mac": {
       "artifactName": "${name}_v${version}.${ext}",
       "category": "public.app-category.finance",
-      "icon": "./assets/lumerin_light.ico",
+      "icon": "./assets/lumerin.png",
       "extendInfo": {
         "NSUserNotificationAlertStyle": "alert"
       },
