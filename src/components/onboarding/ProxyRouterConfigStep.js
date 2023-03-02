@@ -32,11 +32,11 @@ const ProxyRouterConfigStep = props => {
               id="proxyDefaultPool"
             />
           </Sp>
-          <Sp mt={2}>
+          {/* <Sp mt={2}>
             <SecondaryBtn onClick={props.onUseHostedProxyRouter} block>
               Or use hosted proxy router
             </SecondaryBtn>
-          </Sp>
+          </Sp> */}
           <Sp mt={6}>
             <Btn block submit>
               Continue
