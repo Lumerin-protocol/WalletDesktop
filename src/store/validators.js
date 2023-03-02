@@ -120,9 +120,10 @@ export function validatePasswordCreation(
 ) {
   if (!password) {
     errors.password = 'Password is required';
-  } else if (!IsPasswordStrong(password)) {
-    errors.password = 'Password is not strong enough';
   }
+  // else if (!IsPasswordStrong(password)) {
+  //   errors.password = 'Password is not strong enough';
+  // }
 
   return errors;
 }
