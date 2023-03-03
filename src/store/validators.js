@@ -156,7 +156,7 @@ export const validatePoolAddress = (address, errors = {}) => {
 
 export const validatePoolUsername = (username, errors = {}) => {
   if (!username || !username.trim()) {
-    errors.proxyPoolUsername = 'Enter username.';
+    errors.proxyPoolUsername = 'Enter username';
     return errors;
   }
   return errors;
