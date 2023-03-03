@@ -10,7 +10,7 @@ import SecondaryBtn from './SecondaryBtn';
 const ProxyRouterConfigStep = props => {
   return (
     <AltLayout
-      title="Configure Proxy Router"
+      title="Configure Default Pool"
       data-testid="onboarding-container"
     >
       <AltLayoutNarrow>
@@ -30,6 +30,17 @@ const ProxyRouterConfigStep = props => {
               value={props.proxyDefaultPool}
               type="text"
               id="proxyDefaultPool"
+            />
+          </Sp>
+          <Sp mt={2}>
+            <TextInput
+              onChange={props.onInputChange}
+              error={props.errors.proxyPoolUsername}
+              placeholder="username"
+              label="Pool Username"
+              value={props.proxyPoolUsername}
+              type="text"
+              id="proxyPoolUsername"
             />
           </Sp>
           {/* <Sp mt={2}>
