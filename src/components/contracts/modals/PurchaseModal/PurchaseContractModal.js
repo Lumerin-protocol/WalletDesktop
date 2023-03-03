@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import { PurchaseFormModalPage } from './PurchaseFormModalPage';
 import { PurchasePreviewModalPage } from './PurchasePreviewModalPage';
+import { toRfc2396 } from '../../../../utils';
 
 function PurchaseContractModal(props) {
   const {
@@ -44,19 +45,6 @@ function PurchaseContractModal(props) {
     trigger('address');
   }, [isActive]);
 
-  const toRfc2396 = formData => {
-    const addressParts = formData.address
-      .replace('stratum+tcp://', '')
-      .split(':');
-    const address = addressParts[0];
-    const port = addressParts[1];
-    const password = '';
-    // This worker name and password won't be forwarded from the seller to the buyer.
-    // Set url with {username}:{password} to preserve backward compatibility
-    // This also should maintain consistency of data between UI/Blockchain/Proxy Router
-    return `stratum+tcp://${formData.worker}:${password}@${address}:${port}`;
-  };
-
   const handleClose = e => {
     reset();
     setIsPreview(false);
@@ -91,7 +79,11 @@ function PurchaseContractModal(props) {
             onBackToForm={() => setIsPreview(false)}
             onPurchase={() => {
               const inputs = getValues();
-              handlePurchase(inputs, contract, toRfc2396(inputs));
+              handlePurchase(
+                inputs,
+                contract,
+                toRfc2396(inputs.address, inputs.worker)
+              );
             }}
           />
         ) : (

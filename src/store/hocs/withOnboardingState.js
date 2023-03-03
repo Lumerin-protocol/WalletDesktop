@@ -4,6 +4,7 @@ import { withClient } from './clientContext';
 import selectors from '../selectors';
 import { connect } from 'react-redux';
 import * as utils from '../utils';
+import { toRfc2396 } from '../../utils';
 
 const withOnboardingState = WrappedComponent => {
   class Container extends React.Component {
@@ -128,7 +129,8 @@ const withOnboardingState = WrappedComponent => {
       const errors = validators.validatePoolAddress(
         this.state.proxyDefaultPool
       );
-      if (errors.proxyDefaultPool) {
+      validators.validatePoolUsername(this.state.proxyPoolUsername, errors);
+      if (errors.proxyDefaultPool || errors.proxyPoolUsername) {
         this.setState({ errors });
         return false;
       }
@@ -143,10 +145,15 @@ const withOnboardingState = WrappedComponent => {
         return;
       }
 
+      const defaultPool = toRfc2396(
+        this.state.proxyDefaultPool,
+        this.state.proxyPoolUsername
+      );
+
       return this.props.onOnboardingCompleted({
         proxyRouterConfig: {
-          sellerDefaultPool: this.state.proxyDefaultPool,
-          buyerDefaultPool: this.state.proxyDefaultPool
+          sellerDefaultPool: defaultPool,
+          buyerDefaultPool: defaultPool
         },
         password: this.state.password,
         mnemonic: this.state.useUserMnemonic
