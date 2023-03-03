@@ -107,6 +107,7 @@ jobs:
               if grep -q "$namePrefix" <<< "$name"
               then
                 downloadUrl="$(<<<"$line" jq -r .browser_download_url)";
+                echo "Proxyrouter URL: $downloadUrl"
                 if [ "${namePrefix}" = 'Windows_x86_64' ]; then
                   curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" $downloadUrl -L
                 else
