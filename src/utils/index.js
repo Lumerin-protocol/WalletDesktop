@@ -134,3 +134,14 @@ export function abbreviateAddress(addr, length = 6) {
     addr.length
   )}`;
 }
+
+export const toRfc2396 = (pool, username) => {
+  const addressParts = pool.replace('stratum+tcp://', '').split(':');
+  const address = addressParts[0];
+  const port = addressParts[1];
+  const password = '';
+  // This worker name and password won't be forwarded from the seller to the buyer.
+  // Set url with {username}:{password} to preserve backward compatibility
+  // This also should maintain consistency of data between UI/Blockchain/Proxy Router
+  return `stratum+tcp://${username}:${password}@${address}:${port}`;
+};

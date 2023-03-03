@@ -20,16 +20,26 @@ const ProxyRouterConfigStep = props => {
         >
           <Sp mt={2}>
             <TextInput
-              data-testid="pool-field"
               autoFocus
               onChange={props.onInputChange}
               noFocus
               error={props.errors.proxyDefaultPool}
-              placeholder="stratum+tcp://{worker}:{password}@{host}:{port}"
-              label="Default Destination Address"
+              placeholder="stratum+tcp://{pool btc mining url}:{port}"
+              label="Pool BTC Mining Url"
               value={props.proxyDefaultPool}
               type="text"
               id="proxyDefaultPool"
+            />
+          </Sp>
+          <Sp mt={2}>
+            <TextInput
+              onChange={props.onInputChange}
+              error={props.errors.proxyPoolUsername}
+              placeholder="user.worker"
+              label="Pool Username"
+              value={props.proxyPoolUsername}
+              type="text"
+              id="proxyPoolUsername"
             />
           </Sp>
           {/* <Sp mt={2}>
