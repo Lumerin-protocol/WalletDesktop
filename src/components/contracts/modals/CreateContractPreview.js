@@ -9,7 +9,7 @@ import {
 import PriceIcon from '../../icons/PriceIcon';
 import SpeedIcon from '../../icons/SpeedIcon';
 import DurationIcon from '../../icons/DurationIcon';
-
+import { IconQuestionCircle } from '@tabler/icons';
 import {
   Divider,
   HeaderFlex,
@@ -63,6 +63,9 @@ export const CreateContractPreview = ({
           </Values>
         </div>
       </ContractInfoContainer>
+      <SmallTitle style={{ marginTop: '10px' }}>
+        All proceeds are subject to a 1% marketplace fee
+      </SmallTitle>
     </TitleWrapper>
     <Row style={{ marginTop: '3rem' }}>
       <LeftBtn onClick={close}>Edit Contract</LeftBtn>

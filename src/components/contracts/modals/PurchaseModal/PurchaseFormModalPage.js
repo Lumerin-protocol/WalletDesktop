@@ -26,7 +26,7 @@ import {
   ContractInfoContainer
 } from './common.styles';
 
-import { IconExternalLink } from '@tabler/icons';
+import { IconExternalLink, IconQuestionCircle } from '@tabler/icons';
 import { formatDuration, formatSpeed } from '../../utils';
 import { fromTokenBaseUnitsToLMR } from '../../../../utils/coinValue';
 
@@ -94,6 +94,14 @@ export const PurchaseFormModalPage = ({
               {fromTokenBaseUnitsToLMR(contract.price)} LMR (≈ $
               {(fromTokenBaseUnitsToLMR(contract.price) * rate).toFixed(2)} USD)
             </Values>
+            <SmallTitle>
+              + {fromTokenBaseUnitsToLMR(contract.price) * 0.01} LMR fee
+              <IconQuestionCircle
+                data-rh="All proceeds are subject to a 1% marketplace fee"
+                width={'1.7rem'}
+                style={{ padding: '0 0 1px 4px' }}
+              />
+            </SmallTitle>
           </div>
         </ContractInfoContainer>
       </TitleWrapper>

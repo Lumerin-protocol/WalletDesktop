@@ -13,7 +13,7 @@ import { formatDuration, formatSpeed, formatPrice } from '../../utils';
 import PriceIcon from '../../../icons/PriceIcon';
 import SpeedIcon from '../../../icons/SpeedIcon';
 import DurationIcon from '../../../icons/DurationIcon';
-
+import { fromTokenBaseUnitsToLMR } from '../../../../utils/coinValue';
 import {
   Divider,
   HeaderFlex,
@@ -80,7 +80,7 @@ export const PurchasePreviewModalPage = ({
               key={'price'}
               style={{ marginRight: '4px', height: '1.4rem' }}
             />
-            {formatPrice(contract.price)}
+            {fromTokenBaseUnitsToLMR(contract.price) * 1.01} LMR (fees included)
           </Values>
         </div>
       </ContractInfoContainer>
