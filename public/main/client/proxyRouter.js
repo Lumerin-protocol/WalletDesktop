@@ -66,6 +66,7 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
       `${resourcePath}/executables/proxy-router`,
       [
         `--contract-address=${config.cloneFactoryAddress}`,
+        "--contract-hashrate-adjustment=1.1",
         `--eth-node-address=${config.wsApiUrl}`,
         "--miner-vetting-duration=5m",
         "--pool-conn-timeout=15m",
@@ -73,7 +74,7 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
         "--pool-min-duration=2m",
         "--proxy-log-stratum=false",
         "--stratum-socket-buffer=4",
-        "--validation-buffer-period=10m",
+        "--validation-buffer-period=15m",
         "--miner-submit-err-limit=0",
         `--wallet-address=${config.walletAddress}`,
         `--wallet-private-key=${config.privateKey}`,

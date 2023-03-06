@@ -35,6 +35,7 @@ const PasswordStep = props => {
     e.preventDefault();
     props.onPasswordSubmit({ clearOnError: false });
   };
+  let tooltipTimeout;
 
   return (
     <AltLayout title="Create a Password" data-testid="onboarding-container">
@@ -45,13 +46,18 @@ const PasswordStep = props => {
           </PasswordMessage>
           <PasswordInputWrap>
             <Sp mt={2}>
-              <Tooltip content={suggestion} show={typed && suggestion.length} />
+              <Tooltip
+                content={suggestion}
+                show={typed && props.password && suggestion.length}
+              />
               <TextInput
                 data-testid="pass-field"
                 autoFocus
                 onChange={e => {
                   if (!typed) {
+                    tooltipTimeout && clearTimeout(tooltipTimeout);
                     setTyped(true);
+                    tooltipTimeout = setTimeout(() => setTyped(false), 5000);
                   }
                   return props.onInputChange(e);
                 }}

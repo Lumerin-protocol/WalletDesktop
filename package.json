@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.0.32",
+  "version": "1.0.35",
   "author": {
     "name": "Lumerin",
     "email": "developer@lumerin.io",
@@ -125,7 +125,7 @@
     "mac": {
       "artifactName": "${name}_v${version}.${ext}",
       "category": "public.app-category.finance",
-      "icon": "./assets/lumerin_light.ico",
+      "icon": "./assets/lumerin.png",
       "extendInfo": {
         "NSUserNotificationAlertStyle": "alert"
       },

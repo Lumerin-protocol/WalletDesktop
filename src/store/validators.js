@@ -120,9 +120,10 @@ export function validatePasswordCreation(
 ) {
   if (!password) {
     errors.password = 'Password is required';
-  } else if (!IsPasswordStrong(password)) {
-    errors.password = 'Password is not strong enough';
   }
+  // else if (!IsPasswordStrong(password)) {
+  //   errors.password = 'Password is not strong enough';
+  // }
 
   return errors;
 }
@@ -136,7 +137,7 @@ export function validateUseMinimum(useMinimum, estimate, errors = {}) {
 }
 
 export const validatePoolAddress = (address, errors = {}) => {
-  const defaultPoolFormat = 'stratum+tcp://{worker}:{password}@{host}:{port}';
+  const defaultPoolFormat = 'stratum+tcp://{host}:{port}';
   const expectedFormat = `Expected format: ${defaultPoolFormat}`;
 
   if (!address) {
@@ -144,11 +145,19 @@ export const validatePoolAddress = (address, errors = {}) => {
     return errors;
   }
 
-  const pattern = /^stratum\+tcp:\/\/([\w.-]+):(\w+)@([\w.-]+):(\d+)$/;
+  const pattern = /^stratum\+tcp:\/\/([\w.-]+):(\d+)$/;
   const result = pattern.test(address);
 
   if (!result) {
     errors.proxyDefaultPool = `Invalid destination address. ${expectedFormat}`;
+  }
+  return errors;
+};
+
+export const validatePoolUsername = (username, errors = {}) => {
+  if (!username || !username.trim()) {
+    errors.proxyPoolUsername = 'Enter username';
+    return errors;
   }
   return errors;
 };
