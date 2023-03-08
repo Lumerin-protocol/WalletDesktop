@@ -35,7 +35,7 @@ const Green = styled.div`
 `;
 
 const ErrorMessage = styled.div`
-  color: ${p => p.theme.colors.danger}
+  color: ${p => p.theme.colors.danger};
   font-size: 1.2rem;
   margin-top: 2.4rem;
   margin-bottom: -3.9rem;
@@ -46,9 +46,9 @@ const StyledBtn = styled(BaseBtn)`
   height: 40px;
   font-size: 1.5rem;
   border-radius: 5px;
-  padding: 0 .6rem;
-  background-color: ${p => p.theme.colors.primary}
-  color: ${p => p.theme.colors.light}
+  padding: 0 0.6rem;
+  background-color: ${p => p.theme.colors.primary};
+  color: ${p => p.theme.colors.light};
 
   @media (min-width: 1040px) {
     width: 35%;
@@ -81,7 +81,7 @@ function ChangePassword({
       history.push('/tools');
       context.toast('success', 'Password successfully changed');
     }
-  }, []);
+  }, [status]);
 
   return (
     <LightLayout
@@ -118,9 +118,15 @@ function ChangePassword({
               type="password"
               id="newPassword"
             />
-            {!errors.newPassword && (
-              <PasswordStrengthMeter password={newPassword} />
-            )}
+            {/* {!errors.newPassword && (
+              <PasswordStrengthMeter
+                password={newPassword}
+                onChange={res => {
+                  const string = res?.suggestions?.join(`\n`);
+                  setSuggestion(string);
+                }}
+              />
+            )} */}
           </Sp>
           <Sp mt={3}>
             <TextInput

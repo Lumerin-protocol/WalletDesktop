@@ -48,9 +48,11 @@ const withChangePasswordState = WrappedComponent => {
         errors.oldPassword = 'Current password is required';
       } else if (!newPassword) {
         errors.newPassword = 'New password is required';
-      } else if (!IsPasswordStrong(newPassword)) {
-        errors.password = 'Password is not strong enough';
-      } else if (!errors.password && !newPasswordAgain) {
+      }
+      // else if (!IsPasswordStrong(newPassword)) {
+      //   errors.password = 'Password is not strong enough';
+      // }
+      else if (!errors.password && !newPasswordAgain) {
         errors.newPasswordAgain = `Repeat the ${
           clearOnError ? 'PIN' : 'password'
         }`;
@@ -79,12 +81,12 @@ const withChangePasswordState = WrappedComponent => {
           oldPassword: this.state.oldPassword,
           newPassword: this.state.newPassword
         })
-        .then(isValid =>
+        .then(isValid => {
           this.setState({
             status: isValid ? 'success' : 'failure',
             errors: isValid ? {} : { oldPassword: 'Invalid password' }
-          })
-        )
+          });
+        })
         .catch(err => this.setState({ status: 'failure', error: err.message }));
     };
 
@@ -93,7 +95,7 @@ const withChangePasswordState = WrappedComponent => {
         <WrappedComponent
           onInputChange={this.onInputChange}
           onSubmit={this.onSubmit}
-          // validate={this.validate}
+          validate={this.validate}
           {...this.state}
           {...this.props}
         />
