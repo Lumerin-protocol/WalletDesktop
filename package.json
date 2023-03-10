@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.0.37",
+  "version": "1.0.42",
   "author": {
     "name": "Lumerin",
     "email": "developer@lumerin.io",
@@ -122,6 +122,9 @@
     "extraResources": [
       "executables/**/*"
     ],
+    "nsis": {
+      "include": "build/installer.nsh"
+    },
     "mac": {
       "artifactName": "${name}_v${version}.${ext}",
       "category": "public.app-category.finance",
