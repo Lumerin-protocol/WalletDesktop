@@ -8,12 +8,10 @@ const Container = styled.div`
 `;
 
 const Header = styled.header`
-  padding: 2.4rem;
   background-color: ${p => p.theme.colors.light};
 
-  @media (min-width: 800px) {
-    padding: 2.4rem 4.8rem;
-  }
+  padding: 4.5rem 4.8rem;
+  padding-bottom: 0;
 `;
 
 const Title = styled.h1`
