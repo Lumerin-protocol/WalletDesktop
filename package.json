@@ -122,9 +122,6 @@
     "extraResources": [
       "executables/**/*"
     ],
-    "nsis": {
-      "include": "build/installer.nsh"
-    },
     "mac": {
       "artifactName": "${name}_v${version}.${ext}",
       "category": "public.app-category.finance",
