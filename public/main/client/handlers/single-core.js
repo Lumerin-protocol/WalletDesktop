@@ -62,6 +62,22 @@ const purchaseContract = async function(data, { api }) {
   )(data, { api });
 };
 
+const claimFaucet = async function(data, { api }) {
+  data.walletId = wallet.getAddress().address;
+  data.password = await auth.getSessionPassword();
+
+  if (typeof data.walletId !== "string") {
+    throw new WalletError("WalletId is not defined");
+  }
+
+  return withAuth((privateKey) =>
+    api.token.claimFaucet({
+      ...data,
+      privateKey,
+    })
+  )(data, { api });
+};
+
 const cancelContract = async function(data, { api }) {
   data.walletId = wallet.getAddress().address;
   data.password = await auth.getSessionPassword();
@@ -289,4 +305,5 @@ module.exports = {
   getLocalIp,
   getPoolAddress,
   restartProxyRouter,
+  claimFaucet,
 };

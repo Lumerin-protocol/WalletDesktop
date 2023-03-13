@@ -26,6 +26,7 @@ const listeners = {
   "get-lmr-transfer-gas-limit": handlers.getLmrTransferGasLimit,
   "get-local-ip": handlers.getLocalIp,
   "restart-proxy-router": handlers.restartProxyRouter,
+  "claim-faucet": handlers.claimFaucet,
 };
 
 let coreListeners = {};

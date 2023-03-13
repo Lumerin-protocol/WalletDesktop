@@ -130,7 +130,8 @@ const createClient = function(createStore) {
     saveProxyRouterSettings: utils.forwardToMainProcess(
       'save-proxy-router-settings'
     ),
-    restartProxyRouter: utils.forwardToMainProcess('restart-proxy-router')
+    restartProxyRouter: utils.forwardToMainProcess('restart-proxy-router'),
+    claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000)
   };
 
   const api = {
