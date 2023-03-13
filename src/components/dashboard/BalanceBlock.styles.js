@@ -77,3 +77,8 @@ export const BalanceContainer = styled.div`
 export const CoinsRow = styled.div`
   display: flex;
 `;
+
+export const GlobalContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
