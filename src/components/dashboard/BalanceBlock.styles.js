@@ -6,7 +6,7 @@ export const Container = styled.div`
   background-color: #fff;
   padding: 6px 1.6rem 6px 1.6rem;
   border-radius: 15px;
-  max-width: 600px;
+  max-width: 720px;
 `;
 
 export const SecondaryContainer = styled.div`
@@ -61,7 +61,7 @@ export const BtnAccent = styled(Btn)`
 export const BtnRow = styled.div`
   display: flex;
   flex-direction: row;
-  width: 200px;
+  width: 320px;
   height: 100%;
   align-items: center;
   justify-content: space-between;
