@@ -56,10 +56,7 @@ const createClient = function(createStore) {
       'https://github.com/Lumerin-protocol/lumerin-overview/blob/main/docs/00-overview.md'
     );
 
-  const onHelpLinkClick = () =>
-    window.openLink(
-      'https://github.com/Lumerin-protocol/lumerin-overview/blob/main/docs/00-overview.md'
-    );
+  const onHelpLinkClick = () => window.openLink('https://lumerin.gitbook.io');
 
   const onLinkClick = url => window.openLink(url);
 
