@@ -132,20 +132,6 @@ const BalanceBlock = ({
           </BtnRow>
         </SecondaryContainer>
       </Container>
-      {/* {isClaiming ? (
-        <div style={{ paddingLeft: '20px' }}>
-          <Spinner size="25px" />
-        </div>
-      ) : (
-        <BtnAccent
-          data-modal="claim"
-          onClick={claimFaucet}
-          block
-          style={{ width: '120px' }}
-        >
-          Claim Faucet
-        </BtnAccent>
-      )} */}
     </GlobalContainer>
   );
 };
