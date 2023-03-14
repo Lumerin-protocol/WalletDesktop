@@ -15,10 +15,7 @@ import Marketplace from './contracts/Marketplace';
 import Devices from './devices/Devices';
 import BuyerHub from './contracts/BuyerHub';
 
-const BubbleGraphic1 = 'images/Bubble_1.png';
-const BubbleGraphic2 = 'images/Bubble_2.png';
-const BubbleGraphic3 = 'images/Bubble_3.png';
-const BubbleGraphic4 = 'images/Bubble_4.png';
+const bgImage = 'images/MainBackground.png';
 
 const fadeIn = keyframes`
   from {
@@ -49,11 +46,9 @@ const Main = styled.div`
   overflow-y: hidden;
   min-height: 100vh;
   background: #eaf7fc;
-  background-image: url(${BubbleGraphic1}), url(${BubbleGraphic2}),
-    url(${BubbleGraphic3}), url(${BubbleGraphic4});
-  background-position: bottom right, right top, left top, left bottom;
+  background-image: url(${bgImage});
+  background-position: right;
   background-repeat: no-repeat;
-  background-size: 25% 15% 15% 10%;
 `;
 
 export const Layout = () => (
