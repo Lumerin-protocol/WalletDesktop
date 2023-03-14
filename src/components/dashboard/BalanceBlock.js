@@ -114,10 +114,25 @@ const BalanceBlock = ({
             >
               Send
             </Btn>
+            {isClaiming ? (
+              <div style={{ paddingLeft: '20px' }}>
+                <Spinner size="25px" />
+              </div>
+            ) : (
+              <BtnAccent
+                data-modal="claim"
+                onClick={claimFaucet}
+                data-rh={`Payout from the faucet is 10 gLMR per day.\n
+                Wallet addresses are limited to one request every 24 hours.`}
+                block
+              >
+                Get Tokens
+              </BtnAccent>
+            )}
           </BtnRow>
         </SecondaryContainer>
       </Container>
-      {isClaiming ? (
+      {/* {isClaiming ? (
         <div style={{ paddingLeft: '20px' }}>
           <Spinner size="25px" />
         </div>
@@ -130,7 +145,7 @@ const BalanceBlock = ({
         >
           Claim Faucet
         </BtnAccent>
-      )}
+      )} */}
     </GlobalContainer>
   );
 };
