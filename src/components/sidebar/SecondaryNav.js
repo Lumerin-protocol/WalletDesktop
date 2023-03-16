@@ -94,6 +94,12 @@ const NavHeader = styled.h3`
   padding-left: 2rem;
   text-transform: uppercase;
   font-size: 1.2rem;
+  @media (max-width: 800px) {
+    display: none;
+    ${({ parent }) => parent}:hover & {
+      display: block;
+    }
+  }
 `;
 
 const iconSize = '2rem';
@@ -106,7 +112,7 @@ function SecondaryNav({
 }) {
   return (
     <Container>
-      <NavHeader>Tools</NavHeader>
+      <NavHeader parent={parent}>Tools</NavHeader>
       <Button
         onClick={() => setActiveIndex(4)}
         activeClassName="active"
