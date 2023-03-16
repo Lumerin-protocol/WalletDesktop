@@ -56,10 +56,7 @@ const createClient = function(createStore) {
       'https://github.com/Lumerin-protocol/lumerin-overview/blob/main/docs/00-overview.md'
     );
 
-  const onHelpLinkClick = () =>
-    window.openLink(
-      'https://github.com/Lumerin-protocol/lumerin-overview/blob/main/docs/00-overview.md'
-    );
+  const onHelpLinkClick = () => window.openLink('https://lumerin.gitbook.io');
 
   const onLinkClick = url => window.openLink(url);
 
@@ -130,7 +127,8 @@ const createClient = function(createStore) {
     saveProxyRouterSettings: utils.forwardToMainProcess(
       'save-proxy-router-settings'
     ),
-    restartProxyRouter: utils.forwardToMainProcess('restart-proxy-router')
+    restartProxyRouter: utils.forwardToMainProcess('restart-proxy-router'),
+    claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000)
   };
 
   const api = {

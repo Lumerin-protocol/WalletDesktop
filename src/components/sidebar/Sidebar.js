@@ -66,6 +66,9 @@ const NavContainer = styled.div`
   flex-direction: column;
   height: 100%;
   padding-left: 2.2rem;
+  @media (max-width: 800px) {
+    padding-left: 1rem;
+  }
 `;
 
 const PrimaryNavContainer = styled.nav`

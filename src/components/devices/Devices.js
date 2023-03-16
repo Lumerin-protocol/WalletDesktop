@@ -15,9 +15,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  max-width: 100vw;
+  max-width: 80vw;
   position: relative;
-  padding: 0 2.4rem;
 
   .discovery-spinner {
     box-shadow: none;

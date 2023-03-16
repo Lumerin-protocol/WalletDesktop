@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import withBalanceBlockState from '../../store/hocs/withBalanceBlockState';
 import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 import { EtherIcon } from '../icons/EtherIcon';
@@ -12,8 +12,11 @@ import {
   Container,
   Primary,
   CoinsRow,
-  BalanceContainer
+  BalanceContainer,
+  GlobalContainer
 } from './BalanceBlock.styles';
+import Spinner from '../common/Spinner';
+import { ToastsContext } from '../toasts';
 
 const WalletBalance = ({
   lmrBalance,
@@ -52,41 +55,84 @@ const BalanceBlock = ({
   ethBalanceUSD,
   sendDisabled,
   sendDisabledReason,
-  onTabSwitch
+  onTabSwitch,
+  client
 }) => {
   const handleTabSwitch = e => {
     e.preventDefault();
     onTabSwitch(e.target.dataset.modal);
   };
+  const [isClaiming, setClaiming] = useState(false);
+  const context = useContext(ToastsContext);
+
+  const claimFaucet = e => {
+    e.preventDefault();
+    setClaiming(true);
+    client
+      .claimFaucet({})
+      .then(() => {
+        context.toast('success', 'Succesfully claimed 10 LMR');
+      })
+      .catch(err => {
+        if (
+          err.message &&
+          err.message.includes('insufficient funds for gas * price + value')
+        ) {
+          context.toast('error', 'insufficient funds for gas * price');
+        } else {
+          context.toast('error', 'You already claimed today. Try later.');
+        }
+      })
+      .finally(() => {
+        setClaiming(false);
+      });
+  };
 
   return (
-    <Container>
-      <SecondaryContainer>
-        <WalletBalance
-          {...{ lmrBalance, lmrBalanceUSD, ethBalance, ethBalanceUSD }}
-        />
-        <BtnRow>
-          <BtnAccent
-            data-modal="receive"
-            data-testid="receive-btn"
-            onClick={handleTabSwitch}
-            block
-          >
-            Receive
-          </BtnAccent>
-          <Btn
-            data-modal="send"
-            data-disabled={sendDisabled}
-            data-rh={sendDisabledReason}
-            data-testid="send-btn"
-            onClick={sendDisabled ? null : handleTabSwitch}
-            block
-          >
-            Send
-          </Btn>
-        </BtnRow>
-      </SecondaryContainer>
-    </Container>
+    <GlobalContainer>
+      <Container>
+        <SecondaryContainer>
+          <WalletBalance
+            {...{ lmrBalance, lmrBalanceUSD, ethBalance, ethBalanceUSD }}
+          />
+          <BtnRow>
+            <BtnAccent
+              data-modal="receive"
+              data-testid="receive-btn"
+              onClick={handleTabSwitch}
+              block
+            >
+              Receive
+            </BtnAccent>
+            <Btn
+              data-modal="send"
+              data-disabled={sendDisabled}
+              data-rh={sendDisabledReason}
+              data-testid="send-btn"
+              onClick={sendDisabled ? null : handleTabSwitch}
+              block
+            >
+              Send
+            </Btn>
+            {isClaiming ? (
+              <div style={{ paddingLeft: '20px' }}>
+                <Spinner size="25px" />
+              </div>
+            ) : (
+              <BtnAccent
+                data-modal="claim"
+                onClick={claimFaucet}
+                data-rh={`Payout from the faucet is 10 gLMR per day.\n
+                Wallet addresses are limited to one request every 24 hours.`}
+                block
+              >
+                Get Tokens
+              </BtnAccent>
+            )}
+          </BtnRow>
+        </SecondaryContainer>
+      </Container>
+    </GlobalContainer>
   );
 };
 
