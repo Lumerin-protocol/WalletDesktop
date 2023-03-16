@@ -98,6 +98,7 @@ function loadWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, "preload.js"),
+      devTools: !app.isPackaged,
     },
     x: mainWindowState.x,
     y: mainWindowState.y,
