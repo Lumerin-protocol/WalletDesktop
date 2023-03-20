@@ -3,6 +3,7 @@ import selectors from '../selectors';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { ToastsContext } from '../../components/toasts';
 
 const withContractsState = WrappedComponent => {
   class Container extends React.Component {
@@ -18,6 +19,8 @@ const withContractsState = WrappedComponent => {
     //   }).isRequired
     // }
 
+    static contextType = ToastsContext;
+
     static displayName = `withContractsState(${WrappedComponent.displayName ||
       WrappedComponent.name})`;
 
@@ -27,16 +30,15 @@ const withContractsState = WrappedComponent => {
     };
 
     contractsRefresh = () => {
+      const capturedThis = this;
       this.setState({ refreshStatus: 'pending', refreshError: null });
       this.props.client
         .refreshAllContracts({})
         .then(() => this.setState({ refreshStatus: 'success' }))
-        .catch(() =>
-          this.setState({
-            refreshStatus: 'failure',
-            refreshError: 'Could not refresh'
-          })
-        );
+        .catch(e => {
+          capturedThis.context.toast('error', e.message);
+          capturedThis.props.setFailedRefresh();
+        });
     };
 
     onWalletRefresh = () => {
@@ -82,6 +84,7 @@ const withContractsState = WrappedComponent => {
 
   const mapDispatchToProps = dispatch => ({
     setIp: ip => dispatch({ type: 'ip-received', payload: ip }),
+    setFailedRefresh: () => dispatch({ type: 'contracts-scan-failed' }),
     setDefaultBuyerPool: pool =>
       dispatch({ type: 'buyer-default-pool-received', payload: pool })
   });

@@ -10,10 +10,10 @@ import {
   Container,
   ListContainer,
   Contracts,
-  FooterLogo,
-  Title
+  FooterLogo
 } from './ContractsList.styles';
 import { ContractsRowContainer } from './ContractsRow.styles';
+import StatusHeader from './StatusHeader';
 
 function ContractsList({
   contracts,
@@ -62,22 +62,10 @@ function ContractsList({
 
   const filterExtractValue = ({ status }) => status;
 
-  const handleClick = e => {
-    e.preventDefault();
-    if (!window.isDev || !e.shiftKey || !e.altKey) return;
-  };
-
-  const formatStatus = s => {
-    if (s === 'up-to-date') {
-      return 'up to date';
-    }
-    return s;
-  };
-
   return (
     <Container data-testid="Contracts-list">
       <Flex.Row grow="1">
-        <Title onClick={handleClick}>Status: {formatStatus(syncStatus)}</Title>
+        <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
       </Flex.Row>
       <Contracts>
         <ItemFilter extractValue={filterExtractValue} items={contracts}>
@@ -95,7 +83,13 @@ function ContractsList({
                   (syncStatus === 'syncing' ? (
                     <ScanningContractsPlaceholder />
                   ) : (
-                    <NoContractsPlaceholder message={noContractsMessage} />
+                    <NoContractsPlaceholder
+                      message={
+                        syncStatus === 'failed'
+                          ? 'Failed to retrieve contracts'
+                          : noContractsMessage
+                      }
+                    />
                   ))}
                 <AutoSizer>
                   {({ width, height }) => (

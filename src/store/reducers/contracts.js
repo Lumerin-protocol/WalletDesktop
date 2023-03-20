@@ -25,6 +25,13 @@ const reducer = handleActions(
       syncStatus: 'syncing'
     }),
 
+    'contracts-scan-failed': (state, { payload }) => ({
+      ...state,
+      actives: [],
+      lastUpdated: parseInt(Date.now() / 1000, 10),
+      syncStatus: 'failed'
+    }),
+
     'contracts-scan-finished': (state, { payload }) => ({
       ...state,
       actives: payload.actives,
