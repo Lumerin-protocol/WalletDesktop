@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { ToastsContext } from '../../toasts';
+import Select from 'react-select';
 
 import BackIcon from '../../icons/BackIcon';
 import SwapIcon from '../../icons/SwapIcon';
@@ -15,6 +16,7 @@ import {
   FooterRow,
   FooterLabel
 } from './common.styles';
+import { rangeSelectOptions } from '../../../store/hocs/withTransactionModalState';
 
 const AmountContainer = styled.label`
   display: block;
@@ -135,11 +137,25 @@ const SendContainer = styled.div`
 const LMR_MODE = 'coinAmount';
 const USD_MODE = 'usdAmount';
 
+const selectorStyles = {
+  control: (base, state) => ({ ...base, borderColor: '#0E4353' }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isSelected ? '#0E4353' : undefined,
+    color: state.isSelected ? '#FFFFFF' : undefined,
+    ':active': {
+      ...base[':active'],
+      backgroundColor: '#0E435380',
+      color: '#FFFFFF'
+    }
+  })
+};
+
 export function SendForm(props) {
   const [mode, setMode] = useState(LMR_MODE);
   const [isPending, setIsPending] = useState(false);
-
   const context = useContext(ToastsContext);
+  const selectedCurrency = props.selectedCurrency;
 
   const handleSendLmr = async e => {
     e.preventDefault();
@@ -157,7 +173,7 @@ export function SendForm(props) {
 
     try {
       setIsPending(true);
-      await props.onSubmit();
+      await props.onSubmit(selectedCurrency.value);
       props.onTabSwitch('success');
     } catch (err) {
       context.toast('error', err.message);
@@ -203,6 +219,18 @@ export function SendForm(props) {
         <Header>You are sending</Header>
       </HeaderWrapper>
 
+      <div style={{ color: 'black' }}>
+        <Select
+          className="basic-single"
+          classNamePrefix="select"
+          name="color"
+          styles={selectorStyles}
+          onChange={props.setSelectedCurrency}
+          value={selectedCurrency}
+          options={rangeSelectOptions}
+        />
+      </div>
+
       <Column>
         <AmountContainer>
           <AmountInput
@@ -213,7 +241,9 @@ export function SendForm(props) {
             value={props.amountInput}
           />
         </AmountContainer>
-        <AmountSublabel>{mode === LMR_MODE ? 'LMR' : 'USD'}</AmountSublabel>
+        <AmountSublabel>
+          {mode === LMR_MODE ? selectedCurrency.label : 'USD'}
+        </AmountSublabel>
         <IconContainer>
           <SwapIcon
             onClick={onModeChange}
@@ -223,7 +253,9 @@ export function SendForm(props) {
         {mode === LMR_MODE ? (
           <SubAmount>≈ {props.usdAmount}</SubAmount>
         ) : (
-          <SubAmount>≈ {props.coinAmount} LMR</SubAmount>
+          <SubAmount>
+            ≈ {props.coinAmount} {selectedCurrency.label}
+          </SubAmount>
         )}
 
         <FeeContainer>
@@ -247,9 +279,11 @@ export function SendForm(props) {
 
       <Footer>
         <FooterRow>
-          <FooterLabel>LMR Balance</FooterLabel>
+          <FooterLabel>{selectedCurrency.label} Balance</FooterLabel>
           <FooterLabel>
-            {props.lmrBalanceWei} ≈ {props.lmrBalanceUSD}
+            {selectedCurrency.value === 'ETH'
+              ? `${props.ethBalanceWei.toFixed(6)} ≈ ${props.ethBalanceUSD}`
+              : `${props.lmrBalanceWei.toFixed(6)} ≈ ${props.lmrBalanceUSD}`}
           </FooterLabel>
         </FooterRow>
         <FooterRow>
