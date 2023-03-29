@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import useRecaptcha from 'use-recaptcha-v3';
 import withBalanceBlockState from '../../store/hocs/withBalanceBlockState';
 import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 import { EtherIcon } from '../icons/EtherIcon';
@@ -55,6 +56,7 @@ const BalanceBlock = ({
   ethBalanceUSD,
   sendDisabled,
   sendDisabledReason,
+  recaptchaSiteKey,
   onTabSwitch,
   client
 }) => {
@@ -65,27 +67,31 @@ const BalanceBlock = ({
   const [isClaiming, setClaiming] = useState(false);
   const context = useContext(ToastsContext);
 
+  const { status, getRecaptchaToken } = useRecaptcha({
+    siteKey: recaptchaSiteKey
+  });
+
+  const { ready } = status;
+
   const claimFaucet = e => {
     e.preventDefault();
     setClaiming(true);
-    client
-      .claimFaucet({})
-      .then(() => {
-        context.toast('success', 'Succesfully claimed 10 LMR');
+
+    getRecaptchaToken('submit')
+      .then(token => {
+        return client
+          .claimFaucet({ token })
+          .then(() => {
+            context.toast('success', 'Succesfully claimed 10 LMR');
+          })
+          .catch(err => {
+            context.toast('error', 'You already claimed today. Try later.');
+          });
       })
       .catch(err => {
-        if (
-          err.message &&
-          err.message.includes('insufficient funds for gas * price + value')
-        ) {
-          context.toast('error', 'insufficient funds for gas * price');
-        } else {
-          context.toast('error', 'You already claimed today. Try later.');
-        }
+        context.toast('error', `Captcha is not verified: ${err}`);
       })
-      .finally(() => {
-        setClaiming(false);
-      });
+      .finally(() => setClaiming(false));
   };
 
   return (
@@ -118,7 +124,7 @@ const BalanceBlock = ({
               <div style={{ paddingLeft: '20px' }}>
                 <Spinner size="25px" />
               </div>
-            ) : (
+            ) : ready ? (
               <BtnAccent
                 data-modal="claim"
                 onClick={claimFaucet}
@@ -128,6 +134,8 @@ const BalanceBlock = ({
               >
                 Get Tokens
               </BtnAccent>
+            ) : (
+              <></>
             )}
           </BtnRow>
         </SecondaryContainer>

@@ -29,6 +29,8 @@ const chain = {
   localBuyerProxyRouterUrl: `http://localhost:${process.env
     .BUYER_WEB_DEFAULT_PORT || 8082}`,
 
+  faucetUrl: process.env.FAUCET_URL,
+
   bypassAuth: process.env.BYPASS_AUTH === "true",
 };
 
@@ -43,4 +45,5 @@ module.exports = {
   statePersistanceDebounce: 2000,
   trackingId: process.env.TRACKING_ID,
   web3Timeout: 120000,
+  recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
 };
