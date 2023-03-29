@@ -7,6 +7,7 @@ const chain = {
 
   lmrTokenAddress: process.env.LUMERIN_TOKEN_ADDRESS,
   cloneFactoryAddress: process.env.CLONE_FACTORY_ADDRESS,
+  faucetAddress: process.env.FAUCET_ADDRESS || '0xFE64cAE7Ca5166c8bb0e014e2D402f8d22764f24',
 
   proxyRouterUrl: process.env.PROXY_ROUTER_URL,
   explorerUrl: process.env.EXPLORER_URL,
