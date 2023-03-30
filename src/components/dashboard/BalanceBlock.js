@@ -86,10 +86,6 @@ const BalanceBlock = ({
 
     getRecaptchaToken('submit', recaptchaSiteKey)
       .then(token => {
-        console.log(
-          '🚀 ~ file: BalanceBlock.js:103 ~ claimFaucet ~ token:',
-          token
-        );
         return client
           .claimFaucet({ token })
           .then(() => {
@@ -99,10 +95,6 @@ const BalanceBlock = ({
             );
           })
           .catch(err => {
-            console.log(
-              '🚀 ~ file: BalanceBlock.js:99 ~ claimFaucet ~ err:',
-              err
-            );
             if (err.message === 'Request failed with status code 403') {
               context.toast('error', 'You already claimed today. Try later.');
             } else {
@@ -111,7 +103,6 @@ const BalanceBlock = ({
           });
       })
       .catch(err => {
-        console.log('🚀 ~ file: BalanceBlock.js:101 ~ claimFaucet ~ err:', err);
         context.toast('error', `Captcha is not verified: ${err}`);
       })
       .finally(() => setClaiming(false));
