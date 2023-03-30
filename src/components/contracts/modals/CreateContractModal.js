@@ -38,9 +38,16 @@ function CreateContractModal(props) {
     setValue('address', address);
   }, [address]);
 
+  const resetValues = () => {
+    reset();
+    setValue('address', address);
+  };
+
   const handleDeploy = e => {
     e.preventDefault();
+    setIsPreview(false);
     deploy(e, getValues());
+    resetValues();
   };
 
   const handleClose = e => {
