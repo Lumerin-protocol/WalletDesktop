@@ -23,7 +23,7 @@ const Tab = styled.button`
   background: transparent;
   border: none;
   cursor: pointer;
-  border-bottom: 2px solid ${p => (p.isActive ? 'white' : 'transparent')};
+  text-decoration: ${p => (p.isActive ? 'underline' : 'none')};
   margin-bottom: 1px;
   transition: 0.3s;
 

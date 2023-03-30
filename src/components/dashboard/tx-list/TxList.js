@@ -20,11 +20,13 @@ const Container = styled.div`
 const Transactions = styled.div`
   margin: 1.6rem 0 1.6rem;
   border-radius: 15px;
-  background-color: #fff;
+  background-color: transparent;
 `;
 
 const ListContainer = styled.div`
   height: calc(100vh - 370px);
+  background: #fff;
+  border-radius: 15px;
 `;
 
 const TxRowContainer = styled.div`
