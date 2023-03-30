@@ -1,7 +1,6 @@
 "use strict";
 
-const fs = require('fs');
-const { app, BrowserWindow, Notification, dialog, protocol } = require("electron");
+const { app, BrowserWindow, Notification, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const isDev = require("electron-is-dev");
 const path = require("path");
@@ -66,8 +65,6 @@ function initAutoUpdate() {
   });
 }
 
-protocol.registerSchemesAsPrivileged([{ scheme: 'test' }]);
-
 function loadWindow() {
   // Ensure the app is ready before creating the main window
   if (!app.isReady()) {
@@ -101,16 +98,11 @@ function loadWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, "preload.js"),
+      devTools: !app.isPackaged,
     },
     x: mainWindowState.x,
     y: mainWindowState.y,
   });
-
-  protocol.registerBufferProtocol('test', (request, callback) => {
-    callback({mimeType: 'text/html', data: fs.readFileSync(path.join(__dirname, '../index.html'))})
-  }, (error) => {
-    if (error) console.error('Failed to register protocol')
-  })
 
   require("@electron/remote/main").enable(mainWindow.webContents);
 
@@ -120,7 +112,7 @@ function loadWindow() {
 
   const appUrl = isDev
     ? process.env.ELECTRON_START_URL
-    : `test://${path.join(__dirname, "../index.html")}`;
+    : `file://${path.join(__dirname, "../index.html")}`;
 
   logger.info("Roading renderer from URL:", appUrl);
 
