@@ -7,6 +7,7 @@ const chain = {
 
   lmrTokenAddress: process.env.LUMERIN_TOKEN_ADDRESS,
   cloneFactoryAddress: process.env.CLONE_FACTORY_ADDRESS,
+  faucetAddress: process.env.FAUCET_ADDRESS || '0xFE64cAE7Ca5166c8bb0e014e2D402f8d22764f24',
 
   proxyRouterUrl: process.env.PROXY_ROUTER_URL,
   explorerUrl: process.env.EXPLORER_URL,
@@ -28,6 +29,8 @@ const chain = {
   localBuyerProxyRouterUrl: `http://localhost:${process.env
     .BUYER_WEB_DEFAULT_PORT || 8082}`,
 
+  faucetUrl: process.env.FAUCET_URL,
+
   bypassAuth: process.env.BYPASS_AUTH === "true",
 };
 
@@ -42,4 +45,5 @@ module.exports = {
   statePersistanceDebounce: 2000,
   trackingId: process.env.TRACKING_ID,
   web3Timeout: 120000,
+  recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
 };
