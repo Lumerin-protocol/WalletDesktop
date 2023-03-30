@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import useRecaptcha from 'use-recaptcha-v3';
+import useScript from 'react-script-hook';
 import withBalanceBlockState from '../../store/hocs/withBalanceBlockState';
 import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 import { EtherIcon } from '../icons/EtherIcon';
@@ -49,6 +49,16 @@ const WalletBalance = ({
   </BalanceContainer>
 );
 
+const getRecaptchaToken = (action, siteKey) =>
+  new Promise((resolve, reject) => {
+    window.grecaptcha.execute(siteKey, { action }).then(resolve, error => {
+      if (!error) {
+        reject(Error('Error while receiving token'));
+      }
+      reject(error);
+    });
+  });
+
 const BalanceBlock = ({
   lmrBalance,
   lmrBalanceUSD,
@@ -67,17 +77,14 @@ const BalanceBlock = ({
   const [isClaiming, setClaiming] = useState(false);
   const context = useContext(ToastsContext);
 
-  const { status, getRecaptchaToken } = useRecaptcha({
-    siteKey: recaptchaSiteKey
-  });
-
-  const { ready } = status;
+  const scriptSrc = `https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`;
+  const [loading, error] = useScript({ src: scriptSrc });
 
   const claimFaucet = e => {
     e.preventDefault();
     setClaiming(true);
 
-    getRecaptchaToken('submit')
+    getRecaptchaToken('submit', recaptchaSiteKey)
       .then(token => {
         return client
           .claimFaucet({ token })
@@ -100,7 +107,6 @@ const BalanceBlock = ({
       })
       .finally(() => setClaiming(false));
   };
-
   return (
     <GlobalContainer>
       <Container>
@@ -131,7 +137,7 @@ const BalanceBlock = ({
               <div style={{ paddingLeft: '20px' }}>
                 <Spinner size="25px" />
               </div>
-            ) : ready ? (
+            ) : !loading && !error ? (
               <BtnAccent
                 data-modal="claim"
                 onClick={claimFaucet}
