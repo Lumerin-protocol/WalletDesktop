@@ -82,10 +82,17 @@ const BalanceBlock = ({
         return client
           .claimFaucet({ token })
           .then(() => {
-            context.toast('success', 'Succesfully claimed 10 LMR');
+            context.toast(
+              'success',
+              'Succesfully claimed 10 sLMR and 0.1 sETH'
+            );
           })
           .catch(err => {
-            context.toast('error', 'You already claimed today. Try later.');
+            if (err.message === 'Request failed with status code 403') {
+              context.toast('error', 'You already claimed today. Try later.');
+            } else {
+              context.toast('error', 'Failed to claim. Try later.');
+            }
           });
       })
       .catch(err => {
@@ -128,7 +135,7 @@ const BalanceBlock = ({
               <BtnAccent
                 data-modal="claim"
                 onClick={claimFaucet}
-                data-rh={`Payout from the faucet is 10 gLMR per day.\n
+                data-rh={`Payout from the faucet is 10 sLMR and 0.1 sETH per day.\n
                 Wallet addresses are limited to one request every 24 hours.`}
                 block
               >
