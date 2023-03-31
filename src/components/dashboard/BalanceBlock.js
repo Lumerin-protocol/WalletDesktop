@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import useScript from 'react-script-hook';
 import withBalanceBlockState from '../../store/hocs/withBalanceBlockState';
 import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 import { EtherIcon } from '../icons/EtherIcon';
@@ -49,16 +48,6 @@ const WalletBalance = ({
   </BalanceContainer>
 );
 
-const getRecaptchaToken = (action, siteKey) =>
-  new Promise((resolve, reject) => {
-    window.grecaptcha.execute(siteKey, { action }).then(resolve, error => {
-      if (!error) {
-        reject(Error('Error while receiving token'));
-      }
-      reject(error);
-    });
-  });
-
 const BalanceBlock = ({
   lmrBalance,
   lmrBalanceUSD,
@@ -67,6 +56,8 @@ const BalanceBlock = ({
   sendDisabled,
   sendDisabledReason,
   recaptchaSiteKey,
+  faucetUrl,
+  walletAddress,
   onTabSwitch,
   client
 }) => {
@@ -74,39 +65,14 @@ const BalanceBlock = ({
     e.preventDefault();
     onTabSwitch(e.target.dataset.modal);
   };
-  const [isClaiming, setClaiming] = useState(false);
-  const context = useContext(ToastsContext);
-
-  const scriptSrc = `https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`;
-  const [loading, error] = useScript({ src: scriptSrc });
 
   const claimFaucet = e => {
     e.preventDefault();
-    setClaiming(true);
-
-    getRecaptchaToken('submit', recaptchaSiteKey)
-      .then(token => {
-        return client
-          .claimFaucet({ token })
-          .then(() => {
-            context.toast(
-              'success',
-              'Succesfully claimed 10 sLMR and 0.1 sETH'
-            );
-          })
-          .catch(err => {
-            if (err.message === 'Request failed with status code 403') {
-              context.toast('error', 'You already claimed today. Try later.');
-            } else {
-              context.toast('error', 'Failed to claim. Try later.');
-            }
-          });
-      })
-      .catch(err => {
-        context.toast('error', `Captcha is not verified: ${err}`);
-      })
-      .finally(() => setClaiming(false));
+    const url = new URL(faucetUrl);
+    url.searchParams.set('address', walletAddress);
+    window.open(url);
   };
+
   return (
     <GlobalContainer>
       <Container>
@@ -133,23 +99,16 @@ const BalanceBlock = ({
             >
               Send
             </Btn>
-            {isClaiming ? (
-              <div style={{ paddingLeft: '20px' }}>
-                <Spinner size="25px" />
-              </div>
-            ) : !loading && !error ? (
-              <BtnAccent
-                data-modal="claim"
-                onClick={claimFaucet}
-                data-rh={`Payout from the faucet is 10 sLMR and 0.1 sETH per day.\n
+
+            <BtnAccent
+              data-modal="claim"
+              onClick={claimFaucet}
+              data-rh={`Payout from the faucet is 10 sLMR and 0.1 sETH per day.\n
                 Wallet addresses are limited to one request every 24 hours.`}
-                block
-              >
-                Get Tokens
-              </BtnAccent>
-            ) : (
-              <></>
-            )}
+              block
+            >
+              Get Tokens
+            </BtnAccent>
           </BtnRow>
         </SecondaryContainer>
       </Container>
