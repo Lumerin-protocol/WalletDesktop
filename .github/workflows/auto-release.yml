@@ -68,6 +68,8 @@ jobs:
           echo "LMR_DEFAULT_GAS_LIMIT=$LMR_DEFAULT_GAS_LIMIT" >> .env
           echo "DEFAULT_GAS_PRICE=$DEFAULT_GAS_PRICE" >> .env
           echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
+          echo "RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY" >> .env
+          echo "FAUCET_URL=$FAUCET_URL" >> .env
           echo "NODE_ENV=production" >> .env
         shell: bash
       - name: Set env from gitlab
