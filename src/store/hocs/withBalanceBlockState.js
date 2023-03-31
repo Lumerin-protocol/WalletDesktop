@@ -10,7 +10,9 @@ const mapStateToProps = state => {
     lmrBalance: selectors.getWalletLmrBalance(state),
     lmrBalanceUSD: selectors.getWalletLmrBalanceUSD(state),
 
-    recaptchaSiteKey: selectors.getRecaptchaSiteKey(state)
+    recaptchaSiteKey: selectors.getRecaptchaSiteKey(state),
+    faucetUrl: selectors.getFaucetUrl(state),
+    walletAddress: selectors.getWalletAddress(state)
   };
 };
 
