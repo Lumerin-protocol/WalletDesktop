@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import withBalanceBlockState from '../../store/hocs/withBalanceBlockState';
-import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 import { EtherIcon } from '../icons/EtherIcon';
+import LumerinLogo from '../icons/LumerinLogo';
 import { Balance } from './Balance';
 import {
   WalletBalanceHeader,
@@ -30,7 +30,9 @@ const WalletBalance = ({
         <Balance
           currency="LMR"
           value={lmrBalance}
-          icon={<LumerinLightIcon size="4rem" />}
+          icon={
+            <LumerinLogo style={{ height: '3.3rem', marginRight: '4px' }} />
+          }
           equivalentUSD={lmrBalanceUSD}
           maxSignificantFractionDigits={0}
         />
