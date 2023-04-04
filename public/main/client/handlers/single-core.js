@@ -241,9 +241,18 @@ const sendLmr = async (data, { api }) =>
       password: await auth.getSessionPassword(),
     },
     { api }
-  );
+);
 
-const sendEth = (data, { api }) => withAuth(api.wallet.sendEth)(data, { api });
+const sendEth = async (data, { api }) => 
+  withAuth(api.wallet.sendEth)(
+    {
+      ...data,
+      walletId: wallet.getAddress().address,
+      password: await auth.getSessionPassword(),
+    },
+    { api }
+);
+
 
 const startDiscovery = (data, { api }) => api.devices.startDiscovery(data);
 
