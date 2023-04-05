@@ -41,6 +41,7 @@ module.exports = {
   explorerDebounce: 2000,
   ratesUpdateMs: 30000,
   scanTransactionTimeout: 240000,
+  scanContractsInterval: 60 * 1000,
   sentryDsn: process.env.SENTRY_DSN,
   statePersistanceDebounce: 2000,
   trackingId: process.env.TRACKING_ID,

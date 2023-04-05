@@ -230,7 +230,7 @@ function refreshAllContracts() {
     }
     interval = setInterval(() => {
       api.contracts.refreshContracts().catch((err) => logger.error(err));
-    }, 1000 * 60);
+    }, config.scanContractsInterval);
   };
   return ({}, { api }) => {
     startPolling(api);
