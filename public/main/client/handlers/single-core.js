@@ -222,20 +222,8 @@ function refreshAllTransactions({ address }, { api, emitter }) {
     });
 }
 
-function refreshAllContracts() {
-  let interval;
-  const startPolling = (api) => {
-    if (interval) {
-      clearInterval(interval);
-    }
-    interval = setInterval(() => {
-      api.contracts.refreshContracts().catch((err) => logger.error(err));
-    }, config.scanContractsInterval);
-  };
-  return ({}, { api }) => {
-    startPolling(api);
-    return api.contracts.refreshContracts();
-  };
+function refreshAllContracts({}, { api }) {
+  return api.contracts.refreshContracts();
 }
 
 function refreshTransaction({ hash, address }, { api }) {
@@ -307,7 +295,7 @@ const getPoolAddress = async (data) => {
 
 module.exports = {
   // refreshAllSockets,
-  refreshAllContracts: refreshAllContracts(),
+  refreshAllContracts,
   purchaseContract,
   createContract,
   cancelContract,
