@@ -8,7 +8,11 @@ const config = require("../../../config");
 const wallet = require("../wallet");
 const noCore = require("./no-core");
 const WalletError = require("../WalletError");
-const { setProxyRouterConfig, cleanupDb, getProxyRouterConfig } = require("../settings");
+const {
+  setProxyRouterConfig,
+  cleanupDb,
+  getProxyRouterConfig,
+} = require("../settings");
 
 const withAuth = (fn) => (data, { api }) => {
   if (typeof data.walletId !== "string") {
@@ -108,11 +112,13 @@ function createWallet(data, core, isOpen = true) {
 const restartProxyRouter = async (data, { emitter, api }) => {
   const password = await auth.getSessionPassword();
 
-  api['proxy-router'].kill(config.chain.buyerProxyPort).catch(logger.error);
-  await api['proxy-router'].kill(config.chain.sellerProxyPort).catch(logger.error);
+  api["proxy-router"].kill(config.chain.buyerProxyPort).catch(logger.error);
+  await api["proxy-router"]
+    .kill(config.chain.sellerProxyPort)
+    .catch(logger.error);
 
   emitter.emit("open-proxy-router", { password });
-}
+};
 
 async function openWallet({ emitter }, password) {
   const { address } = wallet.getAddress();
@@ -161,10 +167,10 @@ const recoverFromMnemonic = function(data, core) {
 };
 
 function onLoginSubmit({ password }, core) {
-  var checkPassword = config.chain.bypassAuth 
-  ? new Promise(r => r(true))
-  : auth.isValidPassword(password);
-  
+  var checkPassword = config.chain.bypassAuth
+    ? new Promise((r) => r(true))
+    : auth.isValidPassword(password);
+
   return checkPassword.then(function(isValid) {
     if (!isValid) {
       return { error: new WalletError("Invalid password") };
@@ -241,9 +247,9 @@ const sendLmr = async (data, { api }) =>
       password: await auth.getSessionPassword(),
     },
     { api }
-);
+  );
 
-const sendEth = async (data, { api }) => 
+const sendEth = async (data, { api }) =>
   withAuth(api.wallet.sendEth)(
     {
       ...data,
@@ -251,8 +257,7 @@ const sendEth = async (data, { api }) =>
       password: await auth.getSessionPassword(),
     },
     { api }
-);
-
+  );
 
 const startDiscovery = (data, { api }) => api.devices.startDiscovery(data);
 
@@ -274,18 +279,19 @@ const getAddressAndPrivateKey = async (data, { api }) => {
     });
 };
 
-const refreshProxyRouterConnection = async (data, { api }) => api['proxy-router'].refreshConnectionsStream(data)
+const refreshProxyRouterConnection = async (data, { api }) =>
+  api["proxy-router"].refreshConnectionsStream(data);
 
-const getLocalIp = async ({}, { api }) => api['proxy-router'].getLocalIp()
+const getLocalIp = async ({}, { api }) => api["proxy-router"].getLocalIp();
 
 const logout = async (data) => {
   return cleanupDb();
-}
+};
 
 const getPoolAddress = async (data) => {
   const config = getProxyRouterConfig();
   return config.buyerDefaultPool || config.defaultPool;
-}
+};
 
 module.exports = {
   // refreshAllSockets,
