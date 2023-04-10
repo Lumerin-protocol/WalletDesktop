@@ -85,8 +85,13 @@ export const getTxSyncStatus = createSelector(
 export const sendLmrFeatureStatus = createSelector(
   getWalletLmrBalance,
   getIsOnline,
-  (lmrBalance, isOnline) =>
-    isOnline ? (utils.hasFunds(lmrBalance) ? 'ok' : 'no-funds') : 'offline'
+  getWalletEthBalance,
+  (lmrBalance, isOnline, ethBalance) =>
+    isOnline
+      ? utils.hasFunds(lmrBalance) || utils.hasFunds(ethBalance)
+        ? 'ok'
+        : 'no-funds'
+      : 'offline'
 );
 
 // Returns the status of the "Receive Lumerin" feature on the chain
