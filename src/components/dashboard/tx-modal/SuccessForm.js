@@ -6,6 +6,10 @@ import { abbreviateAddress } from '../../../utils';
 import { SuccessLayer } from './SuccessLayer';
 import { toUSD } from '../../../store/utils/syncAmounts';
 
+const SuccessImage = styled.div`
+  margin: 0 auto;
+`;
+
 const HeaderWrapper = styled.div`
   display: flex;
   position: relative;
@@ -97,8 +101,9 @@ export function SuccessForm(props) {
         <HeaderWrapper>
           <Header>Success</Header>
         </HeaderWrapper>
-
-        <SuccessLayer />
+        <SuccessImage>
+          <SuccessLayer />
+        </SuccessImage>
       </Column>
 
       <Column>
