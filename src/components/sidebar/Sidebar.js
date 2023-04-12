@@ -25,6 +25,7 @@ const Container = styled.div`
   }
   @media (min-width: 800px) {
     position: relative;
+    min-width: 210px;
     width: 210px;
     &:hover {
       box-shadow: none;
