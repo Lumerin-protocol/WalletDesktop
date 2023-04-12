@@ -53,7 +53,7 @@ const createClient = function(createStore) {
 
   const onTermsLinkClick = () =>
     window.openLink(
-      'https://github.com/Lumerin-protocol/lumerin-overview/blob/main/docs/00-overview.md'
+      'https://github.com/Lumerin-protocol/WalletDesktop/blob/main/LICENSE'
     );
 
   const onHelpLinkClick = () => window.openLink('https://lumerin.gitbook.io');

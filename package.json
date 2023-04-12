@@ -7,11 +7,11 @@
     "url": "https://lumerin.io"
   },
   "description": "Lumerin Wallet for desktop devices",
-  "repository": "https://gitlab.com/TitanInd/proxy/wallet-desktop",
+  "repository": "https://github.com/Lumerin-protocol/WalletDesktop",
   "license": "MIT",
   "homepage": "./",
   "main": "public/electron.js",
-  "copyright": "Copyright © 2022 Titan Industries",
+  "copyright": "Copyright © 2023 Titan Industries (Global) Co. Ltd.",
   "scripts": {
     "init": "npm run dev:setup && npm run dev:link",
     "dev:setup": "./scripts/dev_setup.sh",
