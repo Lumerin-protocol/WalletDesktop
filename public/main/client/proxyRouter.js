@@ -9,20 +9,27 @@ const PROXY_ROUTER_MODE = {
   Seller: "seller",
 };
 
-const openLogFile = (name) => {
-  const path = `${app.getPath('logs')}/${name}.log`;
+const openLogFile = (name, retry = true) => {
+  try {
+    const path = `${app.getPath("logs")}/${name}.log`;
 
-  logger.debug(`Writing logs to ${path}`);
-  if (fs.existsSync(path)) {
-    const stats = fs.statSync(path);
-    const fileSizeInBytes = stats.size;
+    logger.debug(`Writing logs to ${path}`);
+    if (fs.existsSync(path)) {
+      const stats = fs.statSync(path);
+      const fileSizeInBytes = stats.size;
 
-    const fileSizeInMegabytes = fileSizeInBytes / (1024 * 1024);
-    if (fileSizeInMegabytes > 10) {
-      fs.unlinkSync(path);
+      const fileSizeInMegabytes = fileSizeInBytes / (1024 * 1024);
+      if (fileSizeInMegabytes > 10) {
+        fs.unlinkSync(path);
+      }
     }
+    return fs.openSync(path, "a");
+  } catch {
+    if (retry) {
+      return openLogFile(`${name}(1)`, false);
+    }
+    return undefined;
   }
-  return fs.openSync(path, "a");
 };
 
 const isProxyRouterHealthy = async (api, url) => {
