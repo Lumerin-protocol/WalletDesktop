@@ -79,7 +79,8 @@ const withContractsState = WrappedComponent => {
     syncStatus: selectors.getContractsSyncStatus(state),
     address: selectors.getWalletAddress(state),
     contracts: selectors.getMergeAllContracts(state),
-    lmrBalance: selectors.getWalletLmrBalance(state)
+    lmrBalance: selectors.getWalletLmrBalance(state),
+    allowSendTransaction: selectors.isAllowSendTransaction(state)
   });
 
   const mapDispatchToProps = dispatch => ({

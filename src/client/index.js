@@ -62,6 +62,20 @@ const createClient = function(createStore) {
 
   const copyToClipboard = text => Promise.resolve(window.copyToClipboard(text));
 
+  const lockSendTransaction = () => {
+    store.dispatch({
+      type: 'allow-send-transaction',
+      payload: { allowSendTransaction: false }
+    });
+  };
+
+  const unlockSendTransaction = () => {
+    store.dispatch({
+      type: 'allow-send-transaction',
+      payload: { allowSendTransaction: true }
+    });
+  };
+
   const onInit = () => {
     window.addEventListener('beforeunload', function() {
       utils.sendToMainProcess('ui-unload');
@@ -144,7 +158,9 @@ const createClient = function(createStore) {
     getAppVersion: window.getAppVersion,
     onLinkClick,
     onInit,
-    store
+    store,
+    lockSendTransaction,
+    unlockSendTransaction
   };
 
   return api;

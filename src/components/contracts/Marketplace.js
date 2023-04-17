@@ -22,6 +22,7 @@ function Marketplace({
   contracts,
   history,
   lmrBalance,
+  allowSendTransaction,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -45,6 +46,7 @@ function Marketplace({
         address
       }
     });
+    client.lockSendTransaction();
     client
       .purchaseContract({
         ...data,
@@ -68,6 +70,9 @@ function Marketplace({
           payload: { id: contract.id }
         });
         context.toast('error', `Failed to purchase with error: ${e.message}`);
+      })
+      .finally(() => {
+        client.unlockSendTransaction();
       });
     setIsModalActive(false);
   };
@@ -113,6 +118,7 @@ function Marketplace({
         contract={contractsList[index]}
         address={address}
         ratio={ratio}
+        allowSendTransaction={allowSendTransaction}
       />
     </ContractsRowContainer>
   );

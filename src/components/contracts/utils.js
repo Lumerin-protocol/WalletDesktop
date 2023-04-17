@@ -45,7 +45,7 @@ export const formatTimestamp = (timestamp, timer, state) => {
     const durationLeft = getReadableDate(days, hours, minutes, seconds);
     return `${startDate} (${durationLeft} left)`;
   } else {
-    return `${startDate} (expired)`;
+    return `${startDate} (completed)`;
   }
 };
 
