@@ -18,6 +18,7 @@ function BuyerHub({
   address,
   client,
   contractsRefresh,
+  allowSendTransaction,
   ...props
 }) {
   const contractsToShow = contracts.filter(
@@ -37,19 +38,26 @@ function BuyerHub({
   const handleContractCancellation = (e, data) => {
     e.preventDefault();
 
+    client.lockSendTransaction();
     return client
       .cancelContract({
         contractId: data.contractId,
         walletAddress: data.walletAddress,
         closeOutType: data.closeOutType
       })
-      .then(() => contractsRefresh());
+      .then(() => {
+        contractsRefresh();
+      })
+      .finally(() => {
+        client.unlockSendTransaction();
+      });
   };
 
   const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <BuyerHubRow
         data-testid="BuyerHub-row"
+        allowSendTransaction={allowSendTransaction}
         onClick={console.log}
         contract={contractsList[index]}
         cancel={handleContractCancellation}

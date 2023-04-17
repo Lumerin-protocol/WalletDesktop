@@ -50,7 +50,14 @@ const STATE_COLOR = {
   [CONTRACT_STATE.Avaliable]: theme.colors.success
 };
 
-function Row({ contract, cancel, address, ratio, explorerUrl }) {
+function Row({
+  contract,
+  cancel,
+  address,
+  ratio,
+  explorerUrl,
+  allowSendTransaction
+}) {
   // TODO: Add better padding
   const context = useContext(ToastsContext);
   const [isPending, setIsPending] = useState(false);
@@ -93,6 +100,9 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
   };
 
   const isClaimBtnDisabled = () => {
+    if (!allowSendTransaction) {
+      return true;
+    }
     return contract.balance === '0';
   };
 
@@ -123,7 +133,14 @@ function Row({ contract, cancel, address, ratio, explorerUrl }) {
         ) : (
           <ActionButtons>
             {isContractExpired() && (
-              <ActionButton onClick={handleCancel(CLOSEOUT_TYPE.Close)}>
+              <ActionButton
+                data-disabled={!allowSendTransaction}
+                onClick={
+                  allowSendTransaction
+                    ? handleCancel(CLOSEOUT_TYPE.Close)
+                    : () => {}
+                }
+              >
                 Close
               </ActionButton>
             )}

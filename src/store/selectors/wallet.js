@@ -125,3 +125,7 @@ export const getTransactionFromHash = createSelector(
       .map(utils.createTransactionParser(activeAddress))
       .find(tx => tx.hash === hash)
 );
+
+export const isAllowSendTransaction = createSelector(getWallet, walletData =>
+  get(walletData, 'allowSendTransaction', true)
+);
