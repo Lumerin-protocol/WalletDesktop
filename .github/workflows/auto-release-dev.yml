@@ -111,11 +111,14 @@ jobs:
               echo $name
               if grep -q "${{ matrix.environment }}" <<< "$name"
               then
+                echo "found env"
+                echo $line
                 array=$(<<<"$line" | jq -r '.assets.links');
                 echo $array
                 echo $array | jq -c '.[]' | 
                 while IFS= read -r d; do
                   name=$(<<<"$d" jq -r .name);
+                  echo "filename"
                   echo $name
                   echo $namePrefix
                   if grep -q "$namePrefix" <<< "$name"
@@ -129,6 +132,7 @@ jobs:
                       fi
                   fi
                 done
+                break
              fi
             done
         shell: bash
