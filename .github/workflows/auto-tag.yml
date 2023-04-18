@@ -17,4 +17,4 @@ jobs:
         GITHUB_TOKEN: "${{ secrets.ACCESS_TOKEN }}"
       with:
         strategy: package
-        tag_suffix: "-${{ env.GITHUB_REF_NAME }}"
+        tag_suffix: "-${{ github.ref_name }}"
