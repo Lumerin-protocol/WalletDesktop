@@ -3,7 +3,7 @@ name: Auto Release Staging
 on:
   push:
     tags:
-      - /.*-stg$/
+      - '.*-stg'
 
 env:
   CI: false

@@ -3,7 +3,7 @@ name: Auto Release Development
 on:
   push:
     tags:
-      - /.*-dev$/  
+      - '.*-dev'  
 
 env:
   CI: false
