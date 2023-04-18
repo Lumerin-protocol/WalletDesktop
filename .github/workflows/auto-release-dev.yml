@@ -105,7 +105,7 @@ jobs:
           then
             namePrefix="Darwin_x86_64"
           fi
-          curl --fail --retry 5 --retry-all-errors -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/releases" | jq -c '.[]' |
+          curl --fail --retry 5 --retry-all-errors -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/releases" | jq -c '.[]' |
             while IFS= read -r line; do
               name=$(<<<"$line" jq -r .tag_name);
               if grep -q "${{ matrix.environment }}" <<< "$name"
@@ -119,9 +119,9 @@ jobs:
                       downloadUrl="$(<<<"$d" jq -r .direct_asset_url)";
                       echo "Proxyrouter URL: $downloadUrl"
                       if [ "${namePrefix}" = 'Windows_x86_64' ]; then
-                          curl -o "./proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_GROUP_TOKEN }}" $downloadUrl -L
+                          curl -o "./proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
                       else
-                          curl -o "./proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_GROUP_TOKEN }}" $downloadUrl -L
+                          curl -o "./proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
                       fi
                   fi
                 done
