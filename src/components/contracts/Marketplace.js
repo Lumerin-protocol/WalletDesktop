@@ -27,27 +27,27 @@ function Marketplace({
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   const [contractToPurchase, setContractToPurchase] = useState(undefined);
+  const [showSuccess, setShowSuccess] = useState(false);
   const context = useContext(ToastsContext);
   const contractsToShow = contracts.filter(
     x => (Number(x.state) === 0 && x.seller !== address) || x.inProgress
   );
 
-  const handlePurchase = (data, contract, url) => {
+  const handlePurchase = async (data, contract, url) => {
     if (lmrBalance * 10 ** 8 < Number(contract.price * 1.01)) {
       setIsModalActive(false);
       context.toast('error', 'Insufficient balance');
       return;
     }
-
-    client.store.dispatch({
+    await client.store.dispatch({
       type: 'purchase-temp-contract',
       payload: {
         id: contract.id,
         address
       }
     });
-    client.lockSendTransaction();
-    client
+    await client.lockSendTransaction();
+    await client
       .purchaseContract({
         ...data,
         contractId: contract.id,
@@ -58,11 +58,15 @@ function Marketplace({
       })
       .then(d => {
         onWalletRefresh();
+        setShowSuccess(true);
         context.toast(
           'success',
           'Contract is successfully submitted to purchase'
         );
-        history.push('/buyer-hub');
+        client.store.dispatch({
+          type: 'purchase-contract-success',
+          payload: { id: contract.id }
+        });
       })
       .catch(e => {
         client.store.dispatch({
@@ -70,14 +74,15 @@ function Marketplace({
           payload: { id: contract.id }
         });
         context.toast('error', `Failed to purchase with error: ${e.message}`);
+        setIsModalActive(false);
       })
       .finally(() => {
         client.unlockSendTransaction();
       });
-    setIsModalActive(false);
   };
 
   const handleCloseModal = e => {
+    setShowSuccess(false);
     setIsModalActive(false);
   };
 
@@ -149,6 +154,7 @@ function Marketplace({
         contract={contractToPurchase}
         handlePurchase={handlePurchase}
         close={handleCloseModal}
+        showSuccess={showSuccess}
       />
     </View>
   );

@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { BaseBtn } from '../../common';
-import { abbreviateAddress } from '../../../utils';
-import { SuccessLayer } from './SuccessLayer';
-import { toUSD } from '../../../store/utils/syncAmounts';
-
+import { BaseBtn } from '../../../common';
+import { SuccessLayer } from '../../../dashboard/tx-modal/SuccessLayer';
+import { abbreviateAddress } from '../../../../utils';
+import { fromTokenBaseUnitsToLMR } from '../../../../utils/coinValue';
 const SuccessImage = styled.div`
   margin: 0 auto;
+  margin-bottom: 40px;
 `;
 
 const HeaderWrapper = styled.div`
@@ -81,18 +81,9 @@ const SubAmount = styled.div`
   text-align: center;
 `;
 
-export function SuccessForm(props) {
-  const LMRtoUSD = val => {
-    return toUSD(val, props.coinPrice);
-  };
-
-  if (!props.activeTab) {
-    return <></>;
-  }
-
+export function PurchaseSuccessPage(props) {
   const onDone = () => {
-    props.onRequestClose();
-    props.resetForm();
+    props.close();
   };
 
   return (
@@ -106,22 +97,13 @@ export function SuccessForm(props) {
         </SuccessImage>
       </Column>
 
-      <Column>
-        <AmountContainer>
-          {/* <Currency isActive={props.amountInput > 0}>$</Currency> */}
-          <AmountInput
-            placeholder={0}
-            isActive={props.coinAmount > 0}
-            value={props.coinAmount}
-          />
-        </AmountContainer>
-        {/* <SubAmount>≈ {LMRtoUSD(props.coinAmount)}</SubAmount> */}
-      </Column>
+      <Column></Column>
 
       <Footer>
         <FooterLabel>
-          You have successfully transferred LMR to{' '}
-          {abbreviateAddress(props.toAddress)}
+          You have successfully purchased {abbreviateAddress(props.contractId)}{' '}
+          contract with {fromTokenBaseUnitsToLMR(props.price) * 1.01} LMR
+          {/* {abbreviateAddress(props.toAddress)} */}
         </FooterLabel>
         <DoneBtn data-modal={null} onClick={onDone}>
           Done

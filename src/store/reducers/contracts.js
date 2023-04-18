@@ -78,6 +78,16 @@ const reducer = handleActions(
       };
     },
 
+    'purchase-contract-success': (state, { payload }) => {
+      const array = state.actives;
+      const objIndex = array.findIndex(obj => obj.id == payload.id);
+      array[objIndex].inProgress = false;
+      return {
+        ...state,
+        actives: [...array]
+      };
+    },
+
     'purchase-contract-failed': (state, { payload }) => {
       const array = state.actives;
       const objIndex = array.findIndex(obj => obj.id == payload.id);
