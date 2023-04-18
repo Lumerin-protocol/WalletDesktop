@@ -106,15 +106,15 @@ jobs:
             namePrefix="darwin_amd64"
           fi
           for ((i=1;i<=10;i++)); do
-            curl -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -0 https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs?scope[]=success&per_page=100&page=$i | jq -c '.[]' |
+            curl -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs?scope[]=success&per_page=100&page=$i" | jq -c '.[]' |
                 while IFS= read -r line; do
-                    name=$(<<<"$line" jq -r .ref);
+                    name=$(echo "$line" jq -r .ref);
                     echo "name = $name"
-                    releaseName=$(<<<"$line" jq -r .name);
+                    releaseName=$(echo "$line" jq -r .name);
                     echo "releaseName = $releaseName"
 
                     if [ "${releaseName}" = 'release-internal' ]; then
-                    jobId=$(<<<"$line" jq -r .id);
+                    jobId=$(echo "$line" jq -r .id);
                     echo "jobId = $jobId"
 
                       if grep -q "\\-dev" <<< "$name"
