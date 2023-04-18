@@ -113,7 +113,7 @@ jobs:
               then
                 echo "found env"
                 echo $line
-                array=$(<<<"$line" | jq -r .assets.links);
+                array=$(echo "$line" | jq -r ".assets.links")
                 echo "array"
                 echo $array
                 echo $array | jq -c '.[]' | 
