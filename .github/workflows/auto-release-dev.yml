@@ -109,13 +109,19 @@ jobs:
             curl -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -0 https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs?scope[]=success&per_page=100&page=$i | jq -c '.[]' |
                 while IFS= read -r line; do
                     name=$(<<<"$line" jq -r .ref);
+                    echo "name = $name"
                     releaseName=$(<<<"$line" jq -r .name);
+                    echo "releaseName = $releaseName"
+
                     if [ "${releaseName}" = 'release-internal' ]; then
                     jobId=$(<<<"$line" jq -r .id);
-                      if grep -q "\-dev" <<< "$name"
+                    echo "jobId = $jobId"
+
+                      if grep -q "\\-dev" <<< "$name"
                       then
                           artifactPath="dist/proxy-router_"$name"_$namePrefix";
                           downloadUrl="https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs/$jobId/artifacts/$artifactPath?job=release-internal";
+                          echo $downloadUrl
                           if [ "${namePrefix}" = 'windows_amd64.exe' ]; then
                               curl -o "./proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
                               break 2
