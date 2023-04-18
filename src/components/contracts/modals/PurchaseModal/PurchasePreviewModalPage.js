@@ -8,6 +8,7 @@ import {
   ContractLink,
   LeftBtn
 } from '../CreateContractModal.styles';
+import Spinner from '../../../common/Spinner';
 import { IconExternalLink } from '@tabler/icons';
 import { formatDuration, formatSpeed, formatPrice } from '../../utils';
 import PriceIcon from '../../../icons/PriceIcon';
@@ -38,6 +39,7 @@ export const PurchasePreviewModalPage = ({
   contract,
   pool,
   inputs,
+  isPurchasing,
   onBackToForm,
   onPurchase
 }) => (
@@ -104,10 +106,16 @@ export const PurchasePreviewModalPage = ({
         </div>
       </UrlContainer>
       <ActionsGroup>
-        <Row style={{ justifyContent: 'space-between', marginTop: '3rem' }}>
-          <LeftBtn onClick={onBackToForm}>Edit Order</LeftBtn>
-          <RightBtn onClick={onPurchase}>Confirm Purchase</RightBtn>
-        </Row>
+        {isPurchasing ? (
+          <Row style={{ justifyContent: 'center', marginTop: '3rem' }}>
+            <Spinner size="16px" />
+          </Row>
+        ) : (
+          <Row style={{ justifyContent: 'space-between', marginTop: '3rem' }}>
+            <LeftBtn onClick={onBackToForm}>Edit Order</LeftBtn>
+            <RightBtn onClick={onPurchase}>Confirm Purchase</RightBtn>
+          </Row>
+        )}
       </ActionsGroup>
     </PreviewCont>
   </>

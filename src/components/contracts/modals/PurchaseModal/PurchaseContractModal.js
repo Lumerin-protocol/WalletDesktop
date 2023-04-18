@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { PurchaseFormModalPage } from './PurchaseFormModalPage';
 import { PurchasePreviewModalPage } from './PurchasePreviewModalPage';
 import { toRfc2396 } from '../../../../utils';
+import { PurchaseSuccessPage } from './PurchaseSuccessPage';
 
 function PurchaseContractModal(props) {
   const {
@@ -17,10 +18,12 @@ function PurchaseContractModal(props) {
     explorerUrl,
     lmrRate,
     history,
-    pool
+    pool,
+    showSuccess
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
+  const [isPurchasing, setIsPurchasing] = useState(false);
 
   const {
     register,
@@ -52,6 +55,17 @@ function PurchaseContractModal(props) {
   };
   const handlePropagation = e => e.stopPropagation();
 
+  const wrapHandlePurchase = async () => {
+    setIsPurchasing(true);
+    const inputs = getValues();
+    await handlePurchase(
+      inputs,
+      contract,
+      toRfc2396(inputs.address, inputs.worker)
+    );
+    setIsPurchasing(false);
+  };
+
   const onEditPool = () => {
     history.push('/tools');
   };
@@ -73,18 +87,19 @@ function PurchaseContractModal(props) {
     <Modal onClick={handleClose}>
       <Body onClick={handlePropagation}>
         {CloseModal(handleClose)}
-        {isPreview ? (
+
+        {showSuccess ? (
+          <PurchaseSuccessPage
+            close={handleClose}
+            contractId={contract.id}
+            price={contract.price}
+          />
+        ) : isPreview ? (
           <PurchasePreviewModalPage
             {...pagesProps}
+            isPurchasing={isPurchasing}
             onBackToForm={() => setIsPreview(false)}
-            onPurchase={() => {
-              const inputs = getValues();
-              handlePurchase(
-                inputs,
-                contract,
-                toRfc2396(inputs.address, inputs.worker)
-              );
-            }}
+            onPurchase={wrapHandlePurchase}
           />
         ) : (
           <PurchaseFormModalPage
