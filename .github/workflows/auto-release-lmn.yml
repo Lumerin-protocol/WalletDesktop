@@ -3,7 +3,7 @@ name: Auto Release
 on:
   push:
     tags:
-      - '.*-lmn'
+      - '*-lmn'
 
 env:
   CI: false
