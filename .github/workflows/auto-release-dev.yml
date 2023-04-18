@@ -1,9 +1,9 @@
-name: Auto Release
+name: Auto Release Development
 
 on:
   push:
     tags:
-      - "*"
+      - /.*-dev$/  
 
 env:
   CI: false
@@ -18,19 +18,19 @@ jobs:
         include:
           - target: ubuntu
             os: ubuntu-latest
-            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.deb
+            artifact_name: lumerin-wallet-desktop.deb
             asset_name: lumerin_v${{github.ref_name}}.deb
           - target: windows
             os: windows-latest
-            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.exe
+            artifact_name: lumerin-wallet-desktop.exe
             asset_name: lumerin_v${{github.ref_name}}.exe
           - target: macos
             os: macos-latest
-            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
+            artifact_name: lumerin-wallet-desktop.dmg
             asset_name: lumerin_v${{github.ref_name}}.dmg
           - target: macos-arm
             os: macos-latest
-            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
+            artifact_name: lumerin-wallet-desktop.dmg
             asset_name: lumerin_v${{github.ref_name}}_arm.dmg
     runs-on: ${{ matrix.os }}
     environment: ${{ matrix.environment }}
@@ -105,19 +105,27 @@ jobs:
           then
             namePrefix="Darwin_x86_64"
           fi
-          curl --fail --retry 5 --retry-all-errors -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]' |
+          curl --fail --retry 5 --retry-all-errors -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/releases" | jq -c '.[]' |
             while IFS= read -r line; do
-              name=$(<<<"$line" jq -r .name);
-              if grep -q "$namePrefix" <<< "$name"
+              name=$(<<<"$line" jq -r .tag_name);
+              if grep -q "${{ matrix.environment }}" <<< "$name"
               then
-                downloadUrl="$(<<<"$line" jq -r .browser_download_url)";
-                echo "Proxyrouter URL: $downloadUrl"
-                if [ "${namePrefix}" = 'Windows_x86_64' ]; then
-                  curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" $downloadUrl -L
-                else
-                  curl -o "$GITHUB_WORKSPACE/executables/proxy-router" $downloadUrl -L
-                fi
-              fi
+                array=$(<<<"$line" | jq -r '.assets.links');
+                echo $array | jq -c '.[]' | 
+                while IFS= read -r d; do
+                  name=$(<<<"$d" jq -r .name);
+                  if grep -q "$namePrefix" <<< "$name"
+                  then
+                      downloadUrl="$(<<<"$d" jq -r .direct_asset_url)";
+                      echo "Proxyrouter URL: $downloadUrl"
+                      if [ "${namePrefix}" = 'Windows_x86_64' ]; then
+                          curl -o "./proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_GROUP_TOKEN }}" $downloadUrl -L
+                      else
+                          curl -o "./proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_GROUP_TOKEN }}" $downloadUrl -L
+                      fi
+                  fi
+                done
+             fi
             done
         shell: bash
       - name: Build Web
@@ -140,4 +148,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/${{ matrix.artifact_name }}
           tag: ${{ github.ref }}
-          asset_name: ${{ matrix.environment }}-${{ matrix.asset_name }}
+          asset_name: ${{ matrix.asset_name }}

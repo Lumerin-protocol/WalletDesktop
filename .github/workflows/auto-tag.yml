@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - dev
+      - stg
+      - lmn
 
 jobs:
   build:
@@ -15,3 +17,4 @@ jobs:
         GITHUB_TOKEN: "${{ secrets.ACCESS_TOKEN }}"
       with:
         strategy: package
+        tag_suffix: "-${{ env.GITHUB_REF_NAME }}"
