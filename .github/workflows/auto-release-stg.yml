@@ -110,7 +110,7 @@ jobs:
               name=$(<<<"$line" jq -r .tag_name);
               if grep -q "${{ matrix.environment }}" <<< "$name"
               then
-                array=$(<<<"$line" | jq -r '.assets.links');
+                array=$(echo "$line" | jq -r ".assets.links")
                 echo $array | jq -c '.[]' | 
                 while IFS= read -r d; do
                   name=$(<<<"$d" jq -r .name);
@@ -119,12 +119,13 @@ jobs:
                       downloadUrl="$(<<<"$d" jq -r .direct_asset_url)";
                       echo "Proxyrouter URL: $downloadUrl"
                       if [ "${namePrefix}" = 'Windows_x86_64' ]; then
-                          curl -o "./proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
+                          curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
                       else
-                          curl -o "./proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
+                          curl -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
                       fi
                   fi
                 done
+                break
              fi
             done
         shell: bash
