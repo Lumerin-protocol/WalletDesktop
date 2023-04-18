@@ -123,10 +123,10 @@ jobs:
                           downloadUrl="https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs/$jobId/artifacts/$artifactPath?job=release-internal";
                           echo $downloadUrl
                           if [ "${namePrefix}" = 'windows_amd64.exe' ]; then
-                              curl -o "./proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
+                              curl -o ".$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
                               break 2
                           else
-                              curl -o "./proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
+                              curl -o ".$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
                               break 2
                           fi
                       fi
