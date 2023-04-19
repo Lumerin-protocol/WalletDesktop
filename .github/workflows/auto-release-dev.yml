@@ -92,7 +92,7 @@ jobs:
         shell: bash
       - name: Fetch latest Proxy Router
         run: |
-          curl --header "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -o proxy-router "https://gitlab.com/api/v4/projects/26916328/jobs/4136126569/artifacts/dist/proxy-router_0.1.1-dev_linux_amd64
+          curl --header "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -o "proxy-router" "https://gitlab.com/api/v4/projects/26916328/jobs/4136126569/artifacts/dist/proxy-router_0.1.1-dev_linux_amd64
           if [ "${{ matrix.target }}" = "ubuntu" ]
           then
             namePrefix="linux_amd64"
