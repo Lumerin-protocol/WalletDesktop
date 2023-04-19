@@ -94,40 +94,39 @@ jobs:
         run: |
           if [ "${{ matrix.target }}" = "ubuntu" ]
           then
-            namePrefix="Linux_x86_64"
+            namePrefix="linux_amd64"
           elif [ "${{ matrix.target }}" = "windows" ]
           then
-            namePrefix="Windows_x86_64"
+            namePrefix="windows_amd64.exe"
           elif [ "${{ matrix.target }}" = "macos-arm" ]
           then
-            namePrefix="Darwin_arm64"
+            namePrefix="darwin_arm64"
           elif [ "${{ matrix.target }}" = "macos" ]
           then
-            namePrefix="Darwin_x86_64"
+            namePrefix="darwin_amd64"
           fi
-          curl --fail --retry 5 --retry-all-errors -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/releases" | jq -c '.[]' |
-            while IFS= read -r line; do
-              name=$(<<<"$line" jq -r .tag_name);
-              if grep -q "${{ matrix.environment }}" <<< "$name"
-              then
-                array=$(echo "$line" | jq -r ".assets.links")
-                echo $array | jq -c '.[]' | 
-                while IFS= read -r d; do
-                  name=$(<<<"$d" jq -r .name);
-                  if grep -q "$namePrefix" <<< "$name"
-                  then
-                      downloadUrl="$(<<<"$d" jq -r .direct_asset_url)";
-                      echo "Proxyrouter URL: $downloadUrl"
-                      if [ "${namePrefix}" = 'Windows_x86_64' ]; then
-                          curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
-                      else
-                          curl -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
-                      fi
-                  fi
-                done
-                break
-             fi
-            done
+          break_outer=false
+          for ((i=1;i<=10;i++)); do
+            while read -r result; do
+              name=$(echo "$result" | jq -r '.name')
+              releaseName=$(echo "$result" | jq -r '.releaseName')
+              jobId=$(echo "$result" | jq -r '.jobId')
+
+              artifactPath="dist/proxy-router_${name}_${namePrefix}"
+              downloadUrl="https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs/$jobId/artifacts/$artifactPath"
+
+              if [ "${namePrefix}" = 'windows_amd64.exe' ]; then
+                curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "$downloadUrl" -L
+              else
+                curl -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "$downloadUrl" -L
+              fi
+              break_outer=true
+              break
+            done < <(curl -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -0 "https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs?scope[]=success&per_page=100&page=$i" | jq -c '.[] | select(.name == "release-internal") | select(.ref | test("-stg$")) | {name: .ref, releaseName: .name, jobId: .id}')
+            if $break_outer; then
+              break
+            fi
+          done
         shell: bash
       - name: Build Web
         run: npm run web-build

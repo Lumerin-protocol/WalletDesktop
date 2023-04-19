@@ -92,7 +92,6 @@ jobs:
         shell: bash
       - name: Fetch latest Proxy Router
         run: |
-          curl --header "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -o "$GITHUB_WORKSPACE/executables/proxy-router" "https://gitlab.com/api/v4/projects/26916328/jobs/4136126569/artifacts/dist/proxy-router_0.1.1-dev_linux_amd64"
           if [ "${{ matrix.target }}" = "ubuntu" ]
           then
             namePrefix="linux_amd64"
@@ -110,15 +109,11 @@ jobs:
           for ((i=1;i<=10;i++)); do
             while read -r result; do
               name=$(echo "$result" | jq -r '.name')
-              echo "name = $name"
               releaseName=$(echo "$result" | jq -r '.releaseName')
-              echo "releaseName = $releaseName"
               jobId=$(echo "$result" | jq -r '.jobId')
-              echo "jobId = $jobId"
 
               artifactPath="dist/proxy-router_${name}_${namePrefix}"
               downloadUrl="https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs/$jobId/artifacts/$artifactPath"
-              echo "$downloadUrl"
 
               if [ "${namePrefix}" = 'windows_amd64.exe' ]; then
                 curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "$downloadUrl" -L
