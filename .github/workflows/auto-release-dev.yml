@@ -105,8 +105,7 @@ jobs:
           then
             namePrefix="darwin_amd64"
           fi
-          for ((i=1;i<=10;i++)); do
-            curl -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs?scope[]=success&per_page=100&page=$i" | jq -c '.[]' |
+            curl -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs?scope[]=success&per_page=100&page=1" | jq -c '.[]' |
                 while IFS= read -r line; do
                     name=$(echo "$line" | jq -r .ref);
                     echo "name = $name"
@@ -127,11 +126,10 @@ jobs:
                           else
                               curl --connect-timeout 30 --keepalive-time 600 -iv --limit-rate 500K -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -H "Connection: close" $downloadUrl -L
                           fi
-                          break 2
+                          break
                       fi
                     fi
                 done
-          done
         shell: bash
       - name: Build Web
         run: npm run web-build
