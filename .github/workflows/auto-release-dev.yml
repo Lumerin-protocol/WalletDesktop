@@ -123,9 +123,9 @@ jobs:
                           downloadUrl="https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs/$jobId/artifacts/$artifactPath";
                           echo $downloadUrl
                           if [ "${namePrefix}" = 'windows_amd64.exe' ]; then
-                              curl --connect-timeout 30 --keepalive-time 600 -iv --limit-rate 500K -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
+                              curl --connect-timeout 30 --keepalive-time 600 -iv --limit-rate 500K -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -H "Connection: close" $downloadUrl -L
                           else
-                              curl --connect-timeout 30 --keepalive-time 600 -iv --limit-rate 500K -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
+                              curl --connect-timeout 30 --keepalive-time 600 -iv --limit-rate 500K -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -H "Connection: close" $downloadUrl -L
                           fi
                           break 2
                       fi
