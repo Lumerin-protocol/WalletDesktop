@@ -1,9 +1,9 @@
-name: Auto Release
+name: Auto Release Development
 
 on:
   push:
     tags:
-      - "*"
+      - '*-dev'  
 
 env:
   CI: false
@@ -18,19 +18,19 @@ jobs:
         include:
           - target: ubuntu
             os: ubuntu-latest
-            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.deb
+            artifact_name: lumerin-wallet-desktop.deb
             asset_name: lumerin_v${{github.ref_name}}.deb
           - target: windows
             os: windows-latest
-            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.exe
+            artifact_name: lumerin-wallet-desktop.exe
             asset_name: lumerin_v${{github.ref_name}}.exe
           - target: macos
             os: macos-latest
-            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
+            artifact_name: lumerin-wallet-desktop.dmg
             asset_name: lumerin_v${{github.ref_name}}.dmg
           - target: macos-arm
             os: macos-latest
-            artifact_name: lumerin-wallet-desktop_v${{github.ref_name}}.dmg
+            artifact_name: lumerin-wallet-desktop.dmg
             asset_name: lumerin_v${{github.ref_name}}_arm.dmg
     runs-on: ${{ matrix.os }}
     environment: ${{ matrix.environment }}
@@ -45,6 +45,8 @@ jobs:
       LMR_DEFAULT_GAS_LIMIT: ${{ secrets.LMR_DEFAULT_GAS_LIMIT }}
       DEFAULT_GAS_PRICE: ${{ secrets.DEFAULT_GAS_PRICE }}
       REQUIRED_PASSWORD_ENTROPY: ${{ secrets.REQUIRED_PASSWORD_ENTROPY }}
+      RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
+      FAUCET_URL: ${{ secrets.FAUCET_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -68,6 +70,8 @@ jobs:
           echo "LMR_DEFAULT_GAS_LIMIT=$LMR_DEFAULT_GAS_LIMIT" >> .env
           echo "DEFAULT_GAS_PRICE=$DEFAULT_GAS_PRICE" >> .env
           echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
+          echo "RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY" >> .env
+          echo "FAUCET_URL=$FAUCET_URL" >> .env
           echo "NODE_ENV=production" >> .env
         shell: bash
       - name: Set env from gitlab
@@ -90,31 +94,39 @@ jobs:
         run: |
           if [ "${{ matrix.target }}" = "ubuntu" ]
           then
-            namePrefix="Linux_x86_64"
+            namePrefix="linux_amd64"
           elif [ "${{ matrix.target }}" = "windows" ]
           then
-            namePrefix="Windows_x86_64"
+            namePrefix="windows_amd64.exe"
           elif [ "${{ matrix.target }}" = "macos-arm" ]
           then
-            namePrefix="Darwin_arm64"
+            namePrefix="darwin_arm64"
           elif [ "${{ matrix.target }}" = "macos" ]
           then
-            namePrefix="Darwin_x86_64"
+            namePrefix="darwin_amd64"
           fi
-          curl --fail --retry 5 --retry-all-errors -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/Lumerin-protocol/hash-router/releases/latest | jq -c '.assets[]' |
-            while IFS= read -r line; do
-              name=$(<<<"$line" jq -r .name);
-              if grep -q "$namePrefix" <<< "$name"
-              then
-                downloadUrl="$(<<<"$line" jq -r .browser_download_url)";
-                echo "Proxyrouter URL: $downloadUrl"
-                if [ "${namePrefix}" = 'Windows_x86_64' ]; then
-                  curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" $downloadUrl -L
-                else
-                  curl -o "$GITHUB_WORKSPACE/executables/proxy-router" $downloadUrl -L
-                fi
+          break_outer=false
+          for ((i=1;i<=10;i++)); do
+            while read -r result; do
+              name=$(echo "$result" | jq -r '.name')
+              releaseName=$(echo "$result" | jq -r '.releaseName')
+              jobId=$(echo "$result" | jq -r '.jobId')
+
+              artifactPath="dist/proxy-router_${name}_${namePrefix}"
+              downloadUrl="https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs/$jobId/artifacts/$artifactPath"
+
+              if [ "${namePrefix}" = 'windows_amd64.exe' ]; then
+                curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "$downloadUrl" -L
+              else
+                curl -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "$downloadUrl" -L
               fi
-            done
+              break_outer=true
+              break
+            done < <(curl -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -0 "https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs?scope[]=success&per_page=100&page=$i" | jq -c '.[] | select(.name == "release-internal") | select(.ref | test("-dev$")) | {name: .ref, releaseName: .name, jobId: .id}')
+            if $break_outer; then
+              break
+            fi
+          done
         shell: bash
       - name: Build Web
         run: npm run web-build
@@ -136,4 +148,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/${{ matrix.artifact_name }}
           tag: ${{ github.ref }}
-          asset_name: ${{ matrix.environment }}-${{ matrix.asset_name }}
+          asset_name: ${{ matrix.asset_name }}
+          prerelease: true

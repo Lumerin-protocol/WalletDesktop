@@ -5,6 +5,7 @@ import merge from 'lodash/merge';
 
 export const initialState = {
   syncStatus: 'up-to-date',
+  allowSendTransaction: true,
   isActive: false,
   address: '',
   ethBalance: 0,
@@ -90,6 +91,11 @@ const reducer = handleActions(
     'transactions-scan-finished': (state, { payload }) => ({
       ...state,
       syncStatus: payload.success ? 'up-to-date' : 'failed'
+    }),
+
+    'allow-send-transaction': (state, { payload }) => ({
+      ...state,
+      allowSendTransaction: payload.allowSendTransaction
     })
   },
   initialState

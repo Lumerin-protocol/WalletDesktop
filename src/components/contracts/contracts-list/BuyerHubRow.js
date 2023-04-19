@@ -56,7 +56,13 @@ const STATE_COLOR = {
   [CONTRACT_STATE.Avaliable]: theme.colors.success
 };
 
-function BuyerHubRow({ contract, ratio, explorerUrl, cancel }) {
+function BuyerHubRow({
+  contract,
+  ratio,
+  explorerUrl,
+  cancel,
+  allowSendTransaction
+}) {
   const context = useContext(ToastsContext);
   const [isPending, setIsPending] = useState(false);
 
@@ -111,7 +117,10 @@ function BuyerHubRow({ contract, ratio, explorerUrl, cancel }) {
         </Value>
       ) : (
         <ActionButtons>
-          <ActionButton onClick={handleCancel(CLOSEOUT_TYPE.EarlyCancel)}>
+          <ActionButton
+            disabled={!allowSendTransaction}
+            onClick={handleCancel(CLOSEOUT_TYPE.EarlyCancel)}
+          >
             Close
           </ActionButton>
         </ActionButtons>

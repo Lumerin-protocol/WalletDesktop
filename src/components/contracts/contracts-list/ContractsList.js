@@ -23,6 +23,7 @@ function ContractsList({
   contractsRefresh,
   noContractsMessage,
   customRowRenderer,
+  allowSendTransaction,
   tabs
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
@@ -56,6 +57,7 @@ function ContractsList({
         cancel={cancel}
         address={address}
         ratio={ratio}
+        allowSendTransaction={allowSendTransaction}
       />
     </ContractsRowContainer>
   );

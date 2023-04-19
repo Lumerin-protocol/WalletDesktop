@@ -8,7 +8,11 @@ const mapStateToProps = state => {
     ethBalanceUSD: selectors.getWalletEthBalanceUSD(state),
 
     lmrBalance: selectors.getWalletLmrBalance(state),
-    lmrBalanceUSD: selectors.getWalletLmrBalanceUSD(state)
+    lmrBalanceUSD: selectors.getWalletLmrBalanceUSD(state),
+
+    recaptchaSiteKey: selectors.getRecaptchaSiteKey(state),
+    faucetUrl: selectors.getFaucetUrl(state),
+    walletAddress: selectors.getWalletAddress(state)
   };
 };
 

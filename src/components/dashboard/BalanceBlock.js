@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import withBalanceBlockState from '../../store/hocs/withBalanceBlockState';
-import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 import { EtherIcon } from '../icons/EtherIcon';
+import LumerinLogo from '../icons/LumerinLogo';
 import { Balance } from './Balance';
 import {
   WalletBalanceHeader,
@@ -30,7 +30,9 @@ const WalletBalance = ({
         <Balance
           currency="LMR"
           value={lmrBalance}
-          icon={<LumerinLightIcon size="4rem" />}
+          icon={
+            <LumerinLogo style={{ height: '3.3rem', marginRight: '4px' }} />
+          }
           equivalentUSD={lmrBalanceUSD}
           maxSignificantFractionDigits={0}
         />
@@ -55,6 +57,9 @@ const BalanceBlock = ({
   ethBalanceUSD,
   sendDisabled,
   sendDisabledReason,
+  recaptchaSiteKey,
+  faucetUrl,
+  walletAddress,
   onTabSwitch,
   client
 }) => {
@@ -62,30 +67,12 @@ const BalanceBlock = ({
     e.preventDefault();
     onTabSwitch(e.target.dataset.modal);
   };
-  const [isClaiming, setClaiming] = useState(false);
-  const context = useContext(ToastsContext);
 
   const claimFaucet = e => {
     e.preventDefault();
-    setClaiming(true);
-    client
-      .claimFaucet({})
-      .then(() => {
-        context.toast('success', 'Succesfully claimed 10 LMR');
-      })
-      .catch(err => {
-        if (
-          err.message &&
-          err.message.includes('insufficient funds for gas * price + value')
-        ) {
-          context.toast('error', 'insufficient funds for gas * price');
-        } else {
-          context.toast('error', 'You already claimed today. Try later.');
-        }
-      })
-      .finally(() => {
-        setClaiming(false);
-      });
+    const url = new URL(faucetUrl);
+    url.searchParams.set('address', walletAddress);
+    window.open(url);
   };
 
   return (
@@ -114,21 +101,16 @@ const BalanceBlock = ({
             >
               Send
             </Btn>
-            {isClaiming ? (
-              <div style={{ paddingLeft: '20px' }}>
-                <Spinner size="25px" />
-              </div>
-            ) : (
-              <BtnAccent
-                data-modal="claim"
-                onClick={claimFaucet}
-                data-rh={`Payout from the faucet is 10 gLMR per day.\n
+
+            <BtnAccent
+              data-modal="claim"
+              onClick={claimFaucet}
+              data-rh={`Payout from the faucet is 10 sLMR and 0.1 sETH per day.\n
                 Wallet addresses are limited to one request every 24 hours.`}
-                block
-              >
-                Get Tokens
-              </BtnAccent>
-            )}
+              block
+            >
+              Get Tokens
+            </BtnAccent>
           </BtnRow>
         </SecondaryContainer>
       </Container>

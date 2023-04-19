@@ -29,7 +29,7 @@ const Body = styled.div`
   position: fixed;
   z-index: 20;
   background-color: ${p => p.theme.colors.light};
-  width: 300px;
+  width: 400px;
   height: 500px;
   border-radius: 5px;
   padding: 2rem 3rem 2rem 3rem;

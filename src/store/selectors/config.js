@@ -15,3 +15,7 @@ export const getIsAuthBypassed = state => state.config.chain.bypassAuth;
 export const getIp = state => state.config.ip;
 
 export const getBuyerPool = state => state.config.buyerDefaultPool;
+
+export const getRecaptchaSiteKey = state => state.config.recaptchaSiteKey;
+
+export const getFaucetUrl = state => state.config.chain.faucetUrl;

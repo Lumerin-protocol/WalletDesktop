@@ -47,6 +47,8 @@ export function ReceiveForm({
   onRequestClose,
   lmrBalanceUSD,
   lmrBalanceWei,
+  ethBalanceUSD,
+  ethBalanceWei,
   copyToClipboard
 }) {
   const context = useContext(ToastsContext);
@@ -85,7 +87,11 @@ export function ReceiveForm({
         </FooterRow>
         <FooterLabel>LMR Balance</FooterLabel>
         <FooterSublabel>
-          {lmrBalanceWei} LMR ≈ ${lmrBalanceUSD || 0}
+          {lmrBalanceWei.toFixed(6)} LMR ≈ {lmrBalanceUSD || 0}
+        </FooterSublabel>
+        <FooterLabel>ETH Balance</FooterLabel>
+        <FooterSublabel>
+          {ethBalanceWei.toFixed(6)} ETH ≈ {ethBalanceUSD || 0}
         </FooterSublabel>
       </Footer>
     </>
