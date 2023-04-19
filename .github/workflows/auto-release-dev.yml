@@ -124,14 +124,18 @@ jobs:
                 if [ "${namePrefix}" = 'windows_amd64.exe' ]; then
                     curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "$downloadUrl" -L
                     break_outer=true
+                    echo "BREAK TRUE SET: $break_outer"
                     break
                 else
                     curl -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "$downloadUrl" -L
                     break_outer=true
+                    echo "BREAK TRUE SET: $break_outer"
                     break
                 fi
             done
+            echo "BREAK OUTER: $break_outer"
             if $break_outer; then
+              echo "BREAK OUTER INSIDE: $break_outer"
               break
             fi
           done
