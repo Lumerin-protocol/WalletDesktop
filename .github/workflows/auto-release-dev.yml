@@ -127,7 +127,6 @@ jobs:
                           else
                               curl --header "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -o "$GITHUB_WORKSPACE/executables/proxy-router" "$downloadUrl"
                           fi
-                          break
                       fi
                     fi
                 done
