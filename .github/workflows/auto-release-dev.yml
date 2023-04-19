@@ -92,7 +92,7 @@ jobs:
         shell: bash
       - name: Fetch latest Proxy Router
         run: |
-          curl --header "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -o "proxy-router" "https://gitlab.com/api/v4/projects/26916328/jobs/4136126569/artifacts/dist/proxy-router_0.1.1-dev_linux_amd64"
+          curl --header "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -o "$GITHUB_WORKSPACE/executables/proxy-router" "https://gitlab.com/api/v4/projects/26916328/jobs/4136126569/artifacts/dist/proxy-router_0.1.1-dev_linux_amd64"
           if [ "${{ matrix.target }}" = "ubuntu" ]
           then
             namePrefix="linux_amd64"
@@ -123,9 +123,9 @@ jobs:
                           downloadUrl="https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs/$jobId/artifacts/$artifactPath";
                           echo $downloadUrl
                           if [ "${namePrefix}" = 'windows_amd64.exe' ]; then
-                              curl --connect-timeout 30 --keepalive-time 600 -iv --limit-rate 500K -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -H "Connection: close" $downloadUrl -L
+                              curl --header "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" "$downloadUrl"
                           else
-                              curl --connect-timeout 30 --keepalive-time 600 -iv --limit-rate 500K -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -H "Connection: close" $downloadUrl -L
+                              curl --header "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -o "$GITHUB_WORKSPACE/executables/proxy-router" "$downloadUrl"
                           fi
                           break
                       fi
