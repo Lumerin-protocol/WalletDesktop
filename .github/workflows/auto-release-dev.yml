@@ -120,15 +120,14 @@ jobs:
                       if grep -q "\\-dev" <<< "$name"
                       then
                           artifactPath="dist/proxy-router_"$name"_$namePrefix";
-                          downloadUrl="https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs/$jobId/artifacts/$artifactPath?job=release-internal";
+                          downloadUrl="https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs/$jobId/artifacts/$artifactPath";
                           echo $downloadUrl
                           if [ "${namePrefix}" = 'windows_amd64.exe' ]; then
-                              curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
-                              break 2
+                              curl --connect-timeout 30 --keepalive-time 600 -iv --limit-rate 500K -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
                           else
-                              curl -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
-                              break 2
+                              curl --connect-timeout 30 --keepalive-time 600 -iv --limit-rate 500K -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" $downloadUrl -L
                           fi
+                          break 2
                       fi
                     fi
                 done
