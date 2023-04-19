@@ -106,6 +106,7 @@ jobs:
           then
             namePrefix="darwin_amd64"
           fi
+          break_outer=false
           for ((i=1;i<=10;i++)); do
             curl -H "Accept: application/json" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" -0 "https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROXY_REPO_ID }}/jobs?scope[]=success&per_page=100&page=$i" | jq -c '.[] | select(.name == "release-internal") | select(.ref | test("-dev$")) | {name: .ref, releaseName: .name, jobId: .id}' |
             while read -r result; do
@@ -122,12 +123,17 @@ jobs:
 
                 if [ "${namePrefix}" = 'windows_amd64.exe' ]; then
                     curl -o "$GITHUB_WORKSPACE/executables/proxy-router.exe" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "$downloadUrl" -L
-                    break 2
+                    break_outer=true
+                    break
                 else
                     curl -o "$GITHUB_WORKSPACE/executables/proxy-router" -H "Authorization: Bearer ${{ secrets.GITLAB_TOKEN }}" "$downloadUrl" -L
-                    break 2
+                    break_outer=true
+                    break
                 fi
             done
+            if $break_outer; then
+              break
+            fi
           done
         shell: bash
       - name: Build Web
