@@ -1,4 +1,4 @@
-"use strict";
+
 
 const chain = {
   displayName: process.env.DISPLAY_NAME,
@@ -24,10 +24,13 @@ const chain = {
   sellerWebPort: process.env.SELLER_WEB_DEFAULT_PORT || 8081,
   buyerWebPort: process.env.BUYER_WEB_DEFAULT_PORT || 8082,
 
-  localSellerProxyRouterUrl: `http://localhost:${process.env
-    .SELLER_WEB_DEFAULT_PORT || 8081}`,
-  localBuyerProxyRouterUrl: `http://localhost:${process.env
-    .BUYER_WEB_DEFAULT_PORT || 8082}`,
+localSellerProxyRouterUrl:
+process.env.SELLER_PROXY_ROUTER_URL ||
+`http://localhost:${process.env.SELLER_WEB_DEFAULT_PORT || 8081}`,
+
+localBuyerProxyRouterUrl:
+process.env.BUYER_PROXY_ROUTER_URL ||
+`http://localhost:${process.env.BUYER_WEB_DEFAULT_PORT || 8082}`,
 
   faucetUrl: process.env.FAUCET_URL,
 
@@ -40,6 +43,11 @@ module.exports = {
   debug: process.env.DEBUG === "true" || false,
   explorerDebounce: 2000,
   ratesUpdateMs: 30000,
+
+  requiredPasswordEntropy: parseInt(
+    process.env.REQUIRED_PASSWORD_ENTROPY || "72",
+    10
+  ),
   scanTransactionTimeout: 240000,
   sentryDsn: process.env.SENTRY_DSN,
   statePersistanceDebounce: 2000,

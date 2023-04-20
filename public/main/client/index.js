@@ -95,7 +95,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
 
   emitter.on("open-proxy-router", async ({ password }) => {
     const proxyRouterUserConfig = settings.getProxyRouterConfig();
-    if (!proxyRouterUserConfig.useHostedProxyRouter) {
+    if (!proxyRouterUserConfig.useHostedProxyRouter) { 
       const { address, privateKey } = await getAddressAndPrivateKey(
         { password },
         { api }
