@@ -7,6 +7,7 @@ import Amount from './Amount';
 import { TxIcon } from './Icon';
 import { LumerinDarkIcon } from '../../../icons/LumerinDarkIcon';
 import { LumerinLightIcon } from '../../../icons/LumerinLightIcon';
+import { EtherIcon } from '../../../icons/EtherIcon';
 
 const Container = styled.div`
   margin-left: 1.6rem;
@@ -28,9 +29,13 @@ const IconContainer = styled.div`
 `;
 
 const Row = ({ tx, explorerUrl }) => (
-  <Container onClick={() => window.open(explorerUrl, '_blank')}>
+  <Container onClick={() => window.openLink(explorerUrl)}>
     <IconContainer>
-      <LumerinLightIcon size="5rem" />
+      {tx.symbol === 'LMR' ? (
+        <LumerinLightIcon size="4rem" />
+      ) : (
+        <EtherIcon size="4rem"></EtherIcon>
+      )}
     </IconContainer>
     <IconContainer>
       <TxIcon txType={tx.txType} />

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import withLoginState from '../store/hocs/withLoginState';
 
-import { TextInput, AltLayout, BaseBtn, Sp } from './common';
+import { TextInput, AltLayout, BaseBtn, Sp, AltLayoutNarrow } from './common';
 
 const LoginBtn = styled(BaseBtn)`
   font-size: 1.5rem;
@@ -38,30 +38,32 @@ function Login({
 }) {
   return (
     <AltLayout title="Enter your password">
-      <form onSubmit={onSubmit} data-testid="login-form">
-        <Sp mt={4}>
-          <TextInput
-            id="password"
-            type="password"
-            label="Password"
-            value={password}
-            data-testid="pass-field"
-            autoFocus
-            onChange={onInputChange}
-            error={errors.password || error}
-          />
-        </Sp>
-        <Sp mt={2}>
-          <SecondaryBtn onClick={() => logout({})} block>
-            Or setup new wallet
-          </SecondaryBtn>
-        </Sp>
-        <Sp mt={6}>
-          <LoginBtn block submit disabled={status === 'pending'}>
-            Login
-          </LoginBtn>
-        </Sp>
-      </form>
+      <AltLayoutNarrow>
+        <form onSubmit={onSubmit} data-testid="login-form">
+          <Sp mt={4}>
+            <TextInput
+              id="password"
+              type="password"
+              label="Password"
+              value={password}
+              data-testid="pass-field"
+              autoFocus
+              onChange={onInputChange}
+              error={errors.password || error}
+            />
+          </Sp>
+          <Sp mt={2}>
+            <SecondaryBtn onClick={() => logout({})} block>
+              Or setup new wallet
+            </SecondaryBtn>
+          </Sp>
+          <Sp mt={4}>
+            <LoginBtn block submit disabled={status === 'pending'}>
+              Login
+            </LoginBtn>
+          </Sp>
+        </form>
+      </AltLayoutNarrow>
     </AltLayout>
   );
 }

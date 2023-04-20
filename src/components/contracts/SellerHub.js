@@ -11,7 +11,7 @@ import CreateContractModal from './modals/CreateContractModal';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
-import { lmrEightDecimals } from '../../store/utils/coinValue';
+import { lmrDecimals } from '../../utils/coinValue';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -59,6 +59,7 @@ function SellerHub({
   address,
   client,
   contractsRefresh,
+  allowSendTransaction,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -109,7 +110,7 @@ function SellerHub({
     e.preventDefault();
 
     const contract = {
-      price: contractDetails.price * lmrEightDecimals,
+      price: contractDetails.price * lmrDecimals,
       speed: contractDetails.speed * 10 ** 12, // THs
       duration: contractDetails.time * 3600, // Hours to seconds
       sellerAddress: contractDetails.address
@@ -118,12 +119,16 @@ function SellerHub({
     const tempContractId = uniqueId();
     createTempContract(tempContractId, contract);
 
+    client.lockSendTransaction();
     client
       .createContract(contract)
       .then(() => contractsRefresh())
       .catch(error => {
         context.toast('error', error.message || error);
         removeTempContract(tempContractId, contract);
+      })
+      .finally(() => {
+        client.unlockSendTransaction();
       });
 
     setIsModalActive(false);
@@ -132,13 +137,19 @@ function SellerHub({
   const handleContractCancellation = (e, data) => {
     e.preventDefault();
 
-    client
+    client.lockSendTransaction();
+    return client
       .cancelContract({
         contractId: data.contractId,
         walletAddress: data.walletAddress,
         closeOutType: data.closeOutType
       })
-      .then(() => contractsRefresh());
+      .then(() => {
+        contractsRefresh();
+      })
+      .finally(() => {
+        client.unlockSendTransaction();
+      });
   };
 
   const handleContractSave = e => {
@@ -146,6 +157,10 @@ function SellerHub({
   };
   const contractsToShow = contracts.filter(c => c.seller === address);
 
+  console.log(
+    '🚀 ~ file: SellerHub.js:168 ~ allowSendTransaction:',
+    allowSendTransaction
+  );
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
@@ -153,7 +168,12 @@ function SellerHub({
         address={address}
         copyToClipboard={copyToClipboard}
       >
-        <ContractBtn onClick={handleOpenModal}>Create Contract</ContractBtn>
+        <ContractBtn
+          data-disabled={!allowSendTransaction}
+          onClick={allowSendTransaction ? handleOpenModal : () => {}}
+        >
+          Create Contract
+        </ContractBtn>
       </LayoutHeader>
 
       {/* <TotalsBlock /> */}
@@ -166,6 +186,7 @@ function SellerHub({
         contractsRefresh={contractsRefresh}
         address={address}
         contracts={contractsToShow}
+        allowSendTransaction={allowSendTransaction}
         noContractsMessage={'You have no contracts.'}
       />
 

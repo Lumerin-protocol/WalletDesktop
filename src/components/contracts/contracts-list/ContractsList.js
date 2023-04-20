@@ -10,10 +10,10 @@ import {
   Container,
   ListContainer,
   Contracts,
-  FooterLogo,
-  Title
+  FooterLogo
 } from './ContractsList.styles';
 import { ContractsRowContainer } from './ContractsRow.styles';
+import StatusHeader from './StatusHeader';
 
 function ContractsList({
   contracts,
@@ -23,17 +23,18 @@ function ContractsList({
   contractsRefresh,
   noContractsMessage,
   customRowRenderer,
+  allowSendTransaction,
   tabs
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   const hasContracts = contracts.length;
   const defaultTabs = [
     { value: 'timestamp', name: 'Started', ratio: 2 },
-    { ratio: 1 },
+    { name: 'Status', ratio: 1 },
     { value: 'price', name: 'Price', ratio: 2 },
     { value: 'length', name: 'Duration', ratio: 2 },
-    { value: 'speed', name: 'Speed (TH/s)', ratio: 2 },
-    { value: 'action', name: 'Actions', ratio: 4 }
+    { value: 'speed', name: 'Speed', ratio: 2 },
+    { value: 'action', name: 'Actions', ratio: 3 }
   ];
 
   const tabsToShow = tabs || defaultTabs;
@@ -56,28 +57,17 @@ function ContractsList({
         cancel={cancel}
         address={address}
         ratio={ratio}
+        allowSendTransaction={allowSendTransaction}
       />
     </ContractsRowContainer>
   );
 
   const filterExtractValue = ({ status }) => status;
 
-  const handleClick = e => {
-    e.preventDefault();
-    if (!window.isDev || !e.shiftKey || !e.altKey) return;
-  };
-
-  const formatStatus = s => {
-    if (s === 'up-to-date') {
-      return 'up to date';
-    }
-    return s;
-  };
-
   return (
     <Container data-testid="Contracts-list">
       <Flex.Row grow="1">
-        <Title onClick={handleClick}>Status: {formatStatus(syncStatus)}</Title>
+        <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
       </Flex.Row>
       <Contracts>
         <ItemFilter extractValue={filterExtractValue} items={contracts}>
@@ -95,7 +85,13 @@ function ContractsList({
                   (syncStatus === 'syncing' ? (
                     <ScanningContractsPlaceholder />
                   ) : (
-                    <NoContractsPlaceholder message={noContractsMessage} />
+                    <NoContractsPlaceholder
+                      message={
+                        syncStatus === 'failed'
+                          ? 'Failed to retrieve contracts'
+                          : noContractsMessage
+                      }
+                    />
                   ))}
                 <AutoSizer>
                   {({ width, height }) => (

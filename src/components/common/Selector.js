@@ -3,19 +3,18 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
 
-import { ErrorMsg, Label } from './TextInput';
+import { ErrorMsg, Label } from './TextInput.styles';
 import SelectorCaret from '../icons/SelectorCaret';
 
 const MenuButton = styled(ReachUI.MenuButton)`
-  background-color: ${p => p.theme.colors.medium};
+  background-color: #fff;
   color: ${p => p.theme.colors.dark};
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.5px;
-  text-shadow: ${p => p.theme.textShadow};
   padding: 0;
   border: none;
-  border-radius: 5px;
+  border-radius: 15px;
   display: block;
   height: 4.8rem;
   text-align: left;
@@ -85,7 +84,7 @@ const MenuItem = styled(ReachUI.MenuItem)`
   cursor: pointer;
 
   &[data-selected] {
-    background-color: rgba(126, 97, 248, 0.1);
+    background-color: #eaf7fc;
     color: ${p => p.theme.colors.primary};
     outline: none;
   }

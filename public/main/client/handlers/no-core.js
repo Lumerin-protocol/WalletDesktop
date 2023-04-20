@@ -1,23 +1,24 @@
-'use strict';
+"use strict";
 
-const restart = require('../electron-restart');
-const dbManager = require('../database');
-const logger = require('../../../logger');
-const storage = require('../storage');
-const auth = require('../auth');
-const wallet = require('../wallet');
+const restart = require("../electron-restart");
+const dbManager = require("../database");
+const logger = require("../../../logger");
+const storage = require("../storage");
+const auth = require("../auth");
+const wallet = require("../wallet");
+const { setProxyRouterConfig, getProxyRouterConfig } = require("../settings");
 
-const validatePassword = data => auth.isValidPassword(data);
+const validatePassword = (data) => auth.isValidPassword(data);
 
 function clearCache() {
-  logger.verbose('Clearing database cache');
+  logger.verbose("Clearing database cache");
   return dbManager
     .getDb()
     .dropDatabase()
     .then(restart);
 }
 
-const persistState = data => storage.persistState(data).then(() => true);
+const persistState = (data) => storage.persistState(data).then(() => true);
 
 function changePassword({ oldPassword, newPassword }) {
   return validatePassword(oldPassword).then(function(isValid) {
@@ -33,9 +34,18 @@ function changePassword({ oldPassword, newPassword }) {
   });
 }
 
+const saveProxyRouterSettings = (data) =>
+  Promise.resolve(setProxyRouterConfig(data));
+
+const getProxyRouterSettings = async () => {
+  return getProxyRouterConfig();
+};
+
 module.exports = {
   validatePassword,
   changePassword,
   persistState,
-  clearCache
+  clearCache,
+  saveProxyRouterSettings,
+  getProxyRouterSettings,
 };

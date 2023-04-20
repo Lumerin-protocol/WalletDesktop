@@ -6,7 +6,18 @@ import * as utils from '../utils';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import React from 'react';
-import { lmrEightDecimals } from '../utils/coinValue';
+import { lmrDecimals, ethDecimals } from '../../utils/coinValue';
+
+export const rangeSelectOptions = [
+  {
+    label: 'LMR',
+    value: 'LMR'
+  },
+  {
+    label: 'ETH',
+    value: 'ETH'
+  }
+];
 
 const withTransactionModalState = WrappedComponent => {
   class Container extends React.Component {
@@ -44,6 +55,7 @@ const withTransactionModalState = WrappedComponent => {
       gasPrice: this.props.client.fromWei(this.props.chainGasPrice, 'gwei'),
       gasLimit: this.props.coinDefaultGasLimit,
       estimatedFee: null,
+      selectedCurrency: rangeSelectOptions[0],
       errors: {
         coinAmount: '',
         toAddress: '',
@@ -56,8 +68,21 @@ const withTransactionModalState = WrappedComponent => {
 
     resetForm = () => this.setState(this.initialState);
 
-    onInputChange = ({ id, value }) => {
-      const { coinPrice, client } = this.props;
+    setSelectedCurrency = e => {
+      this.setState({ ...this.state, selectedCurrency: e });
+      this.onInputChange({
+        id: 'coinAmount',
+        value: this.state.coinAmount,
+        selectedCurrency: e
+      });
+    };
+
+    onInputChange = ({ id, value, selectedCurrency }) => {
+      const { client, lmrCoinPrice, ethCoinPrice } = this.props;
+      const coinPrice =
+        (selectedCurrency || this.state.selectedCurrency)?.value === 'LMR'
+          ? lmrCoinPrice
+          : ethCoinPrice;
       this.setState(state => {
         return {
           ...state,
@@ -83,13 +108,26 @@ const withTransactionModalState = WrappedComponent => {
         return;
       }
 
+      let gasLimit = 0;
       try {
-        const { gasLimit } = await this.props.client.getLmrTransferGasLimit({
-          value: parseFloat(utils.sanitize(coinAmount)) * lmrEightDecimals,
-          chain: this.props.chain,
-          from: this.props.from,
-          to: this.state.toAddress
-        });
+        if (this.state.selectedCurrency.value === 'LMR') {
+          const {
+            gasLimit: gas
+          } = await this.props.client.getLmrTransferGasLimit({
+            value: parseFloat(utils.sanitize(coinAmount)) * lmrDecimals,
+            chain: this.props.chain,
+            from: this.props.from,
+            to: this.state.toAddress
+          });
+          gasLimit = gas;
+        } else {
+          const { gasLimit: gas } = await this.props.client.getGasLimit({
+            value: parseFloat(utils.sanitize(coinAmount)) * ethDecimals,
+            from: this.props.from,
+            to: this.state.toAddress
+          });
+          gasLimit = gas;
+        }
 
         const { gasPrice } = await this.props.client.getGasPrice({});
         this.setState({
@@ -107,8 +145,8 @@ const withTransactionModalState = WrappedComponent => {
       }
     }, 500);
 
-    onSubmit = () => {
-      return this.props.client.sendLmr({
+    onSubmit = type => {
+      const payload = {
         gasPrice: this.props.client.toWei(this.state.gasPrice, 'gwei'),
         walletId: this.props.walletId,
         value: utils.sanitize(this.state.coinAmount),
@@ -116,16 +154,23 @@ const withTransactionModalState = WrappedComponent => {
         from: this.props.from,
         gas: this.state.gasLimit,
         to: this.state.toAddress
-      });
+      };
+      return type === 'ETH'
+        ? this.props.client.sendEth(payload)
+        : this.props.client.sendLmr(payload);
     };
 
     validate = () => {
       const { coinAmount, toAddress, gasPrice, gasLimit } = this.state;
-      const { client, lmrBalanceWei } = this.props;
+      const { client, lmrBalanceWei, ethBalanceWei } = this.props;
+      const balance =
+        this.state.selectedCurrency.value === 'LMR'
+          ? lmrBalanceWei
+          : ethBalanceWei;
 
       const errors = {
         ...validators.validateToAddress(client, toAddress),
-        ...validators.validateCoinAmount(client, coinAmount, lmrBalanceWei),
+        ...validators.validateCoinAmount(client, coinAmount, balance),
         ...validators.validateGasPrice(client, gasPrice),
         ...validators.validateGasLimit(client, gasLimit)
       };
@@ -169,6 +214,7 @@ const withTransactionModalState = WrappedComponent => {
           onMaxClick={this.onMaxClick}
           resetForm={this.resetForm}
           onSubmit={this.onSubmit}
+          setSelectedCurrency={this.setSelectedCurrency}
           {...this.props}
           {...this.state}
           coinPlaceholder={amountFieldsProps.coinPlaceholder}
@@ -189,7 +235,10 @@ const withTransactionModalState = WrappedComponent => {
     coinSymbol: selectors.getCoinSymbol(state),
     lmrBalanceUSD: selectors.getWalletLmrBalanceUSD(state),
     lmrBalanceWei: selectors.getWalletLmrBalance(state),
-    coinPrice: selectors.getRate(state),
+    ethBalanceUSD: selectors.getWalletEthBalanceUSD(state),
+    ethBalanceWei: selectors.getWalletEthBalance(state),
+    lmrCoinPrice: selectors.getRate(state),
+    ethCoinPrice: selectors.getRateEth(state),
     from: selectors.getWalletAddress(state)
   });
 

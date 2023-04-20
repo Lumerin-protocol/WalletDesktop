@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { IconExternalLink } from '@tabler/icons';
+
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
 import { Btn } from '../../common';
-import {
-  formatDuration,
-  formatSpeed,
-  formatTimestamp,
-  formatPrice
-} from '../utils';
+import { formatDuration, formatSpeed, formatPrice } from '../utils';
 import Spinner from '../../common/Spinner';
+import { abbreviateAddress } from '../../../utils';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -30,13 +28,26 @@ const Value = styled.label`
   font-size: 1.2rem;
 `;
 
+const ContractValue = styled(Value)`
+  cursor: pointer;
+  text-decoration: underline;
+  flex-direction: row;
+  gap: 5px;
+`;
+
 const ActionButton = styled(Btn)`
   font-size: 1.2rem;
-  padding: 1rem;
+  padding: 1rem 1.25rem;
   line-height: 1.5rem;
 `;
 
-function MarketplaceRow({ contract, ratio, explorerUrl, onPurchase }) {
+function MarketplaceRow({
+  contract,
+  ratio,
+  explorerUrl,
+  onPurchase,
+  allowSendTransaction
+}) {
   // TODO: Add better padding
   const [isPending, setIsPending] = useState(false);
 
@@ -45,7 +56,10 @@ function MarketplaceRow({ contract, ratio, explorerUrl, onPurchase }) {
   }, [contract]);
 
   return (
-    <Container ratio={ratio} onClick={() => window.open(explorerUrl, '_blank')}>
+    <Container ratio={ratio}>
+      <ContractValue onClick={() => window.openLink(explorerUrl)}>
+        {abbreviateAddress(contract.id)} <IconExternalLink width={'1.4rem'} />
+      </ContractValue>
       <Value>{formatPrice(contract.price)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
@@ -56,7 +70,7 @@ function MarketplaceRow({ contract, ratio, explorerUrl, onPurchase }) {
       ) : (
         <Value>
           <ActionButton
-            disabled={false}
+            disabled={!allowSendTransaction}
             onClick={e => {
               e.stopPropagation();
               onPurchase(contract);

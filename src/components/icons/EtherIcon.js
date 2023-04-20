@@ -1,38 +1,20 @@
 import React from 'react';
 
-import BaseIcon from './BaseIcon';
-
-export const EtherIcon = ({ size = '4rem' }) => (
-  <>
-    <BaseIcon size={size}>
-      <svg viewBox="0 0 40 40" version="1.1" preserveAspectRatio="xMidYMid">
-        <g>
-          <polygon
-            fill="#343434"
-            points="127.9611 0 125.1661 9.5 125.1661 285.168 127.9611 287.958 255.9231 212.32"
-          />
-          <polygon
-            fill="#8C8C8C"
-            points="127.962 0 0 212.32 127.962 287.959 127.962 154.158"
-          />
-          <polygon
-            fill="#3C3C3B"
-            points="127.9611 312.1866 126.3861 314.1066 126.3861 412.3056 127.9611 416.9066 255.9991 236.5866"
-          />
-          <polygon
-            fill="#8C8C8C"
-            points="127.962 416.9052 127.962 312.1852 0 236.5852"
-          />
-          <polygon
-            fill="#141414"
-            points="127.9611 287.9577 255.9211 212.3207 127.9611 154.1587"
-          />
-          <polygon
-            fill="#393939"
-            points="0.0009 212.3208 127.9609 287.9578 127.9609 154.1588"
-          />
-        </g>
-      </svg>
-    </BaseIcon>
-  </>
+export const EtherIcon = ({ size = '4rem', ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlSpace="preserve"
+    viewBox="0 0 1920 1920"
+    {...props}
+    width={size}
+  >
+    <path fill="#8A92B2" d="M959.8 80.7 420.1 976.3 959.8 731z" />
+    <path
+      fill="#62688F"
+      d="M959.8 731 420.1 976.3l539.7 319.1zm539.8 245.3L959.8 80.7V731z"
+    />
+    <path fill="#454A75" d="m959.8 1295.4 539.8-319.1L959.8 731z" />
+    <path fill="#8A92B2" d="m420.1 1078.7 539.7 760.6v-441.7z" />
+    <path fill="#62688F" d="M959.8 1397.6v441.7l540.1-760.6z" />
+  </svg>
 );

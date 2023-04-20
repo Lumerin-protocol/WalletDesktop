@@ -4,7 +4,6 @@ import withContractsState from '../../store/hocs/withContractsState';
 import { LayoutHeader } from '../common/LayoutHeader';
 import ContractsList from './contracts-list/ContractsList';
 import { View } from '../common/View';
-import { ToastsContext } from '../toasts';
 import BuyerHubRow from './contracts-list/BuyerHubRow';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 
@@ -19,25 +18,49 @@ function BuyerHub({
   address,
   client,
   contractsRefresh,
+  allowSendTransaction,
   ...props
 }) {
-  const context = useContext(ToastsContext);
-  const contractsToShow = contracts.filter(x => x.buyer === address);
+  const contractsToShow = contracts.filter(
+    x => x.buyer === address && x.seller !== address
+  );
 
   const tabs = [
-    { value: 'timestamp', name: 'Started', ratio: 2 },
-    { ratio: 1 },
-    { value: 'price', name: 'Price', ratio: 3 },
-    { value: 'length', name: 'Duration', ratio: 3 },
-    { value: 'speed', name: 'Speed (TH/s)', ratio: 3 }
+    { value: 'id', name: 'Contract', ratio: 3 },
+    { value: 'timestamp', name: 'Started', ratio: 3 },
+    { name: 'Status', ratio: 1 },
+    { value: 'price', name: 'Price', ratio: 2 },
+    { value: 'length', name: 'Duration', ratio: 2 },
+    { value: 'speed', name: 'Speed', ratio: 2 },
+    { value: 'action', name: 'Actions', ratio: 2 }
   ];
+
+  const handleContractCancellation = (e, data) => {
+    e.preventDefault();
+
+    client.lockSendTransaction();
+    return client
+      .cancelContract({
+        contractId: data.contractId,
+        walletAddress: data.walletAddress,
+        closeOutType: data.closeOutType
+      })
+      .then(() => {
+        contractsRefresh();
+      })
+      .finally(() => {
+        client.unlockSendTransaction();
+      });
+  };
 
   const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <BuyerHubRow
         data-testid="BuyerHub-row"
+        allowSendTransaction={allowSendTransaction}
         onClick={console.log}
         contract={contractsList[index]}
+        cancel={handleContractCancellation}
         address={address}
         ratio={ratio}
       />
@@ -58,7 +81,6 @@ function BuyerHub({
         hasContracts={hasContracts}
         onWalletRefresh={onWalletRefresh}
         syncStatus={syncStatus}
-        cancel={() => {}}
         contractsRefresh={contractsRefresh}
         address={address}
         contracts={contractsToShow}

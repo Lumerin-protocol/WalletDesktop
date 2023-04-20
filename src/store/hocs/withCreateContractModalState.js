@@ -41,6 +41,10 @@ const withCreateContractModalState = WrappedComponent => {
   const mapStateToProps = (state, props) => ({
     address: selectors.getWalletAddress(state),
     buyerPort: selectors.getBuyerProxyPort(state),
+    lmrRate: selectors.getRate(state),
+    isLocalProxyRouter: selectors.getIsLocalProxyRouter(state),
+    ip: selectors.getIp(state),
+    pool: selectors.getBuyerPool(state),
     explorerUrl: props.contract
       ? selectors.getContractExplorerUrl(state, {
           hash: props.contract.id

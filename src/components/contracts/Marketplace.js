@@ -5,7 +5,7 @@ import { LayoutHeader } from '../common/LayoutHeader';
 import ContractsList from './contracts-list/ContractsList';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
-import PurchaseContractModal from './modals/PurchaseContractModal';
+import PurchaseContractModal from './modals/PurchaseModal/PurchaseContractModal';
 import MarketplaceRow from './contracts-list/MarketplaceRow';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 
@@ -22,30 +22,32 @@ function Marketplace({
   contracts,
   history,
   lmrBalance,
+  allowSendTransaction,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   const [contractToPurchase, setContractToPurchase] = useState(undefined);
+  const [showSuccess, setShowSuccess] = useState(false);
   const context = useContext(ToastsContext);
   const contractsToShow = contracts.filter(
     x => (Number(x.state) === 0 && x.seller !== address) || x.inProgress
   );
 
-  const handlePurchase = (data, contract, url) => {
-    if (lmrBalance * 10 ** 8 < Number(contract.price)) {
+  const handlePurchase = async (data, contract, url) => {
+    if (lmrBalance * 10 ** 8 < Number(contract.price * 1.01)) {
       setIsModalActive(false);
       context.toast('error', 'Insufficient balance');
       return;
     }
-
-    client.store.dispatch({
+    await client.store.dispatch({
       type: 'purchase-temp-contract',
       payload: {
         id: contract.id,
         address
       }
     });
-    client
+    await client.lockSendTransaction();
+    await client
       .purchaseContract({
         ...data,
         contractId: contract.id,
@@ -56,27 +58,45 @@ function Marketplace({
       })
       .then(d => {
         onWalletRefresh();
+        setShowSuccess(true);
         context.toast(
           'success',
-          'Contract is succefully submitted to purchase'
+          'Contract is successfully submitted to purchase'
         );
-        history.push('/buyer-hub');
+        client.store.dispatch({
+          type: 'purchase-contract-success',
+          payload: { id: contract.id }
+        });
+      })
+      .catch(e => {
+        client.store.dispatch({
+          type: 'purchase-contract-failed',
+          payload: { id: contract.id }
+        });
+        context.toast('error', `Failed to purchase with error: ${e.message}`);
+        setIsModalActive(false);
+      })
+      .finally(() => {
+        client.unlockSendTransaction();
       });
-    setIsModalActive(false);
   };
 
   const handleCloseModal = e => {
+    setShowSuccess(false);
     setIsModalActive(false);
   };
 
   useEffect(() => {
     contractsRefresh();
+    props.getLocalIp({}).then(props.setIp);
+    props.getPoolAddress({}).then(props.setDefaultBuyerPool);
   }, []);
 
   const tabs = [
+    { value: 'contract', name: 'Contract', ratio: 2 },
     { value: 'price', name: 'Price', ratio: 1 },
     { value: 'length', name: 'Duration', ratio: 1 },
-    { value: 'speed', name: 'Speed (TH/s)', ratio: 1 },
+    { value: 'speed', name: 'Speed', ratio: 1 },
     { value: 'action', name: 'Actions', ratio: 2 }
   ];
 
@@ -97,13 +117,13 @@ function Marketplace({
       <MarketplaceRow
         data-testid="Marketplace-row"
         onPurchase={data => {
-          console.log(data);
           setContractToPurchase(data);
           setIsModalActive(true);
         }}
         contract={contractsList[index]}
         address={address}
         ratio={ratio}
+        allowSendTransaction={allowSendTransaction}
       />
     </ContractsRowContainer>
   );
@@ -134,6 +154,7 @@ function Marketplace({
         contract={contractToPurchase}
         handlePurchase={handlePurchase}
         close={handleCloseModal}
+        showSuccess={showSuccess}
       />
     </View>
   );

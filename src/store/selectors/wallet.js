@@ -1,13 +1,15 @@
 import { createSelector } from 'reselect';
-import uniqBy from 'lodash/uniqBy';
 import sortBy from 'lodash/sortBy';
 import get from 'lodash/get';
 
 import * as utils from '../utils';
-import { getChain, getRate } from './chain';
+import { getChain, getRate, getRateEth } from './chain';
 import { getConfig } from './config';
 import { getIsOnline } from './connectivity';
-import { getEthBalance, getLmrBalance } from '../utils/coinValue';
+import {
+  fromTokenBaseUnitsToETH,
+  fromTokenBaseUnitsToLMR
+} from '../../utils/coinValue';
 import { toUSD } from '../utils/syncAmounts';
 
 export const getWallet = createSelector(
@@ -24,19 +26,25 @@ export const getWalletAddress = createSelector(
 // Returns the LMR balance of the active address in wei
 export const getWalletEthBalance = createSelector(
   getWallet,
-  walletData => getEthBalance(walletData.ethBalance)
-  // (walletData) => walletData.ethBalance / lmrEightDecimals
+  walletData => fromTokenBaseUnitsToETH(walletData.ethBalance)
+  // (walletData) => walletData.ethBalance / lmrDecimals
 );
 
 // Returns the LMR balance of the active address in wei
 export const getWalletLmrBalance = createSelector(getWallet, walletData =>
-  getLmrBalance(get(walletData, 'token.lmrBalance', 0))
+  fromTokenBaseUnitsToLMR(get(walletData, 'token.lmrBalance', 0))
 );
 
 export const getWalletLmrBalanceUSD = createSelector(
   getWalletLmrBalance,
   getRate,
   (lmrBalance, rate) => toUSD(lmrBalance, rate)
+);
+
+export const getWalletEthBalanceUSD = createSelector(
+  getWalletEthBalance,
+  getRateEth,
+  (ethBalance, rateEth) => toUSD(ethBalance, rateEth)
 );
 
 // Returns the LMR balance of the active address in wei
@@ -50,7 +58,7 @@ export const getLmrBalanceWei = getWalletLmrBalance;
 export const getTransactions = createSelector(getWallet, walletData => {
   const transactionParser = utils.createTransactionParser(walletData.address);
 
-  const transactions = get(walletData, 'token.transactions', []);
+  const transactions = Object.values(walletData?.token?.transactions) || [];
 
   const sorted = sortBy(transactions, [
     'transaction.blockNumber',
@@ -58,9 +66,7 @@ export const getTransactions = createSelector(getWallet, walletData => {
     'transaction.nonce'
   ]).reverse();
 
-  const mapped = sorted.map(transactionParser);
-
-  return mapped;
+  return sorted.map(transactionParser);
 });
 
 // Returns if the current wallet/address has transactions on the active chain
@@ -79,8 +85,13 @@ export const getTxSyncStatus = createSelector(
 export const sendLmrFeatureStatus = createSelector(
   getWalletLmrBalance,
   getIsOnline,
-  (lmrBalance, isOnline) =>
-    isOnline ? (utils.hasFunds(lmrBalance) ? 'ok' : 'no-funds') : 'offline'
+  getWalletEthBalance,
+  (lmrBalance, isOnline, ethBalance) =>
+    isOnline
+      ? utils.hasFunds(lmrBalance) || utils.hasFunds(ethBalance)
+        ? 'ok'
+        : 'no-funds'
+      : 'offline'
 );
 
 // Returns the status of the "Receive Lumerin" feature on the chain
@@ -113,4 +124,8 @@ export const getTransactionFromHash = createSelector(
     transactions
       .map(utils.createTransactionParser(activeAddress))
       .find(tx => tx.hash === hash)
+);
+
+export const isAllowSendTransaction = createSelector(getWallet, walletData =>
+  get(walletData, 'allowSendTransaction', true)
 );

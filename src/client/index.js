@@ -1,6 +1,6 @@
-import fastPasswordEntropy from 'fast-password-entropy';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
+import pickBy from 'lodash/pickBy';
 
 import * as utils from './utils';
 import keys from './keys';
@@ -22,11 +22,21 @@ const createClient = function(createStore) {
       'data.config.statePersistanceDebounce',
       0
     );
+
+    // keysToPersist keys that are passed from global redux state to main process.
+    // For now only chain data is used.
+    // TODO: subscribe for changes only within listed branch of redux state
+    const keysToPersist = ['chain'];
+
     store.subscribe(
       debounce(
         function() {
+          const passedState = pickBy(store.getState(), function(value, key) {
+            return keysToPersist.includes(key);
+          });
+
           utils
-            .forwardToMainProcess('persist-state')(store.getState())
+            .forwardToMainProcess('persist-state')(passedState)
             .catch(err =>
               // eslint-disable-next-line no-console
               console.warn(`Error persisting state: ${err.message}`)
@@ -46,16 +56,25 @@ const createClient = function(createStore) {
       'https://github.com/Lumerin-protocol/lumerin-overview/blob/main/docs/00-overview.md'
     );
 
-  const onHelpLinkClick = () =>
-    window.openLink(
-      'https://github.com/Lumerin-protocol/lumerin-overview/blob/main/docs/00-overview.md'
-    );
+  const onHelpLinkClick = () => window.openLink('https://lumerin.gitbook.io');
 
   const onLinkClick = url => window.openLink(url);
 
-  const getStringEntropy = fastPasswordEntropy;
-
   const copyToClipboard = text => Promise.resolve(window.copyToClipboard(text));
+
+  const lockSendTransaction = () => {
+    store.dispatch({
+      type: 'allow-send-transaction',
+      payload: { allowSendTransaction: false }
+    });
+  };
+
+  const unlockSendTransaction = () => {
+    store.dispatch({
+      type: 'allow-send-transaction',
+      payload: { allowSendTransaction: true }
+    });
+  };
 
   const onInit = () => {
     window.addEventListener('beforeunload', function() {
@@ -113,7 +132,17 @@ const createClient = function(createStore) {
     getLmrTransferGasLimit: utils.forwardToMainProcess(
       'get-lmr-transfer-gas-limit'
     ),
-    logout: utils.forwardToMainProcess('logout')
+    logout: utils.forwardToMainProcess('logout'),
+    getLocalIp: utils.forwardToMainProcess('get-local-ip'),
+    getPoolAddress: utils.forwardToMainProcess('get-pool-address'),
+    getProxyRouterSettings: utils.forwardToMainProcess(
+      'get-proxy-router-settings'
+    ),
+    saveProxyRouterSettings: utils.forwardToMainProcess(
+      'save-proxy-router-settings'
+    ),
+    restartProxyRouter: utils.forwardToMainProcess('restart-proxy-router'),
+    claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000)
   };
 
   const api = {
@@ -124,13 +153,14 @@ const createClient = function(createStore) {
     createMnemonic: keys.createMnemonic,
     onTermsLinkClick,
     onTransactionLinkClick,
-    getStringEntropy,
     copyToClipboard,
     onHelpLinkClick,
     getAppVersion: window.getAppVersion,
     onLinkClick,
     onInit,
-    store
+    store,
+    lockSendTransaction,
+    unlockSendTransaction
   };
 
   return api;

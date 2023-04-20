@@ -98,6 +98,7 @@ function loadWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, "preload.js"),
+      devTools: !app.isPackaged,
     },
     x: mainWindowState.x,
     y: mainWindowState.y,
@@ -142,7 +143,7 @@ function loadWindow() {
         buttons: ["Yes", "No"],
         title: "Confirm",
         message:
-          "Are you sure you want to quit? Proxy Router will be terminated and you will stop running contracts",
+          "Are you sure you want to quit?",
       });
       if (choice === 1) {
         return;

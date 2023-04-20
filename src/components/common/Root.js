@@ -33,6 +33,14 @@ class Root extends React.Component {
         });
         this.setState({ onboardingComplete });
       })
+      .then(() => {
+        if (this.props.isAuthBypassed) {
+          // TODO: replace dummy password
+          this.props.client
+            .onLoginSubmit({ password: 'password' })
+            .then(() => this.props.dispatch({ type: 'session-started' }));
+        }
+      })
       // eslint-disable-next-line no-console
       .catch(console.warn);
   }
@@ -85,7 +93,8 @@ class Root extends React.Component {
 
 const mapStateToProps = state => ({
   isSessionActive: selectors.isSessionActive(state),
-  hasEnoughData: selectors.hasEnoughData(state)
+  hasEnoughData: selectors.hasEnoughData(state),
+  isAuthBypassed: selectors.getIsAuthBypassed(state)
 });
 
 export default connect(mapStateToProps)(withClient(Root));

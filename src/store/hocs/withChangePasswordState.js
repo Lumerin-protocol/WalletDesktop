@@ -4,16 +4,13 @@ import React from 'react';
 
 import { withClient } from './clientContext';
 import selectors from '../selectors';
+import { IsPasswordStrong } from '../../lib/PasswordStrength';
 
 const withChangePasswordState = WrappedComponent => {
   class Container extends React.Component {
     static propTypes = {
       client: PropTypes.shape({
-        getStringEntropy: PropTypes.func.isRequired,
         changePassword: PropTypes.func.isRequired
-      }).isRequired,
-      config: PropTypes.shape({
-        requiredPasswordEntropy: PropTypes.number.isRequired
       }).isRequired
     };
 
@@ -51,11 +48,11 @@ const withChangePasswordState = WrappedComponent => {
         errors.oldPassword = 'Current password is required';
       } else if (!newPassword) {
         errors.newPassword = 'New password is required';
-      } else if (
-        client.getStringEntropy(newPassword) < config.requiredPasswordEntropy
-      ) {
-        errors.password = 'Password is not strong enough';
-      } else if (!errors.password && !newPasswordAgain) {
+      }
+      // else if (!IsPasswordStrong(newPassword)) {
+      //   errors.password = 'Password is not strong enough';
+      // }
+      else if (!errors.password && !newPasswordAgain) {
         errors.newPasswordAgain = `Repeat the ${
           clearOnError ? 'PIN' : 'password'
         }`;
@@ -84,22 +81,21 @@ const withChangePasswordState = WrappedComponent => {
           oldPassword: this.state.oldPassword,
           newPassword: this.state.newPassword
         })
-        .then(isValid =>
+        .then(isValid => {
           this.setState({
             status: isValid ? 'success' : 'failure',
             errors: isValid ? {} : { oldPassword: 'Invalid password' }
-          })
-        )
+          });
+        })
         .catch(err => this.setState({ status: 'failure', error: err.message }));
     };
 
     render() {
       return (
         <WrappedComponent
-          requiredPasswordEntropy={this.props.config.requiredPasswordEntropy}
           onInputChange={this.onInputChange}
           onSubmit={this.onSubmit}
-          // validate={this.validate}
+          validate={this.validate}
           {...this.state}
           {...this.props}
         />

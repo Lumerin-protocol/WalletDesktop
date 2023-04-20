@@ -1,231 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import withBalanceBlockState from '../../store/hocs/withBalanceBlockState';
-import styled from 'styled-components';
-import { LumerinLightIcon } from '../icons/LumerinLightIcon';
 import { EtherIcon } from '../icons/EtherIcon';
+import LumerinLogo from '../icons/LumerinLogo';
+import { Balance } from './Balance';
+import {
+  WalletBalanceHeader,
+  Btn,
+  BtnAccent,
+  BtnRow,
+  SecondaryContainer,
+  Container,
+  Primary,
+  CoinsRow,
+  BalanceContainer,
+  GlobalContainer
+} from './BalanceBlock.styles';
+import Spinner from '../common/Spinner';
+import { ToastsContext } from '../toasts';
 
-import { BaseBtn, DisplayValue } from '../common';
-
-const relSize = ratio => `calc(100vw / ${ratio})`;
-const sizeMult = mult => `calc(5px * ${mult})`;
-
-const Container = styled.div`
-  margin: 1.6rem 0 1.6rem;
-  background-color: #fff;
-  height: 106px;
-  width: 100%;
-  padding: 6px 1.6rem 0 1.6rem;
-  border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-`;
-
-const SecondaryContrainer = styled.div`
-  display: flex;
-  height: 90px;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const WalletBalanceHeader = styled.div`
-  font-size: 1.3rem;
-  text-align: center;
-  height: 3px;
-  color: ${p => p.theme.colors.primary};
-`;
-
-const Balance = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75em 1.6rem 0.75em 1rem;
-  height: 90%;
-  position: relative;
-  @media (min-width: 1040px) {
-  }
-`;
-
-const IconLogoContainer = styled.div`
-  padding: 2.4rem 1.2rem;
-  height: 100px;
-  display: block !important;
-  flex-shrink: 0;
-
-  /* @media (min-width: 800px) {
-    display: block !important;
-  } */
-`;
-
-const Primary = styled.div`
-  display: flex;
-  align-items: center;
-  line-height: 1.5;
-  font-weight: 500;
-  letter-spacing: -1px;
-  color: ${p => p.theme.colors.primary};
-  margin: 0 1.6rem;
-  flex-grow: 1;
-  position: relative;
-  // top: ${relSize(-400)};
-  // font-size: ${relSize(58)};
-  font-size: min(max(20px,4vw),24px);
-  max-width: 150px;
-  min-width: 20px;
-  overflow: scroll;
-
-  @media (min-width: 1440px) {
-    font-size: ${({ large }) => (large ? '3.6rem' : '2.8rem')};
-  }
-`;
-
-const Secondary = styled.div`
-  display: block;
-  line-height: 1;
-  font-weight: 600;
-  color: ${p => p.theme.colors.darker};
-  white-space: nowrap;
-  position: relative;
-  top: ${relSize(-400)};
-  font-size: ${relSize(48)};
-
-  @media (min-width: 800px) {
-    font-size: ${relSize(68)};
-  }
-
-  @media (min-width: 1440px) {
-    font-size: 2.2rem;
-  }
-`;
-
-const UsdValue = styled.div`
-  font-size: 12px;
-  color: #8e8e8e;
-  position: absolute;
-  top: 55px;
-`;
-
-const LeftBtn = styled(BaseBtn)`
-  height: 60%;
-  font-size: 1.5rem;
-  margin-right: 0.4rem;
-  border-radius: 5px !important;
-  background-color: ${p => p.theme.colors.translucentPrimary};
-  color: ${p => p.theme.colors.light};
-
-  @media (min-width: 1040px) {
-    margin-left: 0;
-  }
-`;
-
-const RightBtn = styled(BaseBtn)`
-  height: 60%;
-  font-size: 1.5rem;
-  margin-left: 0.4rem;
-  border-radius: 5px !important;
-  border: 1px solid ${p => p.theme.colors.translucentPrimary};
-  background-color: ${p => p.theme.colors.light};
-  color: ${p => p.theme.colors.translucentPrimary};
-
-  @media (min-width: 1040px) {
-    margin-left: 0;
-  }
-`;
-
-const BtnRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 200px;
-  height: 100%;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const LumerinContainer = styled.div`
-  display: flex;
-  align-items: center;
-  height: 90px;
-`;
-
-const LMR = styled.span`
-  font-size: 1.9rem;
-  line-height: 1.75rem;
-  margin-left: 5px;
-`;
-
-function BalanceBlock({
-  sendDisabled,
-  sendDisabledReason,
-  ethBalance,
+const WalletBalance = ({
   lmrBalance,
   lmrBalanceUSD,
-  onTabSwitch
-}) {
-  const [assetMode, setAssetMode] = useState('LMR');
+  ethBalance,
+  ethBalanceUSD
+}) => (
+  <BalanceContainer>
+    <CoinsRow>
+      <Primary data-testid="lmr-balance">
+        <Balance
+          currency="LMR"
+          value={lmrBalance}
+          icon={
+            <LumerinLogo style={{ height: '3.3rem', marginRight: '4px' }} />
+          }
+          equivalentUSD={lmrBalanceUSD}
+          maxSignificantFractionDigits={0}
+        />
+      </Primary>
+      <Primary data-testid="eth-balance">
+        <Balance
+          currency="ETH"
+          value={ethBalance}
+          icon={<EtherIcon size="3.3rem" />}
+          equivalentUSD={ethBalanceUSD}
+          maxSignificantFractionDigits={5}
+        />
+      </Primary>
+    </CoinsRow>
+  </BalanceContainer>
+);
 
-  const handleToggleAssetMode = e => setAssetMode(e.target.dataset.asset);
+const BalanceBlock = ({
+  lmrBalance,
+  lmrBalanceUSD,
+  ethBalance,
+  ethBalanceUSD,
+  sendDisabled,
+  sendDisabledReason,
+  recaptchaSiteKey,
+  faucetUrl,
+  walletAddress,
+  onTabSwitch,
+  client
+}) => {
   const handleTabSwitch = e => {
     e.preventDefault();
-
     onTabSwitch(e.target.dataset.modal);
   };
 
-  const LumerinMode = () => (
-    <LumerinContainer>
-      <LumerinLightIcon size="5rem" />
-      <Balance>
-        <Primary data-testid="lmr-balance">
-          <DisplayValue
-            shouldFormate={true}
-            value={lmrBalance}
-            post={<LMR>LMR</LMR>}
-          />
-        </Primary>
-        {lmrBalanceUSD !== undefined && <UsdValue>≈ {lmrBalanceUSD}</UsdValue>}
-        {/* TODO: Fix ethBalance */}
-        {/* <Secondary data-testid="eth-balance">ETH {ethBalance}</Secondary> */}
-      </Balance>
-    </LumerinContainer>
-  );
-
-  const EtherMode = () => (
-    <>
-      <EtherIcon size="6rem" data-asset="ETH" onClick={handleToggleAssetMode} />
-      <Balance>
-        <Primary data-testid="eth-balance" large>
-          <DisplayValue shouldFormate={false} value={ethBalance} />
-        </Primary>
-        <Secondary data-testid="lmr-balance" hide>
-          <LumerinLightIcon size="2rem" /> {lmrBalance}
-        </Secondary>
-      </Balance>
-    </>
-  );
+  const claimFaucet = e => {
+    e.preventDefault();
+    const url = new URL(faucetUrl);
+    url.searchParams.set('address', walletAddress);
+    window.open(url);
+  };
 
   return (
-    <>
+    <GlobalContainer>
       <Container>
-        <WalletBalanceHeader>Wallet Balance</WalletBalanceHeader>
-        <SecondaryContrainer>
-          <LumerinMode />
+        <SecondaryContainer>
+          <WalletBalance
+            {...{ lmrBalance, lmrBalanceUSD, ethBalance, ethBalanceUSD }}
+          />
           <BtnRow>
-            {/* <LeftBtn
-              data-asset="ETH"
-              data-testid="receive-btn"
-              block
-            >
-              toggle {assetMode}
-            </LeftBtn> */}
-            <LeftBtn
+            <BtnAccent
               data-modal="receive"
               data-testid="receive-btn"
               onClick={handleTabSwitch}
               block
             >
               Receive
-            </LeftBtn>
-
-            <RightBtn
+            </BtnAccent>
+            <Btn
               data-modal="send"
               data-disabled={sendDisabled}
               data-rh={sendDisabledReason}
@@ -234,12 +100,22 @@ function BalanceBlock({
               block
             >
               Send
-            </RightBtn>
+            </Btn>
+
+            <BtnAccent
+              data-modal="claim"
+              onClick={claimFaucet}
+              data-rh={`Payout from the faucet is 10 sLMR and 0.1 sETH per day.\n
+                Wallet addresses are limited to one request every 24 hours.`}
+              block
+            >
+              Get Tokens
+            </BtnAccent>
           </BtnRow>
-        </SecondaryContrainer>
+        </SecondaryContainer>
       </Container>
-    </>
+    </GlobalContainer>
   );
-}
+};
 
 export default withBalanceBlockState(BalanceBlock);

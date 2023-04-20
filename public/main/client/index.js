@@ -14,11 +14,16 @@ const {
   refreshProxyRouterConnection,
 } = require("./handlers/single-core");
 
-const { runProxyRouter, PROXY_ROUTER_MODE } = require("./proxyRouter");
+const {
+  runProxyRouter,
+  PROXY_ROUTER_MODE,
+  isProxyRouterHealthy,
+} = require("./proxyRouter");
 
 function startCore({ chain, core, config: coreConfig }, webContent) {
   logger.verbose(`Starting core ${chain}`);
   const { emitter, events, api } = core.start(coreConfig);
+  const proxyRouterApi = api["proxy-router"];
 
   // emitter.setMaxListeners(30);
   emitter.setMaxListeners(50);
@@ -32,12 +37,15 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
   );
 
   function send(eventName, data) {
-    if (!webContent) {
-      return;
+    try {
+      if (!webContent) {
+        return;
+      }
+      const payload = Object.assign({}, data, { chain });
+      webContent.sender.send(eventName, payload);
+    } catch (err) {
+      logger.error(err);
     }
-    const payload = Object.assign({}, data, { chain });
-    webContent.sender.send(eventName, payload);
-    logger.verbose(`<-- ${eventName} ${stringify(payload)}`);
   }
 
   events.forEach((event) =>
@@ -99,19 +107,33 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         ...proxyRouterUserConfig,
       };
 
-      runProxyRouter(
-        config,
-        PROXY_ROUTER_MODE.Seller
+      const isSellerHealthy = await isProxyRouterHealthy(
+        api,
+        config.localSellerProxyRouterUrl
       );
-      runProxyRouter(config, PROXY_ROUTER_MODE.Buyer);
+      if (!isSellerHealthy) {
+        logger.debug("Seller is not healhy, restart...");
+        await proxyRouterApi.kill(config.sellerProxyPort).catch(logger.error);
+        runProxyRouter(config, PROXY_ROUTER_MODE.Seller);
+      }
+
+      const isBuyerHealthy = await isProxyRouterHealthy(
+        api,
+        config.localBuyerProxyRouterUrl
+      );
+      if (!isBuyerHealthy) {
+        logger.debug("Buyer is not healhy, restart...");
+        await proxyRouterApi.kill(config.buyerProxyPort).catch(logger.error);
+        runProxyRouter(config, PROXY_ROUTER_MODE.Buyer);
+      }
       send("proxy-router-type-changed", {
         isLocal: true,
       });
 
       refreshProxyRouterConnection(
-        { 
+        {
           sellerNodeUrl: config.localSellerProxyRouterUrl,
-          buyerNodeUrl: config.localBuyerProxyRouterUrl
+          buyerNodeUrl: config.localBuyerProxyRouterUrl,
         },
         { api }
       );
@@ -163,7 +185,7 @@ function createClient(config) {
           },
         });
         webContent.sender.send("ui-ready", payload);
-        logger.verbose(`<-- ui-ready ${stringify(payload)}`);
+        // logger.verbose(`<-- ui-ready ${stringify(payload)}`);
       })
       .catch(function(err) {
         logger.error("Could not send ui-ready message back", err.message);

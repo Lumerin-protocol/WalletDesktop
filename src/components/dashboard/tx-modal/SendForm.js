@@ -1,23 +1,22 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { ToastsContext } from '../../toasts';
+import Select from 'react-select';
 
+import BackIcon from '../../icons/BackIcon';
+import SwapIcon from '../../icons/SwapIcon';
 import { BaseBtn } from '../../common';
-import { abbreviateAddress } from '../../../utils';
-
-const TabWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  height: 10%;
-  padding: 0 2rem;
-`;
-
-const Tab = styled(BaseBtn)`
-  color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.primary : theme.colors.dark};
-  font-weight: bold;
-`;
+import Spinner from '../../common/Spinner';
+import theme from '../../../ui/theme';
+import {
+  HeaderWrapper,
+  BackBtn,
+  Header,
+  Footer,
+  FooterRow,
+  FooterLabel
+} from './common.styles';
+import { rangeSelectOptions } from '../../../store/hocs/withTransactionModalState';
 
 const AmountContainer = styled.label`
   display: block;
@@ -25,19 +24,6 @@ const AmountContainer = styled.label`
   font-weight: bold;
 `;
 
-const Currency = styled.span`
-  position: absolute;
-  z-index: 1;
-  top: 50%;
-  font-weight: bold;
-  cursor: text;
-  pointer-events: none;
-  margin-left: 20px;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.primary : theme.colors.dark};
-`;
 const AmountInput = styled.input`
   display: flex;
   font-weight: bold;
@@ -46,15 +32,19 @@ const AmountInput = styled.input`
   text-align: center;
   outline: none;
   border: none;
-  text-shadow: 0 0 0 #2196f3;
   color: ${({ isActive, theme }) =>
     isActive ? theme.colors.primary : theme.colors.dark};
-  &:focus {
-    outline: none;
-  }
 
   ::placeholder {
     color: ${p => p.theme.colors.dark};
+  }
+
+  &[type='number']::-webkit-inner-spin-button,
+  &[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
   }
 `;
 const AmountSublabel = styled.label`
@@ -63,11 +53,27 @@ const AmountSublabel = styled.label`
   text-align: center;
 `;
 
-const SendAllBtn = styled(BaseBtn)`
-  background-color: none;
-  color: ${p => p.theme.colors.primary};
-  font-weight: 800;
-  margin-top: 15px;
+const SubAmount = styled.div`
+  color: ${p => p.theme.colors.lumerin.helpertextGray};
+  font-size: 13px;
+  text-align: center;
+`;
+
+const FeeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 5px;
+`;
+
+const FeeRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const FeeLabel = styled.div`
+  font-size: 1.2rem;
+  color: ${p => p.theme.colors.dark};
 `;
 
 const Column = styled.div`
@@ -102,10 +108,10 @@ const WalletInput = styled.input`
   border-style: solid;
   border-color: ${p => p.theme.colors.lightBG};
   border-width: 1px;
-  padding: 8px 60px 6px 60px;
+  padding: 8px 20px 6px 60px;
 `;
 
-const ConfirmBtn = styled(BaseBtn)`
+const SendBtn = styled(BaseBtn)`
   width: 100%;
   height: 50px;
   border-radius: 5px;
@@ -113,126 +119,183 @@ const ConfirmBtn = styled(BaseBtn)`
     isActive ? theme.colors.lumerin.helpertextGray : theme.colors.primary};
 `;
 
-const Footer = styled.div`
+const IconContainer = styled.div`
+  margin: 0 auto;
+  padding: 5px;
+  cursor: pointer;
+`;
+
+const SendContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: left;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 50px;
+  margin: 16px 0 0;
 `;
 
-const FooterRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
+const LMR_MODE = 'coinAmount';
+const USD_MODE = 'usdAmount';
 
-const FooterLabel = styled.label`
-  color: ${p => p.theme.colors.dark};
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 5px;
-`;
+const selectorStyles = {
+  control: (base, state) => ({ ...base, borderColor: '#0E4353' }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isSelected ? '#0E4353' : undefined,
+    color: state.isSelected ? '#FFFFFF' : undefined,
+    ':active': {
+      ...base[':active'],
+      backgroundColor: '#0E435380',
+      color: '#FFFFFF'
+    }
+  })
+};
 
-export function SendForm({
-  activeTab,
-  address,
-  lmrBalanceUSD,
-  sendLmrDisabled,
-  sendLmrDisabledReason,
-  onTabSwitch,
-  amountInput,
-  onAmountInput,
-  destinationAddress,
-  onDestinationAddressInput,
-  onInputChange,
-  usdAmount,
-  coinAmount,
-  onMaxClick
-}) {
+export function SendForm(props) {
+  const [mode, setMode] = useState(LMR_MODE);
+  const [isPending, setIsPending] = useState(false);
   const context = useContext(ToastsContext);
+  const selectedCurrency = props.selectedCurrency;
 
-  const handleTabSwitch = e => {
+  const handleSendLmr = async e => {
     e.preventDefault();
 
-    onTabSwitch(e.target.dataset.modal);
+    const errorObj = props.validate();
+    if (errorObj) {
+      const message =
+        errorObj.coinAmount ||
+        errorObj.toAddress ||
+        errorObj.gasLimit ||
+        errorObj.gasPrice;
+      context.toast('error', message);
+      return;
+    }
+
+    try {
+      setIsPending(true);
+      await props.onSubmit(selectedCurrency.value);
+      props.onTabSwitch('success');
+    } catch (err) {
+      context.toast('error', err.message);
+    }
+
+    setIsPending(false);
   };
 
   const handleDestinationAddressInput = e => {
     e.preventDefault();
 
-    onDestinationAddressInput(e.target.value);
+    props.onInputChange(e.target);
+    props.onDestinationAddressInput(e.target.value);
   };
 
   const handleAmountInput = e => {
     e.preventDefault();
 
-    onAmountInput(e.target.value);
-    onInputChange(e);
+    const { value } = e.target;
+    props.onInputChange({ id: mode, value });
+    props.onAmountInput(value);
   };
 
-  if (!activeTab) {
+  if (!props.activeTab) {
     return <></>;
   }
 
-  const convertToLMR = val => {
-    return val * 15.8;
+  const sanitize = amount => (amount === '< 0.01' ? '0.01' : amount);
+
+  const onModeChange = () => {
+    const newMode = mode === LMR_MODE ? USD_MODE : LMR_MODE;
+    const newAmount = props[newMode];
+    setMode(newMode);
+    props.onAmountInput(sanitize(newAmount));
   };
 
   return (
     <>
-      <TabWrapper>
-        <Tab
-          data-modal="send"
-          data-rh={sendLmrDisabledReason}
-          isActive={activeTab === 'send'}
-          onClick={sendLmrDisabled ? null : handleTabSwitch}
-        >
-          Send
-        </Tab>
-        <Tab
-          data-modal="receive"
-          isActive={activeTab === 'receive'}
-          onClick={handleTabSwitch}
-        >
-          Receive
-        </Tab>
-      </TabWrapper>
+      <HeaderWrapper>
+        <BackBtn data-modal="send" onClick={props.onRequestClose}>
+          <BackIcon size="2.4rem" fill="black" />
+        </BackBtn>
+        <Header>You are sending</Header>
+      </HeaderWrapper>
+
+      <div style={{ color: 'black' }}>
+        <Select
+          className="basic-single"
+          classNamePrefix="select"
+          name="color"
+          styles={selectorStyles}
+          onChange={props.setSelectedCurrency}
+          value={selectedCurrency}
+          options={rangeSelectOptions}
+        />
+      </div>
+
       <Column>
         <AmountContainer>
-          <Currency isActive={amountInput > 0}>$</Currency>
           <AmountInput
-            id="usdAmount"
+            type="number"
             placeholder={0}
-            isActive={amountInput > 0}
+            isActive={true}
             onChange={handleAmountInput}
-            value={amountInput}
+            value={props.amountInput}
           />
         </AmountContainer>
         <AmountSublabel>
-          {convertToLMR(amountInput).toFixed(2) || 0} LMR
+          {mode === LMR_MODE ? selectedCurrency.label : 'USD'}
         </AmountSublabel>
-        <SendAllBtn onClick={onMaxClick}>Max</SendAllBtn>
+        <IconContainer>
+          <SwapIcon
+            onClick={onModeChange}
+            fill={theme.colors.lumerin.helpertextGray}
+          ></SwapIcon>
+        </IconContainer>
+        {mode === LMR_MODE ? (
+          <SubAmount>≈ {props.usdAmount}</SubAmount>
+        ) : (
+          <SubAmount>
+            ≈ {props.coinAmount} {selectedCurrency.label}
+          </SubAmount>
+        )}
+
+        <FeeContainer>
+          {props.estimatedFee && (
+            <FeeRow>
+              <FeeLabel>Estimated fee:</FeeLabel>
+              <FeeLabel>{props.estimatedFee} ETH</FeeLabel>
+            </FeeRow>
+          )}
+        </FeeContainer>
       </Column>
 
       <WalletContainer>
         <WalletInputLabel>To: </WalletInputLabel>
         <WalletInput
+          id="toAddress"
           onChange={handleDestinationAddressInput}
-          value={destinationAddress}
+          value={props.destinationAddress}
         />
       </WalletContainer>
 
       <Footer>
-        {
-          <FooterRow>
-            <FooterLabel>LMR Balance</FooterLabel>
-            <FooterLabel>
-              {convertToLMR(amountInput).toFixed(2)} ≈ ${amountInput}
-            </FooterLabel>
-          </FooterRow>
-        }
-        <ConfirmBtn data-modal="confirm" onClick={handleTabSwitch}>
-          Confirm
-        </ConfirmBtn>
+        <FooterRow>
+          <FooterLabel>{selectedCurrency.label} Balance</FooterLabel>
+          <FooterLabel>
+            {selectedCurrency.value === 'ETH'
+              ? `${props.ethBalanceWei.toFixed(6)} ≈ ${props.ethBalanceUSD}`
+              : `${props.lmrBalanceWei.toFixed(6)} ≈ ${props.lmrBalanceUSD}`}
+          </FooterLabel>
+        </FooterRow>
+        <FooterRow>
+          <SendContainer>
+            {isPending && <Spinner size="16px" />}
+            {!isPending && (
+              <SendBtn data-modal="success" onClick={handleSendLmr}>
+                Send now
+              </SendBtn>
+            )}
+          </SendContainer>
+        </FooterRow>
       </Footer>
     </>
   );

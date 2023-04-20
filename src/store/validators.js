@@ -1,4 +1,5 @@
 /* eslint-disable max-params */
+import { IsPasswordStrong } from '../lib/PasswordStrength';
 import { isWeiable, isHexable, sanitize, sanitizeMnemonic } from './utils';
 
 function validateAmount(client, amount, propName, max, errors = {}) {
@@ -119,11 +120,10 @@ export function validatePasswordCreation(
 ) {
   if (!password) {
     errors.password = 'Password is required';
-  } else if (
-    client.getStringEntropy(password) < config.requiredPasswordEntropy
-  ) {
-    errors.password = 'Password is not strong enough';
   }
+  // else if (!IsPasswordStrong(password)) {
+  //   errors.password = 'Password is not strong enough';
+  // }
 
   return errors;
 }
@@ -135,3 +135,29 @@ export function validateUseMinimum(useMinimum, estimate, errors = {}) {
 
   return errors;
 }
+
+export const validatePoolAddress = (address, errors = {}) => {
+  const defaultPoolFormat = 'stratum+tcp://{host}:{port}';
+  const expectedFormat = `Expected format: ${defaultPoolFormat}`;
+
+  if (!address) {
+    errors.proxyDefaultPool = `Enter default destination. ${expectedFormat}`;
+    return errors;
+  }
+
+  const pattern = /^stratum\+tcp:\/\/([\w.-]+):(\d+)$/;
+  const result = pattern.test(address);
+
+  if (!result) {
+    errors.proxyDefaultPool = `Invalid destination address. ${expectedFormat}`;
+  }
+  return errors;
+};
+
+export const validatePoolUsername = (username, errors = {}) => {
+  if (!username || !username.trim()) {
+    errors.proxyPoolUsername = 'Enter username';
+    return errors;
+  }
+  return errors;
+};

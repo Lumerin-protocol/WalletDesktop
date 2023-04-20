@@ -1,31 +1,49 @@
-'use strict';
+"use strict";
 
-const settings = require('electron-settings');
-const utils = require('web3-utils');
-const { merge } = require('lodash');
+const settings = require("electron-settings");
+const utils = require("web3-utils");
+const { merge } = require("lodash");
 
-const logger = require('../../../logger');
-const restart = require('../electron-restart');
-const { getDb } = require('../database');
+const logger = require("../../../logger");
+const restart = require("../electron-restart");
+const { getDb } = require("../database");
 
-const getKey = key => settings.getSync(key);
+const getKey = (key) => settings.getSync(key);
 
-function setKey (key, value) {
+function setKey(key, value) {
   settings.setSync(key, value);
-  logger.verbose('Settings changed', key);
+  logger.verbose("Settings changed", key);
 }
 
-const getPasswordHash = () => getKey('user.passwordHash');
+const getPasswordHash = () => getKey("user.passwordHash");
 
-function setPasswordHash (hash) {
-  setKey('user.passwordHash', hash);
+function setPasswordHash(hash) {
+  setKey("user.passwordHash", hash);
 }
 
-const setProxyRouterConfig = (config) => setKey('user.proxyRouterConfig', JSON.stringify(config));
+const setProxyRouterConfig = (config) =>
+  setKey("user.proxyRouterConfig", JSON.stringify(config));
 
-const getProxyRouterConfig = () => JSON.parse(getKey('user.proxyRouterConfig'));
+const getProxyRouterConfig = () => {
+  try {
+    const configJson = getKey("user.proxyRouterConfig");
+    const data = JSON.parse(configJson);
+    if (data.defaultPool) {
+      if (!data.sellerDefaultPool) {
+        data.sellerDefaultPool = data.defaultPool;
+      }
+      if (!data.buyerDefaultPool) {
+        data.buyerDefaultPool = data.defaultPool;
+      }
+    }
+    return data;
+  } catch (e) {
+    console.error(e);
+    cleanupDb();
+  }
+};
 
-function upgradeSettings (defaultSettings, currentSettings) {
+function upgradeSettings(defaultSettings, currentSettings) {
   let finalSettings = merge({}, currentSettings);
   // Remove no longer used settings as now are stored in config
   delete finalSettings.app;
@@ -34,7 +52,6 @@ function upgradeSettings (defaultSettings, currentSettings) {
 
   // Convert previous addresses to checksum addresses
   // if (finalSettings.user && finalSettings.user.wallet) {
-
 
   //   Object.keys(finalSettings.user.wallets).forEach(function (key) {
   //     Object.keys(finalSettings.user.wallets[key].addresses).forEach(function (address) {
@@ -51,28 +68,27 @@ function upgradeSettings (defaultSettings, currentSettings) {
   settings.setSync(finalSettings);
 }
 
-function presetDefaults () {
-  logger.verbose('Settings file', settings.file());
+function presetDefaults() {
+  logger.verbose("Settings file", settings.file());
   const currentSettings = settings.getSync();
-  const defaultSettings = require('./defaultSettings');
+  const defaultSettings = require("./defaultSettings");
   settings.setSync(merge(defaultSettings, currentSettings));
-  logger.verbose('Default settings applied');
-  logger.debug('Current settings', settings.getSync());
+  logger.verbose("Default settings applied");
+  logger.debug("Current settings", settings.getSync());
 }
 
 function cleanupDb() {
   const currentSettings = settings.getSync();
-  const defaultSettings = require('./defaultSettings');
+  const defaultSettings = require("./defaultSettings");
 
-  logger.warn('Removing old user settings');
+  logger.warn("Removing old user settings");
   delete currentSettings.user;
   // Overwrite old settings and clear db if settings file version changed
   upgradeSettings(defaultSettings, currentSettings);
   const db = getDb();
-  db.dropDatabase()
-    .catch(function (err) {
-      logger.error('Possible database corruption', err.message);
-    });
+  db.dropDatabase().catch(function(err) {
+    logger.error("Possible database corruption", err.message);
+  });
   restart(1);
 }
 
@@ -82,5 +98,5 @@ module.exports = {
   presetDefaults,
   setProxyRouterConfig,
   getProxyRouterConfig,
-  cleanupDb
+  cleanupDb,
 };

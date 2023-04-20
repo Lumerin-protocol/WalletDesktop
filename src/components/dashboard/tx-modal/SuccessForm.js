@@ -1,11 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { ToastsContext } from '../../toasts';
 
 import { BaseBtn } from '../../common';
 import { abbreviateAddress } from '../../../utils';
 import { SuccessLayer } from './SuccessLayer';
 import { toUSD } from '../../../store/utils/syncAmounts';
+
+const SuccessImage = styled.div`
+  margin: 0 auto;
+`;
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -29,20 +32,6 @@ const AmountContainer = styled.label`
   font-weight: bold;
 `;
 
-const Currency = styled.span`
-  position: absolute;
-  z-index: 1;
-  top: 50%;
-  font-weight: bold;
-  cursor: text;
-  pointer-events: none;
-  margin-left: 20px;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.primary : theme.colors.dark};
-`;
-
 const AmountInput = styled.input`
   display: flex;
   font-weight: bold;
@@ -57,11 +46,6 @@ const AmountInput = styled.input`
   ::placeholder {
     color: ${p => p.theme.colors.dark};
   }
-`;
-const AmountSublabel = styled.label`
-  color: ${p => p.theme.colors.dark};
-  font-size: 1.4rem;
-  text-align: center;
 `;
 
 const DoneBtn = styled(BaseBtn)`
@@ -97,30 +81,7 @@ const SubAmount = styled.div`
   text-align: center;
 `;
 
-// export function ConfirmForm({ activeTab, address, lmrBalanceUSD, sendLmrDisabled, sendLmrDisabledReason, onTabSwitch, amountInput, onAmountInput, destinationAddress, onDestinationAddressInput, onInputChange, usdAmount, coinAmount, onMaxClick }) {
 export function SuccessForm(props) {
-  const context = useContext(ToastsContext);
-
-  const handleTabSwitch = e => {
-    e.preventDefault();
-
-    // props.onTabSwitch(e.target.dataset.modal);
-    props.onCloseModal();
-  };
-
-  const handleDestinationAddressInput = e => {
-    e.preventDefault();
-
-    props.onDestinationAddressInput(e.target.value);
-  };
-
-  const handleAmountInput = e => {
-    e.preventDefault();
-
-    props.onAmountInput(e.target.value);
-    props.onInputChange(e);
-  };
-
   const LMRtoUSD = val => {
     return toUSD(val, props.coinPrice);
   };
@@ -140,8 +101,9 @@ export function SuccessForm(props) {
         <HeaderWrapper>
           <Header>Success</Header>
         </HeaderWrapper>
-
-        <SuccessLayer />
+        <SuccessImage>
+          <SuccessLayer />
+        </SuccessImage>
       </Column>
 
       <Column>
@@ -153,7 +115,7 @@ export function SuccessForm(props) {
             value={props.coinAmount}
           />
         </AmountContainer>
-        <SubAmount>≈ {LMRtoUSD(props.coinAmount)}</SubAmount>
+        {/* <SubAmount>≈ {LMRtoUSD(props.coinAmount)}</SubAmount> */}
       </Column>
 
       <Footer>

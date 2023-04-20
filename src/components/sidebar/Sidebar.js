@@ -14,6 +14,7 @@ const Container = styled.div`
   flex-direction: column;
   transition: width 0.2s;
   position: absolute;
+  overflow-y: hidden;
   top: 0;
   left: 0;
   bottom: 0;
@@ -24,6 +25,7 @@ const Container = styled.div`
   }
   @media (min-width: 800px) {
     position: relative;
+    min-width: 210px;
     width: 210px;
     &:hover {
       box-shadow: none;
@@ -60,21 +62,19 @@ const IconLogoContainer = styled.div`
 `;
 
 const NavContainer = styled.div`
-  overflow-y: scroll;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   height: 100%;
   padding-left: 2.2rem;
+  @media (max-width: 800px) {
+    padding-left: 1rem;
+  }
 `;
 
 const PrimaryNavContainer = styled.nav`
   flex-grow: 1;
   margin-top: 3rem;
-`;
-
-const SecondaryNavContainer = styled.nav`
-  padding-bottom: 1.2rem;
 `;
 
 export default function Sidebar() {
@@ -99,13 +99,13 @@ export default function Sidebar() {
           />
         </PrimaryNavContainer>
 
-        <SecondaryNavContainer>
+        <nav>
           <SecondaryNav
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             parent={Container}
           />
-        </SecondaryNavContainer>
+        </nav>
       </NavContainer>
     </Container>
   );

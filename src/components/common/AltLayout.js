@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React from 'react';
 
@@ -15,7 +14,7 @@ const Container = styled(Flex.Column)`
 `;
 
 const Body = styled.div`
-  max-width: 40rem;
+  max-width: 53rem;
   width: 100%;
   margin-top: 4rem;
   @media (min-height: 800px) {
@@ -41,11 +40,6 @@ const LogoContainer = styled.div`
 `;
 
 export default function AltLayout({ title, children, ...other }) {
-  // static propTypes = {
-  //   children: PropTypes.node.isRequired,
-  //   title: PropTypes.string
-  // }
-
   return (
     <Container align="center" {...other}>
       <LogoContainer>

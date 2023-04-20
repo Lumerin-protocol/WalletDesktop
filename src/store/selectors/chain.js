@@ -100,40 +100,11 @@ export const getRate = createSelector(
   (chainData, chainMetaData) => (chainData ? chainMetaData.rate : null)
 );
 
-// export const getChainWithBalances = createSelector(
-//   getChain,
-//   getConfig,
-//   (chain, config) => {
-//     const chainConfig = config.chain;
-//     const walletData = chain.wallet;
-//     const activeWallet = walletData.active;
-//     const activeAddress = Object.keys(
-//       walletsData.byId[activeWallet].addresses
-//     )[0]
-//     return {
-//       displayName: chainConfig.displayName,
-//       coinBalance: get(
-//         walletsData,
-//         ['byId', activeWallet, 'addresses', activeAddress, 'balance'],
-//         null
-//       ),
-//       balance: get(
-//         walletsData,
-//         [
-//           'byId',
-//           activeWallet,
-//           'addresses',
-//           activeAddress,
-//           'token',
-//           chainConfig.lmrTokenAddress,
-//           'balance'
-//         ],
-//         null
-//       ),
-//       id: chainName
-//     }
-//   }
-// )
+export const getRateEth = createSelector(
+  getChain,
+  getChainMeta,
+  (chainData, chainMetaData) => (chainData ? chainMetaData.rateEth : null)
+);
 
 export const getChainReadyStatus = createSelector(
   getChain,

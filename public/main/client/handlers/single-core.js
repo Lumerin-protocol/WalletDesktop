@@ -8,7 +8,11 @@ const config = require("../../../config");
 const wallet = require("../wallet");
 const noCore = require("./no-core");
 const WalletError = require("../WalletError");
-const { setProxyRouterConfig, cleanupDb } = require("../settings");
+const {
+  setProxyRouterConfig,
+  cleanupDb,
+  getProxyRouterConfig,
+} = require("../settings");
 
 const withAuth = (fn) => (data, { api }) => {
   if (typeof data.walletId !== "string") {
@@ -62,6 +66,22 @@ const purchaseContract = async function(data, { api }) {
   )(data, { api });
 };
 
+const claimFaucet = async function(data, { api }) {
+  data.walletId = wallet.getAddress().address;
+  data.password = await auth.getSessionPassword();
+
+  if (typeof data.walletId !== "string") {
+    throw new WalletError("WalletId is not defined");
+  }
+
+  return withAuth((privateKey) =>
+    api.token.claimFaucet({
+      ...data,
+      privateKey,
+    })
+  )(data, { api });
+};
+
 const cancelContract = async function(data, { api }) {
   data.walletId = wallet.getAddress().address;
   data.password = await auth.getSessionPassword();
@@ -88,6 +108,17 @@ function createWallet(data, core, isOpen = true) {
     .then(() => core.emitter.emit("create-wallet", { address: walletAddress }))
     .then(() => isOpen && openWallet(core, data.password));
 }
+
+const restartProxyRouter = async (data, { emitter, api }) => {
+  const password = await auth.getSessionPassword();
+
+  api["proxy-router"].kill(config.chain.buyerProxyPort).catch(logger.error);
+  await api["proxy-router"]
+    .kill(config.chain.sellerProxyPort)
+    .catch(logger.error);
+
+  emitter.emit("open-proxy-router", { password });
+};
 
 async function openWallet({ emitter }, password) {
   const { address } = wallet.getAddress();
@@ -136,7 +167,11 @@ const recoverFromMnemonic = function(data, core) {
 };
 
 function onLoginSubmit({ password }, core) {
-  return auth.isValidPassword(password).then(function(isValid) {
+  var checkPassword = config.chain.bypassAuth
+    ? new Promise((r) => r(true))
+    : auth.isValidPassword(password);
+
+  return checkPassword.then(function(isValid) {
     if (!isValid) {
       return { error: new WalletError("Invalid password") };
     }
@@ -214,7 +249,15 @@ const sendLmr = async (data, { api }) =>
     { api }
   );
 
-const sendEth = (data, { api }) => withAuth(api.wallet.sendEth)(data, { api });
+const sendEth = async (data, { api }) =>
+  withAuth(api.wallet.sendEth)(
+    {
+      ...data,
+      walletId: wallet.getAddress().address,
+      password: await auth.getSessionPassword(),
+    },
+    { api }
+  );
 
 const startDiscovery = (data, { api }) => api.devices.startDiscovery(data);
 
@@ -236,11 +279,19 @@ const getAddressAndPrivateKey = async (data, { api }) => {
     });
 };
 
-const refreshProxyRouterConnection = async (data, { api }) => api['proxy-router'].refreshConnectionsStream(data)
+const refreshProxyRouterConnection = async (data, { api }) =>
+  api["proxy-router"].refreshConnectionsStream(data);
+
+const getLocalIp = async ({}, { api }) => api["proxy-router"].getLocalIp();
 
 const logout = async (data) => {
   return cleanupDb();
-}
+};
+
+const getPoolAddress = async (data) => {
+  const config = getProxyRouterConfig();
+  return config.buyerDefaultPool || config.defaultPool;
+};
 
 module.exports = {
   // refreshAllSockets,
@@ -265,5 +316,9 @@ module.exports = {
   getLmrTransferGasLimit,
   getAddressAndPrivateKey,
   refreshProxyRouterConnection,
-  logout
+  logout,
+  getLocalIp,
+  getPoolAddress,
+  restartProxyRouter,
+  claimFaucet,
 };

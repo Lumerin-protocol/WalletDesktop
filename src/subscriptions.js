@@ -20,13 +20,13 @@ export const subscribeToMainProcessMessages = function(store) {
     'token-balance-changed',
     'token-contract-received',
     'token-transactions-changed',
-    'wallet-transactions-changed',
     'eth-tx',
     'lmr-tx',
     'coin-block',
     'devices-device-updated',
     'devices-state-updated',
-    'proxy-router-type-changed'
+    'proxy-router-type-changed',
+    'allow-send-transaction'
   ];
 
   // Subscribe to every IPC message defined above and dispatch a

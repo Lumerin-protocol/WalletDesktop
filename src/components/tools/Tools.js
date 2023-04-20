@@ -2,7 +2,7 @@ import { withRouter, NavLink } from 'react-router-dom';
 import withToolsState from '../../store/hocs/withToolsState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
 import ConfirmModal from './ConfirmModal';
@@ -12,6 +12,7 @@ import { ConfirmationWizard, TextInput, Flex, BaseBtn, Sp } from '../common';
 import Spinner from '../common/Spinner';
 import { View } from '../common/View';
 import { ToastsContext } from '../../components/toasts';
+import ConfirmProxyConfigModal from './ConfirmProxyConfigModal';
 
 const Container = styled.div`
   padding: 3rem 0 0 0;
@@ -99,7 +100,22 @@ const WalletInfo = styled.h4`
   color: ${p => p.theme.colors.dark};
 `;
 
+const Input = styled(TextInput)`
+  outline: 0;
+  border: 0px;
+  background: #eaf7fc;
+  border-radius: 15px;
+  padding: 1.2rem 1.2rem;
+  margin-top: 0.25rem;
+`;
+
 const Tools = props => {
+  const {
+    getProxyRouterSettings,
+    saveProxyRouterSettings,
+    restartProxyRouter
+  } = props;
+
   const RenderForm = goToReview => {
     const defState = {
       activeModal: null,
@@ -113,8 +129,24 @@ const Tools = props => {
 
     const [state, setState] = useState(defState);
     const [isRestarting, restartNode] = useState(false);
-
+    const [proxyRouterSettings, setProxyRouterSettings] = useState({
+      proxyRouterEditMode: false,
+      isFetching: true
+    });
     const context = useContext(ToastsContext);
+
+    useEffect(() => {
+      getProxyRouterSettings()
+        .then(data => {
+          setProxyRouterSettings({
+            ...data,
+            isFetching: false
+          });
+        })
+        .catch(err => {
+          context.toast('error', 'Failed to fetch proxy-router settings');
+        });
+    }, []);
 
     const onCloseModal = () => {
       setState({ ...state, activeModal: null });
@@ -124,42 +156,56 @@ const Tools = props => {
       setState({ ...state, activeModal: modal });
     };
 
+    const proxyRouterEditClick = () => {
+      setProxyRouterSettings({
+        ...proxyRouterSettings,
+        proxyRouterEditMode: true
+      });
+    };
+
+    const saveProxyRouterConfig = () => {
+      onCloseModal();
+      setProxyRouterSettings({
+        ...proxyRouterSettings,
+        proxyRouterEditMode: false,
+        isFetching: true
+      });
+      return saveProxyRouterSettings({
+        sellerDefaultPool: proxyRouterSettings.sellerDefaultPool,
+        buyerDefaultPool: proxyRouterSettings.buyerDefaultPool
+      })
+        .catch(() => {
+          context.toast('error', 'Failed to save proxy-router settings');
+        })
+        .finally(() => {
+          setProxyRouterSettings({
+            ...proxyRouterSettings,
+            isFetching: false,
+            proxyRouterEditMode: false
+          });
+        });
+    };
+
+    const confirmProxyRouterRestart = () => {
+      saveProxyRouterConfig().then(() => {
+        restartProxyRouter({}).catch(err => {
+          context.toast('error', 'Failed to restart proxy-router');
+        });
+      });
+    };
+
     const onRestartClick = async () => {
+      onCloseModal();
       restartNode(true);
 
-      let conf = {
-        headers: {
-          'content-type': 'application/json',
-          accept: 'application/json'
-        }
-      };
-
-      const restartHost =
-        process.env.LUMERIN_RESTART_HOST || 'http://localhost';
-      const restartPort = process.env.LUMERIN_RESTART_PORT || '8081';
-
-      await axios
-        .post(
-          `${restartHost}:${restartPort}/signal`,
-          {
-            type: 'restart'
-          },
-          conf
-        )
-        .then(response => {
-          if (process.env.DEBUG) {
-            console.log(`received ${response} after restart`);
-          }
-          context.toast('success', response.data.message);
-        })
-        .catch(error => {
-          context.toast('error', error.message);
-        });
+      await restartProxyRouter({}).catch(() => {
+        context.toast('error', 'Failed to restart proxy-router');
+      });
 
       // for UX
       setTimeout(() => {
         restartNode(false);
-      }, 800);
+      }, 6000);
     };
 
     const { onInputChange, mnemonic, errors } = props;
@@ -225,6 +271,90 @@ const Tools = props => {
               isOpen={state.activeModal === 'confirm-rescan'}
             />
           </Sp>
+          <Sp mt={5}>
+            <Subtitle>Proxy-Router configuration</Subtitle>
+            {proxyRouterSettings.isFetching ? (
+              <Spinner />
+            ) : !proxyRouterSettings.proxyRouterEditMode ? (
+              <>
+                <StyledParagraph>
+                  Seller default pool: "{proxyRouterSettings.sellerDefaultPool}"
+                </StyledParagraph>
+                <StyledParagraph>
+                  Buyer default pool: "{proxyRouterSettings.buyerDefaultPool}"
+                </StyledParagraph>
+                <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
+              </>
+            ) : (
+              <>
+                <StyledParagraph>
+                  Seller default pool:{' '}
+                  <Input
+                    onChange={e =>
+                      setProxyRouterSettings({
+                        ...proxyRouterSettings,
+                        sellerDefaultPool: e.value
+                      })
+                    }
+                    value={proxyRouterSettings.sellerDefaultPool}
+                  />
+                </StyledParagraph>
+                <StyledParagraph>
+                  Buyer default pool:{' '}
+                  <Input
+                    onChange={e =>
+                      setProxyRouterSettings({
+                        ...proxyRouterSettings,
+                        buyerDefaultPool: e.value
+                      })
+                    }
+                    value={proxyRouterSettings.buyerDefaultPool}
+                  />
+                </StyledParagraph>
+                <StyledBtn
+                  onClick={() => onActiveModalClick('confirm-proxy-restart')}
+                >
+                  Save
+                </StyledBtn>
+              </>
+            )}
+
+            <ConfirmModal
+              onRequestClose={onCloseModal}
+              onConfirm={props.onRescanTransactions}
+              isOpen={state.activeModal === 'confirm-rescan'}
+            />
+            <ConfirmProxyConfigModal
+              onRequestClose={onCloseModal}
+              onConfirm={confirmProxyRouterRestart}
+              onLater={saveProxyRouterConfig}
+              isOpen={state.activeModal === 'confirm-proxy-restart'}
+            />
+          </Sp>
+          <Sp mt={5}>
+            <Subtitle>Restart Proxy Router</Subtitle>
+            <StyledParagraph>
+              Restart the connected Proxy Router.
+            </StyledParagraph>
+            {isRestarting ? (
+              <Spinner size="20px" />
+            ) : (
+              <StyledBtn
+                onClick={() =>
+                  onActiveModalClick('confirm-proxy-direct-restart')
+                }
+              >
+                Restart
+              </StyledBtn>
+            )}
+            <ConfirmProxyConfigModal
+              onRequestClose={onCloseModal}
+              onConfirm={onRestartClick}
+              onLater={onCloseModal}
+              isOpen={state.activeModal === 'confirm-proxy-direct-restart'}
+            />
+          </Sp>
+
           {/* <Sp mt={5}>
             <hr />
             <Subtitle>Run End-to-End Test</Subtitle>
@@ -251,20 +381,6 @@ const Tools = props => {
               onConfirm={props.onRunTest}
               isOpen={state.activeModal === 'confirm-test'}
             />
-          </Sp> */}
-          {/* TODO: intent: Connecct lumerin node in future */}
-          {/* <Sp mt={5}>
-            <hr />
-            <Subtitle>Restart Lumerin Node</Subtitle>
-            <StyledParagraph>
-              Restart the connected Lumerin Node.
-            </StyledParagraph>
-
-            <br />
-            <StyledBtn onClick={() => onRestartClick()} disabled={isRestarting}>
-              Restart Node
-            </StyledBtn>
-            <Spinner show={isRestarting} />
           </Sp> */}
           <Sp mt={5}>
             <WalletInfo>Wallet Information</WalletInfo>

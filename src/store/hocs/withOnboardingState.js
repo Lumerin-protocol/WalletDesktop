@@ -4,6 +4,7 @@ import { withClient } from './clientContext';
 import selectors from '../selectors';
 import { connect } from 'react-redux';
 import * as utils from '../utils';
+import { toRfc2396 } from '../../utils';
 
 const withOnboardingState = WrappedComponent => {
   class Container extends React.Component {
@@ -16,7 +17,6 @@ const withOnboardingState = WrappedComponent => {
     //     createMnemonic: PropTypes.func.isRequired
     //   }).isRequired,
     //   config: PropTypes.shape({
-    //     requiredPasswordEntropy: PropTypes.number.isRequired
     //   }).isRequired
     // };
 
@@ -125,18 +125,35 @@ const withOnboardingState = WrappedComponent => {
       return this.setState({ isMnemonicVerified: true });
     };
 
+    validateDefaultPoolAddress() {
+      const errors = validators.validatePoolAddress(
+        this.state.proxyDefaultPool
+      );
+      validators.validatePoolUsername(this.state.proxyPoolUsername, errors);
+      if (errors.proxyDefaultPool || errors.proxyPoolUsername) {
+        this.setState({ errors });
+        return false;
+      }
+      return true;
+    }
+
     onProxyRouterConfigured = e => {
       if (e && e.preventDefault) e.preventDefault();
 
-      if (!this.state.proxyDefaultPool) {
-        const { errors } = this.state;
-        errors.proxyDefaultPool = 'Enter default pool';
-        return this.setState({ errors });
+      const isValid = this.validateDefaultPoolAddress();
+      if (!isValid) {
+        return;
       }
+
+      const defaultPool = toRfc2396(
+        this.state.proxyDefaultPool,
+        this.state.proxyPoolUsername
+      );
 
       return this.props.onOnboardingCompleted({
         proxyRouterConfig: {
-          defaultPool: this.state.proxyDefaultPool
+          sellerDefaultPool: defaultPool,
+          buyerDefaultPool: defaultPool
         },
         password: this.state.password,
         mnemonic: this.state.useUserMnemonic
@@ -192,7 +209,6 @@ const withOnboardingState = WrappedComponent => {
       return (
         <WrappedComponent
           onUseUserMnemonicToggled={this.onUseUserMnemonicToggled}
-          requiredPasswordEntropy={this.props.config.requiredPasswordEntropy}
           onMnemonicCopiedToggled={this.onMnemonicCopiedToggled}
           onMnemonicAccepted={this.onMnemonicAccepted}
           onTermsLinkClick={this.props.client.onTermsLinkClick}

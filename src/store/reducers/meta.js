@@ -36,11 +36,22 @@ const reducer = handleActions(
       height: payload.number
     }),
 
-    'coin-price-updated': (state, { payload }) => ({
-      ...state,
-      rateLastUpdated: parseInt(Date.now() / 1000, 10),
-      rate: payload.price
-    }),
+    'coin-price-updated': (state, { payload }) => {
+      if (payload.token === 'LMR') {
+        return {
+          ...state,
+          rateLastUpdated: parseInt(Date.now() / 1000, 10),
+          rate: payload.price
+        };
+      }
+
+      if (payload.token === 'ETH') {
+        return {
+          ...state,
+          rateEth: payload.price
+        };
+      }
+    },
 
     'gas-price-updated': (state, { payload }) => ({
       ...state,

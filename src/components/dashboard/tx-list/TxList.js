@@ -11,7 +11,6 @@ import TxRow from './row/Row';
 
 const Container = styled.div`
   margin-top: 2.4rem;
-  padding: 1.8rem 0;
   height: 100%;
 
   @media (min-width: 960px) {
@@ -21,16 +20,18 @@ const Container = styled.div`
 const Transactions = styled.div`
   margin: 1.6rem 0 1.6rem;
   border-radius: 15px;
-  background-color: #fff;
+  background-color: transparent;
 `;
 
 const ListContainer = styled.div`
   height: calc(100vh - 370px);
+  background: #fff;
+  border-radius: 15px;
 `;
 
 const TxRowContainer = styled.div`
   &:hover {
-    background-color: rgba(126, 97, 248, 0.1);
+    background-color: #eaf7fc;
   }
 `;
 

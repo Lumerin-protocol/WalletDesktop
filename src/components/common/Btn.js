@@ -31,7 +31,7 @@ export const Btn = styled(BaseBtn)`
   border-radius: 12px;
   background-color: ${p => p.theme.colors.primary};
   box-shadow: inset 0 3px 0 0 rgba(255, 255, 255, 0.1);
-  padding: 1.6rem;
+  padding: 1.6rem 2rem;
 
   &:not([disabled], [data-disabled]):hover,
   &:not([disabled], [data-disabled]):focus,
