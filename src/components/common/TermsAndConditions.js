@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Markdown from 'marked-react';
-import termsPath from '../../terms_and_conditions.md';
 import styled from 'styled-components';
+import Markdown from 'marked-react';
+import termsPath from '../../termsAndConditions.md';
 
 const StyledTC = styled.div`
   text-align: justify;
