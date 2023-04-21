@@ -4,7 +4,6 @@ import pickBy from 'lodash/pickBy';
 
 import * as utils from './utils';
 import keys from './keys';
-import { getSessionPassword } from './secure';
 import './sentry';
 
 const createClient = function(createStore) {
@@ -146,7 +145,6 @@ const createClient = function(createStore) {
   };
 
   const api = {
-    getSessionPassword,
     ...utils,
     ...forwardedMethods,
     isValidMnemonic: keys.isValidMnemonic,
