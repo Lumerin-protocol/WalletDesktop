@@ -4,10 +4,11 @@
 
 💻💰 Lumerin Wallet for desktop computers
 
-<!-- [![Build Status](https://travis-ci.com/TitanInd/lumerin-wallet-desktop.svg?branch=master)](https://travis-ci.com/TitanInd/lumerin-wallet-desktop)
+<!--
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-![Lumerin Desktop Wallet](https://lumerin.io/images/lumerin-apps-demo@2x.png) -->
+![Lumerin Desktop Wallet](https://lumerin.io/images/lumerin-apps-demo@2x.png) 
+-->
 
 ## Development
 
@@ -149,7 +150,7 @@ We welcome contributions to the Lumerin Wallet. If you're interested in helping 
 
 Please make sure that your code follows the existing code style and that all tests pass before opening a pull request.
 
-If you're not sure where to start, take a look at the [open issues](https://github.com/TitanInd/lumerin-wallet-desktop/issues) for the project.
+If you're not sure where to start, take a look at the [open issues](https://github.com/lumerin-protocol/WalletDesktop/issues) for the project.
 
 Thank you for your contributions!
 
