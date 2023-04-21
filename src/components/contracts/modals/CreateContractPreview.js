@@ -18,10 +18,12 @@ import {
   UpperCaseTitle,
   ContractInfoContainer
 } from './PurchaseModal/common.styles';
+import Spinner from '../../common/Spinner';
 
 export const CreateContractPreview = ({
   data: { address, time, speed, price },
   submit,
+  isCreating,
   close
 }) => (
   <>
@@ -67,9 +69,15 @@ export const CreateContractPreview = ({
         All proceeds are subject to a 1% marketplace fee
       </SmallTitle>
     </TitleWrapper>
-    <Row style={{ marginTop: '3rem' }}>
-      <LeftBtn onClick={close}>Edit Contract</LeftBtn>
-      <RightBtn onClick={submit}>Confirm</RightBtn>
-    </Row>
+    {isCreating ? (
+      <Row style={{ justifyContent: 'center', marginTop: '3rem' }}>
+        <Spinner size="16px" />
+      </Row>
+    ) : (
+      <Row style={{ marginTop: '3rem' }}>
+        <LeftBtn onClick={close}>Edit Contract</LeftBtn>
+        <RightBtn onClick={submit}>Confirm</RightBtn>
+      </Row>
+    )}
   </>
 );
