@@ -1,7 +1,7 @@
 const secureStore = require('keytar');
 
-const APP_NAME = 'titanio-lumerin-wallet';
-const SECURE_PASSWORD_KEY = 'temp';
+const APP_NAME = 'lumerin-wallet';
+const SECURE_PASSWORD_KEY = 'password';
 
 module.exports = {
   APP_NAME,

@@ -64,6 +64,7 @@ function SellerHub({
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   const context = useContext(ToastsContext);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // static propTypes = {
   //   sendDisabledReason: PropTypes.string,
@@ -79,6 +80,7 @@ function SellerHub({
 
   const handleCloseModal = e => {
     setIsModalActive(false);
+    setShowSuccess(false);
   };
 
   const createTempContract = (id, contract) => {
@@ -106,7 +108,7 @@ function SellerHub({
     });
   };
 
-  const handleContractDeploy = (e, contractDetails) => {
+  const handleContractDeploy = async (e, contractDetails) => {
     e.preventDefault();
 
     const contract = {
@@ -119,19 +121,21 @@ function SellerHub({
     const tempContractId = uniqueId();
     createTempContract(tempContractId, contract);
 
-    client.lockSendTransaction();
-    client
+    await client.lockSendTransaction();
+    await client
       .createContract(contract)
-      .then(() => contractsRefresh())
+      .then(() => {
+        setShowSuccess(true);
+        contractsRefresh();
+      })
       .catch(error => {
         context.toast('error', error.message || error);
         removeTempContract(tempContractId, contract);
+        setIsModalActive(false);
       })
       .finally(() => {
         client.unlockSendTransaction();
       });
-
-    setIsModalActive(false);
   };
 
   const handleContractCancellation = (e, data) => {
@@ -157,10 +161,6 @@ function SellerHub({
   };
   const contractsToShow = contracts.filter(c => c.seller === address);
 
-  console.log(
-    '🚀 ~ file: SellerHub.js:168 ~ allowSendTransaction:',
-    allowSendTransaction
-  );
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
@@ -195,6 +195,7 @@ function SellerHub({
         save={handleContractSave}
         deploy={handleContractDeploy}
         close={handleCloseModal}
+        showSuccess={showSuccess}
       />
     </View>
   );
