@@ -4,7 +4,6 @@ import pickBy from 'lodash/pickBy';
 
 import * as utils from './utils';
 import keys from './keys';
-import { getSessionPassword } from './secure';
 import './sentry';
 
 const createClient = function(createStore) {
@@ -53,7 +52,7 @@ const createClient = function(createStore) {
 
   const onTermsLinkClick = () =>
     window.openLink(
-      'https://github.com/Lumerin-protocol/lumerin-overview/blob/main/docs/00-overview.md'
+      'https://github.com/Lumerin-protocol/WalletDesktop/blob/main/LICENSE'
     );
 
   const onHelpLinkClick = () => window.openLink('https://lumerin.gitbook.io');
@@ -146,7 +145,6 @@ const createClient = function(createStore) {
   };
 
   const api = {
-    getSessionPassword,
     ...utils,
     ...forwardedMethods,
     isValidMnemonic: keys.isValidMnemonic,
