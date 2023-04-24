@@ -1,4 +1,4 @@
-"use strict";
+
 
 const { app, BrowserWindow, Notification, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
@@ -65,7 +65,7 @@ function initAutoUpdate() {
   });
 }
 
-function loadWindow() {
+function loadWindow(config) {
   // Ensure the app is ready before creating the main window
   if (!app.isReady()) {
     logger.warn("Tried to load main window while app not ready. Reloading...");
@@ -98,7 +98,7 @@ function loadWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, "preload.js"),
-      devTools: !app.isPackaged,
+      devTools: config.devTools || !app.isPackaged,
     },
     x: mainWindowState.x,
     y: mainWindowState.y,
@@ -166,15 +166,17 @@ function loadWindow() {
   });
 }
 
-function createWindow() {
+function createWindow(config) {
   app.on("fullscreen", function() {
     mainWindow.isFullScreenable
       ? mainWindow.setFullScreen(true)
       : mainWindow.setFullScreen(false);
   });
 
-  app.on("ready", loadWindow);
-  app.on("activate", loadWindow);
+  const load = loadWindow.bind(null, config)
+
+  app.on("ready", load);
+  app.on("activate", load);
 }
 
 module.exports = { createWindow };

@@ -3,7 +3,7 @@ name: Auto Release Development
 on:
   push:
     tags:
-      - '*-dev'  
+      - "*-dev"
 
 env:
   CI: false
@@ -61,8 +61,9 @@ jobs:
       - name: Set env from github
         run: |
           echo "CHAIN_ID=$CHAIN_ID" >> .env
-          echo "EXPLORER_URL=$EXPLORER_URL" >> .env
+          echo "DEV_TOOLS=true" >> .env
           echo "DISPLAY_NAME=$DISPLAY_NAME" >> .env
+          echo "EXPLORER_URL=$EXPLORER_URL" >> .env
           echo "SYMBOL=$SYMBOL" >> .env
           echo "PROXY_ROUTER_URL=$PROXY_ROUTER_URL" >> .env
           echo "COIN_DEFAULT_GAS_LIMIT=$COIN_DEFAULT_GAS_LIMIT" >> .env
