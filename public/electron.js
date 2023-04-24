@@ -1,4 +1,4 @@
-'use strict';
+
 
 const { app } = require('electron');
 const remote = require('@electron/remote/main');
@@ -56,7 +56,7 @@ app.on('window-all-closed', function () {
   }
 });
 
-createWindow();
+createWindow(config);
 
 app.on('ready', function () {
   logger.info('App ready, initializing...');

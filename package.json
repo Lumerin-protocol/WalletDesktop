@@ -1,17 +1,17 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.1.1",
+  "version": "1.1.3",
   "author": {
     "name": "Lumerin",
     "email": "developer@lumerin.io",
     "url": "https://lumerin.io"
   },
   "description": "Lumerin Wallet for desktop devices",
-  "repository": "https://gitlab.com/TitanInd/proxy/wallet-desktop",
+  "repository": "https://github.com/Lumerin-protocol/WalletDesktop",
   "license": "MIT",
   "homepage": "./",
   "main": "public/electron.js",
-  "copyright": "Copyright © 2022 Titan Industries",
+  "copyright": "Copyright © 2023 Titan Industries (Global) Co. Ltd.",
   "scripts": {
     "init": "npm run dev:setup && npm run dev:link",
     "dev:setup": "./scripts/dev_setup.sh",
@@ -63,6 +63,7 @@
     "json-stringify-safe": "5.0.1",
     "keytar": "7.9.0",
     "lodash": "4.17.21",
+    "marked-react": "1.3.2",
     "moment": "2.29.4",
     "moment-precise-range-plugin": "1.3.0",
     "nedb": "1.8.0",

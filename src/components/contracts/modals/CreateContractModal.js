@@ -18,11 +18,13 @@ import {
 } from './CreateContractModal.styles';
 import { useForm } from 'react-hook-form';
 import { CreateContractPreview } from './CreateContractPreview';
+import { CreateContractSuccessPage } from './CreateContractSuccessPage';
 
 function CreateContractModal(props) {
-  const { isActive, save, deploy, close, client, address } = props;
+  const { isActive, save, deploy, close, client, address, showSuccess } = props;
 
   const [isPreview, setIsPreview] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
   const {
     register,
@@ -43,11 +45,12 @@ function CreateContractModal(props) {
     setValue('address', address);
   };
 
-  const handleDeploy = e => {
+  const wrapHandleDeploy = async e => {
     e.preventDefault();
-    setIsPreview(false);
-    deploy(e, getValues());
+    setIsCreating(true);
+    await deploy(e, getValues());
     resetValues();
+    setIsCreating(false);
   };
 
   const handleClose = e => {
@@ -64,11 +67,14 @@ function CreateContractModal(props) {
     <Modal onClick={handleClose}>
       <Body onClick={handlePropagation}>
         {CloseModal(handleClose)}
-        {isPreview ? (
+        {showSuccess ? (
+          <CreateContractSuccessPage close={handleClose} />
+        ) : isPreview ? (
           <CreateContractPreview
+            isCreating={isCreating}
             data={getValues()}
             close={() => setIsPreview(false)}
-            submit={handleDeploy}
+            submit={wrapHandleDeploy}
           />
         ) : (
           <>
