@@ -38,7 +38,7 @@ const reducer = handleActions(
 
       return {
         ...state,
-        actives: { ...payload.actives, ...idContractMap },
+        actives: { ...state.actives, ...idContractMap },
         lastUpdated: parseInt(Date.now() / 1000, 10),
         syncStatus: 'up-to-date'
       };
