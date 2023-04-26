@@ -57,7 +57,6 @@ function Marketplace({
         url
       })
       .then(d => {
-        onWalletRefresh();
         setShowSuccess(true);
         context.toast(
           'success',
