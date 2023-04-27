@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.1.3",
+  "version": "1.1.5",
   "author": {
     "name": "Lumerin",
     "email": "developer@lumerin.io",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@electron/remote": "2.0.9",
-    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.43",
+    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.44",
     "@reach/menu-button": "0.17.0",
     "@tabler/icons": "1.119.0",
     "axios": "0.27.2",
