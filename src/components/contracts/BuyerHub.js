@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 
 import withContractsState from '../../store/hocs/withContractsState';
 import { LayoutHeader } from '../common/LayoutHeader';
-import ContractsList from './contracts-list/ContractsList';
 import { View } from '../common/View';
 import BuyerHubRow from './contracts-list/BuyerHubRow';
+import ContractsList from './contracts-list/ContractsList';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 
 function BuyerHub({
