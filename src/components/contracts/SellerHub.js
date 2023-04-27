@@ -126,14 +126,13 @@ function SellerHub({
       .createContract(contract)
       .then(() => {
         setShowSuccess(true);
-        contractsRefresh();
       })
       .catch(error => {
         context.toast('error', error.message || error);
-        removeTempContract(tempContractId, contract);
         setIsModalActive(false);
       })
       .finally(() => {
+        removeTempContract(tempContractId, contract);
         client.unlockSendTransaction();
       });
   };

@@ -6,7 +6,7 @@ import sortBy from 'lodash/sortBy';
 export const getContracts = state => state.contracts;
 
 export const getActiveContracts = createSelector(getContracts, contractsData =>
-  sortBy(Object.values(contractsData.actives), 'timestamp').reverse()
+  sortBy(Object.values(contractsData.actives), 'timestamp')
 );
 
 export const getDraftContracts = createSelector(
