@@ -30,6 +30,14 @@ const withContractsState = WrappedComponent => {
     };
 
     contractsRefresh = () => {
+      const now = parseInt(Date.now() / 1000, 10);
+      const timeout = 15; // seconds
+      if (
+        this.props.contractsLastUpdatedAt &&
+        now - this.props.contractsLastUpdatedAt < timeout
+      ) {
+        return;
+      }
       const capturedThis = this;
       this.setState({ refreshStatus: 'pending', refreshError: null });
       this.props.client
@@ -80,7 +88,8 @@ const withContractsState = WrappedComponent => {
     address: selectors.getWalletAddress(state),
     contracts: selectors.getMergeAllContracts(state),
     lmrBalance: selectors.getWalletLmrBalance(state),
-    allowSendTransaction: selectors.isAllowSendTransaction(state)
+    allowSendTransaction: selectors.isAllowSendTransaction(state),
+    contractsLastUpdatedAt: selectors.getContractsLastUpdated(state)
   });
 
   const mapDispatchToProps = dispatch => ({
