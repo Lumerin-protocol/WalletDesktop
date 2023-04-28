@@ -36,6 +36,10 @@ const withContractsState = WrappedComponent => {
         this.props.contractsLastUpdatedAt &&
         now - this.props.contractsLastUpdatedAt < timeout
       ) {
+        this.props.setPendingRefresh();
+        setTimeout(() => {
+          this.props.setFinishedRefresh();
+        }, 200);
         return;
       }
       const capturedThis = this;
@@ -95,6 +99,9 @@ const withContractsState = WrappedComponent => {
   const mapDispatchToProps = dispatch => ({
     setIp: ip => dispatch({ type: 'ip-received', payload: ip }),
     setFailedRefresh: () => dispatch({ type: 'contracts-scan-failed' }),
+    setPendingRefresh: () => dispatch({ type: 'contracts-scan-started' }),
+    setFinishedRefresh: () =>
+      dispatch({ type: 'contracts-scan-finished', payload: {} }),
     setDefaultBuyerPool: pool =>
       dispatch({ type: 'buyer-default-pool-received', payload: pool })
   });
