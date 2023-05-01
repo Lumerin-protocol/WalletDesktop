@@ -42,3 +42,8 @@ export const getContractsSyncStatus = createSelector(
   getContracts,
   contractsData => contractsData.syncStatus
 );
+
+export const getContractsLastUpdated = createSelector(
+  getContracts,
+  contractsData => contractsData.lastUpdated
+);

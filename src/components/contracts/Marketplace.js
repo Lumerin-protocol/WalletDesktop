@@ -86,7 +86,6 @@ function Marketplace({
   };
 
   useEffect(() => {
-    contractsRefresh();
     props.getLocalIp({}).then(props.setIp);
     props.getPoolAddress({}).then(props.setDefaultBuyerPool);
   }, []);
@@ -102,13 +101,11 @@ function Marketplace({
   const handleContractCancellation = (e, data) => {
     e.preventDefault();
 
-    client
-      .cancelContract({
-        contractId: data.contractId,
-        walletAddress: data.walletAddress,
-        closeOutType: data.closeOutType
-      })
-      .then(() => contractsRefresh());
+    client.cancelContract({
+      contractId: data.contractId,
+      walletAddress: data.walletAddress,
+      closeOutType: data.closeOutType
+    });
   };
 
   const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
