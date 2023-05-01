@@ -30,7 +30,7 @@
     "env:darwin:linux": "./scripts/env.sh",
     "ppa": "./scripts/ppa.sh",
     "postinstall": "patch-package && electron-builder install-app-deps",
-    "postinstallMac": "electron-builder install-app-deps --arch arm64",
+    "postinstallMacDist": "electron-builder install-app-deps --arch arm64",
     "prepare": "husky install",
     "release": "gh release create 1.0.16 ./dist/*.exe ./dist/*.dmg ./dist/*.deb",
     "release-init": "./scripts/release",
