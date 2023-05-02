@@ -11,23 +11,23 @@ env:
 jobs:
   build:
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         environment: [dev]
         target: [macos-arm]
         include:
-          - target: ubuntu
-            os: ubuntu-latest
-            artifact_name: lumerin-wallet-desktop.deb
-            asset_name: lumerin_v${{github.ref_name}}.deb
-          - target: windows
-            os: windows-latest
-            artifact_name: lumerin-wallet-desktop.exe
-            asset_name: lumerin_v${{github.ref_name}}.exe
-          - target: macos
-            os: macos-latest
-            artifact_name: lumerin-wallet-desktop.dmg
-            asset_name: lumerin_v${{github.ref_name}}.dmg
+          # - target: ubuntu
+          #   os: ubuntu-latest
+          #   artifact_name: lumerin-wallet-desktop.deb
+          #   asset_name: lumerin_v${{github.ref_name}}.deb
+          # - target: windows
+          #   os: windows-latest
+          #   artifact_name: lumerin-wallet-desktop.exe
+          #   asset_name: lumerin_v${{github.ref_name}}.exe
+          # - target: macos
+          #   os: macos-latest
+          #   artifact_name: lumerin-wallet-desktop.dmg
+          #   asset_name: lumerin_v${{github.ref_name}}.dmg
           - target: macos-arm
             os: macos-latest
             artifact_name: lumerin-wallet-desktop.dmg
