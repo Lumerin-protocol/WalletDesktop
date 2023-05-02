@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         environment: [dev]
-        target: [ubuntu, windows, macos, macos-arm]
+        target: [macos-arm]
         include:
           - target: ubuntu
             os: ubuntu-latest
