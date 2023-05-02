@@ -38,8 +38,8 @@ const chain = {
 module.exports = {
   chain,
   dbAutocompactionInterval: 30000,
-  debug: process.env.DEBUG === "true",
-  devTools: process.env.DEV_TOOLS === "true",
+  debug: true || process.env.DEBUG === "true",
+  devTools: true || process.env.DEV_TOOLS === "true",
   explorerDebounce: 2000,
   ratesUpdateMs: 30000,
   scanTransactionTimeout: 240000,
