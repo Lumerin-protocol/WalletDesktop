@@ -77,6 +77,8 @@ jobs:
           echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
           echo "ETH_NODE_ADDRESS_HTTP2=$ETH_NODE_ADDRESS_HTTP2" >> .env
           echo "ETH_NODE_ADDRESS_HTTP3=$ETH_NODE_ADDRESS_HTTP3" >> .env
+          echo "$ETH_NODE_ADDRESS_HTTP, $ETH_NODE_ADDRESS_HTTP2, $ETH_NODE_ADDRESS_HTTP3"
+          cat .env
         shell: bash
       - name: Set env from gitlab
         run: |
