@@ -15,6 +15,7 @@ const listeners = {
   "refresh-transaction": handlers.refreshTransaction,
   "get-gas-limit": handlers.getGasLimit,
   "get-gas-price": handlers.getGasPrice,
+  "get-past-transactions": handlers.getPastTransactions,
   "send-lmr": handlers.sendLmr,
   "send-eth": handlers.sendEth,
   "create-contract": handlers.createContract,
