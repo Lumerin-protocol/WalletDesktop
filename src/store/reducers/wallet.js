@@ -24,7 +24,37 @@ export const initialState = {
 const mergeTransactions = (stateTxs, payloadTxs) => {
   const txWithReceipts = payloadTxs.filter(tx => tx.receipt);
   const txMap = keyBy(txWithReceipts, item => item.transaction.hash);
-  return merge({}, stateTxs, txMap);
+
+  const newStateTxs = { ...stateTxs };
+
+  for (const tx of txWithReceipts) {
+    newStateTxs[tx.transaction.hash] = tx;
+
+    // contract purchase emits 2 transactions with the same hash
+    // as of now we merge corresponding amount values. Temporary fix, until refactoring trasactions totally
+    const oldStateTx = stateTxs[tx.transaction.hash];
+    if (oldStateTx) {
+      if (newStateTxs[tx.transaction.hash].transaction.value) {
+        newStateTxs[tx.transaction.hash].transaction.value = String(
+          Number(oldStateTx.transaction.value) + Number(tx.transaction.value)
+        );
+      }
+
+      if (newStateTxs[tx.transaction.hash].transaction.input.amount) {
+        newStateTxs[tx.transaction.hash].transaction.input.amount = String(
+          Number(oldStateTx.transaction.input.amount) +
+            Number(tx.transaction.input.amount)
+        );
+      }
+
+      if (newStateTxs[tx.transaction.hash].receipt.value) {
+        newStateTxs[tx.transaction.hash].receipt.value = String(
+          Number(oldStateTx.receipt.value) + Number(tx.receipt.value)
+        );
+      }
+    }
+  }
+  return newStateTxs;
 };
 
 const reducer = handleActions(
