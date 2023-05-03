@@ -51,6 +51,7 @@ function CreateContractModal(props) {
     await deploy(e, getValues());
     resetValues();
     setIsCreating(false);
+    setIsPreview(false);
   };
 
   const handleClose = e => {

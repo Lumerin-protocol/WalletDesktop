@@ -1,13 +1,14 @@
 import { handleActions } from 'redux-actions';
 import get from 'lodash/get';
 import { v4 as uuidv4 } from 'uuid';
+import { keyBy } from 'lodash';
 
 // TODO: remove dummy data
 const initialState = {
   lastUpdated: null,
   syncStatus: null,
   drafts: [],
-  actives: []
+  actives: {}
 };
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -27,17 +28,21 @@ const reducer = handleActions(
 
     'contracts-scan-failed': (state, { payload }) => ({
       ...state,
-      actives: [],
+      actives: {},
       lastUpdated: parseInt(Date.now() / 1000, 10),
       syncStatus: 'failed'
     }),
 
-    'contracts-scan-finished': (state, { payload }) => ({
-      ...state,
-      actives: payload.actives,
-      lastUpdated: parseInt(Date.now() / 1000, 10),
-      syncStatus: 'up-to-date'
-    }),
+    'contracts-scan-finished': (state, { payload }) => {
+      const idContractMap = keyBy(payload.actives, 'id');
+
+      return {
+        ...state,
+        actives: { ...state.actives, ...idContractMap },
+        lastUpdated: parseInt(Date.now() / 1000, 10),
+        syncStatus: 'up-to-date'
+      };
+    },
 
     'remove-draft': (state, { payload }) => ({
       ...state,
@@ -59,59 +64,69 @@ const reducer = handleActions(
       };
     },
 
-    'publish-draft': (state, { payload }) => ({
-      ...state,
-      actives: payload.actives,
-      lastUpdated: parseInt(Date.now() / 1000, 10),
-      syncStatus: payload.syncStatus
-    }),
-
     'purchase-temp-contract': (state, { payload }) => {
-      const array = state.actives;
-      const objIndex = array.findIndex(obj => obj.id == payload.id);
-      array[objIndex].inProgress = true;
-      array[objIndex].buyer = payload.address;
-      array[objIndex].timestamp = parseInt(Date.now() / 1000, 10);
+      const contract = {
+        ...state.actives[payload.id],
+        inProgress: true,
+        buyer: payload.address,
+        timestamp: parseInt(Date.now() / 1000, 10)
+      };
+
       return {
         ...state,
-        actives: [...array]
+        actives: {
+          ...state.actives,
+          [contract.id]: contract
+        }
       };
     },
 
     'purchase-contract-success': (state, { payload }) => {
-      const array = state.actives;
-      const objIndex = array.findIndex(obj => obj.id == payload.id);
-      array[objIndex].inProgress = false;
+      const contract = {
+        ...state.actives[payload.id],
+        inProgress: false
+      };
+
       return {
         ...state,
-        actives: [...array]
+        actives: {
+          ...state.actives,
+          [contract.id]: contract
+        }
       };
     },
 
     'purchase-contract-failed': (state, { payload }) => {
-      const array = state.actives;
-      const objIndex = array.findIndex(obj => obj.id == payload.id);
-      array[objIndex].inProgress = false;
-      array[objIndex].buyer = ZERO_ADDRESS;
+      const contract = {
+        ...state.actives[payload.id],
+        inProgress: false,
+        buyer: ZERO_ADDRESS
+      };
+
       return {
         ...state,
-        actives: [...array]
+        actives: {
+          ...state.actives,
+          [contract.id]: contract
+        }
       };
     },
 
     'create-temp-contract': (state, { payload }) => {
       return {
         ...state,
-        actives: [...state.actives, payload]
+        actives: {
+          ...state.actives,
+          [payload.id]: payload
+        }
       };
     },
 
     'remove-contract': (state, { payload }) => {
+      const { [payload.id]: _, ...filtered } = state.actives;
       return {
         ...state,
-        actives: Object.assign(state.actives, []).filter(
-          contract => contract.id !== payload.id
-        )
+        actives: filtered
       };
     }
   },

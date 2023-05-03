@@ -5,9 +5,8 @@ import sortBy from 'lodash/sortBy';
 // The items are mapped to contain properties useful for rendering.
 export const getContracts = state => state.contracts;
 
-export const getActiveContracts = createSelector(
-  getContracts,
-  contractsData => contractsData.actives
+export const getActiveContracts = createSelector(getContracts, contractsData =>
+  sortBy(Object.values(contractsData.actives), 'timestamp')
 );
 
 export const getDraftContracts = createSelector(
@@ -25,7 +24,7 @@ export const getMergeAllContracts = createSelector(
 // Returns if the current wallet/address has transactions on the active chain
 export const hasContracts = createSelector(
   getContracts,
-  contractsData => contractsData.actives.length !== 0
+  contractsData => Object.keys(contractsData.actives).length !== 0
 );
 
 export const getActiveContractsCount = createSelector(
@@ -42,4 +41,9 @@ export const getDraftContractsCount = createSelector(
 export const getContractsSyncStatus = createSelector(
   getContracts,
   contractsData => contractsData.syncStatus
+);
+
+export const getContractsLastUpdated = createSelector(
+  getContracts,
+  contractsData => contractsData.lastUpdated
 );
