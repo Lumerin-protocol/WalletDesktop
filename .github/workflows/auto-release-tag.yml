@@ -74,10 +74,10 @@ jobs:
           echo "RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY" >> .env
           echo "FAUCET_URL=$FAUCET_URL" >> .env
           echo "NODE_ENV=production" >> .env
-          echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
-          echo "ETH_NODE_ADDRESS_HTTP2=$ETH_NODE_ADDRESS_HTTP2" >> .env
-          echo "ETH_NODE_ADDRESS_HTTP3=$ETH_NODE_ADDRESS_HTTP3" >> .env
-          echo "$ETH_NODE_ADDRESS_HTTP, $ETH_NODE_ADDRESS_HTTP2, $ETH_NODE_ADDRESS_HTTP3"
+          echo "ETH_NODE_ADDRESS_HTTP=$repository.ETH_NODE_ADDRESS_HTTP" >> .env
+          echo "ETH_NODE_ADDRESS_HTTP2=$repository.ETH_NODE_ADDRESS_HTTP2" >> .env
+          echo "ETH_NODE_ADDRESS_HTTP3=$repository.ETH_NODE_ADDRESS_HTTP3" >> .env
+          echo "$repository.ETH_NODE_ADDRESS_HTTP, $repository.ETH_NODE_ADDRESS_HTTP2, $repository.ETH_NODE_ADDRESS_HTTP3"
           cat .env
         shell: bash
       - name: Set env from gitlab
