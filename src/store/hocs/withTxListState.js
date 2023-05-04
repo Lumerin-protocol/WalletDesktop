@@ -9,7 +9,6 @@ const withTxListState = Component => {
     const [nextPageLoading, setNextPageLoading] = useState(false);
     const getPastTransactions = () => {
       setNextPageLoading(true);
-      console.log('CALLED!!!', props.page, nextPageLoading);
       props.client
         .getPastTransactions({
           address: props.address,
