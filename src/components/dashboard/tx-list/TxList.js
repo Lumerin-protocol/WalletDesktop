@@ -147,7 +147,7 @@ export const TxList = ({
                       isRowLoaded={isRowLoaded}
                       loadMoreRows={loadMoreRows}
                       rowCount={rowCount}
-                      threshold={1}
+                      threshold={activeFilter ? 1 : 10}
                     >
                       {({ onRowsRendered, registerChild }) => (
                         <AutoSizer>
