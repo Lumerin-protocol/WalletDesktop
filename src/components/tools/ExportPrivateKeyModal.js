@@ -3,30 +3,15 @@ import styled from 'styled-components';
 import React, { useEffect } from 'react';
 
 import { Modal, BaseBtn } from '../common';
-import { Container, Message, Button } from './ConfirmModal.styles';
+import {
+  Container,
+  Message,
+  DismissBtn,
+  ConfirmBtn,
+  Row
+} from './ConfirmModal.styles';
 import { Input } from './Tools';
 import { useState } from 'react';
-
-export const RestartNowBtn = styled(Button)`
-  width: 40%;
-  display: inline-block;
-`;
-
-export const LaterBtn = styled(Button)`
-  width: 40%;
-  border: 1px solid ${p => p.theme.colors.primary};
-  background-color: ${p => p.theme.colors.light};
-  color: ${p => p.theme.colors.primary};
-  display: inline-block;
-`;
-
-export const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`;
 
 const PrivateKey = styled.div`
   word-break: break-word;
@@ -87,18 +72,18 @@ const ExportPrivateKeyModal = props => {
         </>
         <Row style={{ justifyContent: 'space-around' }}>
           {privateKey ? (
-            <RestartNowBtn onClick={() => copyToClipboard(privateKey)}>
+            <ConfirmBtn onClick={() => copyToClipboard(privateKey)}>
               Copy to clipboard
-            </RestartNowBtn>
+            </ConfirmBtn>
           ) : (
-            <RestartNowBtn
+            <ConfirmBtn
               disabled={!password}
               onClick={() => onExportPrivateKey(password)}
             >
               Show
-            </RestartNowBtn>
+            </ConfirmBtn>
           )}
-          <LaterBtn onClick={closeWrapper}>Close</LaterBtn>
+          <DismissBtn onClick={closeWrapper}>Close</DismissBtn>
         </Row>
       </Container>
     </Modal>
