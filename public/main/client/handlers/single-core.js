@@ -293,6 +293,10 @@ const getPoolAddress = async (data) => {
   return config.buyerDefaultPool || config.defaultPool;
 };
 
+function getPastTransactions({ address, page, pageSize }, { api }) {
+  return api.explorer.getPastCoinTransactions(0, undefined, address, page, pageSize)
+}
+
 module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
@@ -321,4 +325,5 @@ module.exports = {
   getPoolAddress,
   restartProxyRouter,
   claimFaucet,
+  getPastTransactions,
 };

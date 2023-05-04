@@ -61,13 +61,28 @@ export const getTransactions = createSelector(getWallet, walletData => {
   const transactions = Object.values(walletData?.token?.transactions) || [];
 
   const sorted = sortBy(transactions, [
-    'transaction.blockNumber',
-    'transaction.transactionIndex',
+    'receipt.blockNumber',
+    'receipt.transactionIndex',
     'transaction.nonce'
   ]).reverse();
 
   return sorted.map(transactionParser);
 });
+
+export const getTransactionPage = createSelector(
+  getWallet,
+  walletData => walletData.page
+);
+
+export const getTransactionPageSize = createSelector(
+  getWallet,
+  walletData => walletData.pageSize
+);
+
+export const getHasNextPage = createSelector(
+  getWallet,
+  walletData => walletData.hasNextPage
+);
 
 // Returns if the current wallet/address has transactions on the active chain
 export const hasTransactions = createSelector(

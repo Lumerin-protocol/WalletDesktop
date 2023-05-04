@@ -10,6 +10,9 @@ export const initialState = {
   address: '',
   ethBalance: 0,
   transactions: {},
+  page: 1,
+  pageSize: 15,
+  hasNextPage: true,
   token: {
     contract: '',
     lmrBalance: 0,
@@ -76,6 +79,12 @@ const reducer = handleActions(
           payload.transactions
         )
       }
+    }),
+
+    'transactions-next-page': (state, { payload }) => ({
+      ...state,
+      hasNextPage: payload.hasNextPage,
+      page: payload.page
     }),
 
     'token-state-changed': (state, { payload }) => ({
