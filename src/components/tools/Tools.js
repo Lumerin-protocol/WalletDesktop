@@ -13,15 +13,14 @@ import Spinner from '../common/Spinner';
 import { View } from '../common/View';
 import { ToastsContext } from '../../components/toasts';
 import ConfirmProxyConfigModal from './ConfirmProxyConfigModal';
+import RevealSecretPhraseModal from './RevealSecretPhraseModal';
+import { Message } from './ConfirmModal.styles';
+import ExportPrivateKeyModal from './ExportPrivateKeyModal';
 
 const Container = styled.div`
-  padding: 3rem 0 0 0;
   margin-left: 2rem;
-  height: 80vh;
+  height: 85vh;
   overflow-y: scroll;
-  ::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 const TitleContainer = styled.div`
@@ -100,7 +99,7 @@ const WalletInfo = styled.h4`
   color: ${p => p.theme.colors.dark};
 `;
 
-const Input = styled(TextInput)`
+export const Input = styled(TextInput)`
   outline: 0;
   border: 0px;
   background: #eaf7fc;
@@ -272,7 +271,7 @@ const Tools = props => {
             />
           </Sp>
           <Sp mt={5}>
-            <Subtitle>Proxy-Router configuration</Subtitle>
+            <Subtitle>Proxy-Router Configuration</Subtitle>
             {proxyRouterSettings.isFetching ? (
               <Spinner />
             ) : !proxyRouterSettings.proxyRouterEditMode ? (
@@ -352,6 +351,78 @@ const Tools = props => {
               onConfirm={onRestartClick}
               onLater={onCloseModal}
               isOpen={state.activeModal === 'confirm-proxy-direct-restart'}
+            />
+          </Sp>
+
+          <Sp mt={5}>
+            <Subtitle>Sensetive Info</Subtitle>
+            {!props.hasStoredSecretPhrase && (
+              <StyledParagraph>
+                To enable this feature you need to re-login to your wallet
+              </StyledParagraph>
+            )}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <StyledBtn
+                disabled={!props.hasStoredSecretPhrase}
+                onClick={() => onActiveModalClick('reveal-secret-phrase')}
+              >
+                Reveal Secret Recovery Phrase
+              </StyledBtn>
+              <StyledBtn
+                style={{ marginTop: '1.6rem' }}
+                onClick={() => onActiveModalClick('export-private-key')}
+              >
+                Export private key
+              </StyledBtn>
+            </div>
+            <ExportPrivateKeyModal
+              onRequestClose={() => {
+                props.discardPrivateKey();
+                onCloseModal();
+              }}
+              onLater={onCloseModal}
+              onExportPrivateKey={props.onExportPrivateKey}
+              privateKey={props.privateKey}
+              copyToClipboard={props.copyToClipboard}
+              onRevealPhrase={props.onRevealPhrase}
+              isOpen={state.activeModal === 'export-private-key'}
+            />
+            <RevealSecretPhraseModal
+              onRequestClose={() => {
+                props.discardMnemonic();
+                onCloseModal();
+              }}
+              onLater={onCloseModal}
+              onShowMnemonic={props.onShowMnemonic}
+              mnemonic={props.mnemonic}
+              copyToClipboard={props.copyToClipboard}
+              onRevealPhrase={props.onRevealPhrase}
+              isOpen={state.activeModal === 'reveal-secret-phrase'}
+            />
+          </Sp>
+
+          <Sp mt={5}>
+            <Subtitle>Exit</Subtitle>
+            <StyledParagraph>Logout from wallet.</StyledParagraph>
+            <StyledBtn onClick={() => onActiveModalClick('confirm-logout')}>
+              Exit
+            </StyledBtn>
+
+            <ConfirmProxyConfigModal
+              title={'Logout from wallet'}
+              message={
+                <>
+                  <Message>
+                    You are going to restart wallet along with Proxy Router. It
+                    may affect your running contracts.
+                  </Message>
+                  <Message>Are you sure?</Message>
+                </>
+              }
+              onRequestClose={onCloseModal}
+              onConfirm={props.logout}
+              onLater={onCloseModal}
+              isOpen={state.activeModal === 'confirm-logout'}
             />
           </Sp>
 

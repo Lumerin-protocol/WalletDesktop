@@ -231,6 +231,9 @@ const withTransactionModalState = WrappedComponent => {
     address: selectors.getWalletAddress(state),
     coinDefaultGasLimit: selectors.getChainConfig(state).coinDefaultGasLimit,
     chainGasPrice: selectors.getChainGasPrice(state),
+    explorerUrl: selectors.getContractExplorerUrl(state, {
+      hash: selectors.getWalletAddress(state)
+    }),
     // availableCoin: selectors.getCoinBalanceWei(state),
     coinSymbol: selectors.getCoinSymbol(state),
     lmrBalanceUSD: selectors.getWalletLmrBalanceUSD(state),

@@ -14,9 +14,18 @@ function getSeed (password) {
   return aes256cbcIv.decrypt(password, encryptedSeed);
 }
 
+const hasEntropy = () => !!settings.getSync(`user.wallet.encryptedEntropy`);
+
+function getEntropy (password) {
+  const encryptedEntropy = settings.getSync(`user.wallet.encryptedEntropy`);
+  return aes256cbcIv.decrypt(password, encryptedEntropy);
+}
+
 const setAddress = (address) => settings.setSync(`user.wallet.address`, { address });
 
 const setSeed = (seed, password) => settings.setSync(`user.wallet.encryptedSeed`, aes256cbcIv.encrypt(password, seed));
+
+const setEntropy = (entropy, password) => settings.setSync(`user.wallet.encryptedEntropy`, aes256cbcIv.encrypt(password, entropy));
 
 const clearWallet = () => settings.setSync('user.wallet', {});
 
@@ -29,5 +38,8 @@ module.exports = {
   getWallet,
   getToken,
   getSeed,
-  setSeed
+  setSeed,
+  getEntropy,
+  setEntropy,
+  hasEntropy
 };

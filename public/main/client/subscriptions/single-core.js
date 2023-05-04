@@ -28,6 +28,7 @@ const listeners = {
   "get-local-ip": handlers.getLocalIp,
   "restart-proxy-router": handlers.restartProxyRouter,
   "claim-faucet": handlers.claimFaucet,
+  'get-private-key': handlers.getAddressAndPrivateKey
 };
 
 let coreListeners = {};
