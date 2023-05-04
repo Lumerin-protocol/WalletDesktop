@@ -134,6 +134,11 @@ const createClient = function(createStore) {
     logout: utils.forwardToMainProcess('logout'),
     getLocalIp: utils.forwardToMainProcess('get-local-ip'),
     getPoolAddress: utils.forwardToMainProcess('get-pool-address'),
+    revealSecretPhrase: utils.forwardToMainProcess('reveal-secret-phrase'),
+    getPrivateKey: utils.forwardToMainProcess('get-private-key'),
+    hasStoredSecretPhrase: utils.forwardToMainProcess(
+      'has-stored-secret-phrase'
+    ),
     getProxyRouterSettings: utils.forwardToMainProcess(
       'get-proxy-router-settings'
     ),

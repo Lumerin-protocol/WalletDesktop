@@ -28,7 +28,7 @@ export const Row = styled.div`
 
 const ConfirmProxyConfigModal = props => {
   // eslint-disable-next-line complexity
-  const { onRequestClose, onConfirm, onLater, isOpen } = props;
+  const { onRequestClose, onConfirm, onLater, isOpen, message, title } = props;
   return (
     <Modal
       shouldReturnFocusAfterClose={false}
@@ -39,14 +39,18 @@ const ConfirmProxyConfigModal = props => {
       }}
       variant="primary"
       isOpen={isOpen}
-      title="Proxy-router restart"
+      title={title || 'Proxy-router restart'}
     >
       <Container data-testid="confirm-proxy-config-modal">
-        <Message>
-          You are going to restart Proxy Router. It may affect your running
-          contracts.
-        </Message>
-        <Message>You can restart right now or later.</Message>
+        {message || (
+          <>
+            <Message>
+              You are going to restart Proxy Router. It may affect your running
+              contracts.
+            </Message>
+            <Message>You can restart right now or later.</Message>
+          </>
+        )}
         <Row style={{ justifyContent: 'space-around' }}>
           <RestartNowBtn onClick={onConfirm}>Restart now</RestartNowBtn>
           <LaterBtn onClick={onLater}>Later</LaterBtn>
