@@ -312,6 +312,10 @@ const revealSecretPhrase = async (password) => {
   return mnemonic;
 }
 
+function getPastTransactions({ address, page, pageSize }, { api }) {
+  return api.explorer.getPastCoinTransactions(0, undefined, address, page, pageSize);
+}
+
 module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
@@ -341,5 +345,6 @@ module.exports = {
   restartProxyRouter,
   claimFaucet,
   revealSecretPhrase,
-  hasStoredSecretPhrase
+  hasStoredSecretPhrase,
+  getPastTransactions,
 };

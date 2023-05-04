@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { List as RVList, AutoSizer } from 'react-virtualized';
+import { List as RVList, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import styled from 'styled-components';
 
 import withTxListState from '../../../store/hocs/withTxListState';
@@ -8,6 +8,7 @@ import NoTxPlaceholder from './NoTxPlaceholder';
 import { ItemFilter, Flex } from '../../common';
 import Header from './Header';
 import TxRow from './row/Row';
+import Spinner from '../../common/Spinner';
 
 const Container = styled.div`
   margin-top: 2.4rem;
@@ -15,6 +16,13 @@ const Container = styled.div`
 
   @media (min-width: 960px) {
   }
+`;
+
+const LoadingRov = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${p => p.theme.colors.primary};
 `;
 
 const Transactions = styled.div`
@@ -57,33 +65,14 @@ const Title = styled.div`
 
 export const TxList = ({
   transactions,
+  hasNextPage,
+  getPastTransactions,
+  isNextPageLoading,
   hasTransactions,
   onWalletRefresh,
   syncStatus,
   client
 }) => {
-  // static propTypes = {
-  //   hasTransactions: PropTypes.bool.isRequired,
-  //   onWalletRefresh: PropTypes.func.isRequired,
-  //   syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
-  //   items: PropTypes.arrayOf(
-  //     PropTypes.shape({
-  //       txType: PropTypes.string.isRequired,
-  //       hash: PropTypes.string.isRequired
-  //     })
-  //   ).isRequired
-  // };
-
-  const rowRenderer = transactionList => ({ key, style, index }) => (
-    <TxRowContainer style={style} key={`${key}-${transactionList[index].hash}`}>
-      <TxRow
-        data-testid="tx-row"
-        data-hash={transactionList[index].hash}
-        tx={transactionList[index]}
-      />
-    </TxRowContainer>
-  );
-
   const handleClick = e => {
     if (!window.isDev || !e.shiftKey || !e.altKey) return;
 
@@ -100,37 +89,87 @@ export const TxList = ({
           extractValue={({ txType }) => txType}
           items={transactions.filter(({ txType }) => txType)}
         >
-          {({ filteredItems, onFilterChange, activeFilter }) => (
-            <React.Fragment>
-              <Header
-                onWalletRefresh={onWalletRefresh}
-                hasTransactions={hasTransactions}
-                onFilterChange={onFilterChange}
-                activeFilter={activeFilter}
-                syncStatus={syncStatus}
-              />
+          {({ filteredItems, onFilterChange, activeFilter }) => {
+            const rowCount = hasNextPage
+              ? filteredItems.length + 1
+              : filteredItems.length;
 
-              <ListContainer>
-                {!transactions.length &&
-                  (syncStatus === 'syncing' ? (
-                    <ScanningTxPlaceholder />
-                  ) : (
-                    <NoTxPlaceholder />
-                  ))}
-                <AutoSizer>
-                  {({ width, height }) => (
-                    <RVList
-                      rowRenderer={rowRenderer(filteredItems)}
-                      rowHeight={66}
-                      rowCount={filteredItems.length}
-                      height={height || 500} // defaults for tests
-                      width={width || 500} // defaults for tests
-                    />
+            // Only load 1 page of items at a time.
+            // Pass an empty callback to InfiniteLoader in case it asks us to load more than once.
+            const loadMoreRows = isNextPageLoading
+              ? () => {}
+              : () => {
+                  getPastTransactions();
+                };
+
+            // Every row is loaded except for our loading indicator row.
+            const isRowLoaded = ({ index }) => {
+              return !hasNextPage || index < rowCount - 1;
+            };
+
+            const rowRenderer = ({ key, style, index }) =>
+              isRowLoaded({ index }) ? (
+                <TxRowContainer
+                  style={style}
+                  key={`${key}-${filteredItems[index].hash}`}
+                >
+                  <TxRow
+                    data-testid="tx-row"
+                    data-hash={filteredItems[index].hash}
+                    tx={filteredItems[index]}
+                  />
+                </TxRowContainer>
+              ) : (
+                <LoadingRov key={key} style={style}>
+                  Loading... <Spinner></Spinner>
+                </LoadingRov>
+              );
+
+            return (
+              <React.Fragment>
+                <Header
+                  onWalletRefresh={onWalletRefresh}
+                  hasTransactions={hasTransactions}
+                  onFilterChange={onFilterChange}
+                  activeFilter={activeFilter}
+                  syncStatus={syncStatus}
+                />
+
+                <ListContainer>
+                  {!transactions.length &&
+                    (syncStatus === 'syncing' ? (
+                      <ScanningTxPlaceholder />
+                    ) : (
+                      <NoTxPlaceholder />
+                    ))}
+                  {transactions.length && (
+                    <InfiniteLoader
+                      isRowLoaded={isRowLoaded}
+                      loadMoreRows={loadMoreRows}
+                      rowCount={rowCount}
+                      threshold={1}
+                    >
+                      {({ onRowsRendered, registerChild }) => (
+                        <AutoSizer>
+                          {({ width, height }) => (
+                            <RVList
+                              ref={registerChild}
+                              onRowsRendered={onRowsRendered}
+                              rowRenderer={rowRenderer}
+                              rowHeight={66}
+                              rowCount={rowCount}
+                              height={height || 500} // defaults for tests
+                              width={width || 500} // defaults for tests
+                            />
+                          )}
+                        </AutoSizer>
+                      )}
+                    </InfiniteLoader>
                   )}
-                </AutoSizer>
-              </ListContainer>
-            </React.Fragment>
-          )}
+                </ListContainer>
+              </React.Fragment>
+            );
+          }}
         </ItemFilter>
       </Transactions>
     </Container>

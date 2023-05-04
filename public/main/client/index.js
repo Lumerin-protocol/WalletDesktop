@@ -54,7 +54,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
     })
   );
 
-  function syncTransactions({ address }) {
+  function syncTransactions({ address }, page = 1, pageSize = 15) {
     return storage
       .getSyncBlock(chain)
       .then(function(from) {
@@ -63,7 +63,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         return api.explorer
           .syncTransactions(0, address, (number) =>
             storage.setSyncBlock(number, chain)
-          )
+          , page, pageSize)
           .then(function() {
             send("transactions-scan-finished", { success: true });
 
@@ -81,7 +81,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
           success: false,
         });
 
-        emitter.once("coin-block", () => syncTransactions({ address }));
+        emitter.once("coin-block", () => syncTransactions({ address }, page, pageSize));
       });
   }
 

@@ -23,6 +23,7 @@ export const subscribeToMainProcessMessages = function(store) {
     'eth-tx',
     'lmr-tx',
     'coin-block',
+    'transactions-next-page',
     'devices-device-updated',
     'devices-state-updated',
     'proxy-router-type-changed',
