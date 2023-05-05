@@ -1,4 +1,4 @@
-'use strict';
+
 
 const chalk = require('chalk');
 const logger = require('electron-log');

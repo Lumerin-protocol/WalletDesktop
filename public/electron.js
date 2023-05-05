@@ -1,37 +1,41 @@
-
-
-const { app } = require('electron');
-const remote = require('@electron/remote/main');
+const { app, dialog } = require("electron");
+const logger = require("./logger");
+const remote = require("@electron/remote/main");
 remote.initialize();
-const path = require('path');
+const path = require("path");
 
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
-const isDev = require('electron-is-dev');
-const os = require('os');
-const Raven = require('raven');
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
-const { createWindow } = require('./main/main-window.js');
-const { createClient } = require('./main/client');
-const config = require('./config');
-const initContextMenu = require('./contextMenu');
-const initMenu = require('./menu');
-const logger = require('./logger');
+const isDev = require("electron-is-dev");
+const os = require("os");
+const Raven = require("raven");
+
+const { createWindow } = require("./main/main-window.js");
+const { createClient } = require("./main/client");
+const config = require("./config");
+const initContextMenu = require("./contextMenu");
+const initMenu = require("./menu");
+
+// Disable error dialogs by overriding
+dialog.showErrorBox = function(title, content) {
+  logger.info(`Error box error\n ${title}\n ${content}`);
+};
 
 if (isDev) {
   // Development
-  app.on('ready', function () {
-    require('electron-debug')({ isEnabled: true });
+  app.on("ready", function() {
+    require("electron-debug")({ isEnabled: true });
 
     const {
       default: installExtension,
       REACT_DEVELOPER_TOOLS,
-      REDUX_DEVTOOLS
-    } = require('electron-devtools-installer');
+      REDUX_DEVTOOLS,
+    } = require("electron-devtools-installer");
 
     installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-      .then(extName => logger.debug(`Added Extension:  ${extName}`))
-      .catch(err => logger.debug('An error occurred: ', err));
+      .then((extName) => logger.debug(`Added Extension:  ${extName}`))
+      .catch((err) => logger.debug("An error occurred: ", err));
   });
 } else {
   // Production
@@ -44,22 +48,22 @@ if (isDev) {
         electron: process.versions.electron,
         chrome: process.versions.chrome,
         platform: os.platform(),
-        platform_release: os.release()
-      }
+        platform_release: os.release(),
+      },
     }).install();
   }
 }
 
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", function() {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
 createWindow(config);
 
-app.on('ready', function () {
-  logger.info('App ready, initializing...');
+app.on("ready", function() {
+  logger.info("App ready, initializing...");
 
   initMenu();
   initContextMenu();
