@@ -29,3 +29,24 @@ export const Button = styled(BaseBtn)`
     opacity: 0.9;
   }
 `;
+
+export const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+export const DismissBtn = styled(Button)`
+  width: 40%;
+  border: 1px solid ${p => p.theme.colors.primary};
+  background-color: ${p => p.theme.colors.light};
+  color: ${p => p.theme.colors.primary};
+  display: inline-block;
+`;
+
+export const ConfirmBtn = styled(Button)`
+  width: 40%;
+  display: inline-block;
+`;

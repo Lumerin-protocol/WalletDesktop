@@ -9,6 +9,8 @@ const listeners = {
   'persist-state': handlers.persistState,
   'clear-cache': handlers.clearCache,
   'get-pool-address': handlers.getPoolAddress,
+  'reveal-secret-phrase': handlers.revealSecretPhrase,
+  'has-stored-secret-phrase': handlers.hasStoredSecretPhrase,
   "logout": handlers.logout,
   "save-proxy-router-settings": handlers.saveProxyRouterSettings,
   "get-proxy-router-settings": handlers.getProxyRouterSettings,

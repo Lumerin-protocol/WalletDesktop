@@ -3,6 +3,7 @@ import { withClient } from './clientContext';
 import * as utils from '../utils';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { ToastsContext } from '../../components/toasts';
 
 const withToolsState = WrappedComponent => {
   class Container extends React.Component {
@@ -14,13 +15,23 @@ const withToolsState = WrappedComponent => {
       }).isRequired
     };
 
+    static contextType = ToastsContext;
+
     static displayName = `withToolsState(${WrappedComponent.displayName ||
       WrappedComponent.name})`;
 
     state = {
       mnemonic: null,
-      errors: {}
+      privateKey: null,
+      errors: {},
+      hasStoredSecretPhrase: false
     };
+
+    componentDidMount() {
+      this.props.client.hasStoredSecretPhrase().then(value => {
+        this.setState({ ...this.state, hasStoredSecretPhrase: value });
+      });
+    }
 
     onInputChange = ({ id, value }) => {
       this.setState(state => ({
@@ -32,6 +43,34 @@ const withToolsState = WrappedComponent => {
         }
       }));
     };
+
+    onShowMnemonic = password => {
+      const capturedThis = this;
+      this.props.client
+        .revealSecretPhrase(password)
+        .then(value => {
+          this.setState({ ...this.state, mnemonic: value });
+        })
+        .catch(e => {
+          capturedThis.context.toast('error', e.message);
+        });
+    };
+
+    onExportPrivateKey = password => {
+      const capturedThis = this;
+      this.props.client
+        .getPrivateKey({ password })
+        .then(({ privateKey }) => {
+          this.setState({ ...this.state, privateKey: privateKey });
+        })
+        .catch(e => {
+          capturedThis.context.toast('error', e.message);
+        });
+    };
+
+    discardMnemonic = () => this.setState({ ...this.state, mnemonic: null });
+    discardPrivateKey = () =>
+      this.setState({ ...this.state, privateKey: null });
 
     onSubmit = password =>
       this.props.client.recoverFromMnemonic({
@@ -59,6 +98,10 @@ const withToolsState = WrappedComponent => {
       console.log('RUN TEST');
     };
 
+    logout = () => {
+      return this.props.client.logout();
+    };
+
     render() {
       const isRecoverEnabled =
         utils.sanitizeMnemonic(this.state.mnemonic || '').split(' ').length ===
@@ -71,7 +114,14 @@ const withToolsState = WrappedComponent => {
           isRecoverEnabled={isRecoverEnabled}
           onInputChange={this.onInputChange}
           onSubmit={this.onSubmit}
+          onShowMnemonic={this.onShowMnemonic}
+          onExportPrivateKey={this.onExportPrivateKey}
+          discardMnemonic={this.discardMnemonic}
+          discardPrivateKey={this.discardPrivateKey}
           validate={this.validate}
+          copyToClipboard={this.props.client.copyToClipboard}
+          logout={this.logout}
+          onRevealPhrase={this.props.client.revealSecretPhrase}
           getProxyRouterSettings={this.props.client.getProxyRouterSettings}
           saveProxyRouterSettings={this.props.client.saveProxyRouterSettings}
           restartProxyRouter={this.props.client.restartProxyRouter}

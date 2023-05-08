@@ -43,6 +43,7 @@ export const FooterBlock = styled.div`
 
 export const FooterLabel = styled.label`
   color: ${p => p.theme.colors.dark};
+  margin-top: 5px;
   font-size: 1.6rem;
   font-weight: bold;
 `;

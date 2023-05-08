@@ -17,17 +17,24 @@ import {
   FooterSublabel
 } from './common.styles';
 import { abbreviateAddress } from '../../../utils';
-
+import { BtnAccent } from '../BalanceBlock.styles';
+import { useState } from 'react';
 const QRContainer = styled.div`
   display: flex;
   align-self: center;
   background: white;
-  padding: 1.6rem;
+  padding: 3rem 1.6rem 1.6rem 1.6rem;
 
   & canvas {
     display: block;
   }
 `;
+
+export const Divider = styled.div`
+  margin-top: 5px
+  width:100%;
+  height: 0px;
+  border: 0.5px solid rgba(0, 0, 0, 0.25);`;
 
 const CopyBtn = styled(BaseBtn)`
   background-color: ${p => p.theme.colors.light};
@@ -49,7 +56,8 @@ export function ReceiveForm({
   lmrBalanceWei,
   ethBalanceUSD,
   ethBalanceWei,
-  copyToClipboard
+  copyToClipboard,
+  explorerUrl
 }) {
   const context = useContext(ToastsContext);
 
@@ -79,7 +87,7 @@ export function ReceiveForm({
         <FooterRow>
           <FooterBlock>
             <FooterLabel>LMR Address</FooterLabel>
-            <FooterSublabel>{abbreviateAddress(address, 10)}</FooterSublabel>
+            <FooterSublabel>{abbreviateAddress(address, 16)}</FooterSublabel>
           </FooterBlock>
           <CopyBtn onClick={handleCopyToClipboard}>
             <CopyIcon fill="black" size="3.8rem" />
@@ -93,6 +101,15 @@ export function ReceiveForm({
         <FooterSublabel>
           {ethBalanceWei.toFixed(6)} ETH ≈ {ethBalanceUSD || 0}
         </FooterSublabel>
+        <Divider style={{ margin: '2rem 0' }} />
+        <BtnAccent
+          style={{ marginBottom: '5px' }}
+          onClick={() => {
+            window.openLink(explorerUrl);
+          }}
+        >
+          View account at {explorerUrl ? new URL(explorerUrl).hostname : ''}
+        </BtnAccent>
       </Footer>
     </>
   );

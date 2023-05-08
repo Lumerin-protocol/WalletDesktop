@@ -122,6 +122,10 @@ const createClient = function(createStore) {
     cancelContract: utils.forwardToMainProcess('cancel-contract', 750000),
     getGasLimit: utils.forwardToMainProcess('get-gas-limit'),
     getGasPrice: utils.forwardToMainProcess('get-gas-price'),
+    getPastTransactions: utils.forwardToMainProcess(
+      'get-past-transactions',
+      750000
+    ),
     sendLmr: utils.forwardToMainProcess('send-lmr', 750000),
     sendEth: utils.forwardToMainProcess('send-eth', 750000),
     clearCache: utils.forwardToMainProcess('clear-cache'),
@@ -134,6 +138,11 @@ const createClient = function(createStore) {
     logout: utils.forwardToMainProcess('logout'),
     getLocalIp: utils.forwardToMainProcess('get-local-ip'),
     getPoolAddress: utils.forwardToMainProcess('get-pool-address'),
+    revealSecretPhrase: utils.forwardToMainProcess('reveal-secret-phrase'),
+    getPrivateKey: utils.forwardToMainProcess('get-private-key'),
+    hasStoredSecretPhrase: utils.forwardToMainProcess(
+      'has-stored-secret-phrase'
+    ),
     getProxyRouterSettings: utils.forwardToMainProcess(
       'get-proxy-router-settings'
     ),
