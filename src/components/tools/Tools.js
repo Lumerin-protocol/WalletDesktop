@@ -355,7 +355,7 @@ const Tools = props => {
           </Sp>
 
           <Sp mt={5}>
-            <Subtitle>Sensetive Info</Subtitle>
+            <Subtitle>Sensitive Info</Subtitle>
             {!props.hasStoredSecretPhrase && (
               <StyledParagraph>
                 To enable this feature you need to re-login to your wallet
