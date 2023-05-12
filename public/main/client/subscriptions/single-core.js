@@ -15,11 +15,13 @@ const listeners = {
   "refresh-transaction": handlers.refreshTransaction,
   "get-gas-limit": handlers.getGasLimit,
   "get-gas-price": handlers.getGasPrice,
+  "get-past-transactions": handlers.getPastTransactions,
   "send-lmr": handlers.sendLmr,
   "send-eth": handlers.sendEth,
   "create-contract": handlers.createContract,
   "purchase-contract": handlers.purchaseContract,
   "cancel-contract": handlers.cancelContract,
+  "delete-contract": handlers.deleteContract,
   "start-discovery": handlers.startDiscovery,
   "stop-discovery": handlers.stopDiscovery,
   "set-miner-pool": handlers.setMinerPool,
@@ -27,6 +29,7 @@ const listeners = {
   "get-local-ip": handlers.getLocalIp,
   "restart-proxy-router": handlers.restartProxyRouter,
   "claim-faucet": handlers.claimFaucet,
+  'get-private-key': handlers.getAddressAndPrivateKey
 };
 
 let coreListeners = {};

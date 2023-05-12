@@ -45,9 +45,6 @@ function BuyerHub({
         walletAddress: data.walletAddress,
         closeOutType: data.closeOutType
       })
-      .then(() => {
-        contractsRefresh();
-      })
       .finally(() => {
         client.unlockSendTransaction();
       });

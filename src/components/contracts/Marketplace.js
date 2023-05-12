@@ -1,13 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import withContractsState from '../../store/hocs/withContractsState';
 import { LayoutHeader } from '../common/LayoutHeader';
-import ContractsList from './contracts-list/ContractsList';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
-import PurchaseContractModal from './modals/PurchaseModal/PurchaseContractModal';
-import MarketplaceRow from './contracts-list/MarketplaceRow';
+import ContractsList from './contracts-list/ContractsList';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
+import MarketplaceRow from './contracts-list/MarketplaceRow';
+import PurchaseContractModal from './modals/PurchaseModal/PurchaseContractModal';
 
 function Marketplace({
   hasContracts,
@@ -30,7 +30,9 @@ function Marketplace({
   const [showSuccess, setShowSuccess] = useState(false);
   const context = useContext(ToastsContext);
   const contractsToShow = contracts.filter(
-    x => (Number(x.state) === 0 && x.seller !== address) || x.inProgress
+    x =>
+      (Number(x.state) === 0 && x.seller !== address && !x.isDead) ||
+      x.inProgress
   );
 
   const handlePurchase = async (data, contract, url) => {
@@ -86,7 +88,6 @@ function Marketplace({
   };
 
   useEffect(() => {
-    contractsRefresh();
     props.getLocalIp({}).then(props.setIp);
     props.getPoolAddress({}).then(props.setDefaultBuyerPool);
   }, []);
@@ -102,13 +103,11 @@ function Marketplace({
   const handleContractCancellation = (e, data) => {
     e.preventDefault();
 
-    client
-      .cancelContract({
-        contractId: data.contractId,
-        walletAddress: data.walletAddress,
-        closeOutType: data.closeOutType
-      })
-      .then(() => contractsRefresh());
+    client.cancelContract({
+      contractId: data.contractId,
+      walletAddress: data.walletAddress,
+      closeOutType: data.closeOutType
+    });
   };
 
   const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (

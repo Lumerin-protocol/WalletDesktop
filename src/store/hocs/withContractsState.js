@@ -30,6 +30,18 @@ const withContractsState = WrappedComponent => {
     };
 
     contractsRefresh = () => {
+      const now = parseInt(Date.now() / 1000, 10);
+      const timeout = 15; // seconds
+      if (
+        this.props.contractsLastUpdatedAt &&
+        now - this.props.contractsLastUpdatedAt < timeout
+      ) {
+        this.props.setPendingRefresh();
+        setTimeout(() => {
+          this.props.setFinishedRefresh();
+        }, 200);
+        return;
+      }
       const capturedThis = this;
       this.setState({ refreshStatus: 'pending', refreshError: null });
       this.props.client
@@ -80,12 +92,16 @@ const withContractsState = WrappedComponent => {
     address: selectors.getWalletAddress(state),
     contracts: selectors.getMergeAllContracts(state),
     lmrBalance: selectors.getWalletLmrBalance(state),
-    allowSendTransaction: selectors.isAllowSendTransaction(state)
+    allowSendTransaction: selectors.isAllowSendTransaction(state),
+    contractsLastUpdatedAt: selectors.getContractsLastUpdated(state)
   });
 
   const mapDispatchToProps = dispatch => ({
     setIp: ip => dispatch({ type: 'ip-received', payload: ip }),
     setFailedRefresh: () => dispatch({ type: 'contracts-scan-failed' }),
+    setPendingRefresh: () => dispatch({ type: 'contracts-scan-started' }),
+    setFinishedRefresh: () =>
+      dispatch({ type: 'contracts-scan-finished', payload: {} }),
     setDefaultBuyerPool: pool =>
       dispatch({ type: 'buyer-default-pool-received', payload: pool })
   });

@@ -99,10 +99,30 @@ const cancelContract = async function(data, { api }) {
   )(data, { api });
 };
 
+const deleteContract = async function(data, { api }) {
+  data.walletId = wallet.getAddress().address;
+  data.password = await auth.getSessionPassword();
+
+  if (typeof data.walletId !== "string") {
+    throw new WalletError("WalletId is not defined");
+  }
+  return withAuth((privateKey) =>
+    api.contracts.setContractAsDead({
+      walletAddress: data.walletAddress,
+      contractId: data.contractId,
+      privateKey,
+    })
+  )(data, { api });
+};
+
 function createWallet(data, core, isOpen = true) {
-  const walletAddress = core.api.wallet.createAddress(data.seed);
+  const seed = keys.mnemonicToSeedHex(data.mnemonic);
+  const entropy = keys.mnemonicToEntropy(data.mnemonic);
+  const walletAddress = core.api.wallet.createAddress(seed);
+
   return Promise.all([
-    wallet.setSeed(data.seed, data.password),
+    wallet.setSeed(seed, data.password),
+    wallet.setEntropy(entropy, data.password),
     wallet.setAddress(walletAddress),
   ])
     .then(() => core.emitter.emit("create-wallet", { address: walletAddress }))
@@ -134,7 +154,7 @@ const onboardingCompleted = (data, core) => {
     .then(() =>
       createWallet(
         {
-          seed: keys.mnemonicToSeedHex(data.mnemonic),
+          mnemonic: data.mnemonic,
           password: data.password,
         },
         core,
@@ -156,7 +176,7 @@ const recoverFromMnemonic = function(data, core) {
 
   return createWallet(
     {
-      seed: keys.mnemonicToSeedHex(data.mnemonic),
+      mnemonic: data.mnemonic,
       password: data.password,
     },
     core,
@@ -269,14 +289,14 @@ const getLmrTransferGasLimit = (data, { api }) =>
   api.lumerin.estimateGasTransfer(data);
 
 const getAddressAndPrivateKey = async (data, { api }) => {
-  return auth
-    .isValidPassword(data.password)
-    .then(() => {
-      return wallet.getSeed(data.password);
-    })
-    .then((seed, index) => {
-      return api.wallet.getAddressAndPrivateKey(seed, index);
-    });
+
+  const isValid = await auth.isValidPassword(data.password);
+  if (!isValid) {
+    return { error: new WalletError("Invalid password") };
+  }
+
+  const seed = wallet.getSeed(data.password);
+  return api.wallet.getAddressAndPrivateKey(seed, undefined);
 };
 
 const refreshProxyRouterConnection = async (data, { api }) =>
@@ -292,6 +312,25 @@ const getPoolAddress = async (data) => {
   const config = getProxyRouterConfig();
   return config.buyerDefaultPool || config.defaultPool;
 };
+
+const hasStoredSecretPhrase = async (data) => {
+  return wallet.hasEntropy();
+};
+
+const revealSecretPhrase = async (password) => {
+  const isValid = await auth.isValidPassword(password);
+  if (!isValid) {
+    return { error: new WalletError("Invalid password") };
+  }
+ 
+  const entropy = wallet.getEntropy(password);
+  const mnemonic = keys.entropyToMnemonic(entropy);
+  return mnemonic;
+}
+
+function getPastTransactions({ address, page, pageSize }, { api }) {
+  return api.explorer.getPastCoinTransactions(0, undefined, address, page, pageSize);
+}
 
 module.exports = {
   // refreshAllSockets,
@@ -321,4 +360,8 @@ module.exports = {
   getPoolAddress,
   restartProxyRouter,
   claimFaucet,
+  revealSecretPhrase,
+  hasStoredSecretPhrase,
+  getPastTransactions,
+  deleteContract,
 };

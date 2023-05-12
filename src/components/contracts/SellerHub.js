@@ -137,9 +137,7 @@ function SellerHub({
       });
   };
 
-  const handleContractCancellation = (e, data) => {
-    e.preventDefault();
-
+  const handleContractCancellation = data => {
     client.lockSendTransaction();
     return client
       .cancelContract({
@@ -147,8 +145,17 @@ function SellerHub({
         walletAddress: data.walletAddress,
         closeOutType: data.closeOutType
       })
-      .then(() => {
-        contractsRefresh();
+      .finally(() => {
+        client.unlockSendTransaction();
+      });
+  };
+
+  const handleDeleteContract = data => {
+    client.lockSendTransaction();
+    return client
+      .deleteContract({
+        contractId: data.contractId,
+        walletAddress: data.walletAddress
       })
       .finally(() => {
         client.unlockSendTransaction();
@@ -158,7 +165,9 @@ function SellerHub({
   const handleContractSave = e => {
     e.preventDefault();
   };
-  const contractsToShow = contracts.filter(c => c.seller === address);
+  const contractsToShow = contracts.filter(
+    c => c.seller === address && !c.isDead
+  );
 
   return (
     <View data-testid="contracts-container">
@@ -182,6 +191,7 @@ function SellerHub({
         onWalletRefresh={onWalletRefresh}
         syncStatus={syncStatus}
         cancel={handleContractCancellation}
+        deleteContract={handleDeleteContract}
         contractsRefresh={contractsRefresh}
         address={address}
         contracts={contractsToShow}
