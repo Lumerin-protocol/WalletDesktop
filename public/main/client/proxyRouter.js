@@ -1,12 +1,17 @@
 const { app } = require("electron");
 const fs = require("fs");
-const { spawn } = require("child_process");
-
 const logger = require("../../logger.js");
+const { spawn } = require("child_process");
 
 const PROXY_ROUTER_MODE = {
   Buyer: "buyer",
   Seller: "seller",
+};
+
+const getResourcesPath = () => {
+  return process.env.NODE_ENV === "production"
+    ? process.resourcesPath // Prod Mode
+    : `${__dirname}/../../..`; // Dev Mode
 };
 
 const openLogFile = (name, retry = true) => {
@@ -42,7 +47,7 @@ const isProxyRouterHealthy = async (api, url) => {
   }
 };
 
-const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
+const runProxyRouter = async (config, mode = PROXY_ROUTER_MODE.Seller) => {
   const modes = {
     [PROXY_ROUTER_MODE.Buyer]: [
       `--proxy-address=0.0.0.0:${config.buyerProxyPort}`,
@@ -61,10 +66,7 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
   };
 
   try {
-    const resourcePath =
-      process.env.NODE_ENV === "production"
-        ? process.resourcesPath // Prod Mode
-        : `${__dirname}/../../..`; // Dev Mode
+    const resourcePath = getResourcesPath()
 
     const out = openLogFile(`${mode}-out`);
     const err = openLogFile(`${mode}-err`);
@@ -101,4 +103,4 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
   }
 };
 
-module.exports = { runProxyRouter, PROXY_ROUTER_MODE, isProxyRouterHealthy };
+module.exports = { runProxyRouter, PROXY_ROUTER_MODE, isProxyRouterHealthy, getResourcesPath };

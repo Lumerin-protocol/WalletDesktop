@@ -15,6 +15,9 @@ function setKey(key, value) {
   logger.verbose("Settings changed", key);
 }
 
+const getAppVersion = () =>  getKey("app.version");
+const setAppVersion = (value) =>  setKey("app.version", value);
+
 const getPasswordHash = () => getKey("user.passwordHash");
 
 function setPasswordHash(hash) {
@@ -99,4 +102,6 @@ module.exports = {
   setProxyRouterConfig,
   getProxyRouterConfig,
   cleanupDb,
+  getAppVersion,
+  setAppVersion,
 };
