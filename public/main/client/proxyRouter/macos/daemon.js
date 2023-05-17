@@ -70,20 +70,20 @@ const runMacosDaemons = async (resourcePath, config) => {
   };
 
   const installSellerCommand = await getInstallMacosDaemonCommand(
-    "proxy.router.seller",
+    "com.proxy.router.seller",
     `${resourcePath}/executables`
   );
   const installBuyerCommand = await getInstallMacosDaemonCommand(
-    "proxy.router.buyer",
+    "com.proxy.router.buyer",
     `${resourcePath}/executables`
   );
 
   const sellerRunCommand = await getCommandToRunDaemon(
-    getMacosDaemonPath("proxy.router.seller"),
+    getMacosDaemonPath("com.proxy.router.seller"),
     getCommandWithEnv(config, modes[PROXY_ROUTER_MODE.Seller])
   );
   const buyerRunCommand = await getCommandToRunDaemon(
-    getMacosDaemonPath("proxy.router.buyer"),
+    getMacosDaemonPath("com.proxy.router.buyer"),
     getCommandWithEnv(config, modes[PROXY_ROUTER_MODE.Buyer])
   );
 
