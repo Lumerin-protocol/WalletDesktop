@@ -156,6 +156,8 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
       ) {
         logger.debug("Proxy is not healhy, restart...");
         if (os.platform() === "darwin") {
+          await proxyRouterApi.kill(config.sellerProxyPort).catch(logger.error);
+          await proxyRouterApi.kill(config.buyerProxyPort).catch(logger.error);
           await runMacosDaemons(getResourcesPath(), config);
         } else {
           if (!isSellerHealthy) {
