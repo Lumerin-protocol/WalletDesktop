@@ -52,7 +52,6 @@ function SellerHub({
   contracts,
   hasContracts,
   copyToClipboard,
-  onWalletRefresh,
   syncStatus,
   activeCount,
   draftCount,
@@ -70,7 +69,6 @@ function SellerHub({
   //   sendDisabledReason: PropTypes.string,
   //   hasContracts: PropTypes.bool.isRequired,
   //   copyToClipboard: PropTypes.func.isRequired,
-  //   onWalletRefresh: PropTypes.func.isRequired,
   //   sendDisabled: PropTypes.bool.isRequired,
   //   syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
   //   address: PropTypes.string.isRequired
@@ -188,7 +186,6 @@ function SellerHub({
 
       <ContractsList
         hasContracts={hasContracts}
-        onWalletRefresh={onWalletRefresh}
         syncStatus={syncStatus}
         cancel={handleContractCancellation}
         deleteContract={handleDeleteContract}

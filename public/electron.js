@@ -16,7 +16,9 @@ const { createClient } = require('./main/client');
 const config = require('./config');
 const initContextMenu = require('./contextMenu');
 const initMenu = require('./menu');
+const errorHandler = require('./errorHandler');
 const logger = require('./logger');
+errorHandler({ logger: logger.error });
 
 if (isDev) {
   // Development

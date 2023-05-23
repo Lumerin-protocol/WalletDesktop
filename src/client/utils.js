@@ -50,6 +50,10 @@ export function sendToMainProcess(
 
     if (responseError) {
       deferred.reject(responseError);
+      ipcRenderer.send('handle-client-error', {
+        id: cuid(),
+        data: responseError
+      });
     } else {
       deferred.resolve(_data);
     }

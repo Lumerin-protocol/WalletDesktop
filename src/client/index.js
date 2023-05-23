@@ -130,6 +130,7 @@ const createClient = function(createStore) {
     sendLmr: utils.forwardToMainProcess('send-lmr', 750000),
     sendEth: utils.forwardToMainProcess('send-eth', 750000),
     clearCache: utils.forwardToMainProcess('clear-cache'),
+    handleClientSideError: utils.forwardToMainProcess('handle-client-error'),
     startDiscovery: utils.forwardToMainProcess('start-discovery'),
     stopDiscovery: utils.forwardToMainProcess('stop-discovery'),
     setMinerPool: utils.forwardToMainProcess('set-miner-pool'),
