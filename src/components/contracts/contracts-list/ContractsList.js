@@ -14,6 +14,28 @@ import {
 } from './ContractsList.styles';
 import { ContractsRowContainer } from './ContractsRow.styles';
 import StatusHeader from './StatusHeader';
+import styled from 'styled-components';
+import TotalIcon from '../../icons/TotalIcon';
+import RentedIcon from '../../icons/RentedIcon';
+import ExpiresIcon from '../../icons/ExpiresIcon';
+
+const Stats = styled.div`
+  color: #0e4353;
+  display: flex;
+  width: 435px;
+  justify-content: space-between;
+`;
+
+const StatValue = styled.div`
+  background-color: white;
+  padding: 5px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 100;
+  font-size: 1.5rem;
+  border-radius: 8px;
+`;
 
 function ContractsList({
   contracts,
@@ -24,7 +46,8 @@ function ContractsList({
   noContractsMessage,
   customRowRenderer,
   allowSendTransaction,
-  tabs
+  tabs,
+  stats
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   const hasContracts = contracts.length;
@@ -64,10 +87,36 @@ function ContractsList({
 
   const filterExtractValue = ({ status }) => status;
 
+  const iconStyles = { width: '15px', marginRight: '4px' };
+
   return (
     <Container data-testid="Contracts-list">
-      <Flex.Row grow="1">
-        <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
+      <Flex.Row grow="1" style={{ flexDirection: 'column' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
+          {stats && (
+            <Stats>
+              <StatValue>
+                <TotalIcon style={iconStyles} />
+                Total: <b>{stats.count}</b>
+              </StatValue>
+              <StatValue>
+                <RentedIcon style={iconStyles} />
+                Rented: <b>{stats.rented}</b>
+              </StatValue>
+              <StatValue>
+                <ExpiresIcon style={iconStyles} />
+                Expires in an hour: <b>{stats.expiresInHour}</b>
+              </StatValue>
+            </Stats>
+          )}
+        </div>
       </Flex.Row>
       <Contracts>
         <ItemFilter extractValue={filterExtractValue} items={contracts}>
