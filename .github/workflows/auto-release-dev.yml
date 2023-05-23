@@ -86,13 +86,17 @@ jobs:
           variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "ETH_NODE_ADDRESS" "PROXY_ROUTER_URL")
           curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables?per_page=1000" | jq -c '.[]' | 
             while IFS= read -r line; do
-              scope=$(<<<"$line" jq -r .environment_scope);
-              if [ "${scope}" = "${{ matrix.environment }}" ] || [ "${scope}" = '*' ]
-              then
-                key=$(<<<"$line" jq -r .key);
-                if [[ " ${variables[*]} " =~ " ${key} " ]]; then
-                 value=$(<<<"$line" jq -r .value);
-                 echo "$key=$value" >> .env
+              key=$(<<<"$line" jq -r .key);
+              if [[ " ${variables[*]} " =~ " ${key} " ]]; then
+                scope=$(<<<"$line" jq -r .environment_scope);
+                if [ "${scope}" = "${{ matrix.environment }}" ]
+                then
+                  value=$(<<<"$line" jq -r .value);
+                  echo "$key=$value" >> .env
+                elif [ "${scope}" = '*' ]
+                then
+                  value=$(curl --globoff --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables/${key}?filter[environment_scope]=*" | jq -c '.value')
+                  echo "$key=$value" >> .env
                 fi
               fi
             done
