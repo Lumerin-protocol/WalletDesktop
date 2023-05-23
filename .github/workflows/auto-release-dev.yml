@@ -91,7 +91,7 @@ jobs:
               if [[ " ${variables[*]} " =~ " ${key} " ]]; then
                 scope=$(<<<"$line" jq -r .environment_scope);
                 value=$(<<<"$line" jq -r .value);
-                if [ "${scope}" = '*'' ]
+                if [ "${scope}" = '*' ]
                 then
                   echo "$key=$value" >> .env
                 fi
