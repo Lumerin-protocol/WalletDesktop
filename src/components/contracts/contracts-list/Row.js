@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import styled from 'styled-components';
 import { useTimer } from 'react-timer-hook';
 import { ToastsContext } from '../../toasts';
+import styled from 'styled-components';
 
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
 
-import { Btn } from '../../common';
 import { CLOSEOUT_TYPE, CONTRACT_STATE } from '../../../enums';
 import Spinner from '../../common/Spinner';
 import { ClockIcon } from '../../icons/ClockIcon';
@@ -24,6 +23,7 @@ import {
   ActionButtons,
   SmallAssetContainer
 } from './ContractsRow.styles';
+import ContractActions from '../../common/ContractActions';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -53,6 +53,7 @@ const STATE_COLOR = {
 function Row({
   contract,
   cancel,
+  deleteContract,
   address,
   ratio,
   explorerUrl,
@@ -66,20 +67,37 @@ function Row({
     setIsPending(false);
   }, [contract]);
 
-  const handleCancel = closeOutType => e => {
-    e.stopPropagation();
-    e.preventDefault();
+  const handleCancel = closeOutType => {
     setIsPending(true);
-    cancel(e, {
+    cancel({
       contractId: contract.id,
       walletAddress: contract.seller,
       closeOutType
-    }).catch(e => {
-      const action =
-        closeOutType === CLOSEOUT_TYPE.Claim ? 'claim funds' : 'close contract';
-      context.toast('error', `Failed to ${action}: ${e.message}`);
-      setIsPending(false);
-    });
+    })
+      .catch(e => {
+        const action =
+          closeOutType === CLOSEOUT_TYPE.Claim
+            ? 'claim funds'
+            : 'close contract';
+        context.toast('error', `Failed to ${action}: ${e.message}`);
+      })
+      .finally(() => {
+        setIsPending(false);
+      });
+  };
+
+  const handleDelete = () => {
+    setIsPending(true);
+    deleteContract({
+      contractId: contract.id,
+      walletAddress: contract.seller
+    })
+      .catch(e => {
+        context.toast('error', `Failed to delete contract: ${e.message}`);
+      })
+      .finally(() => {
+        setIsPending(false);
+      });
   };
 
   const contractEndTimestamp = getContractEndTimestamp(contract);
@@ -110,8 +128,20 @@ function Row({
     return STATE_COLOR[contract.state];
   };
 
+  const handleActionSelector = value => {
+    if (value === 1) {
+      return handleCancel(CLOSEOUT_TYPE.Claim);
+    }
+    if (value === 2) {
+      return handleCancel(CLOSEOUT_TYPE.Close);
+    }
+    if (value === 3) {
+      return handleDelete();
+    }
+  };
+
   return (
-    <Container ratio={ratio} onClick={() => window.openLink(explorerUrl)}>
+    <Container ratio={ratio}>
       <Value>
         {formatTimestamp(contract.timestamp, timer, contract.state)}
       </Value>
@@ -132,25 +162,37 @@ function Row({
           </Value>
         ) : (
           <ActionButtons>
-            {isContractExpired() && (
-              <ActionButton
-                data-disabled={!allowSendTransaction}
-                onClick={
-                  allowSendTransaction
-                    ? handleCancel(CLOSEOUT_TYPE.Close)
-                    : () => {}
+            <ContractActions
+              onChange={e => handleActionSelector(e.value)}
+              options={[
+                {
+                  label: 'Actions',
+                  value: 0,
+                  hidden: true
+                },
+                {
+                  label: 'Claim Funds',
+                  value: 1,
+                  disabled: !allowSendTransaction || isClaimBtnDisabled()
+                },
+                {
+                  label: 'Close',
+                  value: 2,
+                  disabled: !(allowSendTransaction && isContractExpired())
+                },
+                {
+                  label: 'Delete',
+                  value: 3,
+                  disabled: !allowSendTransaction || contract.isDead,
+                  message:
+                    getContractState(contract) === CONTRACT_STATE.Running
+                      ? 'Will not affect hashrate delivery of running contract'
+                      : null
                 }
-              >
-                Close
-              </ActionButton>
-            )}
-            <ActionButton
-              data-disabled={isClaimBtnDisabled()}
-              data-rh={getClaimDisabledReason()}
-              onClick={handleCancel(CLOSEOUT_TYPE.Claim)}
-            >
-              Claim Funds
-            </ActionButton>
+              ]}
+              value={0}
+              id="range"
+            />
           </ActionButtons>
         ))}
     </Container>

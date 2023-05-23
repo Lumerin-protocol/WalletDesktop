@@ -30,7 +30,9 @@ function Marketplace({
   const [showSuccess, setShowSuccess] = useState(false);
   const context = useContext(ToastsContext);
   const contractsToShow = contracts.filter(
-    x => (Number(x.state) === 0 && x.seller !== address) || x.inProgress
+    x =>
+      (Number(x.state) === 0 && x.seller !== address && !x.isDead) ||
+      x.inProgress
   );
 
   const stats = {

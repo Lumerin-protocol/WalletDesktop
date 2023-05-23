@@ -41,6 +41,7 @@ function ContractsList({
   contracts,
   syncStatus,
   cancel,
+  deleteContract,
   address,
   contractsRefresh,
   noContractsMessage,
@@ -57,7 +58,7 @@ function ContractsList({
     { value: 'price', name: 'Price', ratio: 2 },
     { value: 'length', name: 'Duration', ratio: 2 },
     { value: 'speed', name: 'Speed', ratio: 2 },
-    { value: 'action', name: 'Actions', ratio: 3 }
+    { value: 'action', name: '', ratio: 3 }
   ];
 
   const tabsToShow = tabs || defaultTabs;
@@ -78,6 +79,7 @@ function ContractsList({
         onClick={onContractsClicked}
         contract={contractsList[index]}
         cancel={cancel}
+        deleteContract={deleteContract}
         address={address}
         ratio={ratio}
         allowSendTransaction={allowSendTransaction}

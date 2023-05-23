@@ -99,6 +99,22 @@ const cancelContract = async function(data, { api }) {
   )(data, { api });
 };
 
+const deleteContract = async function(data, { api }) {
+  data.walletId = wallet.getAddress().address;
+  data.password = await auth.getSessionPassword();
+
+  if (typeof data.walletId !== "string") {
+    throw new WalletError("WalletId is not defined");
+  }
+  return withAuth((privateKey) =>
+    api.contracts.setContractAsDead({
+      walletAddress: data.walletAddress,
+      contractId: data.contractId,
+      privateKey,
+    })
+  )(data, { api });
+};
+
 function createWallet(data, core, isOpen = true) {
   const seed = keys.mnemonicToSeedHex(data.mnemonic);
   const entropy = keys.mnemonicToEntropy(data.mnemonic);
@@ -347,4 +363,5 @@ module.exports = {
   revealSecretPhrase,
   hasStoredSecretPhrase,
   getPastTransactions,
+  deleteContract,
 };
