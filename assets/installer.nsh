@@ -1,3 +1,7 @@
+!macro customHeader
+   RequestExecutionLevel admin
+!macroend
+
 !macro customUnInstall
   ${ifNot} ${isUpdated}
     ExecWait "TaskKill /IM proxy-router.exe /F"
