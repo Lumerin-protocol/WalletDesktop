@@ -9,7 +9,7 @@ const PROXY_ROUTER_MODE = {
 };
 
 const getInstallNssmServiceCommand = (resourcePath) => {
-    return [`wget -O ${resourcePath}/nssm.zip http://nssm.cc/release/nssm-2.24.zip`, `Expand-Archive -LiteralPath ${resourcePath}/nssm.zip`, `${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe install`].join(' && ');
+    return [`Expand-Archive -LiteralPath ${resourcePath}/nssm.zip`, `${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe install`].join(' && ');
 }
 
 const getInstallServiceCommand = (serviceName, pathToExecutable, resourcePath) => {

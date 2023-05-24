@@ -124,7 +124,8 @@
       "buildResources": "assets"
     },
     "extraResources": [
-      "executables/**/*"
+      "executables/**/*",
+      "nssm.zip"
     ],
     "nsis": {
       "include": "assets/installer.nsh"
