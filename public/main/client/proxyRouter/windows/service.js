@@ -9,7 +9,7 @@ const PROXY_ROUTER_MODE = {
 };
 
 const getInstallNssmServiceCommand = (resourcePath) => {
-    return `powershell -command "Expand-Archive -LiteralPath ${resourcePath}/nssm.zip -DestinationPath ${resourcePath}/nssm""`;
+    return `powershell -command "Expand-Archive -LiteralPath ${resourcePath}/nssm.zip -DestinationPath ${resourcePath}/nssm"`;
 }
 
 const getInstallServiceCommand = (serviceName, pathToExecutable, resourcePath) => {
