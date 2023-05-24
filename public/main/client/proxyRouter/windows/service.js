@@ -9,7 +9,7 @@ const PROXY_ROUTER_MODE = {
 };
 
 const getInstallNssmServiceCommand = (resourcePath) => {
-    return [`powershell -command "Expand-Archive -LiteralPath ${resourcePath}/nssm.zip"`, `${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe install`].join(' && ');
+    return `powershell -command "Expand-Archive -LiteralPath ${resourcePath}/nssm.zip -DestinationPath ${resourcePath}/nssm""`;
 }
 
 const getInstallServiceCommand = (serviceName, pathToExecutable, resourcePath) => {
@@ -21,7 +21,7 @@ const getInstallServiceCommand = (serviceName, pathToExecutable, resourcePath) =
     `${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe set ${serviceName} AppStderr ${pathToExecutable}/${serviceName}-err.log`,
   ];
 
-  return commands.join(" && ");
+  return commands.join(" ; ");
 };
 
 const getEnvsFromConfig = (config, additional) => {
@@ -45,7 +45,7 @@ const getEnvsFromConfig = (config, additional) => {
 };
 
 const getCommandToSetEnv = (serviceName, envs, resourcePath) => {
-  return `${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe set ${serviceName} AppEnvironmentExtra ${envs} && ${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe restart ${serviceName}`;
+  return `${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe set ${serviceName} AppEnvironmentExtra ${envs} ; ${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe restart ${serviceName}`;
 };
 
 const runWindowsServices = async (resourcePath, config) => {
@@ -95,10 +95,10 @@ const runWindowsServices = async (resourcePath, config) => {
     sellerRunCommand,
     buyerRunCommand,
   ];
-  console.log("🚀 ~ file: service.js:98 ~ runWindowsServices ~ commands:", commands.join(" && "))
+  console.log("🚀 ~ file: service.js:98 ~ runWindowsServices ~ commands:", commands.join(" ; "))
 
   await new Promise((resolve, reject) => {
-    sudo.exec(commands.join(" && "), options, function(error, stdout, stderr) {
+    sudo.exec(commands.join(" ; "), options, function(error, stdout, stderr) {
       if (error) {
         return reject(error);
       }
