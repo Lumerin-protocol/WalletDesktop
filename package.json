@@ -128,7 +128,8 @@
       "nssm.zip"
     ],
     "nsis": {
-      "include": "assets/installer.nsh"
+      "include": "assets/installer.nsh",
+      "allowElevation": true
     },
     "mac": {
       "artifactName": "${name}.${ext}",
