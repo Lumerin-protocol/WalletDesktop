@@ -128,8 +128,7 @@
       "nssm.zip"
     ],
     "nsis": {
-      "include": "assets/installer.nsh",
-      "requestedExecutionLevel": "requireAdministrator"
+      "include": "assets/installer.nsh"
     },
     "mac": {
       "artifactName": "${name}.${ext}",
@@ -156,6 +155,7 @@
       "artifactName": "${name}.${ext}",
       "target": "nsis",
       "icon": "./assets/lumerin.png",
+      "requestedExecutionLevel": "requireAdministrator",
       "legalTrademarks": ""
     }
   },
