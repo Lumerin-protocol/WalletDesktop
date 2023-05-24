@@ -22,6 +22,7 @@ const {
   getResourcesPath,
 } = require("./proxyRouter");
 const { runMacosDaemons } = require("./proxyRouter/macos/daemon");
+const { runWindowsServices } = require("./proxyRouter/windows/service");
 
 function startCore({ chain, core, config: coreConfig }, webContent) {
   logger.verbose(`Starting core ${chain}`);
@@ -159,6 +160,10 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
           await proxyRouterApi.kill(config.sellerProxyPort).catch(logger.error);
           await proxyRouterApi.kill(config.buyerProxyPort).catch(logger.error);
           await runMacosDaemons(getResourcesPath(), config);
+        } else if(os.platform() === 'win32') {
+          await proxyRouterApi.kill(config.sellerProxyPort).catch(logger.error);
+          await proxyRouterApi.kill(config.buyerProxyPort).catch(logger.error);
+          await runWindowsServices(getResourcesPath(), config);
         } else {
           if (!isSellerHealthy) {
             await proxyRouterApi
