@@ -160,7 +160,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
           await proxyRouterApi.kill(config.sellerProxyPort).catch(logger.error);
           await proxyRouterApi.kill(config.buyerProxyPort).catch(logger.error);
           await runMacosDaemons(getResourcesPath(), config);
-        } else if(os.platform() === "win") {
+        } else if(os.platform() === "win32") {
           await proxyRouterApi.kill(config.sellerProxyPort).catch(logger.error);
           await proxyRouterApi.kill(config.buyerProxyPort).catch(logger.error);
           await runWindowsServices(getResourcesPath(), config);
