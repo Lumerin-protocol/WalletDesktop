@@ -8,17 +8,17 @@ const PROXY_ROUTER_MODE = {
   Seller: "seller",
 };
 
-const getInstallNssmServiceCommand = (resourcePath) => {
-    return `powershell -command "Expand-Archive -LiteralPath ${resourcePath}/nssm.zip -DestinationPath ${resourcePath}/nssm"`;
+const getInstallNssmServiceCommand = (pathToExecutable) => {
+    return `powershell -command "Expand-Archive -LiteralPath ${pathToExecutable}/nssm.zip -DestinationPath ${pathToExecutable}/nssm"`;
 }
 
-const getInstallServiceCommand = (serviceName, pathToExecutable, resourcePath) => {
+const getInstallServiceCommand = (serviceName, pathToExecutable) => {
   pathToExecutable = pathToExecutable.replaceAll(" ", "\\ ");
 
   const commands = [
-    `${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe install ${serviceName} ${pathToExecutable}/proxy-router.exe`,
-    `${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe set ${serviceName} AppStdout ${pathToExecutable}/${serviceName}.log`,
-    `${resourcePath}\\nssm\\nssm-2.24\\win64\\nssm.exe set ${serviceName} AppStderr ${pathToExecutable}/${serviceName}-err.log`,
+    `${pathToExecutable}\\nssm\\nssm-2.24\\win64\\nssm.exe install ${serviceName} ${pathToExecutable}/proxy-router.exe`,
+    `${pathToExecutable}\\nssm\\nssm-2.24\\win64\\nssm.exe set ${serviceName} AppStdout ${pathToExecutable}/${serviceName}.log`,
+    `${pathToExecutable}\\nssm\\nssm-2.24\\win64\\nssm.exe set ${serviceName} AppStderr ${pathToExecutable}/${serviceName}-err.log`,
   ];
 
   return commands.join(" ; ");
@@ -80,22 +80,21 @@ const runWindowsServices = async (resourcePath, config) => {
   const sellerRunCommand = await getCommandToSetEnv(
     "proxySeller",
     getEnvsFromConfig(config, modes[PROXY_ROUTER_MODE.Seller]),
-    resourcePath
+    `${resourcePath}/executables`
   );
   const buyerRunCommand = await getCommandToSetEnv(
     "proxyBuyer",
     getEnvsFromConfig(config, modes[PROXY_ROUTER_MODE.Buyer]),
-    resourcePath
+    `${resourcePath}/executables`
   );
 
   const commands = [
-    getInstallNssmServiceCommand(resourcePath),
+    getInstallNssmServiceCommand(`${resourcePath}/executables`),
     installSellerCommand,
     installBuyerCommand,
     sellerRunCommand,
     buyerRunCommand,
   ];
-  console.log("🚀 ~ file: service.js:98 ~ runWindowsServices ~ commands:", commands.join(" ; "))
 
   await new Promise((resolve, reject) => {
     sudo.exec(commands.join(" ; "), options, function(error, stdout, stderr) {
