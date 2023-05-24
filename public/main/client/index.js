@@ -156,11 +156,11 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         shouldRestartProxy
       ) {
         logger.debug("Proxy is not healhy, restart...");
-        if (os.platform() === "darwin") {
+        if (os.platform() === "da1rwin") {
           await proxyRouterApi.kill(config.sellerProxyPort).catch(logger.error);
           await proxyRouterApi.kill(config.buyerProxyPort).catch(logger.error);
           await runMacosDaemons(getResourcesPath(), config);
-        } else if(os.platform() === 'win32') {
+        } else if(true) {
           await proxyRouterApi.kill(config.sellerProxyPort).catch(logger.error);
           await proxyRouterApi.kill(config.buyerProxyPort).catch(logger.error);
           await runWindowsServices(getResourcesPath(), config);
