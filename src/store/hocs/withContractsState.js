@@ -42,31 +42,17 @@ const withContractsState = WrappedComponent => {
         }, 200);
         return;
       }
-      const capturedThis = this;
       this.setState({ refreshStatus: 'pending', refreshError: null });
       this.props.client
         .refreshAllContracts({})
         .then(() => this.setState({ refreshStatus: 'success' }))
         .catch(e => {
-          capturedThis.context.toast('error', e.message);
-          capturedThis.props.setFailedRefresh();
+          this.context.toast(
+            'error',
+            'We’re experiencing connection problems.  Please wait a few minutes and try again'
+          );
+          this.props.setFailedRefresh();
         });
-    };
-
-    onWalletRefresh = () => {
-      this.setState({ refreshStatus: 'pending', refreshError: null });
-      this.props.client
-        .refreshAllTransactions({
-          address: this.props.address,
-          chain: this.props.chain
-        })
-        .then(() => this.setState({ refreshStatus: 'success' }))
-        .catch(() =>
-          this.setState({
-            refreshStatus: 'failure',
-            refreshError: 'Could not refresh'
-          })
-        );
     };
 
     render() {
@@ -74,7 +60,6 @@ const withContractsState = WrappedComponent => {
         <WrappedComponent
           copyToClipboard={this.props.client.copyToClipboard}
           contractsRefresh={this.contractsRefresh}
-          onWalletRefresh={this.onWalletRefresh}
           getLocalIp={this.props.client.getLocalIp}
           getPoolAddress={this.props.client.getPoolAddress}
           {...this.props}

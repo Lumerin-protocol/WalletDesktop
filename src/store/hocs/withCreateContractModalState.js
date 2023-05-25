@@ -20,13 +20,6 @@ const withCreateContractModalState = WrappedComponent => {
       copyBtnLabel: ''
     };
 
-    createContract = contract => {
-      this.props.client
-        .copyToClipboard(this.props.address)
-        .then(() => this.setState({ copyBtnLabel: 'Copied to clipboard!' }))
-        .catch(err => this.setState({ copyBtnLabel: err.message }));
-    };
-
     render() {
       return (
         <WrappedComponent

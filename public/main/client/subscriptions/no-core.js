@@ -8,6 +8,7 @@ const listeners = {
   'change-password': handlers.changePassword,
   'persist-state': handlers.persistState,
   'clear-cache': handlers.clearCache,
+  'handle-client-error': handlers.handleClientSideError,
   'get-pool-address': handlers.getPoolAddress,
   'reveal-secret-phrase': handlers.revealSecretPhrase,
   'has-stored-secret-phrase': handlers.hasStoredSecretPhrase,

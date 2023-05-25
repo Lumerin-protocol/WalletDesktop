@@ -87,7 +87,9 @@ const withChangePasswordState = WrappedComponent => {
             errors: isValid ? {} : { oldPassword: 'Invalid password' }
           });
         })
-        .catch(err => this.setState({ status: 'failure', error: err.message }));
+        .catch(err => {
+          this.setState({ status: 'failure', error: err.message });
+        });
     };
 
     render() {
