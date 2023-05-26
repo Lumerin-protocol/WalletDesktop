@@ -1,4 +1,4 @@
-const { macosInstallScript } = require("./installScript");
+const { linuxInstallScript } = require("./installScript");
 const sudo = require("@vscode/sudo-prompt");
 const options = {
   name: "Proxy Router",
@@ -11,7 +11,7 @@ const PROXY_ROUTER_MODE = {
 
 const getInstallLinuxServiceCommand = async (daemonName, pathToExecutable) => {
   pathToExecutable = pathToExecutable.replaceAll(" ", "\\ ");
-  const config = macosInstallScript
+  const config = linuxInstallScript
     .replace("{serviceName}", daemonName)
     .replace("{pathToExecutable}", `${pathToExecutable}/proxy-router`)
     .replace("{workingDir}", pathToExecutable);
