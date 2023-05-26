@@ -12,9 +12,9 @@ const PROXY_ROUTER_MODE = {
 const getInstallLinuxServiceCommand = async (daemonName, pathToExecutable) => {
   pathToExecutable = pathToExecutable.replaceAll(" ", "\\ ");
   const config = linuxInstallScript
-    .replace("{serviceName}", daemonName)
-    .replace("{pathToExecutable}", `${pathToExecutable}/proxy-router`)
-    .replace("{workingDir}", pathToExecutable);
+    .replaceAll("{serviceName}", daemonName)
+    .replaceAll("{pathToExecutable}", `${pathToExecutable}/proxy-router`)
+    .replaceAll("{workingDir}", pathToExecutable);
 
   const path = `/etc/systemd/system/${daemonName}.service`;
   return `touch ${path} && echo '${config}' > ${path}`;
