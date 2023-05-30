@@ -6,8 +6,6 @@ After=network.target
 
 [Service]
 Type=simple
-User=dev
-Group=dev
 
 WorkingDirectory={workingDir}
 ExecStart={pathToExecutable}
