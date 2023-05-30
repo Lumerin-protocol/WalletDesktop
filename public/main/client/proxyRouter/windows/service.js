@@ -1,12 +1,5 @@
-const sudo = require("@vscode/sudo-prompt");
-const options = {
-  name: "Proxy Router",
-};
-
-const PROXY_ROUTER_MODE = {
-  Buyer: "buyer",
-  Seller: "seller",
-};
+const { getProxyRouterEnvs, PROXY_ROUTER_MODE } = require("../config");
+const { sudo } = require("../sudoPrompt");
 
 const getInstallNssmServiceCommand = (pathToExecutable) => {
     return `powershell -command "Expand-Archive -LiteralPath ${pathToExecutable}/nssm.zip -DestinationPath ${pathToExecutable}/nssm"`;
@@ -24,22 +17,8 @@ const getInstallServiceCommand = (serviceName, pathToExecutable) => {
   return commands.join(" ; ");
 };
 
-const getEnvsFromConfig = (config, additional) => {
-  return [
-    ["CLONE_FACTORY_ADDRESS", `"${config.cloneFactoryAddress}"`],
-    ["ETH_NODE_ADDRESS", `"${config.wsApiUrl}"`],
-    ["MINER_VETTING_DURATION", "1m"],
-    ["POOL_CONN_TIMEOUT", "15m"],
-    ["POOL_MAX_DURATION", "7m"],
-    ["POOL_MIN_DURATION", "2m"],
-    ["STRATUM_SOCKET_BUFFER_SIZE", 4],
-    ["VALIDATION_BUFFER_PERIOD", "10m"],
-    ["WALLET_ADDRESS", `"${config.walletAddress}"`],
-    ["WALLET_PRIVATE_KEY", `"${config.privateKey}"`],
-    ["LOG_LEVEL", "debug"],
-    ["MINER_SUBMIT_ERR_LIMIT", 0],
-    ...additional,
-  ]
+const getEnvsFromConfig = (config, mode) => {
+  return getProxyRouterEnvs(config, mode)
     .map((e) => `${e[0]}=${e[1]}`)
     .join(" ");
 };
@@ -49,61 +28,41 @@ const getCommandToSetEnv = (serviceName, envs, resourcePath) => {
 };
 
 const runWindowsServices = async (resourcePath, config) => {
-  const modes = {
-    [PROXY_ROUTER_MODE.Buyer]: [
-      ["PROXY_ADDRESS", `0.0.0.0:${config.buyerProxyPort}`],
-      ["WEB_ADDRESS", `0.0.0.0:${config.buyerWebPort}`],
-      ["IS_BUYER", true],
-      ["POOL_ADDRESS", `"${config.buyerDefaultPool}"`],
-      ["HASHRATE_DIFF_THRESHOLD", 0.1],
-    ],
-    [PROXY_ROUTER_MODE.Seller]: [
-      ["PROXY_ADDRESS", `0.0.0.0:${config.sellerProxyPort}`],
-      ["WEB_ADDRESS", `0.0.0.0:${config.sellerWebPort}`],
-      ["IS_BUYER", false],
-      ["POOL_ADDRESS", `"${config.sellerDefaultPool}"`],
-      ["HASHRATE_DIFF_THRESHOLD", 0.03],
-    ],
-  };
+  const pathToExecutables = `${resourcePath}/executables`;
+  const sellerServiceName = 'proxySeller';
+  const buyerServiceName = 'proxyBuyer';
 
   const installSellerCommand = await getInstallServiceCommand(
-    "proxySeller",
-    `${resourcePath}/executables`,
+    sellerServiceName,
+    pathToExecutables,
     resourcePath
   );
   const installBuyerCommand = await getInstallServiceCommand(
-    "proxyBuyer",
-    `${resourcePath}/executables`,
+    buyerServiceName,
+    pathToExecutables,
     resourcePath
   );
 
   const sellerRunCommand = await getCommandToSetEnv(
-    "proxySeller",
-    getEnvsFromConfig(config, modes[PROXY_ROUTER_MODE.Seller]),
-    `${resourcePath}/executables`
+    sellerServiceName,
+    getEnvsFromConfig(config, PROXY_ROUTER_MODE.Seller),
+    pathToExecutables
   );
   const buyerRunCommand = await getCommandToSetEnv(
-    "proxyBuyer",
-    getEnvsFromConfig(config, modes[PROXY_ROUTER_MODE.Buyer]),
-    `${resourcePath}/executables`
+    buyerServiceName,
+    getEnvsFromConfig(config, PROXY_ROUTER_MODE.Buyer),
+    pathToExecutables
   );
 
   const commands = [
-    getInstallNssmServiceCommand(`${resourcePath}/executables`),
+    getInstallNssmServiceCommand(pathToExecutables),
     installSellerCommand,
     installBuyerCommand,
     sellerRunCommand,
     buyerRunCommand,
   ];
 
-  await new Promise((resolve, reject) => {
-    sudo.exec(commands.join(" ; "), options, function(error, stdout, stderr) {
-      if (error) {
-        return reject(error);
-      }
-      resolve();
-    });
-  });
+  await sudo(commands.join(" ; "));
 };
 
 module.exports = { runWindowsServices };
