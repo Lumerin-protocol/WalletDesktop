@@ -134,11 +134,7 @@ function createWallet(data, core, isOpen = true) {
 const restartProxyRouter = async (data, { emitter, api }) => {
   const password = await auth.getSessionPassword();
 
-  if (os.platform() === "darwin") {
-    emitter.emit("open-proxy-router", { password, restartDaemon: true });
-  } else if (os.platform() === "win32") {
-    emitter.emit("open-proxy-router", { password, restartDaemon: true });
-  } else if (os.platform() === 'linux') {
+  if (['darwin', 'win32', 'linux'].includes(os.platform()) ) {
     emitter.emit("open-proxy-router", { password, restartDaemon: true });
   } else {
     api["proxy-router"].kill(config.chain.buyerProxyPort).catch(logger.error);
