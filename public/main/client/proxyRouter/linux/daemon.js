@@ -10,7 +10,7 @@ const PROXY_ROUTER_MODE = {
 };
 
 const getInstallLinuxServiceCommand = async (daemonName, pathToExecutable) => {
-  pathToExecutable = pathToExecutable.replaceAll(" ", "\\ ");
+  pathToExecutable = pathToExecutable.replaceAll(" ", "\x20");
   const config = linuxInstallScript
     .replaceAll("{serviceName}", daemonName)
     .replaceAll("{pathToExecutable}", `${pathToExecutable}/proxy-router`)
@@ -19,11 +19,6 @@ const getInstallLinuxServiceCommand = async (daemonName, pathToExecutable) => {
   const path = `/etc/systemd/system/${daemonName}.service`;
   return `touch ${path} && echo '${config}' > ${path}`;
 };
-
-// const getMacosDaemonPath = (daemonName) => {
-//   const path = `/Library/LaunchDaemons/${daemonName}.plist`;
-//   return path;
-// };
 
 const getCommandWithEnv = (config, additional) => {
   return [
