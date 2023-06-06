@@ -38,6 +38,8 @@ const withCreateContractModalState = WrappedComponent => {
     isLocalProxyRouter: selectors.getIsLocalProxyRouter(state),
     ip: selectors.getIp(state),
     pool: selectors.getBuyerPool(state),
+    btcRate: selectors.getRateBtc(state),
+    lmrRate: selectors.getRate(state),
     explorerUrl: props.contract
       ? selectors.getContractExplorerUrl(state, {
           hash: props.contract.id

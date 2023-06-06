@@ -121,6 +121,13 @@ export const Input = styled.input`
   ::placeholder {
     color: rgba(1, 67, 83, 0.56);
   }
+
+  ${props =>
+    props.id === 'price' &&
+    `
+      display: inline-block;
+      width: 50%;
+    `};
 `;
 
 export const Select = styled.select`

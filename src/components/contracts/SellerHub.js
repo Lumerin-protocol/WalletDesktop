@@ -12,6 +12,7 @@ import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
 import { lmrDecimals } from '../../utils/coinValue';
+import { formatBtcPerTh } from './utils';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -48,6 +49,15 @@ const ContractBtn = styled(Btn)`
   }
 `;
 
+const tabs = [
+  { name: 'Status', ratio: 1 },
+  { value: 'price', name: 'Price', ratio: 1 },
+  { value: 'btc-th', name: 'BTC/TH', ratio: 1 },
+  { value: 'length', name: 'Duration', ratio: 1 },
+  { value: 'speed', name: 'Speed', ratio: 1 },
+  { value: 'action', name: 'Actions', ratio: 2 }
+];
+
 function SellerHub({
   contracts,
   hasContracts,
@@ -59,6 +69,7 @@ function SellerHub({
   client,
   contractsRefresh,
   allowSendTransaction,
+  networkDifficulty,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -167,6 +178,16 @@ function SellerHub({
     c => c.seller === address && !c.isDead
   );
 
+  const rentedContracts =
+    contractsToShow?.filter(x => Number(x.state) === 1) ?? [];
+  const speedReducer = (acc, c) => acc + Number(c.speed) / 10 ** 12;
+  const sellerStats = {
+    count: contractsToShow.length ?? 0,
+    rented: rentedContracts.reduce(speedReducer, 0),
+    totalPosted: contractsToShow.reduce(speedReducer, 0),
+    networkReward: formatBtcPerTh(networkDifficulty)
+  };
+
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
@@ -194,6 +215,8 @@ function SellerHub({
         contracts={contractsToShow}
         allowSendTransaction={allowSendTransaction}
         noContractsMessage={'You have no contracts.'}
+        tabs={tabs}
+        sellerStats={sellerStats}
       />
 
       <CreateContractModal

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTimer } from 'react-timer-hook';
+import { IconCircle } from '@tabler/icons';
 import { ToastsContext } from '../../toasts';
 import styled from 'styled-components';
 
@@ -16,7 +17,9 @@ import {
   formatPrice,
   isContractClosed,
   getContractState,
-  getContractEndTimestamp
+  getContractEndTimestamp,
+  getContractRewardBtcPerTh,
+  formatExpNumber
 } from '../utils';
 import {
   ActionButton,
@@ -57,7 +60,9 @@ function Row({
   address,
   ratio,
   explorerUrl,
-  allowSendTransaction
+  allowSendTransaction,
+  lmrRate,
+  btcRate
 }) {
   // TODO: Add better padding
   const context = useContext(ToastsContext);
@@ -140,15 +145,32 @@ function Row({
     }
   };
 
+  const btcPerThReward = getContractRewardBtcPerTh(contract, btcRate, lmrRate);
+
   return (
     <Container ratio={ratio}>
-      <Value>
+      {/* <Value>
         {formatTimestamp(contract.timestamp, timer, contract.state)}
-      </Value>
-      <SmallAssetContainer data-rh={getContractState(contract)}>
-        <ClockIcon size="3rem" fill={getClockColor(contract)} />
-      </SmallAssetContainer>
+      </Value> */}
+      {contract.state === CONTRACT_STATE.Avaliable ? (
+        <SmallAssetContainer data-rh={getContractState(contract)}>
+          <IconCircle
+            data-rh={getContractState(contract)}
+            fill={getClockColor(contract)}
+            size="3rem"
+            stroke="currentColor"
+          ></IconCircle>
+        </SmallAssetContainer>
+      ) : (
+        <SmallAssetContainer data-rh={getContractState(contract)}>
+          <ClockIcon size="3rem" fill={getClockColor(contract)} />
+        </SmallAssetContainer>
+      )}
+
       <Value>{formatPrice(contract.price)}</Value>
+      <Value data-rh={`${formatExpNumber(btcPerThReward / 10 ** 6)} BTC/TH`}>
+        {btcPerThReward} μBTC/TH
+      </Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
       {contract.seller === address &&
