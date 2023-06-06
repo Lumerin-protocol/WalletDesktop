@@ -18,6 +18,7 @@ import styled from 'styled-components';
 import TotalIcon from '../../icons/TotalIcon';
 import RentedIcon from '../../icons/RentedIcon';
 import ExpiresIcon from '../../icons/ExpiresIcon';
+import { formatExpNumber } from '../utils';
 
 const Stats = styled.div`
   color: #0e4353;
@@ -132,8 +133,12 @@ function ContractsList({
               <StatValue>
                 Rented: <b> {sellerStats.rented} TH/s</b>
               </StatValue>
-              <StatValue>
-                Network Reward: <b> {sellerStats.networkReward}</b>
+              <StatValue
+                data-rh={`${formatExpNumber(
+                  sellerStats.networkReward / 10 ** 6
+                )} BTC/TH`}
+              >
+                Network Reward: <b> {sellerStats.networkReward} μBTC/TH</b>
               </StatValue>
             </Stats>
           )}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTimer } from 'react-timer-hook';
 import { IconCircle } from '@tabler/icons';
-
 import { ToastsContext } from '../../toasts';
 import styled from 'styled-components';
 
@@ -19,7 +18,8 @@ import {
   isContractClosed,
   getContractState,
   getContractEndTimestamp,
-  getContractRewardBtcPerTh
+  getContractRewardBtcPerTh,
+  formatExpNumber
 } from '../utils';
 import {
   ActionButton,
@@ -145,6 +145,8 @@ function Row({
     }
   };
 
+  const btcPerThReward = getContractRewardBtcPerTh(contract, btcRate, lmrRate);
+
   return (
     <Container ratio={ratio}>
       {/* <Value>
@@ -166,8 +168,8 @@ function Row({
       )}
 
       <Value>{formatPrice(contract.price)}</Value>
-      <Value>
-        {getContractRewardBtcPerTh(contract, btcRate, lmrRate)} μBTC/TH
+      <Value data-rh={`${formatExpNumber(btcPerThReward / 10 ** 6)} BTC/TH`}>
+        {btcPerThReward} μBTC/TH
       </Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>

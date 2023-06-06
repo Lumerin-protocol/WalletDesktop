@@ -62,7 +62,7 @@ export const formatBtcPerTh = networkDifficulty => {
   const profitPerTh = (1000000000000 / networkHashrate) * (8 * 144);
 
   const fixedValue = Number(profitPerTh).toFixed(8);
-  return `${toMicro(fixedValue)} μBTC/TH`;
+  return `${toMicro(fixedValue)}`;
 };
 
 export const formatDuration = duration => {
@@ -131,3 +131,6 @@ export const getContractRewardBtcPerTh = (contract, btcRate, lmrRate) => {
   const result = contractBtcPrice / speed / lengthDays;
   return toMicro(result).toFixed(3);
 };
+
+export const formatExpNumber = value =>
+  value.toFixed(20).replace(/(?<=\.\d*[1-9])0+$|\.0*$/, '');
