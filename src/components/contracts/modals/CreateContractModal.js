@@ -20,11 +20,33 @@ import { useForm } from 'react-hook-form';
 import { CreateContractPreview } from './CreateContractPreview';
 import { CreateContractSuccessPage } from './CreateContractSuccessPage';
 
+const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
+  const lengthDays = time / 24;
+
+  const contractUsdPrice = price * lmrRate;
+  const contractBtcPrice = contractUsdPrice / btcRate;
+  const result = contractBtcPrice / speed / lengthDays;
+  return (result * 10 ** 6).toFixed(3);
+};
+
 function CreateContractModal(props) {
-  const { isActive, save, deploy, close, client, address, showSuccess } = props;
+  const {
+    isActive,
+    save,
+    deploy,
+    close,
+    client,
+    address,
+    showSuccess,
+    lmrRate,
+    btcRate
+  } = props;
 
   const [isPreview, setIsPreview] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [price, setPrice] = useState();
+  const [speed, setSpeed] = useState();
+  const [length, setTime] = useState();
 
   const {
     register,
@@ -117,16 +139,19 @@ function CreateContractModal(props) {
                   <Label htmlFor="time">Time *</Label>
                   <Input
                     {...register('time', {
-                      required: true,
-                      min: 1
+                      required: true
                     })}
+                    onChange={e => {
+                      setTime(e.target.value);
+                    }}
                     placeholder="# of hours"
                     type="number"
                     name="time"
                     id="time"
-                    min={1}
+                    min={24}
+                    max={48}
                   />
-                  <Sublabel>Contract Length</Sublabel>
+                  <Sublabel>Contract Length (min 24 hrs, max 48 hrs)</Sublabel>
                   {formState?.errors?.time?.type === 'required' && (
                     <ErrorLabel>Time is required</ErrorLabel>
                   )}
@@ -137,14 +162,17 @@ function CreateContractModal(props) {
                   <Label htmlFor="speed">Speed *</Label>
                   <Input
                     {...register('speed', {
-                      required: true,
-                      min: 1
+                      required: true
                     })}
+                    onChange={e => {
+                      setSpeed(e.target.value);
+                    }}
                     placeholder="Number of TH/s"
                     type="number"
                     name="speed"
                     id="speed"
-                    min={1}
+                    min={100}
+                    max={1000}
                   />
                   <Sublabel>Amount of TH/s Contracted</Sublabel>
                   {formState?.errors?.speed?.type === 'required' && (
@@ -157,17 +185,35 @@ function CreateContractModal(props) {
                   <div>
                     <Label htmlFor="price">List Price (LMR) *</Label>
                   </div>
-                  <Input
-                    {...register('price', {
-                      required: true,
-                      min: 1
-                    })}
-                    placeholder="LMR Charged for Hash Power"
-                    type="number"
-                    name="price"
-                    id="price"
-                    min={1}
-                  />
+                  <div>
+                    <Input
+                      {...register('price', {
+                        required: true,
+                        min: 1
+                      })}
+                      onChange={e => {
+                        setPrice(e.target.value);
+                      }}
+                      placeholder="LMR for Hash Power"
+                      type="number"
+                      name="price"
+                      id="price"
+                      min={1}
+                    />{' '}
+                    {!!price && !!speed && !!length && (
+                      <Sublabel>
+                        ~{' '}
+                        {getContractRewardBtcPerTh(
+                          price,
+                          length,
+                          speed,
+                          btcRate,
+                          lmrRate
+                        )}{' '}
+                        μBTC/TH/day
+                      </Sublabel>
+                    )}
+                  </div>
                   <Sublabel>
                     This is the price you will deploy your contract to the
                     marketplace.

@@ -22,8 +22,9 @@ import ExpiresIcon from '../../icons/ExpiresIcon';
 const Stats = styled.div`
   color: #0e4353;
   display: flex;
-  width: 435px;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
 `;
 
 const StatValue = styled.div`
@@ -48,7 +49,8 @@ function ContractsList({
   customRowRenderer,
   allowSendTransaction,
   tabs,
-  stats
+  stats,
+  sellerStats
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   const hasContracts = contracts.length;
@@ -98,7 +100,8 @@ function ContractsList({
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            flexWrap: 'wrap'
           }}
         >
           <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
@@ -115,6 +118,22 @@ function ContractsList({
               <StatValue>
                 <ExpiresIcon style={iconStyles} />
                 Expires in an hour: <b>{stats.expiresInHour}</b>
+              </StatValue>
+            </Stats>
+          )}
+          {sellerStats && (
+            <Stats>
+              <StatValue>
+                Contracts: <b> {sellerStats.count}</b>
+              </StatValue>
+              <StatValue>
+                Posted: <b> {sellerStats.totalPosted} TH/s</b>
+              </StatValue>
+              <StatValue>
+                Rented: <b> {sellerStats.rented} TH/s</b>
+              </StatValue>
+              <StatValue>
+                Network Reward: <b> {sellerStats.networkReward}</b>
               </StatValue>
             </Stats>
           )}

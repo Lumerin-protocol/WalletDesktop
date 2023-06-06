@@ -100,10 +100,23 @@ export const getRate = createSelector(
   (chainData, chainMetaData) => (chainData ? chainMetaData.rate : null)
 );
 
+export const getNetworkDifficulty = createSelector(
+  getChain,
+  getChainMeta,
+  (chainData, chainMetaData) =>
+    chainData ? chainMetaData.networkDifficulty : null
+);
+
 export const getRateEth = createSelector(
   getChain,
   getChainMeta,
   (chainData, chainMetaData) => (chainData ? chainMetaData.rateEth : null)
+);
+
+export const getRateBtc = createSelector(
+  getChain,
+  getChainMeta,
+  (chainData, chainMetaData) => (chainData ? chainMetaData.rateBtc : null)
 );
 
 export const getChainReadyStatus = createSelector(
