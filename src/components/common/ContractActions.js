@@ -9,14 +9,14 @@ import SelectorCaret from '../icons/SelectorCaret';
 const MenuButton = styled(ReachUI.MenuButton)`
   background-color: ${p => p.theme.colors.primary};
   color: ${p => p.theme.colors.light};
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 500;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   padding: 0;
   border: none;
-  border-radius: 15px;
+  border-radius: 12px;
   display: block;
-  height: 4rem;
+  height: fit-content;
   text-align: left;
   width: 100%;
   cursor: pointer;
@@ -41,13 +41,13 @@ const MenuButton = styled(ReachUI.MenuButton)`
 `;
 
 const ValueContainer = styled.div`
-  padding: 0.8rem 1.6rem;
+  padding: 0.8rem 0 0.7rem 1.6rem;
   flex-grow: 1;
 `;
 
 const CaretContainer = styled.div`
   background-color: transparent;
-  padding: 1.6rem 1.2rem 1.6rem 1.3rem;
+  padding: 0.8rem 1rem;
   svg {
     fill: ${p => p.theme.colors.ligth};
   }
@@ -129,7 +129,7 @@ export default class ContractActions extends React.Component {
               {activeItem ? activeItem.label : ''}{' '}
             </ValueContainer>
             <CaretContainer>
-              <SelectorCaret />
+              <SelectorCaret style={{ width: '14px' }} />
             </CaretContainer>
           </MenuButton>
           <MenuList>

@@ -14,7 +14,6 @@ export const BaseBtn = styled.button.attrs(({ submit }) => ({
   padding: 0;
   color: ${p => p.theme.colors.light};
   outline: none;
-  border-radius: 50px !important;
 
   &[data-disabled='true'],
   &[disabled] {
