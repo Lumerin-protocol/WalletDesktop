@@ -42,7 +42,7 @@ const Title = styled.div`
 
 const ContractBtn = styled(Btn)`
   font-size: 1.3rem;
-  padding: 1rem 1.4rem;
+  padding: 0.6rem 1.4rem;
 
   @media (min-width: 1040px) {
     margin-left: 0;
@@ -202,8 +202,6 @@ function SellerHub({
           Create Contract
         </ContractBtn>
       </LayoutHeader>
-
-      {/* <TotalsBlock /> */}
 
       <ContractsList
         hasContracts={hasContracts}

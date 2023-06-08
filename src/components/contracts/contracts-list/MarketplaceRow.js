@@ -37,7 +37,8 @@ const ContractValue = styled(Value)`
 
 const ActionButton = styled(Btn)`
   font-size: 1.2rem;
-  padding: 1rem 1.25rem;
+  letter-spacing: 1px;
+  padding: 0.8rem 2.25rem;
   line-height: 1.5rem;
 `;
 
