@@ -77,6 +77,7 @@ function CreateContractModal(props) {
   };
 
   const handleClose = e => {
+    resetValues();
     setIsPreview(false);
     close(e);
   };
@@ -85,7 +86,20 @@ function CreateContractModal(props) {
   if (!isActive) {
     return <></>;
   }
-
+  const timeField = register('time', {
+    required: true,
+    min: 24,
+    max: 48
+  });
+  const speedField = register('speed', {
+    required: true,
+    min: 100,
+    max: 1000
+  });
+  const priceField = register('price', {
+    required: true,
+    min: 1
+  });
   return (
     <Modal onClick={handleClose}>
       <Body onClick={handlePropagation}>
@@ -108,7 +122,7 @@ function CreateContractModal(props) {
               </Subtitle>
             </TitleWrapper>
             <Form onSubmit={() => setIsPreview(true)}>
-              <Row>
+              {/* <Row>
                 <InputGroup>
                   <Label htmlFor="address">Ethereum Address *</Label>
                   <Input
@@ -133,27 +147,30 @@ function CreateContractModal(props) {
                     <ErrorLabel>Invalid address</ErrorLabel>
                   )}
                 </InputGroup>
-              </Row>
+              </Row> */}
               <Row>
                 <InputGroup>
-                  <Label htmlFor="time">Time *</Label>
+                  <Label htmlFor="time">Duration *</Label>
                   <Input
-                    {...register('time', {
-                      required: true
-                    })}
+                    {...timeField}
                     onChange={e => {
                       setTime(e.target.value);
+                      timeField.onChange(e);
                     }}
                     placeholder="# of hours"
                     type="number"
                     name="time"
                     id="time"
-                    min={24}
-                    max={48}
                   />
                   <Sublabel>Contract Length (min 24 hrs, max 48 hrs)</Sublabel>
                   {formState?.errors?.time?.type === 'required' && (
-                    <ErrorLabel>Time is required</ErrorLabel>
+                    <ErrorLabel>Duration is required</ErrorLabel>
+                  )}
+                  {formState?.errors?.time?.type === 'min' && (
+                    <ErrorLabel>{'Minimum 24 hours'}</ErrorLabel>
+                  )}
+                  {formState?.errors?.time?.type === 'max' && (
+                    <ErrorLabel>{'Maximum 48 hours'}</ErrorLabel>
                   )}
                 </InputGroup>
               </Row>
@@ -161,22 +178,25 @@ function CreateContractModal(props) {
                 <InputGroup>
                   <Label htmlFor="speed">Speed *</Label>
                   <Input
-                    {...register('speed', {
-                      required: true
-                    })}
+                    {...speedField}
                     onChange={e => {
                       setSpeed(e.target.value);
+                      speedField.onChange(e);
                     }}
                     placeholder="Number of TH/s"
                     type="number"
                     name="speed"
                     id="speed"
-                    min={100}
-                    max={1000}
                   />
-                  <Sublabel>Amount of TH/s Contracted</Sublabel>
+                  <Sublabel>Amount of TH/s Contracted (min 100 TH/s)</Sublabel>
                   {formState?.errors?.speed?.type === 'required' && (
                     <ErrorLabel>Speed is required</ErrorLabel>
+                  )}
+                  {formState?.errors?.speed?.type === 'min' && (
+                    <ErrorLabel>Minimum 100 TH/s</ErrorLabel>
+                  )}
+                  {formState?.errors?.speed?.type === 'max' && (
+                    <ErrorLabel>Maximum 1000 TH/s</ErrorLabel>
                   )}
                 </InputGroup>
               </Row>
@@ -187,18 +207,15 @@ function CreateContractModal(props) {
                   </div>
                   <div>
                     <Input
-                      {...register('price', {
-                        required: true,
-                        min: 1
-                      })}
+                      {...priceField}
                       onChange={e => {
                         setPrice(e.target.value);
+                        priceField.onChange(e);
                       }}
                       placeholder="LMR for Hash Power"
                       type="number"
                       name="price"
                       id="price"
-                      min={1}
                     />{' '}
                     {!!price && !!speed && !!length && (
                       <Sublabel>
@@ -220,6 +237,9 @@ function CreateContractModal(props) {
                   </Sublabel>
                   {formState?.errors?.price?.type === 'required' && (
                     <ErrorLabel>Price is required</ErrorLabel>
+                  )}
+                  {formState?.errors?.price?.type === 'min' && (
+                    <ErrorLabel>Minimum 1 LMR</ErrorLabel>
                   )}
                 </InputGroup>
               </Row>
