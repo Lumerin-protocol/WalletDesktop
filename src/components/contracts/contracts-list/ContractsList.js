@@ -187,7 +187,7 @@ function ContractsList({
                   sellerStats.networkReward / 10 ** 6
                 )} BTC/TH`}
               >
-                Network Reward: <b> {sellerStats.networkReward} μBTC/TH</b>
+                Est. Network Profitability: <b> {sellerStats.networkReward} μBTC/TH</b>
               </StatValue>
             </Stats>
           )}
