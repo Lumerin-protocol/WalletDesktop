@@ -168,10 +168,10 @@ function ContractsList({
           <Flex.Row
             style={{ alignItems: 'center', justifyContent: 'space-between' }}
           >
-            <ArchiveBtn disabled={showArchive} onClick={onArchiveOpen}>
+            <ArchiveBtn disabled={!showArchive} onClick={onArchiveOpen}>
               <span
                 style={{ display: 'flex' }}
-                data-rh={`You have no deleted contracts`}
+                data-rh={showArchive ? null : `You have no deleted contracts`}
               >
                 <IconTrash style={{ display: 'inline-block' }} /> Archive
               </span>

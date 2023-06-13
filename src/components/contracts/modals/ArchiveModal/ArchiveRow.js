@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import { formatDuration, formatSpeed, formatPrice } from '../../utils';
 import withContractsRowState from '../../../../store/hocs/withContractsRowState';
+import Spinner from '../../../common/Spinner';
 
 const RowContainer = styled.div`
   padding: 1.2rem 0;
@@ -12,7 +13,6 @@ const RowContainer = styled.div`
   grid-template-columns: 1fr 4fr 1fr 1fr;
   text-align: center;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
-  cursor: pointer;
   color: ${p => p.theme.colors.primary}
   height: 50px;
 `;
@@ -24,7 +24,7 @@ const ContractValue = styled.label`
   align-items: center;
   justify-content: center;
   color: ${p => p.theme.colors.primary};
-
+  cursor: pointer;
   text-decoration: underline;
   flex-direction: row;
   gap: 5px;
@@ -48,10 +48,15 @@ const FlexCenter = styled.div`
 `;
 
 function ArchiveRow(props) {
-  const { explorerUrl, close, contract } = props;
+  const { explorerUrl, contract, handleRestore } = props;
 
-  const [isPreview, setIsPreview] = useState(false);
-  const [isPurchasing, setIsPurchasing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const wrapRestoreContract = async () => {
+    setIsProcessing(true);
+    await handleRestore(contract);
+    setIsProcessing(false);
+  };
 
   return (
     <RowContainer>
@@ -80,7 +85,15 @@ function ArchiveRow(props) {
         </Circle>
       </FlexCenter>
       <FlexCenter>
-        <IconTrashOff />
+        {isProcessing ? (
+          <Spinner size="18px" />
+        ) : (
+          <IconTrashOff
+            data-rh={`Restore contract`}
+            onClick={wrapRestoreContract}
+            style={{ cursor: 'pointer' }}
+          />
+        )}
       </FlexCenter>
     </RowContainer>
   );
