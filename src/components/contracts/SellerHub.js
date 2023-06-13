@@ -182,9 +182,7 @@ function SellerHub({
     c => c.seller === address && !c.isDead
   );
 
-  const deadContracts = contracts.filter(
-    c => (c.seller === address && c.isDead) || true
-  );
+  const deadContracts = contracts.filter(c => c.seller === address && c.isDead);
 
   const rentedContracts =
     contractsToShow?.filter(x => Number(x.state) === 1) ?? [];

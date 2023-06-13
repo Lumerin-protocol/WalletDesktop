@@ -29,9 +29,6 @@ function ArchiveModal(props) {
         {CloseModal(handleClose)}
         <TitleWrapper>
           <Title>Archived contracts</Title>
-          {!deletedContracts && (
-            <Subtitle>Your archived contracts list is empty</Subtitle>
-          )}
         </TitleWrapper>
         {deletedContracts &&
           deletedContracts.map(c => <ArchiveRow contract={c} />)}

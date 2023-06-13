@@ -171,7 +171,7 @@ function ContractsList({
             <ArchiveBtn disabled={showArchive} onClick={onArchiveOpen}>
               <span
                 style={{ display: 'flex' }}
-                data-rh={`You dont have deleted contracts`}
+                data-rh={`You have no deleted contracts`}
               >
                 <IconTrash style={{ display: 'inline-block' }} /> Archive
               </span>
