@@ -27,6 +27,7 @@ import {
   SmallAssetContainer
 } from './ContractsRow.styles';
 import ContractActions from '../../common/ContractActions';
+import ProgressBarWithLabels from '../../common/ProgressBar';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -148,6 +149,9 @@ function Row({
 
   const btcPerThReward = getContractRewardBtcPerTh(contract, btcRate, lmrRate);
 
+  const successCount = contract?.stats?.successCount || 0;
+  const failCount = contract?.stats?.failCount || 0;
+
   return (
     <Container ratio={ratio}>
       {/* <Value>
@@ -175,7 +179,11 @@ function Row({
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
       <Value>
-        {contract?.stats?.successCount || 0} | {contract?.stats?.failCount || 0}{' '}
+        <ProgressBarWithLabels
+          key={'stats'}
+          completed={successCount}
+          remaining={failCount}
+        />
       </Value>
       <Value>{formatPrice(contract.balance)}</Value>
       {contract.seller === address ||
