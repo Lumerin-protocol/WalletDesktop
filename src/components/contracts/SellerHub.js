@@ -182,7 +182,9 @@ function SellerHub({
     c => c.seller === address && !c.isDead
   );
 
-  const deadContracts = contracts.filter(c => c.seller === address && c.isDead);
+  const deadContracts = contracts.filter(
+    c => (c.seller === address && c.isDead) || true
+  );
 
   const rentedContracts =
     contractsToShow?.filter(x => Number(x.state) === 1) ?? [];
@@ -220,7 +222,8 @@ function SellerHub({
         allowSendTransaction={allowSendTransaction}
         noContractsMessage={'You have no contracts.'}
         tabs={tabs}
-        isSellerMode={true}
+        isSellerTab={true}
+        showArchive={deadContracts?.length}
         sellerStats={sellerStats}
         onArchiveOpen={() => setIsArchiveModalActive(true)}
       />

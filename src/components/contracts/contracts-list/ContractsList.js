@@ -102,7 +102,8 @@ function ContractsList({
   customRowRenderer,
   allowSendTransaction,
   tabs,
-  isSellerMode,
+  showArchive,
+  isSellerTab,
   stats,
   sellerStats,
   onArchiveOpen
@@ -163,12 +164,17 @@ function ContractsList({
           <Search onSearch={setSearch} />
         </Flex.Row>
 
-        {isSellerMode ? (
+        {isSellerTab ? (
           <Flex.Row
             style={{ alignItems: 'center', justifyContent: 'space-between' }}
           >
-            <ArchiveBtn onClick={onArchiveOpen}>
-              <IconTrash /> Archive
+            <ArchiveBtn disabled={showArchive} onClick={onArchiveOpen}>
+              <span
+                style={{ display: 'flex' }}
+                data-rh={`You dont have deleted contracts`}
+              >
+                <IconTrash style={{ display: 'inline-block' }} /> Archive
+              </span>
             </ArchiveBtn>
             <Sort sort={sort} setSort={setSort} />
           </Flex.Row>
