@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import withCreateContractModalState from '../../../../store/hocs/withCreateContractModalState';
 import { withRouter } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import {
   Modal,
   Body,
@@ -10,7 +9,6 @@ import {
   Subtitle,
   CloseModal
 } from '../CreateContractModal.styles';
-import { toRfc2396 } from '../../../../utils';
 import ArchiveRow from './ArchiveRow';
 
 function ArchiveModal(props) {
