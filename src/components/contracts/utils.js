@@ -54,7 +54,8 @@ export const formatTimestamp = (timestamp, timer, state) => {
 };
 
 export const formatPrice = price => {
-  return `${Number(price) / lmrDecimals} LMR`;
+  const value = Number(price) / lmrDecimals;
+  return `${Math.round(value * 100) / 100} LMR`;
 };
 
 export const formatBtcPerTh = networkDifficulty => {

@@ -18,6 +18,8 @@ import Search from './Search';
 import styled from 'styled-components';
 import Sort from './Sort';
 import { formatExpNumber } from '../utils';
+import { Btn } from '../../common';
+import { IconTrash } from '@tabler/icons';
 
 const Stats = styled.div`
   color: #0e4353;
@@ -53,6 +55,22 @@ const VerticalDivider = styled.div`
   border: 0.5px solid rgba(0, 0, 0, 0.25);
 `;
 
+const ArchiveBtn = styled(Btn)`
+font-weight: 700
+display: flex;
+justify-content: center;
+align-items: center;
+  font-size: 1.6rem;
+  padding: 0.4rem 1.1rem 0.4rem 0.9rem;
+  box-shadow: none;
+
+  svg {
+    margin-right: 4px;
+  }
+  color: ${p => p.theme.colors.primary};
+  background-color: transparent;
+`;
+
 const sorting = (contracts, sortBy) => {
   if (!sortBy?.value) return contracts;
   switch (sortBy.value) {
@@ -84,8 +102,11 @@ function ContractsList({
   customRowRenderer,
   allowSendTransaction,
   tabs,
+  showArchive,
+  isSellerTab,
   stats,
-  sellerStats
+  sellerStats,
+  onArchiveOpen
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   const [search, setSearch] = useState('');
@@ -143,7 +164,23 @@ function ContractsList({
           <Search onSearch={setSearch} />
         </Flex.Row>
 
-        <Sort sort={sort} setSort={setSort} />
+        {isSellerTab ? (
+          <Flex.Row
+            style={{ alignItems: 'center', justifyContent: 'space-between' }}
+          >
+            <ArchiveBtn disabled={!showArchive} onClick={onArchiveOpen}>
+              <span
+                style={{ display: 'flex' }}
+                data-rh={showArchive ? null : `You have no deleted contracts`}
+              >
+                <IconTrash style={{ display: 'inline-block' }} /> Archive
+              </span>
+            </ArchiveBtn>
+            <Sort sort={sort} setSort={setSort} />
+          </Flex.Row>
+        ) : (
+          <Sort sort={sort} setSort={setSort} />
+        )}
 
         <div
           style={{
@@ -187,7 +224,8 @@ function ContractsList({
                   sellerStats.networkReward / 10 ** 6
                 )} BTC/TH`}
               >
-                Est. Network Profitability: <b> {sellerStats.networkReward} μBTC/TH</b>
+                Est. Network Profitability:{' '}
+                <b> {sellerStats.networkReward} μBTC/TH</b>
               </StatValue>
             </Stats>
           )}
