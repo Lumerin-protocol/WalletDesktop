@@ -95,7 +95,8 @@ function Row({
     setIsPending(true);
     deleteContract({
       contractId: contract.id,
-      walletAddress: contract.seller
+      walletAddress: contract.seller,
+      deleteContract: true
     })
       .catch(e => {
         context.toast('error', `Failed to delete contract: ${e.message}`);
@@ -173,50 +174,55 @@ function Row({
       </Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
-      {contract.seller === address &&
-        (isPending ? (
-          <Value>
-            <Spinner size="25px" />
-          </Value>
-        ) : contract.isDeploying ? (
-          <Value>
-            <Spinner size="25px" /> Deploying...
-          </Value>
-        ) : (
-          <ActionButtons>
-            <ContractActions
-              onChange={e => handleActionSelector(e.value)}
-              options={[
-                {
-                  label: 'Actions',
-                  value: 0,
-                  hidden: true
-                },
-                {
-                  label: 'Claim Funds',
-                  value: 1,
-                  disabled: !allowSendTransaction || isClaimBtnDisabled()
-                },
-                {
-                  label: 'Close',
-                  value: 2,
-                  disabled: !(allowSendTransaction && isContractExpired())
-                },
-                {
-                  label: 'Delete',
-                  value: 3,
-                  disabled: !allowSendTransaction || contract.isDead,
-                  message:
-                    getContractState(contract) === CONTRACT_STATE.Running
-                      ? 'Will not affect hashrate delivery of running contract'
-                      : null
-                }
-              ]}
-              value={0}
-              id="range"
-            />
-          </ActionButtons>
-        ))}
+      <Value>
+        {contract?.stats?.successCount || 0} | {contract?.stats?.failCount || 0}{' '}
+      </Value>
+      <Value>{formatPrice(contract.balance)}</Value>
+      {contract.seller === address ||
+        (true &&
+          (isPending ? (
+            <Value>
+              <Spinner size="25px" />
+            </Value>
+          ) : contract.isDeploying ? (
+            <Value>
+              <Spinner size="25px" /> Deploying...
+            </Value>
+          ) : (
+            <ActionButtons>
+              <ContractActions
+                onChange={e => handleActionSelector(e.value)}
+                options={[
+                  {
+                    label: 'Actions',
+                    value: 0,
+                    hidden: true
+                  },
+                  {
+                    label: 'Claim Funds',
+                    value: 1,
+                    disabled: !allowSendTransaction || isClaimBtnDisabled()
+                  },
+                  {
+                    label: 'Close',
+                    value: 2,
+                    disabled: !(allowSendTransaction && isContractExpired())
+                  },
+                  {
+                    label: 'Delete',
+                    value: 3,
+                    disabled: !allowSendTransaction || contract.isDead,
+                    message:
+                      getContractState(contract) === CONTRACT_STATE.Running
+                        ? 'Will not affect hashrate delivery of running contract'
+                        : null
+                  }
+                ]}
+                value={0}
+                id="range"
+              />
+            </ActionButtons>
+          )))}
     </Container>
   );
 }

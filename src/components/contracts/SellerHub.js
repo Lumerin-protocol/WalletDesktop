@@ -5,7 +5,6 @@ import { uniqueId } from 'lodash';
 import withContractsState from '../../store/hocs/withContractsState';
 import { Btn } from '../common';
 import { LayoutHeader } from '../common/LayoutHeader';
-import TotalsBlock from './TotalsBlock';
 import ContractsList from './contracts-list/ContractsList';
 import CreateContractModal from './modals/CreateContractModal';
 import { View } from '../common/View';
@@ -13,6 +12,7 @@ import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
 import { lmrDecimals } from '../../utils/coinValue';
 import { formatBtcPerTh } from './utils';
+import ArchiveModal from './modals/ArchiveModal/ArchiveModal';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -55,7 +55,9 @@ const tabs = [
   { value: 'btc-th', name: 'BTC/TH', ratio: 1 },
   { value: 'length', name: 'Duration', ratio: 1 },
   { value: 'speed', name: 'Speed', ratio: 1 },
-  { value: 'action', name: 'Actions', ratio: 2 }
+  { value: 'history', name: 'History', ratio: 1 },
+  { value: 'funds', name: 'Funds', ratio: 1 },
+  { value: 'action', name: 'Actions', ratio: 1 }
 ];
 
 function SellerHub({
@@ -73,6 +75,7 @@ function SellerHub({
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
+  const [isArchiveModalActive, setIsArchiveModalActive] = useState(false);
   const context = useContext(ToastsContext);
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -159,12 +162,13 @@ function SellerHub({
       });
   };
 
-  const handleDeleteContract = data => {
+  const handleDeleteContractStateChange = data => {
     client.lockSendTransaction();
     return client
-      .deleteContract({
+      .setDeleteContractStatus({
         contractId: data.contractId,
-        walletAddress: data.walletAddress
+        walletAddress: data.walletAddress,
+        deleteContract: data.deleteContract
       })
       .finally(() => {
         client.unlockSendTransaction();
@@ -175,7 +179,11 @@ function SellerHub({
     e.preventDefault();
   };
   const contractsToShow = contracts.filter(
-    c => c.seller === address && !c.isDead
+    c => (c.seller === address && !c.isDead) || true
+  );
+
+  const deadContracts = contracts.filter(
+    c => (c.seller === address && c.isDead) || true
   );
 
   const rentedContracts =
@@ -207,14 +215,16 @@ function SellerHub({
         hasContracts={hasContracts}
         syncStatus={syncStatus}
         cancel={handleContractCancellation}
-        deleteContract={handleDeleteContract}
+        deleteContract={handleDeleteContractStateChange}
         contractsRefresh={contractsRefresh}
         address={address}
         contracts={contractsToShow}
         allowSendTransaction={allowSendTransaction}
         noContractsMessage={'You have no contracts.'}
         tabs={tabs}
+        isSellerMode={true}
         sellerStats={sellerStats}
+        onArchiveOpen={() => setIsArchiveModalActive(true)}
       />
 
       <CreateContractModal
@@ -223,6 +233,17 @@ function SellerHub({
         deploy={handleContractDeploy}
         close={handleCloseModal}
         showSuccess={showSuccess}
+      />
+
+      <ArchiveModal
+        isActive={isArchiveModalActive}
+        deletedContracts={deadContracts}
+        handlePurchase={() => {}}
+        close={() => {
+          setIsArchiveModalActive(false);
+        }}
+        restore={handleDeleteContractStateChange}
+        showSuccess={false}
       />
     </View>
   );

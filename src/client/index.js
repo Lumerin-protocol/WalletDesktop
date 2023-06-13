@@ -120,7 +120,10 @@ const createClient = function(createStore) {
     createContract: utils.forwardToMainProcess('create-contract', 750000),
     purchaseContract: utils.forwardToMainProcess('purchase-contract', 750000),
     cancelContract: utils.forwardToMainProcess('cancel-contract', 750000),
-    deleteContract: utils.forwardToMainProcess('delete-contract', 750000),
+    setDeleteContractStatus: utils.forwardToMainProcess(
+      'set-delete-contract-status',
+      750000
+    ),
     getGasLimit: utils.forwardToMainProcess('get-gas-limit'),
     getGasPrice: utils.forwardToMainProcess('get-gas-price'),
     getPastTransactions: utils.forwardToMainProcess(

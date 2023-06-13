@@ -21,7 +21,7 @@ const listeners = {
   "create-contract": handlers.createContract,
   "purchase-contract": handlers.purchaseContract,
   "cancel-contract": handlers.cancelContract,
-  "delete-contract": handlers.deleteContract,
+  "set-delete-contract-status": handlers.setContractDeleteStatus,
   "start-discovery": handlers.startDiscovery,
   "stop-discovery": handlers.stopDiscovery,
   "set-miner-pool": handlers.setMinerPool,
