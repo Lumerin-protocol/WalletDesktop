@@ -17,7 +17,7 @@ import StatusHeader from './StatusHeader';
 import Search from './Search';
 import styled from 'styled-components';
 import Sort from './Sort';
-import { formatExpNumber } from '../utils';
+import { fromMicro, formatExpNumber } from '../utils';
 import { Btn } from '../../common';
 import { IconTrash } from '@tabler/icons';
 
@@ -223,7 +223,7 @@ function ContractsList({
                 data-rh={
                   sellerStats.networkReward
                     ? `${formatExpNumber(
-                        sellerStats.networkReward / 10 ** 6
+                        fromMicro(sellerStats.networkReward)
                       )} BTC/TH`
                     : 'Calculating...'
                 }

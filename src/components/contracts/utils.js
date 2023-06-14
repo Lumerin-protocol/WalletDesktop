@@ -2,8 +2,14 @@ import moment from 'moment';
 import { lmrDecimals } from '../../utils/coinValue';
 import { CONTRACT_STATE } from '../../enums';
 
-const toMicro = value => {
-  return value * 10 ** 6;
+const MICRO = 10 ** 6;
+
+export const toMicro = value => {
+  return value * MICRO;
+};
+
+export const fromMicro = value => {
+  return value / MICRO;
 };
 
 const getReadableDate = (days, hours, minutes, seconds) => {

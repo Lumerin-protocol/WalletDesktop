@@ -34,13 +34,16 @@ const Value = styled.span`
 `;
 
 const ProgressBar = ({ completed, remaining }) => {
-  const isZero = +completed + +remaining === 0;
+  completed = Number(completed);
+  remaining = Number(remaining);
+
+  const isZero = completed + remaining === 0;
   const progress = isZero
     ? 100
-    : Math.floor((+completed / (+completed + +remaining)) * 100);
+    : Math.floor((completed / (completed + remaining)) * 100);
 
   const completedWidth = `${progress}%`;
-  const remainingWidth = +remaining === 0 ? '0%' : `${100 - progress}%`;
+  const remainingWidth = remaining === 0 ? '0%' : `${100 - progress}%`;
 
   return (
     <ProgressBarWrapper>
