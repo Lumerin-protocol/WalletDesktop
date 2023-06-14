@@ -19,6 +19,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { CreateContractPreview } from './CreateContractPreview';
 import { CreateContractSuccessPage } from './CreateContractSuccessPage';
+import { toMicro } from '../utils';
 
 const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
   const lengthDays = time / 24;
@@ -26,7 +27,7 @@ const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
   const contractUsdPrice = price * lmrRate;
   const contractBtcPrice = contractUsdPrice / btcRate;
   const result = contractBtcPrice / speed / lengthDays;
-  return (result * 10 ** 6).toFixed(3);
+  return toMicro(result).toFixed(3);
 };
 
 function CreateContractModal(props) {

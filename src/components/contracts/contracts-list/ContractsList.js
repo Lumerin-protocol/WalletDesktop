@@ -17,7 +17,7 @@ import StatusHeader from './StatusHeader';
 import Search from './Search';
 import styled from 'styled-components';
 import Sort from './Sort';
-import { formatExpNumber } from '../utils';
+import { fromMicro, formatExpNumber } from '../utils';
 import { Btn } from '../../common';
 import { IconTrash } from '@tabler/icons';
 
@@ -220,12 +220,20 @@ function ContractsList({
               </StatValue>
               <VerticalDivider />
               <StatValue
-                data-rh={`${formatExpNumber(
-                  sellerStats.networkReward / 10 ** 6
-                )} BTC/TH`}
+                data-rh={
+                  sellerStats.networkReward
+                    ? `${formatExpNumber(
+                        fromMicro(sellerStats.networkReward)
+                      )} BTC/TH`
+                    : 'Calculating...'
+                }
               >
                 Est. Network Profitability:{' '}
-                <b> {sellerStats.networkReward} μBTC/TH</b>
+                <b>
+                  {sellerStats.networkReward
+                    ? `${sellerStats.networkReward} μBTC/TH`
+                    : 'Calculating...'}
+                </b>
               </StatValue>
             </Stats>
           )}

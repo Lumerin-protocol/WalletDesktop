@@ -109,6 +109,7 @@ function Marketplace({
     { value: 'price', name: 'Price', ratio: 1 },
     { value: 'length', name: 'Duration', ratio: 1 },
     { value: 'speed', name: 'Speed', ratio: 1 },
+    { value: 'history', name: 'History', ratio: 1 },
     { value: 'action', name: 'Actions', ratio: 2 }
   ];
 

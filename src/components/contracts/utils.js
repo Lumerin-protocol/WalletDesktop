@@ -2,8 +2,14 @@ import moment from 'moment';
 import { lmrDecimals } from '../../utils/coinValue';
 import { CONTRACT_STATE } from '../../enums';
 
-const toMicro = value => {
-  return value * 10 ** 6;
+const MICRO = 10 ** 6;
+
+export const toMicro = value => {
+  return value * MICRO;
+};
+
+export const fromMicro = value => {
+  return value / MICRO;
 };
 
 const getReadableDate = (days, hours, minutes, seconds) => {
@@ -55,6 +61,9 @@ export const formatTimestamp = (timestamp, timer, state) => {
 
 export const formatPrice = price => {
   const value = Number(price) / lmrDecimals;
+  if (Number.isNaN(value)) {
+    return '0 LMR';
+  }
   return `${Math.round(value * 100) / 100} LMR`;
 };
 
