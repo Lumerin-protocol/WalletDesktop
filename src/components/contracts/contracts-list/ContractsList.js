@@ -220,12 +220,20 @@ function ContractsList({
               </StatValue>
               <VerticalDivider />
               <StatValue
-                data-rh={`${formatExpNumber(
-                  sellerStats.networkReward / 10 ** 6
-                )} BTC/TH`}
+                data-rh={
+                  sellerStats.networkReward
+                    ? `${formatExpNumber(
+                        sellerStats.networkReward / 10 ** 6
+                      )} BTC/TH`
+                    : 'Calculating...'
+                }
               >
                 Est. Network Profitability:{' '}
-                <b> {sellerStats.networkReward} μBTC/TH</b>
+                <b>
+                  {sellerStats.networkReward
+                    ? `${sellerStats.networkReward} μBTC/TH`
+                    : 'Calculating...'}
+                </b>
               </StatValue>
             </Stats>
           )}

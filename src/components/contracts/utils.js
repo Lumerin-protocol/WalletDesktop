@@ -55,6 +55,9 @@ export const formatTimestamp = (timestamp, timer, state) => {
 
 export const formatPrice = price => {
   const value = Number(price) / lmrDecimals;
+  if (Number.isNaN(value)) {
+    return '0 LMR';
+  }
   return `${Math.round(value * 100) / 100} LMR`;
 };
 

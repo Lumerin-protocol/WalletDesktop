@@ -34,28 +34,20 @@ const Value = styled.span`
 `;
 
 const ProgressBar = ({ completed, remaining }) => {
-  const progress =
-    completed === remaining
-      ? 50
-      : Math.floor((completed / (+completed + +remaining)) * 100);
+  const isZero = +completed + +remaining === 0;
+  const progress = isZero
+    ? 100
+    : Math.floor((+completed / (+completed + +remaining)) * 100);
 
   const completedWidth = `${progress}%`;
   const remainingWidth = +remaining === 0 ? '0%' : `${100 - progress}%`;
 
   return (
     <ProgressBarWrapper>
-      <Completed
-        width={completedWidth}
-        roundRight={+remaining === 0}
-        data-rh={`${completed} Completed`}
-      >
+      <Completed width={completedWidth} data-rh={`${completed} Completed`}>
         {/* <Value>{completed}</Value> */}
       </Completed>
-      <Remaining
-        width={remainingWidth}
-        roundRight={progress === 0}
-        data-rh={`${remaining} Cancelled`}
-      >
+      <Remaining width={remainingWidth} data-rh={`${remaining} Cancelled`}>
         {/* <Value>{remaining}</Value> */}
       </Remaining>
     </ProgressBarWrapper>
