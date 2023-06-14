@@ -5,13 +5,14 @@ import { uniqueId } from 'lodash';
 import withContractsState from '../../store/hocs/withContractsState';
 import { Btn } from '../common';
 import { LayoutHeader } from '../common/LayoutHeader';
-import TotalsBlock from './TotalsBlock';
 import ContractsList from './contracts-list/ContractsList';
 import CreateContractModal from './modals/CreateContractModal';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
 import { lmrDecimals } from '../../utils/coinValue';
+import { formatBtcPerTh } from './utils';
+import ArchiveModal from './modals/ArchiveModal/ArchiveModal';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -41,12 +42,23 @@ const Title = styled.div`
 
 const ContractBtn = styled(Btn)`
   font-size: 1.3rem;
-  padding: 1rem 1.4rem;
+  padding: 0.6rem 1.4rem;
 
   @media (min-width: 1040px) {
     margin-left: 0;
   }
 `;
+
+const tabs = [
+  { name: 'Status', ratio: 1 },
+  { value: 'price', name: 'Price', ratio: 1 },
+  { value: 'btc-th', name: 'BTC/TH', ratio: 1 },
+  { value: 'length', name: 'Duration', ratio: 1 },
+  { value: 'speed', name: 'Speed', ratio: 1 },
+  { value: 'history', name: 'History', ratio: 1 },
+  { value: 'funds', name: 'Funds', ratio: 1 },
+  { value: 'action', name: 'Actions', ratio: 1 }
+];
 
 function SellerHub({
   contracts,
@@ -59,9 +71,11 @@ function SellerHub({
   client,
   contractsRefresh,
   allowSendTransaction,
+  networkDifficulty,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
+  const [isArchiveModalActive, setIsArchiveModalActive] = useState(false);
   const context = useContext(ToastsContext);
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -148,12 +162,13 @@ function SellerHub({
       });
   };
 
-  const handleDeleteContract = data => {
+  const handleDeleteContractStateChange = data => {
     client.lockSendTransaction();
     return client
-      .deleteContract({
+      .setDeleteContractStatus({
         contractId: data.contractId,
-        walletAddress: data.walletAddress
+        walletAddress: data.walletAddress,
+        deleteContract: data.deleteContract
       })
       .finally(() => {
         client.unlockSendTransaction();
@@ -166,6 +181,18 @@ function SellerHub({
   const contractsToShow = contracts.filter(
     c => c.seller === address && !c.isDead
   );
+
+  const deadContracts = contracts.filter(c => c.seller === address && c.isDead);
+
+  const rentedContracts =
+    contractsToShow?.filter(x => Number(x.state) === 1) ?? [];
+  const speedReducer = (acc, c) => acc + Number(c.speed) / 10 ** 12;
+  const sellerStats = {
+    count: contractsToShow.length ?? 0,
+    rented: rentedContracts.reduce(speedReducer, 0),
+    totalPosted: contractsToShow.reduce(speedReducer, 0),
+    networkReward: formatBtcPerTh(networkDifficulty)
+  };
 
   return (
     <View data-testid="contracts-container">
@@ -182,18 +209,21 @@ function SellerHub({
         </ContractBtn>
       </LayoutHeader>
 
-      {/* <TotalsBlock /> */}
-
       <ContractsList
         hasContracts={hasContracts}
         syncStatus={syncStatus}
         cancel={handleContractCancellation}
-        deleteContract={handleDeleteContract}
+        deleteContract={handleDeleteContractStateChange}
         contractsRefresh={contractsRefresh}
         address={address}
         contracts={contractsToShow}
         allowSendTransaction={allowSendTransaction}
         noContractsMessage={'You have no contracts.'}
+        tabs={tabs}
+        isSellerTab={true}
+        showArchive={deadContracts?.length}
+        sellerStats={sellerStats}
+        onArchiveOpen={() => setIsArchiveModalActive(true)}
       />
 
       <CreateContractModal
@@ -202,6 +232,17 @@ function SellerHub({
         deploy={handleContractDeploy}
         close={handleCloseModal}
         showSuccess={showSuccess}
+      />
+
+      <ArchiveModal
+        isActive={isArchiveModalActive}
+        deletedContracts={deadContracts}
+        handlePurchase={() => {}}
+        close={() => {
+          setIsArchiveModalActive(false);
+        }}
+        restore={handleDeleteContractStateChange}
+        showSuccess={false}
       />
     </View>
   );

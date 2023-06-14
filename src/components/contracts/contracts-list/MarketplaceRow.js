@@ -7,6 +7,7 @@ import { Btn } from '../../common';
 import { formatDuration, formatSpeed, formatPrice } from '../utils';
 import Spinner from '../../common/Spinner';
 import { abbreviateAddress } from '../../../utils';
+import ProgressBarWithLabels from '../../common/ProgressBar';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -37,7 +38,8 @@ const ContractValue = styled(Value)`
 
 const ActionButton = styled(Btn)`
   font-size: 1.2rem;
-  padding: 1rem 1.25rem;
+  letter-spacing: 1px;
+  padding: 0.8rem 2.25rem;
   line-height: 1.5rem;
 `;
 
@@ -55,6 +57,9 @@ function MarketplaceRow({
     setIsPending(false);
   }, [contract]);
 
+  const successCount = contract?.stats?.successCount || 0;
+  const failCount = contract?.stats?.failCount || 0;
+
   return (
     <Container ratio={ratio}>
       <ContractValue onClick={() => window.openLink(explorerUrl)}>
@@ -63,6 +68,13 @@ function MarketplaceRow({
       <Value>{formatPrice(contract.price)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
+      <Value>
+        <ProgressBarWithLabels
+          key={'stats'}
+          completed={successCount}
+          remaining={failCount}
+        />
+      </Value>
       {contract.inProgress ? (
         <Value>
           <Spinner size="25px" /> Purchasing..

@@ -78,7 +78,8 @@ const withContractsState = WrappedComponent => {
     contracts: selectors.getMergeAllContracts(state),
     lmrBalance: selectors.getWalletLmrBalance(state),
     allowSendTransaction: selectors.isAllowSendTransaction(state),
-    contractsLastUpdatedAt: selectors.getContractsLastUpdated(state)
+    contractsLastUpdatedAt: selectors.getContractsLastUpdated(state),
+    networkDifficulty: selectors.getNetworkDifficulty(state)
   });
 
   const mapDispatchToProps = dispatch => ({

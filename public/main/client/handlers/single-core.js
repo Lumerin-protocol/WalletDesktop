@@ -99,7 +99,7 @@ const cancelContract = async function(data, { api }) {
   )(data, { api });
 };
 
-const deleteContract = async function(data, { api }) {
+const setContractDeleteStatus = async function(data, { api }) {
   data.walletId = wallet.getAddress().address;
   data.password = await auth.getSessionPassword();
 
@@ -107,9 +107,10 @@ const deleteContract = async function(data, { api }) {
     throw new WalletError("WalletId is not defined");
   }
   return withAuth((privateKey) =>
-    api.contracts.setContractAsDead({
+    api.contracts.setContractDeleteStatus({
       walletAddress: data.walletAddress,
       contractId: data.contractId,
+      deleteContract: data.deleteContract,
       privateKey,
     })
   )(data, { api });
@@ -363,5 +364,5 @@ module.exports = {
   revealSecretPhrase,
   hasStoredSecretPhrase,
   getPastTransactions,
-  deleteContract,
+  setContractDeleteStatus,
 };

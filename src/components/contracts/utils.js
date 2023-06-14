@@ -2,6 +2,16 @@ import moment from 'moment';
 import { lmrDecimals } from '../../utils/coinValue';
 import { CONTRACT_STATE } from '../../enums';
 
+const MICRO = 10 ** 6;
+
+export const toMicro = value => {
+  return value * MICRO;
+};
+
+export const fromMicro = value => {
+  return value / MICRO;
+};
+
 const getReadableDate = (days, hours, minutes, seconds) => {
   const readableDays = days
     ? days === 1
@@ -50,7 +60,19 @@ export const formatTimestamp = (timestamp, timer, state) => {
 };
 
 export const formatPrice = price => {
-  return `${Number(price) / lmrDecimals} LMR`;
+  const value = Number(price) / lmrDecimals;
+  if (Number.isNaN(value)) {
+    return '0 LMR';
+  }
+  return `${Math.round(value * 100) / 100} LMR`;
+};
+
+export const formatBtcPerTh = networkDifficulty => {
+  const networkHashrate = (networkDifficulty * Math.pow(2, 32)) / 600;
+  const profitPerTh = (1000000000000 / networkHashrate) * (8 * 144);
+
+  const fixedValue = Number(profitPerTh).toFixed(8);
+  return `${toMicro(fixedValue)}`;
 };
 
 export const formatDuration = duration => {
@@ -72,7 +94,15 @@ export const isContractClosed = contract => {
 };
 
 export const getContractState = contract => {
-  return Object.entries(CONTRACT_STATE).find(s => contract.state === s[1])[0];
+  const state = Object.entries(CONTRACT_STATE).find(
+    s => contract.state === s[1]
+  )[1];
+  if (contract.state === CONTRACT_STATE.Avaliable) {
+    return 'Available';
+  }
+
+  const startDate = moment.unix(contract.timestamp).format('lll');
+  return `Running. Started at ${startDate}`;
 };
 
 export const getContractEndTimestamp = contract => {
@@ -101,3 +131,16 @@ export const truncateAddress = (address, desiredLength) => {
     address.length
   )}`;
 };
+
+export const getContractRewardBtcPerTh = (contract, btcRate, lmrRate) => {
+  const lengthDays = contract.length / 60 / 60 / 24;
+  const speed = Number(contract.speed) / 10 ** 12;
+
+  const contractUsdPrice = (contract.price / lmrDecimals) * lmrRate;
+  const contractBtcPrice = contractUsdPrice / btcRate;
+  const result = contractBtcPrice / speed / lengthDays;
+  return toMicro(result).toFixed(3);
+};
+
+export const formatExpNumber = value =>
+  value.toFixed(20).replace(/(?<=\.\d*[1-9])0+$|\.0*$/, '');
