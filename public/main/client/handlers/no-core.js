@@ -41,6 +41,10 @@ const getProxyRouterSettings = async () => {
   return getProxyRouterConfig();
 };
 
+const handleClientSideError = (data) => {
+  logger.error(data.message, data.stack);
+}
+
 module.exports = {
   validatePassword,
   changePassword,
@@ -48,4 +52,5 @@ module.exports = {
   clearCache,
   saveProxyRouterSettings,
   getProxyRouterSettings,
+  handleClientSideError
 };

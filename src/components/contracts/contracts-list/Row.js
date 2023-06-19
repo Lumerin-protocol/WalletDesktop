@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTimer } from 'react-timer-hook';
+import { IconCircle } from '@tabler/icons';
 import { ToastsContext } from '../../toasts';
 import styled from 'styled-components';
 
@@ -16,7 +17,9 @@ import {
   formatPrice,
   isContractClosed,
   getContractState,
-  getContractEndTimestamp
+  getContractEndTimestamp,
+  getContractRewardBtcPerTh,
+  formatExpNumber
 } from '../utils';
 import {
   ActionButton,
@@ -24,6 +27,7 @@ import {
   SmallAssetContainer
 } from './ContractsRow.styles';
 import ContractActions from '../../common/ContractActions';
+import ProgressBarWithLabels from '../../common/ProgressBar';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -57,7 +61,9 @@ function Row({
   address,
   ratio,
   explorerUrl,
-  allowSendTransaction
+  allowSendTransaction,
+  lmrRate,
+  btcRate
 }) {
   // TODO: Add better padding
   const context = useContext(ToastsContext);
@@ -90,7 +96,8 @@ function Row({
     setIsPending(true);
     deleteContract({
       contractId: contract.id,
-      walletAddress: contract.seller
+      walletAddress: contract.seller,
+      deleteContract: true
     })
       .catch(e => {
         context.toast('error', `Failed to delete contract: ${e.message}`);
@@ -140,17 +147,45 @@ function Row({
     }
   };
 
+  const btcPerThReward = getContractRewardBtcPerTh(contract, btcRate, lmrRate);
+
+  const successCount = contract?.stats?.successCount || 0;
+  const failCount = contract?.stats?.failCount || 0;
+
   return (
     <Container ratio={ratio}>
-      <Value>
+      {/* <Value>
         {formatTimestamp(contract.timestamp, timer, contract.state)}
-      </Value>
-      <SmallAssetContainer data-rh={getContractState(contract)}>
-        <ClockIcon size="3rem" fill={getClockColor(contract)} />
-      </SmallAssetContainer>
+      </Value> */}
+      {contract.state === CONTRACT_STATE.Avaliable ? (
+        <SmallAssetContainer data-rh={getContractState(contract)}>
+          <IconCircle
+            data-rh={getContractState(contract)}
+            fill={getClockColor(contract)}
+            size="3rem"
+            stroke="currentColor"
+          ></IconCircle>
+        </SmallAssetContainer>
+      ) : (
+        <SmallAssetContainer data-rh={getContractState(contract)}>
+          <ClockIcon size="3rem" fill={getClockColor(contract)} />
+        </SmallAssetContainer>
+      )}
+
       <Value>{formatPrice(contract.price)}</Value>
+      <Value data-rh={`${formatExpNumber(btcPerThReward / 10 ** 6)} BTC/TH`}>
+        {btcPerThReward} μBTC/TH
+      </Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
+      <Value>
+        <ProgressBarWithLabels
+          key={'stats'}
+          completed={successCount}
+          remaining={failCount}
+        />
+      </Value>
+      <Value>{formatPrice(contract.balance)}</Value>
       {contract.seller === address &&
         (isPending ? (
           <Value>

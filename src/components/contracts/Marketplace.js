@@ -8,11 +8,11 @@ import ContractsList from './contracts-list/ContractsList';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 import MarketplaceRow from './contracts-list/MarketplaceRow';
 import PurchaseContractModal from './modals/PurchaseModal/PurchaseContractModal';
+import { getContractEndTimestamp } from './utils';
 
 function Marketplace({
   hasContracts,
   copyToClipboard,
-  onWalletRefresh,
   syncStatus,
   activeCount,
   draftCount,
@@ -34,6 +34,18 @@ function Marketplace({
       (Number(x.state) === 0 && x.seller !== address && !x.isDead) ||
       x.inProgress
   );
+
+  const stats = {
+    count: contracts.length ?? 0,
+    rented: contracts?.filter(x => Number(x.state) === 1)?.length ?? 0,
+    expiresInHour:
+      contracts?.filter(c => {
+        const endDate = getContractEndTimestamp(c);
+        const utcNow = new Date();
+        const limit = utcNow.setHours(utcNow.getHours() + 1);
+        return endDate > Date.now() && endDate < limit;
+      })?.length ?? 0
+  };
 
   const handlePurchase = async (data, contract, url) => {
     if (lmrBalance * 10 ** 8 < Number(contract.price * 1.01)) {
@@ -97,6 +109,7 @@ function Marketplace({
     { value: 'price', name: 'Price', ratio: 1 },
     { value: 'length', name: 'Duration', ratio: 1 },
     { value: 'speed', name: 'Speed', ratio: 1 },
+    { value: 'history', name: 'History', ratio: 1 },
     { value: 'action', name: 'Actions', ratio: 2 }
   ];
 
@@ -135,8 +148,8 @@ function Marketplace({
       ></LayoutHeader>
 
       <ContractsList
+        stats={stats}
         hasContracts={hasContracts}
-        onWalletRefresh={onWalletRefresh}
         syncStatus={syncStatus}
         cancel={handleContractCancellation}
         contractsRefresh={contractsRefresh}

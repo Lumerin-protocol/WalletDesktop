@@ -11,7 +11,6 @@ function BuyerHub({
   contracts,
   hasContracts,
   copyToClipboard,
-  onWalletRefresh,
   syncStatus,
   activeCount,
   draftCount,
@@ -76,7 +75,6 @@ function BuyerHub({
 
       <ContractsList
         hasContracts={hasContracts}
-        onWalletRefresh={onWalletRefresh}
         syncStatus={syncStatus}
         contractsRefresh={contractsRefresh}
         address={address}

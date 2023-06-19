@@ -38,7 +38,7 @@ const chain = {
 module.exports = {
   chain,
   dbAutocompactionInterval: 30000,
-  debug: process.env.DEBUG === "true",
+  debug: process.env.DEBUG === "true" && process.env.IGNORE_DEBUG_LOGS !== "true",
   devTools: process.env.DEV_TOOLS === "true",
   explorerDebounce: 2000,
   ratesUpdateMs: 30000,

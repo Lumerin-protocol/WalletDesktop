@@ -134,6 +134,14 @@ const Tools = props => {
     });
     const context = useContext(ToastsContext);
 
+    const logPath = (() => {
+      if (window.navigator.userAgent.indexOf('Win') !== -1)
+        return '%USERPROFILE%\\AppData\\Roaming\\lumerin-wallet-desktop\\logs\\main.log';
+      if (window.navigator.userAgent.indexOf('Mac') !== -1)
+        return '~/Library/Logs/lumerin-wallet-desktop/main.log';
+      return '~/.config/lumerin-wallet-desktop/logs/main.log';
+    })();
+
     useEffect(() => {
       getProxyRouterSettings()
         .then(data => {
@@ -424,6 +432,14 @@ const Tools = props => {
               onLater={onCloseModal}
               isOpen={state.activeModal === 'confirm-logout'}
             />
+          </Sp>
+
+          <Sp mt={5}>
+            <Subtitle>Logs</Subtitle>
+            <StyledParagraph>
+              You can find wallet logs in the file: <br />
+              <i>{logPath}</i>
+            </StyledParagraph>
           </Sp>
 
           {/* <Sp mt={5}>

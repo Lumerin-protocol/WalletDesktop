@@ -17,7 +17,10 @@ const withContractsRowState = WrappedComponent => {
   const mapStateToProps = (state, props) => ({
     explorerUrl: selectors.getContractExplorerUrl(state, {
       hash: props.contract.id
-    })
+    }),
+    networkDifficulty: selectors.getNetworkDifficulty(state),
+    lmrRate: selectors.getRate(state),
+    btcRate: selectors.getRateBtc(state)
   });
 
   return connect(mapStateToProps)(Container);
