@@ -65,6 +65,9 @@ function CreateContractModal(props) {
 
   const resetValues = () => {
     reset();
+    setPrice();
+    setSpeed();
+    setTime();
     setValue('address', address);
   };
 
