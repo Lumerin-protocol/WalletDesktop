@@ -171,9 +171,9 @@ function ContractsList({
             <ArchiveBtn disabled={!showArchive} onClick={onArchiveOpen}>
               <span
                 style={{ display: 'flex' }}
-                data-rh={showArchive ? null : `You have no deleted contracts`}
+                data-rh={showArchive ? null : `You have no archived contracts`}
               >
-                <IconTrash style={{ display: 'inline-block' }} /> Archive
+                <IconTrash style={{ display: 'inline-block' }} /> Archived
               </span>
             </ArchiveBtn>
             <Sort sort={sort} setSort={setSort} />
@@ -224,14 +224,14 @@ function ContractsList({
                   sellerStats.networkReward
                     ? `${formatExpNumber(
                         fromMicro(sellerStats.networkReward)
-                      )} BTC/TH`
+                      )} BTC/TH/day`
                     : 'Calculating...'
                 }
               >
                 Est. Network Profitability:{' '}
                 <b>
                   {sellerStats.networkReward
-                    ? `${sellerStats.networkReward} μBTC/TH`
+                    ? `${sellerStats.networkReward} μBTC/TH/day`
                     : 'Calculating...'}
                 </b>
               </StatValue>

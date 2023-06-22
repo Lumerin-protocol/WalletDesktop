@@ -52,7 +52,7 @@ const ContractBtn = styled(Btn)`
 const tabs = [
   { name: 'Status', ratio: 1 },
   { value: 'price', name: 'Price', ratio: 1 },
-  { value: 'btc-th', name: 'BTC/TH', ratio: 1 },
+  { value: 'btc-th', name: 'BTC/TH/day', ratio: 1 },
   { value: 'length', name: 'Duration', ratio: 1 },
   { value: 'speed', name: 'Speed', ratio: 1 },
   { value: 'history', name: 'History', ratio: 1 },
