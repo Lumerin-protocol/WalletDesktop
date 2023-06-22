@@ -173,7 +173,9 @@ function Row({
       )}
 
       <Value>{formatPrice(contract.price)}</Value>
-      <Value data-rh={`${formatExpNumber(btcPerThReward / 10 ** 6)} BTC/TH`}>
+      <Value
+        data-rh={`${formatExpNumber(btcPerThReward / 10 ** 6)} BTC/TH/day`}
+      >
         {btcPerThReward} μBTC/TH
       </Value>
       <Value>{formatDuration(contract.length)}</Value>
@@ -216,7 +218,7 @@ function Row({
                   disabled: !(allowSendTransaction && isContractExpired())
                 },
                 {
-                  label: 'Delete',
+                  label: 'Archive',
                   value: 3,
                   disabled: !allowSendTransaction || contract.isDead,
                   message:
