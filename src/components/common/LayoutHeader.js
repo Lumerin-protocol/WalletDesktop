@@ -9,6 +9,7 @@ const Container = styled.div`
   align-items: center;
   position: sticky;
   width: 100%;
+  padding: 1.5rem 0;
   z-index: 2;
   right: 0;
   left: 0;
@@ -16,6 +17,7 @@ const Container = styled.div`
 `;
 
 const TitleRow = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -31,6 +33,7 @@ const Title = styled.label`
   margin-bottom: 4.8px;
   margin-right: 2.4rem;
   cursor: default;
+  /* width: 100%; */
 
   @media (min-width: 1140px) {
   }
@@ -39,15 +42,13 @@ const Title = styled.label`
   }
 `;
 
-export const LayoutHeader = ({ title, address, copyToClipboard, children }) => (
+export const LayoutHeader = ({ title, children }) => (
   <>
     <Container>
       <TitleRow>
         <Title>{title}</Title>
         {children}
       </TitleRow>
-
-      <AddressHeader address={address} copyToClipboard={copyToClipboard} />
     </Container>
   </>
 );

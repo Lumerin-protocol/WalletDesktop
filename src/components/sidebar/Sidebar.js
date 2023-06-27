@@ -6,6 +6,8 @@ import PrimaryNav from './PrimaryNav';
 import { SidebarLumerinLightIcon } from '../icons/SidebarLumerinLightIcon';
 
 import { ReactComponent as LumerinLogoFull } from '../icons/LumerinLogoFull.svg';
+import { AddressHeader } from '../common/AddressHeader';
+import withSidebarState from '../../store/hocs/withSidebarState';
 
 const Container = styled.div`
   background: ${p => p.theme.colors.light};
@@ -77,9 +79,9 @@ const PrimaryNavContainer = styled.nav`
   margin-top: 3rem;
 `;
 
-export default function Sidebar() {
+function Sidebar(props) {
+  const { address, copyToClipboard } = props;
   const [activeIndex, setActiveIndex] = useState(0);
-
   return (
     <Container>
       <FullLogoContainer parent={Container}>
@@ -89,7 +91,7 @@ export default function Sidebar() {
       <IconLogoContainer parent={Container}>
         <SidebarLumerinLightIcon size="6rem" />
       </IconLogoContainer>
-
+      <AddressHeader address={address} copyToClipboard={copyToClipboard} />
       <NavContainer>
         <PrimaryNavContainer>
           <PrimaryNav
@@ -110,3 +112,5 @@ export default function Sidebar() {
     </Container>
   );
 }
+
+export default withSidebarState(Sidebar);
