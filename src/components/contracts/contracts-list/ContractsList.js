@@ -19,7 +19,6 @@ import styled from 'styled-components';
 import Sort from './Sort';
 import { fromMicro, formatExpNumber } from '../utils';
 import { Btn } from '../../common';
-import { IconTrash } from '@tabler/icons';
 
 const Stats = styled.div`
   color: #0e4353;
@@ -55,20 +54,13 @@ const VerticalDivider = styled.div`
   border: 0.5px solid rgba(0, 0, 0, 0.25);
 `;
 
-const ArchiveBtn = styled(Btn)`
-font-weight: 700
-display: flex;
-justify-content: center;
-align-items: center;
-  font-size: 1.6rem;
-  padding: 0.4rem 1.1rem 0.4rem 0.9rem;
-  box-shadow: none;
+const ContractBtn = styled(Btn)`
+  font-size: 1.3rem;
+  padding: 0.6rem 1.4rem;
 
-  svg {
-    margin-right: 4px;
+  @media (min-width: 1040px) {
+    margin-left: 0;
   }
-  color: ${p => p.theme.colors.primary};
-  background-color: transparent;
 `;
 
 const sorting = (contracts, sortBy) => {
@@ -96,17 +88,16 @@ function ContractsList({
   syncStatus,
   cancel,
   deleteContract,
+  createContract,
   address,
   contractsRefresh,
   noContractsMessage,
   customRowRenderer,
   allowSendTransaction,
   tabs,
-  showArchive,
   isSellerTab,
   stats,
-  sellerStats,
-  onArchiveOpen
+  sellerStats
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   const [search, setSearch] = useState('');
@@ -159,28 +150,23 @@ function ContractsList({
   return (
     <Container data-testid="Contracts-list">
       <Flex.Row grow="1" style={{ flexDirection: 'column' }}>
-        <Flex.Row style={{ justifyContent: 'space-between' }}>
-          <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
-          <Search onSearch={setSearch} />
-        </Flex.Row>
-
-        {isSellerTab ? (
-          <Flex.Row
-            style={{ alignItems: 'center', justifyContent: 'space-between' }}
-          >
-            <ArchiveBtn disabled={!showArchive} onClick={onArchiveOpen}>
-              <span
-                style={{ display: 'flex' }}
-                data-rh={showArchive ? null : `You have no archived contracts`}
+        <Flex.Row style={{ justifyContent: 'space-between', margin: '10px 0' }}>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            {isSellerTab ? (
+              <ContractBtn
+                data-disabled={!allowSendTransaction}
+                onClick={allowSendTransaction ? createContract : () => {}}
               >
-                <IconTrash style={{ display: 'inline-block' }} /> Archived
-              </span>
-            </ArchiveBtn>
+                Create Contract
+              </ContractBtn>
+            ) : (
+              <></>
+            )}
+            <Search onSearch={setSearch} />
             <Sort sort={sort} setSort={setSort} />
-          </Flex.Row>
-        ) : (
-          <Sort sort={sort} setSort={setSort} />
-        )}
+          </div>
+          <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
+        </Flex.Row>
 
         <div
           style={{

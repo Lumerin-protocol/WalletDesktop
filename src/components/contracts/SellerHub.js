@@ -13,6 +13,7 @@ import { CONTRACT_STATE } from '../../enums';
 import { lmrDecimals } from '../../utils/coinValue';
 import { formatBtcPerTh } from './utils';
 import ArchiveModal from './modals/ArchiveModal/ArchiveModal';
+import { IconTrash } from '@tabler/icons';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -47,6 +48,23 @@ const ContractBtn = styled(Btn)`
   @media (min-width: 1040px) {
     margin-left: 0;
   }
+`;
+
+const ArchiveBtn = styled(Btn)`
+  margin: 0 0 0 auto;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  padding: 0.4rem 1.1rem 0.4rem 0.9rem;
+  box-shadow: none;
+
+  svg {
+    margin-right: 4px;
+  }
+  color: ${p => p.theme.colors.primary};
+  background-color: transparent;
 `;
 
 const tabs = [
@@ -193,6 +211,8 @@ function SellerHub({
     totalPosted: contractsToShow.reduce(speedReducer, 0),
     networkReward: formatBtcPerTh(networkDifficulty)
   };
+  const showArchive = deadContracts?.length;
+  const onArchiveOpen = () => setIsArchiveModalActive(true);
 
   return (
     <View data-testid="contracts-container">
@@ -201,12 +221,14 @@ function SellerHub({
         address={address}
         copyToClipboard={copyToClipboard}
       >
-        <ContractBtn
-          data-disabled={!allowSendTransaction}
-          onClick={allowSendTransaction ? handleOpenModal : () => {}}
-        >
-          Create Contract
-        </ContractBtn>
+        <ArchiveBtn disabled={!showArchive} onClick={onArchiveOpen}>
+          <span
+            style={{ display: 'flex' }}
+            data-rh={showArchive ? null : `You have no archived contracts`}
+          >
+            <IconTrash style={{ display: 'inline-block' }} /> Archived
+          </span>
+        </ArchiveBtn>
       </LayoutHeader>
 
       <ContractsList
@@ -214,6 +236,7 @@ function SellerHub({
         syncStatus={syncStatus}
         cancel={handleContractCancellation}
         deleteContract={handleDeleteContractStateChange}
+        createContract={handleOpenModal}
         contractsRefresh={contractsRefresh}
         address={address}
         contracts={contractsToShow}
@@ -221,9 +244,7 @@ function SellerHub({
         noContractsMessage={'You have no contracts.'}
         tabs={tabs}
         isSellerTab={true}
-        showArchive={deadContracts?.length}
         sellerStats={sellerStats}
-        onArchiveOpen={() => setIsArchiveModalActive(true)}
       />
 
       <CreateContractModal

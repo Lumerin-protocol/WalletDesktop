@@ -11,7 +11,6 @@ const Container = styled.div`
   color: ${p => p.theme.colors.primary};
   align-items: center;
   font-weight: 100;
-  width: 185px;
   font-size: 1.5rem;
   cursor: pointer;
   border-radius: 12px;
@@ -25,7 +24,6 @@ export default function StatusHeader(props) {
 
   const iconStyles = {
     width: '20px',
-    marginRight: '6px',
     paddingBottom: '2px',
     paddingTop: '2px',
     cursor: 'pointer'
@@ -41,8 +39,8 @@ export default function StatusHeader(props) {
           <span>Syncing Contracts...</span>
         ) : (
           <>
-            <IconRefresh style={iconStyles} />
-            <span>Refresh Contracts</span>
+            <IconRefresh style={iconStyles} data-rh={'Refresh Contracts'} />
+            {/* <span>Refresh Contracts</span> */}
           </>
         )}
       </Container>

@@ -137,12 +137,15 @@ function Row({
 
   const handleActionSelector = value => {
     if (value === 1) {
-      return handleCancel(CLOSEOUT_TYPE.Claim);
+      return window.openLink(explorerUrl);
     }
     if (value === 2) {
-      return handleCancel(CLOSEOUT_TYPE.Close);
+      return handleCancel(CLOSEOUT_TYPE.Claim);
     }
     if (value === 3) {
+      return handleCancel(CLOSEOUT_TYPE.Close);
+    }
+    if (value === 4) {
       return handleDelete();
     }
   };
@@ -208,18 +211,22 @@ function Row({
                   hidden: true
                 },
                 {
+                  label: 'View',
+                  value: 1
+                },
+                {
                   label: 'Claim Funds',
-                  value: 1,
+                  value: 2,
                   disabled: !allowSendTransaction || isClaimBtnDisabled()
                 },
                 {
                   label: 'Close',
-                  value: 2,
+                  value: 3,
                   disabled: !(allowSendTransaction && isContractExpired())
                 },
                 {
                   label: 'Archive',
-                  value: 3,
+                  value: 4,
                   disabled: !allowSendTransaction || contract.isDead,
                   message:
                     getContractState(contract) === CONTRACT_STATE.Running

@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import Select from 'react-select';
 
 const Container = styled.div`
-  margin: 10px 0;
+  /* margin: 10px 0; */
+  margin-left: -10px;
   width: fit-content;
   color: ${p => p.theme.colors.primary};
   font-weight: bold;
