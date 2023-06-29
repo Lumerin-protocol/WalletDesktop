@@ -177,9 +177,9 @@ function Row({
 
       <Value>{formatPrice(contract.price)}</Value>
       <Value
-        data-rh={`${formatExpNumber(btcPerThReward / 10 ** 6)} BTC/TH/day`}
+      // data-rh={`${formatExpNumber(btcPerThReward)} BTC/TH/day`}
       >
-        {btcPerThReward} μBTC/TH
+        {formatExpNumber(btcPerThReward)} BTC/TH/day
       </Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>

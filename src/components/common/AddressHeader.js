@@ -17,9 +17,10 @@ const AddressContainer = styled.div`
   align-items: center;
   background-color: #fff;
   border-radius: 15px;
-  border: 1px solid #014353;
+  border: 1px solid #384764;
   padding: 0.4rem 1.25rem;
   color: ${p => p.theme.colors.dark};
+  opacity: 0.8;
 `;
 
 const Address = styled.div`

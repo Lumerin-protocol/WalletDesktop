@@ -146,7 +146,6 @@ function ContractsList({
   );
 
   const filterExtractValue = ({ status }) => status;
-
   return (
     <Container data-testid="Contracts-list">
       <Flex.Row grow="1" style={{ flexDirection: 'column' }}>
@@ -206,18 +205,18 @@ function ContractsList({
               </StatValue>
               <VerticalDivider />
               <StatValue
-                data-rh={
-                  sellerStats.networkReward
-                    ? `${formatExpNumber(
-                        fromMicro(sellerStats.networkReward)
-                      )} BTC/TH/day`
-                    : 'Calculating...'
-                }
+              // data-rh={
+              //   sellerStats.networkReward
+              //     ? `${formatExpNumber(
+              //         fromMicro(sellerStats.networkReward)
+              //       )} BTC/TH/day`
+              //     : 'Calculating...'
+              // }
               >
                 Est. Network Profitability:{' '}
                 <b>
                   {sellerStats.networkReward
-                    ? `${sellerStats.networkReward} μBTC/TH/day`
+                    ? `${sellerStats.networkReward} BTC/TH/day`
                     : 'Calculating...'}
                 </b>
               </StatValue>
