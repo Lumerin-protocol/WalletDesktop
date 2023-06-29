@@ -21,6 +21,7 @@ const TitleRow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const Title = styled.label`

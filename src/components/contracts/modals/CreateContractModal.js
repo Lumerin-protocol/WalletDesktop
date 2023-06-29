@@ -27,7 +27,7 @@ const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
   const contractUsdPrice = price * lmrRate;
   const contractBtcPrice = contractUsdPrice / btcRate;
   const result = contractBtcPrice / speed / lengthDays;
-  return toMicro(result).toFixed(3);
+  return result.toFixed(10);
 };
 
 function CreateContractModal(props) {
@@ -231,7 +231,7 @@ function CreateContractModal(props) {
                           btcRate,
                           lmrRate
                         )}{' '}
-                        μBTC/TH/day
+                        BTC/TH/day
                       </Sublabel>
                     )}
                   </div>

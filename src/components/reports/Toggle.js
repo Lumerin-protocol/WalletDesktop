@@ -16,11 +16,12 @@ const Toggle = ({
   labelRight = '',
   labelLeft = '',
   sliderWidth = 26,
-  sliderHeight = 26
+  sliderHeight = 26,
+  labelColor = '#fff'
 }) => {
   return (
     <GlobalContainer>
-      {labelLeft && <Label>{labelLeft}</Label>}
+      {labelLeft && <Label color={labelColor}>{labelLeft}</Label>}
       <InputContainer width={width} height={height}>
         <Input
           type="checkbox"

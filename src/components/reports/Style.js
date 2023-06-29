@@ -68,7 +68,7 @@ export const Slider = styled.span`
 `;
 
 export const Label = styled.span`
-  color: #777;
+  color: ${({ color }) => color || '#777'};
   font-size: 15px;
   padding: 0 10px;
 `;

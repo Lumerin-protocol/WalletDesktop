@@ -8,6 +8,8 @@ export default {
     primaryDark: '#252b34',
     translucentPrimary: '#014353',
     inactive: '#384764',
+    active: '#5ADCE2',
+    cancelled: '#8B8B96',
     // translucentPrimary: 'rgba(126, 97, 248, 0.2)',
     secondary: '#014353',
     tertiary: '#DB2642',
