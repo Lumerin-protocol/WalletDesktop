@@ -64,8 +64,7 @@ const ContractBtn = styled(Btn)`
 `;
 
 const sorting = (contracts, sortBy) => {
-  if (!sortBy?.value) return contracts;
-  switch (sortBy.value) {
+  switch (sortBy?.value) {
     case 'AscPrice':
       return contracts.sort((a, b) => a.price - b.price);
     case 'DescPrice':
@@ -78,8 +77,12 @@ const sorting = (contracts, sortBy) => {
       return contracts.sort((a, b) => a.speed - b.speed);
     case 'DescSpeed':
       return contracts.sort((a, b) => b.speed - a.speed);
+    case 'AvailableFirst':
+      return contracts.sort((a, b) => (+b.state > +a.state ? -1 : 1));
+    case 'RunningFirst':
+      return contracts.sort((a, b) => (+b.state > +a.state ? 1 : -1));
     default:
-      return contracts;
+      return contracts.sort((a, b) => (+b.state > +a.state ? -1 : 1));
   }
 };
 
@@ -162,9 +165,11 @@ function ContractsList({
               <></>
             )}
             <Search onSearch={setSearch} />
-            <Sort sort={sort} setSort={setSort} />
+            {/* <Sort sort={sort} setSort={setSort} /> */}
+            <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
           </div>
-          <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
+          <Sort sort={sort} setSort={setSort} />
+          {/* <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} /> */}
         </Flex.Row>
 
         <div

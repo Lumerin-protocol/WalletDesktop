@@ -28,7 +28,7 @@ function Marketplace({
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(true);
 
   const [contractToPurchase, setContractToPurchase] = useState(undefined);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -154,6 +154,7 @@ function Marketplace({
           backgroundColorUnchecked={theme.colors.cancelled}
           labelLeft={'Show all'}
           onChange={e => setShowAll(!showAll)}
+          checked={showAll}
           height={25}
           width={45}
           sliderHeight={18}
