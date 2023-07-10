@@ -3,7 +3,8 @@
 const chain = {
   displayName: process.env.DISPLAY_NAME,
   chainId: process.env.CHAIN_ID,
-  symbol: process.env.SYMBOL,
+  symbol: process.env.SYMBOL_LMR || process.env.SYMBOL || 'LMR',
+  symbolEth: process.env.SYMBOL_ETH || 'ETH',
 
   lmrTokenAddress: process.env.LUMERIN_TOKEN_ADDRESS,
   cloneFactoryAddress: process.env.CLONE_FACTORY_ADDRESS,

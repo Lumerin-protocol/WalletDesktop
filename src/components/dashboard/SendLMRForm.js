@@ -54,8 +54,13 @@ class SendLMRForm extends React.Component {
   renderConfirmation = () => (
     <ConfirmationContainer data-testid="confirmation">
       You will send{' '}
-      <DisplayValue inline value={this.props.lmrAmount} toWei post=" LMR" /> to
-      the address {this.props.toAddress}.
+      <DisplayValue
+        inline
+        value={this.props.lmrAmount}
+        toWei
+        post={` ${this.props.symbol}`}
+      />{' '}
+      to the address {this.props.toAddress}.
     </ConfirmationContainer>
   );
 
@@ -93,7 +98,7 @@ class SendLMRForm extends React.Component {
               data-testid="lmrAmount-field"
               onChange={this.props.onInputChange}
               error={this.props.errors.lmrAmount}
-              label="Amount (LMR)"
+              label={`Amount (${this.props.symbol})`}
               value={this.props.lmrAmount}
               id="lmrAmount"
             />

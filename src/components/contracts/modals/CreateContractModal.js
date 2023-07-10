@@ -40,7 +40,8 @@ function CreateContractModal(props) {
     address,
     showSuccess,
     lmrRate,
-    btcRate
+    btcRate,
+    symbol
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
@@ -116,6 +117,7 @@ function CreateContractModal(props) {
             data={getValues()}
             close={() => setIsPreview(false)}
             submit={wrapHandleDeploy}
+            symbol={symbol}
           />
         ) : (
           <>
@@ -207,7 +209,7 @@ function CreateContractModal(props) {
               <Row>
                 <InputGroup>
                   <div>
-                    <Label htmlFor="price">List Price (LMR) *</Label>
+                    <Label htmlFor="price">List Price ({symbol}) *</Label>
                   </div>
                   <div>
                     <Input
@@ -216,7 +218,7 @@ function CreateContractModal(props) {
                         setPrice(e.target.value);
                         priceField.onChange(e);
                       }}
-                      placeholder="LMR for Hash Power"
+                      placeholder={`${symbol} for Hash Power`}
                       type="number"
                       name="price"
                       id="price"
@@ -243,7 +245,7 @@ function CreateContractModal(props) {
                     <ErrorLabel>Price is required</ErrorLabel>
                   )}
                   {formState?.errors?.price?.type === 'min' && (
-                    <ErrorLabel>Minimum 1 LMR</ErrorLabel>
+                    <ErrorLabel>Minimum 1 {symbol}</ErrorLabel>
                   )}
                 </InputGroup>
               </Row>

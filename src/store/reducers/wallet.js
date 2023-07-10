@@ -16,7 +16,8 @@ export const initialState = {
     contract: '',
     lmrBalance: 0,
     transactions: {},
-    symbol: 'LMR'
+    symbol: 'LMR',
+    symbolEth: 'ETH'
   }
 };
 

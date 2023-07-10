@@ -59,10 +59,16 @@ function TransactionModal(props) {
             onAmountInput={setAmount}
             amountInput={amount}
             onSubmit={props.onSubmit}
+            symbol={props.symbol}
+            symbolEth={props.symbolEth}
           />
         )}
         {props.activeTab === 'success' && (
-          <SuccessForm amountInput={amount} {...props} />
+          <SuccessForm
+            amountInput={amount}
+            {...props}
+            symbol={props.selectedCurrency.label}
+          />
         )}
       </Body>
     </Modal>

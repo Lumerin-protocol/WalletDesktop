@@ -63,8 +63,10 @@ function Row({
   explorerUrl,
   allowSendTransaction,
   lmrRate,
-  btcRate
+  btcRate,
+  symbol
 }) {
+  console.log('🚀 ~ file: Row.js:69 ~ symbol:', symbol);
   // TODO: Add better padding
   const context = useContext(ToastsContext);
   const [isPending, setIsPending] = useState(false);
@@ -175,7 +177,7 @@ function Row({
         </SmallAssetContainer>
       )}
 
-      <Value>{formatPrice(contract.price)}</Value>
+      <Value>{formatPrice(contract.price, symbol)}</Value>
       <Value
       // data-rh={`${formatExpNumber(btcPerThReward)} BTC/TH/day`}
       >

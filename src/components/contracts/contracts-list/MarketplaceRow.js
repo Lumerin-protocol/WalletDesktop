@@ -55,7 +55,8 @@ function MarketplaceRow({
   explorerUrl,
   onPurchase,
   allowSendTransaction,
-  address
+  address,
+  symbol
 }) {
   // TODO: Add better padding
   const [isPending, setIsPending] = useState(false);
@@ -78,7 +79,7 @@ function MarketplaceRow({
       <ContractValue onClick={() => window.openLink(explorerUrl)}>
         {abbreviateAddress(contract.id)} <IconExternalLink width={'1.4rem'} />
       </ContractValue>
-      <Value>{formatPrice(contract.price)}</Value>
+      <Value>{formatPrice(contract.price, symbol)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
       <Value>

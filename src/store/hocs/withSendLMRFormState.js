@@ -144,7 +144,8 @@ const withSendLMRFormState = Component => {
     lmrTokenAddress: selectors.getChainConfig(state).lmrTokenAddress,
     chainGasPrice: selectors.getChainGasPrice(state),
     availableLMR: selectors.getLmrBalanceWei(state),
-    from: selectors.getWalletAddress(state)
+    from: selectors.getWalletAddress(state),
+    symbol: selectors.getCoinSymbol(state)
   });
 
   return connect(mapStateToProps)(withClient(WrappedComponent));
