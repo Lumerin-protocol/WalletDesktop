@@ -24,7 +24,8 @@ export const CreateContractPreview = ({
   data: { address, time, speed, price },
   submit,
   isCreating,
-  close
+  close,
+  symbol
 }) => (
   <>
     <TitleWrapper>
@@ -61,7 +62,7 @@ export const CreateContractPreview = ({
               key={'price'}
               style={{ marginRight: '4px', height: '1.4rem' }}
             />
-            {price} LMR
+            {price} {symbol}
           </Values>
         </div>
       </ContractInfoContainer>

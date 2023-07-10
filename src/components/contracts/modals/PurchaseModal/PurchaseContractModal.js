@@ -19,7 +19,8 @@ function PurchaseContractModal(props) {
     lmrRate,
     history,
     pool,
-    showSuccess
+    showSuccess,
+    symbol
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
@@ -93,6 +94,7 @@ function PurchaseContractModal(props) {
             close={handleClose}
             contractId={contract.id}
             price={contract.price}
+            symbol={symbol}
           />
         ) : isPreview ? (
           <PurchasePreviewModalPage
@@ -100,6 +102,7 @@ function PurchaseContractModal(props) {
             isPurchasing={isPurchasing}
             onBackToForm={() => setIsPreview(false)}
             onPurchase={wrapHandlePurchase}
+            symbol={symbol}
           />
         ) : (
           <PurchaseFormModalPage
@@ -109,6 +112,7 @@ function PurchaseContractModal(props) {
             handleSubmit={handleSubmit}
             formState={formState}
             onFinished={() => setIsPreview(true)}
+            symbol={symbol}
           />
         )}
       </Body>
