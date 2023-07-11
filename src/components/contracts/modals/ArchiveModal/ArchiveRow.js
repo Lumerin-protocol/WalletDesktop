@@ -48,7 +48,7 @@ const FlexCenter = styled.div`
 `;
 
 function ArchiveRow(props) {
-  const { explorerUrl, contract, handleRestore } = props;
+  const { explorerUrl, contract, handleRestore, symbol } = props;
 
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -66,7 +66,7 @@ function ArchiveRow(props) {
         </ContractValue>
       </FlexCenter>
       <FlexCenter style={{ justifyContent: 'space-between', padding: '0 5px' }}>
-        {formatPrice(contract.price)} <span>|</span>
+        {formatPrice(contract.price, symbol)} <span>|</span>
         {formatDuration(contract.length)} <span>|</span>
         {formatSpeed(contract.speed)}
       </FlexCenter>
