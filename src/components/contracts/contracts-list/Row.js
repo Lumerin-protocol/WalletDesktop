@@ -192,7 +192,7 @@ function Row({
           remaining={failCount}
         />
       </Value>
-      <Value>{formatPrice(contract.balance)}</Value>
+      <Value>{formatPrice(contract.balance, symbol)}</Value>
       {contract.seller === address &&
         (isPending ? (
           <Value>
