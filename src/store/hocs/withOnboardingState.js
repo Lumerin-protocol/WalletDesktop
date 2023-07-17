@@ -4,7 +4,9 @@ import { withClient } from './clientContext';
 import selectors from '../selectors';
 import { connect } from 'react-redux';
 import * as utils from '../utils';
-import { toRfc2396 } from '../../utils';
+import { toRfc2396, toLightningUrl } from '../../utils';
+
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const withOnboardingState = WrappedComponent => {
   class Container extends React.Component {
@@ -37,6 +39,8 @@ const withOnboardingState = WrappedComponent => {
       password: null,
       mnemonic: null,
       proxyDefaultPool: null,
+      lightningAddress: null,
+      isTitanLightning: true,
       errors: {}
     };
 
@@ -139,6 +143,30 @@ const withOnboardingState = WrappedComponent => {
 
     onProxyRouterConfigured = e => {
       if (e && e.preventDefault) e.preventDefault();
+
+      if (this.state.isTitanLightning) {
+        if (!EMAIL_REGEX.test(this.state.lightningAddress)) {
+          const newErrors = this.state.errors;
+          newErrors.lightningAddress = 'Invalid email';
+          this.setState({ errors: newErrors });
+          return;
+        }
+        const poolUrl = toLightningUrl(
+          this.state.lightningAddress,
+          this.props.config.chain.titanLightningPool
+        );
+
+        return this.props.onOnboardingCompleted({
+          proxyRouterConfig: {
+            sellerDefaultPool: poolUrl,
+            buyerDefaultPool: poolUrl
+          },
+          password: this.state.password,
+          mnemonic: this.state.useUserMnemonic
+            ? utils.sanitizeMnemonic(this.state.userMnemonic)
+            : this.state.mnemonic
+        });
+      }
 
       const isValid = this.validateDefaultPoolAddress();
       if (!isValid) {
