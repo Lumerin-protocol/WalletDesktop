@@ -49,6 +49,10 @@ const Main = styled.div`
   background-image: url(${bgImage});
   background-position: right;
   background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 `;
 
 export const Layout = () => (

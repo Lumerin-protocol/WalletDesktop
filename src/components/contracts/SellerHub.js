@@ -5,13 +5,15 @@ import { uniqueId } from 'lodash';
 import withContractsState from '../../store/hocs/withContractsState';
 import { Btn } from '../common';
 import { LayoutHeader } from '../common/LayoutHeader';
-import TotalsBlock from './TotalsBlock';
 import ContractsList from './contracts-list/ContractsList';
 import CreateContractModal from './modals/CreateContractModal';
 import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
 import { lmrDecimals } from '../../utils/coinValue';
+import { formatBtcPerTh } from './utils';
+import ArchiveModal from './modals/ArchiveModal/ArchiveModal';
+import { IconTrash } from '@tabler/icons';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -41,18 +43,45 @@ const Title = styled.div`
 
 const ContractBtn = styled(Btn)`
   font-size: 1.3rem;
-  padding: 1rem 1.4rem;
+  padding: 0.6rem 1.4rem;
 
   @media (min-width: 1040px) {
     margin-left: 0;
   }
 `;
 
+const ArchiveBtn = styled(Btn)`
+  margin: 0 0 0 auto;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  padding: 0.4rem 1.1rem 0.4rem 0.9rem;
+  box-shadow: none;
+
+  svg {
+    margin-right: 4px;
+  }
+  color: ${p => p.theme.colors.primary};
+  background-color: transparent;
+`;
+
+const tabs = [
+  { name: 'Status', ratio: 1 },
+  { value: 'price', name: 'Price', ratio: 1 },
+  { value: 'btc-th', name: 'BTC/TH/day', ratio: 1 },
+  { value: 'length', name: 'Duration', ratio: 1 },
+  { value: 'speed', name: 'Speed', ratio: 1 },
+  { value: 'history', name: 'History', ratio: 1 },
+  { value: 'funds', name: 'Funds', ratio: 1 },
+  { value: 'action', name: 'Actions', ratio: 1 }
+];
+
 function SellerHub({
   contracts,
   hasContracts,
   copyToClipboard,
-  onWalletRefresh,
   syncStatus,
   activeCount,
   draftCount,
@@ -60,9 +89,11 @@ function SellerHub({
   client,
   contractsRefresh,
   allowSendTransaction,
+  networkDifficulty,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
+  const [isArchiveModalActive, setIsArchiveModalActive] = useState(false);
   const context = useContext(ToastsContext);
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -70,7 +101,6 @@ function SellerHub({
   //   sendDisabledReason: PropTypes.string,
   //   hasContracts: PropTypes.bool.isRequired,
   //   copyToClipboard: PropTypes.func.isRequired,
-  //   onWalletRefresh: PropTypes.func.isRequired,
   //   sendDisabled: PropTypes.bool.isRequired,
   //   syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
   //   address: PropTypes.string.isRequired
@@ -150,12 +180,13 @@ function SellerHub({
       });
   };
 
-  const handleDeleteContract = data => {
+  const handleDeleteContractStateChange = data => {
     client.lockSendTransaction();
     return client
-      .deleteContract({
+      .setDeleteContractStatus({
         contractId: data.contractId,
-        walletAddress: data.walletAddress
+        walletAddress: data.walletAddress,
+        deleteContract: data.deleteContract
       })
       .finally(() => {
         client.unlockSendTransaction();
@@ -169,6 +200,20 @@ function SellerHub({
     c => c.seller === address && !c.isDead
   );
 
+  const deadContracts = contracts.filter(c => c.seller === address && c.isDead);
+
+  const rentedContracts =
+    contractsToShow?.filter(x => Number(x.state) === 1) ?? [];
+  const speedReducer = (acc, c) => acc + Number(c.speed) / 10 ** 12;
+  const sellerStats = {
+    count: contractsToShow.length ?? 0,
+    rented: rentedContracts.reduce(speedReducer, 0),
+    totalPosted: contractsToShow.reduce(speedReducer, 0),
+    networkReward: formatBtcPerTh(networkDifficulty)
+  };
+  const showArchive = deadContracts?.length;
+  const onArchiveOpen = () => setIsArchiveModalActive(true);
+
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
@@ -176,27 +221,30 @@ function SellerHub({
         address={address}
         copyToClipboard={copyToClipboard}
       >
-        <ContractBtn
-          data-disabled={!allowSendTransaction}
-          onClick={allowSendTransaction ? handleOpenModal : () => {}}
-        >
-          Create Contract
-        </ContractBtn>
+        <ArchiveBtn disabled={!showArchive} onClick={onArchiveOpen}>
+          <span
+            style={{ display: 'flex' }}
+            data-rh={showArchive ? null : `You have no archived contracts`}
+          >
+            <IconTrash style={{ display: 'inline-block' }} /> Archived
+          </span>
+        </ArchiveBtn>
       </LayoutHeader>
-
-      {/* <TotalsBlock /> */}
 
       <ContractsList
         hasContracts={hasContracts}
-        onWalletRefresh={onWalletRefresh}
         syncStatus={syncStatus}
         cancel={handleContractCancellation}
-        deleteContract={handleDeleteContract}
+        deleteContract={handleDeleteContractStateChange}
+        createContract={handleOpenModal}
         contractsRefresh={contractsRefresh}
         address={address}
         contracts={contractsToShow}
         allowSendTransaction={allowSendTransaction}
         noContractsMessage={'You have no contracts.'}
+        tabs={tabs}
+        isSellerTab={true}
+        sellerStats={sellerStats}
       />
 
       <CreateContractModal
@@ -205,6 +253,17 @@ function SellerHub({
         deploy={handleContractDeploy}
         close={handleCloseModal}
         showSuccess={showSuccess}
+      />
+
+      <ArchiveModal
+        isActive={isArchiveModalActive}
+        deletedContracts={deadContracts}
+        handlePurchase={() => {}}
+        close={() => {
+          setIsArchiveModalActive(false);
+        }}
+        restore={handleDeleteContractStateChange}
+        showSuccess={false}
       />
     </View>
   );

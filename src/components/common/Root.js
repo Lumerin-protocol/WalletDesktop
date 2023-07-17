@@ -2,6 +2,7 @@ import { withClient } from '../../store/hocs/clientContext';
 import selectors from '../../store/selectors';
 import { connect } from 'react-redux';
 import React from 'react';
+import { ToastsContext } from '../../components/toasts';
 
 class Root extends React.Component {
   // static propTypes = {
@@ -18,6 +19,8 @@ class Root extends React.Component {
   //     onInit: PropTypes.func.isRequired
   //   }).isRequired
   // };
+
+  static contextType = ToastsContext;
 
   state = {
     onboardingComplete: null
@@ -38,11 +41,19 @@ class Root extends React.Component {
           // TODO: replace dummy password
           this.props.client
             .onLoginSubmit({ password: 'password' })
-            .then(() => this.props.dispatch({ type: 'session-started' }));
+            .then(() => this.props.dispatch({ type: 'session-started' }))
+            .catch(e => {
+              this.context.toast('error', 'Bypass auth failed');
+            });
         }
       })
       // eslint-disable-next-line no-console
-      .catch(console.warn);
+      .catch(e => {
+        this.context.toast(
+          'error',
+          'Failed to startup wallet. Please wait a few minutes and try again'
+        );
+      });
   }
 
   onOnboardingCompleted = ({ password, mnemonic, proxyRouterConfig }) => {
@@ -54,7 +65,12 @@ class Root extends React.Component {
           this.props.dispatch({ type: 'session-started' });
         })
         // eslint-disable-next-line no-console
-        .catch(console.warn)
+        .catch(e => {
+          this.context.toast(
+            'error',
+            'Failed to finish onboarding. Please wait a few minutes and try again'
+          );
+        })
     );
   };
 

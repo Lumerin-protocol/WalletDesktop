@@ -20,13 +20,6 @@ const withCreateContractModalState = WrappedComponent => {
       copyBtnLabel: ''
     };
 
-    createContract = contract => {
-      this.props.client
-        .copyToClipboard(this.props.address)
-        .then(() => this.setState({ copyBtnLabel: 'Copied to clipboard!' }))
-        .catch(err => this.setState({ copyBtnLabel: err.message }));
-    };
-
     render() {
       return (
         <WrappedComponent
@@ -45,6 +38,9 @@ const withCreateContractModalState = WrappedComponent => {
     isLocalProxyRouter: selectors.getIsLocalProxyRouter(state),
     ip: selectors.getIp(state),
     pool: selectors.getBuyerPool(state),
+    btcRate: selectors.getRateBtc(state),
+    lmrRate: selectors.getRate(state),
+    symbol: selectors.getCoinSymbol(state),
     explorerUrl: props.contract
       ? selectors.getContractExplorerUrl(state, {
           hash: props.contract.id

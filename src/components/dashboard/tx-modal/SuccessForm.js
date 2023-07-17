@@ -120,7 +120,7 @@ export function SuccessForm(props) {
 
       <Footer>
         <FooterLabel>
-          You have successfully transferred LMR to{' '}
+          You have successfully transferred {props.symbol} to{' '}
           {abbreviateAddress(props.toAddress)}
         </FooterLabel>
         <DoneBtn data-modal={null} onClick={onDone}>

@@ -45,26 +45,24 @@ const withToolsState = WrappedComponent => {
     };
 
     onShowMnemonic = password => {
-      const capturedThis = this;
       this.props.client
         .revealSecretPhrase(password)
         .then(value => {
           this.setState({ ...this.state, mnemonic: value });
         })
         .catch(e => {
-          capturedThis.context.toast('error', e.message);
+          this.context.toast('error', e.message);
         });
     };
 
     onExportPrivateKey = password => {
-      const capturedThis = this;
       this.props.client
         .getPrivateKey({ password })
         .then(({ privateKey }) => {
           this.setState({ ...this.state, privateKey: privateKey });
         })
         .catch(e => {
-          capturedThis.context.toast('error', e.message);
+          this.context.toast('error', e.message);
         });
     };
 

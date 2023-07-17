@@ -28,7 +28,7 @@ const IconContainer = styled.div`
   width: 40px;
 `;
 
-const Row = ({ tx, explorerUrl }) => (
+const Row = ({ tx, explorerUrl, symbol, symbolEth }) => (
   <Container onClick={() => window.openLink(explorerUrl)}>
     <IconContainer>
       {tx.symbol === 'LMR' ? (
@@ -40,7 +40,7 @@ const Row = ({ tx, explorerUrl }) => (
     <IconContainer>
       <TxIcon txType={tx.txType} />
     </IconContainer>
-    <Amount {...tx} />
+    <Amount {...tx} symbol={tx.symbol === 'LMR' ? symbol : symbolEth} />
     <Details {...tx} />
   </Container>
 );

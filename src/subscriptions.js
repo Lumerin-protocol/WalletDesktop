@@ -13,6 +13,7 @@ export const subscribeToMainProcessMessages = function(store) {
     'contracts-scan-started',
     'wallet-state-changed',
     'coin-price-updated',
+    'network-difficulty-updated',
     'create-wallet',
     'open-wallet',
     'open-proxy-router',

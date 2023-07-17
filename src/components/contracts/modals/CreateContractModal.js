@@ -19,12 +19,36 @@ import {
 import { useForm } from 'react-hook-form';
 import { CreateContractPreview } from './CreateContractPreview';
 import { CreateContractSuccessPage } from './CreateContractSuccessPage';
+import { toMicro } from '../utils';
+
+const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
+  const lengthDays = time / 24;
+
+  const contractUsdPrice = price * lmrRate;
+  const contractBtcPrice = contractUsdPrice / btcRate;
+  const result = contractBtcPrice / speed / lengthDays;
+  return result.toFixed(10);
+};
 
 function CreateContractModal(props) {
-  const { isActive, save, deploy, close, client, address, showSuccess } = props;
+  const {
+    isActive,
+    save,
+    deploy,
+    close,
+    client,
+    address,
+    showSuccess,
+    lmrRate,
+    btcRate,
+    symbol
+  } = props;
 
   const [isPreview, setIsPreview] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [price, setPrice] = useState();
+  const [speed, setSpeed] = useState();
+  const [length, setTime] = useState();
 
   const {
     register,
@@ -42,6 +66,9 @@ function CreateContractModal(props) {
 
   const resetValues = () => {
     reset();
+    setPrice();
+    setSpeed();
+    setTime();
     setValue('address', address);
   };
 
@@ -55,6 +82,7 @@ function CreateContractModal(props) {
   };
 
   const handleClose = e => {
+    resetValues();
     setIsPreview(false);
     close(e);
   };
@@ -63,7 +91,20 @@ function CreateContractModal(props) {
   if (!isActive) {
     return <></>;
   }
-
+  const timeField = register('time', {
+    required: true,
+    min: 24,
+    max: 48
+  });
+  const speedField = register('speed', {
+    required: true,
+    min: 100,
+    max: 1000
+  });
+  const priceField = register('price', {
+    required: true,
+    min: 1
+  });
   return (
     <Modal onClick={handleClose}>
       <Body onClick={handlePropagation}>
@@ -76,6 +117,7 @@ function CreateContractModal(props) {
             data={getValues()}
             close={() => setIsPreview(false)}
             submit={wrapHandleDeploy}
+            symbol={symbol}
           />
         ) : (
           <>
@@ -86,7 +128,7 @@ function CreateContractModal(props) {
               </Subtitle>
             </TitleWrapper>
             <Form onSubmit={() => setIsPreview(true)}>
-              <Row>
+              {/* <Row>
                 <InputGroup>
                   <Label htmlFor="address">Ethereum Address *</Label>
                   <Input
@@ -111,24 +153,30 @@ function CreateContractModal(props) {
                     <ErrorLabel>Invalid address</ErrorLabel>
                   )}
                 </InputGroup>
-              </Row>
+              </Row> */}
               <Row>
                 <InputGroup>
-                  <Label htmlFor="time">Time *</Label>
+                  <Label htmlFor="time">Duration *</Label>
                   <Input
-                    {...register('time', {
-                      required: true,
-                      min: 1
-                    })}
+                    {...timeField}
+                    onChange={e => {
+                      setTime(e.target.value);
+                      timeField.onChange(e);
+                    }}
                     placeholder="# of hours"
                     type="number"
                     name="time"
                     id="time"
-                    min={1}
                   />
-                  <Sublabel>Contract Length</Sublabel>
+                  <Sublabel>Contract Length (min 24 hrs, max 48 hrs)</Sublabel>
                   {formState?.errors?.time?.type === 'required' && (
-                    <ErrorLabel>Time is required</ErrorLabel>
+                    <ErrorLabel>Duration is required</ErrorLabel>
+                  )}
+                  {formState?.errors?.time?.type === 'min' && (
+                    <ErrorLabel>{'Minimum 24 hours'}</ErrorLabel>
+                  )}
+                  {formState?.errors?.time?.type === 'max' && (
+                    <ErrorLabel>{'Maximum 48 hours'}</ErrorLabel>
                   )}
                 </InputGroup>
               </Row>
@@ -136,44 +184,68 @@ function CreateContractModal(props) {
                 <InputGroup>
                   <Label htmlFor="speed">Speed *</Label>
                   <Input
-                    {...register('speed', {
-                      required: true,
-                      min: 1
-                    })}
+                    {...speedField}
+                    onChange={e => {
+                      setSpeed(e.target.value);
+                      speedField.onChange(e);
+                    }}
                     placeholder="Number of TH/s"
                     type="number"
                     name="speed"
                     id="speed"
-                    min={1}
                   />
-                  <Sublabel>Amount of TH/s Contracted</Sublabel>
+                  <Sublabel>Amount of TH/s Contracted (min 100 TH/s)</Sublabel>
                   {formState?.errors?.speed?.type === 'required' && (
                     <ErrorLabel>Speed is required</ErrorLabel>
+                  )}
+                  {formState?.errors?.speed?.type === 'min' && (
+                    <ErrorLabel>Minimum 100 TH/s</ErrorLabel>
+                  )}
+                  {formState?.errors?.speed?.type === 'max' && (
+                    <ErrorLabel>Maximum 1000 TH/s</ErrorLabel>
                   )}
                 </InputGroup>
               </Row>
               <Row>
                 <InputGroup>
                   <div>
-                    <Label htmlFor="price">List Price (LMR) *</Label>
+                    <Label htmlFor="price">List Price ({symbol}) *</Label>
                   </div>
-                  <Input
-                    {...register('price', {
-                      required: true,
-                      min: 1
-                    })}
-                    placeholder="LMR Charged for Hash Power"
-                    type="number"
-                    name="price"
-                    id="price"
-                    min={1}
-                  />
+                  <div>
+                    <Input
+                      {...priceField}
+                      onChange={e => {
+                        setPrice(e.target.value);
+                        priceField.onChange(e);
+                      }}
+                      placeholder={`${symbol} for Hash Power`}
+                      type="number"
+                      name="price"
+                      id="price"
+                    />{' '}
+                    {!!price && !!speed && !!length && (
+                      <Sublabel>
+                        ~{' '}
+                        {getContractRewardBtcPerTh(
+                          price,
+                          length,
+                          speed,
+                          btcRate,
+                          lmrRate
+                        )}{' '}
+                        BTC/TH/day
+                      </Sublabel>
+                    )}
+                  </div>
                   <Sublabel>
                     This is the price you will deploy your contract to the
                     marketplace.
                   </Sublabel>
                   {formState?.errors?.price?.type === 'required' && (
                     <ErrorLabel>Price is required</ErrorLabel>
+                  )}
+                  {formState?.errors?.price?.type === 'min' && (
+                    <ErrorLabel>Minimum 1 {symbol}</ErrorLabel>
                   )}
                 </InputGroup>
               </Row>

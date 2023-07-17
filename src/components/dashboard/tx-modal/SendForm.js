@@ -16,7 +16,6 @@ import {
   FooterRow,
   FooterLabel
 } from './common.styles';
-import { rangeSelectOptions } from '../../../store/hocs/withTransactionModalState';
 
 const AmountContainer = styled.label`
   display: block;
@@ -152,6 +151,17 @@ const selectorStyles = {
 };
 
 export function SendForm(props) {
+  const rangeSelectOptions = [
+    {
+      label: props.symbol,
+      value: 'LMR'
+    },
+    {
+      label: props.symbolEth,
+      value: 'ETH'
+    }
+  ];
+
   const [mode, setMode] = useState(LMR_MODE);
   const [isPending, setIsPending] = useState(false);
   const context = useContext(ToastsContext);
@@ -262,7 +272,9 @@ export function SendForm(props) {
           {props.estimatedFee && (
             <FeeRow>
               <FeeLabel>Estimated fee:</FeeLabel>
-              <FeeLabel>{props.estimatedFee} ETH</FeeLabel>
+              <FeeLabel>
+                {props.estimatedFee} {props.symbolEth}
+              </FeeLabel>
             </FeeRow>
           )}
         </FeeContainer>
