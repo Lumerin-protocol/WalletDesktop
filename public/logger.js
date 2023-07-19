@@ -1,4 +1,4 @@
-'use strict';
+
 
 const chalk = require('chalk');
 const logger = require('electron-log');
@@ -39,8 +39,8 @@ logger.transports.console = function ({ date, level, data }) {
 }
 
 if (config.debug) {
-  logger.transports.console.level = 'debug';
-  logger.transports.file.level = 'debug';
+  logger.transports.console.level = 'verbose';
+  logger.transports.file.level = 'verbose';
 }
 
 
