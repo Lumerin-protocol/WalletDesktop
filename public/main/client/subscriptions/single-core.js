@@ -1,5 +1,3 @@
-"use strict";
-
 const handlers = require("../handlers");
 const utils = require("./utils");
 

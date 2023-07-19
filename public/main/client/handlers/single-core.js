@@ -1,4 +1,4 @@
-"use strict";
+
 
 const pTimeout = require("p-timeout");
 const logger = require("../../../logger");
@@ -164,7 +164,7 @@ const onboardingCompleted = (data, core) => {
     )
     .then(() => true)
     .catch((err) => {
-      error: new WalletError("Onboarding unable to be completed: ", err);
+      new WalletError("Onboarding unable to be completed: ", err);
     });
 };
 
@@ -199,7 +199,7 @@ function onLoginSubmit({ password }, core) {
     openWallet(core, password);
 
     return isValid;
-  });
+  }).catch(logger.error);
 }
 function refreshAllSockets({ url }, { api, emitter }) {
   emitter.emit("sockets-scan-started", {});
