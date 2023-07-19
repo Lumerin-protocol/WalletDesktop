@@ -17,7 +17,7 @@ async function setPassword(password) {
 }
 
 function isValidPassword(password) {
-  logger.log("checking if password is valid");
+  logger.info("checking if password is valid");
   const passwordHash = getPasswordHash();
 
   return verify(passwordHash, password)

@@ -1,4 +1,4 @@
-"use strict";
+
 
 const { ipcMain } = require("electron");
 const createCore = require("@lumerin/wallet-core");
@@ -198,9 +198,9 @@ function createClient(config) {
         subscriptions.subscribe(core);
       })
       .catch(function(err) {
-        console.log("panic");
-        console.log(err);
-        console.log("Unknown chain =", err.message);
+        logger.error("panic");
+        logger.error(err);
+        logger.error("Unknown chain =", err.message);
         logger.error("Could not start core", err.message);
       });
   });

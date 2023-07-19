@@ -2,9 +2,9 @@ import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import pickBy from 'lodash/pickBy';
 
-import * as utils from './utils';
 import keys from './keys';
 import './sentry';
+import * as utils from './utils';
 
 const createClient = function(createStore) {
   const reduxDevtoolsOptions = {

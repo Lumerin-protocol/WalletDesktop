@@ -80,6 +80,9 @@ jobs:
           echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
           #echo "ETH_NODE_ADDRESS_HTTP2=$ETH_NODE_ADDRESS_HTTP2" >> .env
           #echo "ETH_NODE_ADDRESS_HTTP3=$ETH_NODE_ADDRESS_HTTP3" >> .env
+          echo "DEBUG=$DEBUG" >> .env
+          echo "ELECTRON_IS_DEV=$ELECTRON_IS_DEV" >> .env
+          echo "ELECTRON_ENABLE_LOGGING=$ELECTRON_ENABLE_LOGGING" >> .env
         shell: bash
       - name: Set env from gitlab
         run: |

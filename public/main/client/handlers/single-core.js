@@ -199,6 +199,7 @@ function onLoginSubmit({ password }, core) {
     return isValid;
   }).catch(logger.error);
 }
+
 function refreshAllSockets({ url }, { api, emitter }) {
   emitter.emit("sockets-scan-started", {});
   return api.sockets
