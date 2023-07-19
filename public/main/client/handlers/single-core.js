@@ -163,9 +163,7 @@ const onboardingCompleted = (data, core) => {
       )
     )
     .then(() => true)
-    .catch((err) => {
-      new WalletError("Onboarding unable to be completed: ", err);
-    });
+    .catch((err) => ({error: new WalletError("Onboarding unable to be completed: ", err)}));
 };
 
 const recoverFromMnemonic = function(data, core) {
