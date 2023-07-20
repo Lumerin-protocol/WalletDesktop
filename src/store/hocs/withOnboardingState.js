@@ -4,7 +4,7 @@ import { withClient } from './clientContext';
 import selectors from '../selectors';
 import { connect } from 'react-redux';
 import * as utils from '../utils';
-import { toRfc2396, toLightningUrl } from '../../utils';
+import { toRfc2396, generatePoolUrl } from '../../utils';
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -151,7 +151,7 @@ const withOnboardingState = WrappedComponent => {
           this.setState({ errors: newErrors });
           return;
         }
-        const poolUrl = toLightningUrl(
+        const poolUrl = generatePoolUrl(
           this.state.lightningAddress,
           this.props.config.chain.titanLightningPool
         );

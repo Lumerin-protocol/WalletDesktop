@@ -146,8 +146,8 @@ export const toRfc2396 = (pool, username) => {
   return `stratum+tcp://${username}:${password}@${address}:${port}`;
 };
 
-export const toLightningUrl = (email, poolAddress) => {
+export const generatePoolUrl = (account, poolAddress) => {
   const password = '';
-  const username = encodeURIComponent(email);
+  const username = encodeURIComponent(account);
   return `stratum+tcp://${username}:${password}@${poolAddress}`;
 };
