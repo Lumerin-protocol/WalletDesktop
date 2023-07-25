@@ -98,7 +98,10 @@ export function CreateContractSuccessPage(props) {
       <Column></Column>
 
       <Footer>
-        <FooterLabel>You have successfully created a contract</FooterLabel>
+        <FooterLabel>
+          You have successfully {props.isEditMode ? 'updated' : 'created'} a
+          contract
+        </FooterLabel>
         <DoneBtn data-modal={null} onClick={onDone}>
           Done
         </DoneBtn>

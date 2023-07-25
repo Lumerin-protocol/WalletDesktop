@@ -18,6 +18,7 @@ const listeners = {
   "send-eth": handlers.sendEth,
   "create-contract": handlers.createContract,
   "purchase-contract": handlers.purchaseContract,
+  "edit-contract": handlers.editContract,
   "cancel-contract": handlers.cancelContract,
   "set-delete-contract-status": handlers.setContractDeleteStatus,
   "start-discovery": handlers.startDiscovery,

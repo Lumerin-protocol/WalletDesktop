@@ -94,6 +94,8 @@ function SellerHub({
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   const [isArchiveModalActive, setIsArchiveModalActive] = useState(false);
+  const [isEditModalActive, setIsEditModalActive] = useState(false);
+  const [editContractData, setEditContractData] = useState({});
   const context = useContext(ToastsContext);
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -110,6 +112,13 @@ function SellerHub({
 
   const handleCloseModal = e => {
     setIsModalActive(false);
+    setIsEditModalActive(false);
+    setShowSuccess(false);
+  };
+
+  const handleEditModal = contract => {
+    setEditContractData(contract);
+    setIsEditModalActive(true);
     setShowSuccess(false);
   };
 
@@ -128,6 +137,16 @@ function SellerHub({
     });
   };
 
+  const dispatchEditContract = (id, contract) => {
+    client.store.dispatch({
+      type: 'edit-contract-state',
+      payload: {
+        id,
+        ...contract
+      }
+    });
+  };
+
   const removeTempContract = (id, contract) => {
     client.store.dispatch({
       type: 'remove-contract',
@@ -136,6 +155,33 @@ function SellerHub({
         ...contract
       }
     });
+  };
+
+  const handleContractUpdate = async (e, contractDetails, contractId) => {
+    e.preventDefault();
+
+    const contract = {
+      id: contractId,
+      price: contractDetails.price * lmrDecimals,
+      speed: contractDetails.speed * 10 ** 12, // THs
+      duration: contractDetails.time * 3600, // Hours to seconds
+      sellerAddress: contractDetails.address
+    };
+
+    await client.lockSendTransaction();
+    await client
+      .editContract(contract)
+      .then(() => {
+        setShowSuccess(true);
+        dispatchEditContract(contract.id, contract);
+      })
+      .catch(error => {
+        context.toast('error', error.message || error);
+        setIsModalActive(false);
+      })
+      .finally(() => {
+        client.unlockSendTransaction();
+      });
   };
 
   const handleContractDeploy = async (e, contractDetails) => {
@@ -243,6 +289,8 @@ function SellerHub({
         allowSendTransaction={allowSendTransaction}
         noContractsMessage={'You have no contracts.'}
         tabs={tabs}
+        edit={handleEditModal}
+        setEditContractData={setEditContractData}
         isSellerTab={true}
         sellerStats={sellerStats}
       />
@@ -253,6 +301,7 @@ function SellerHub({
         deploy={handleContractDeploy}
         close={handleCloseModal}
         showSuccess={showSuccess}
+        editContractData={{}}
       />
 
       <ArchiveModal
@@ -265,6 +314,17 @@ function SellerHub({
         restore={handleDeleteContractStateChange}
         showSuccess={false}
       />
+
+      <CreateContractModal
+        isActive={isEditModalActive}
+        isEditMode={true}
+        editContractData={editContractData}
+        edit={handleContractUpdate}
+        showSuccess={showSuccess}
+        close={() => {
+          setIsEditModalActive(false);
+        }}
+      ></CreateContractModal>
     </View>
   );
 }

@@ -20,6 +20,7 @@ import { useForm } from 'react-hook-form';
 import { CreateContractPreview } from './CreateContractPreview';
 import { CreateContractSuccessPage } from './CreateContractSuccessPage';
 import { toMicro } from '../utils';
+import { lmrDecimals } from '../../../utils/coinValue';
 
 const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
   const lengthDays = time / 24;
@@ -35,20 +36,23 @@ function CreateContractModal(props) {
     isActive,
     save,
     deploy,
+    edit,
     close,
     client,
     address,
     showSuccess,
     lmrRate,
     btcRate,
-    symbol
+    symbol,
+    isEditMode,
+    editContractData
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [price, setPrice] = useState();
-  const [speed, setSpeed] = useState();
-  const [length, setTime] = useState();
+  const [price, setPrice] = useState(+editContractData.price);
+  const [speed, setSpeed] = useState(editContractData.speed);
+  const [length, setTime] = useState(editContractData.length);
 
   const {
     register,
@@ -81,6 +85,15 @@ function CreateContractModal(props) {
     setIsPreview(false);
   };
 
+  const wrapHandleUpdate = async e => {
+    e.preventDefault();
+    setIsCreating(true);
+    await edit(e, getValues(), editContractData.id, editContractData);
+    resetValues();
+    setIsCreating(false);
+    setIsPreview(false);
+  };
+
   const handleClose = e => {
     resetValues();
     setIsPreview(false);
@@ -94,38 +107,53 @@ function CreateContractModal(props) {
   const timeField = register('time', {
     required: true,
     min: 24,
-    max: 48
+    max: 48,
+    value: editContractData.length ? editContractData.length / 3600 : undefined
   });
   const speedField = register('speed', {
     required: true,
     min: 100,
-    max: 1000
+    max: 1000,
+    value: editContractData.price
+      ? editContractData.speed / 10 ** 12
+      : undefined
   });
   const priceField = register('price', {
     required: true,
-    min: 1
+    min: 1,
+    value: editContractData.price
+      ? editContractData.price / lmrDecimals
+      : undefined
   });
+
+  const title = isEditMode ? 'Edit your contract' : 'Create new contract';
+  const buttonLabel = isEditMode ? 'Update Contract' : 'Create Contract';
+  const subtitle = isEditMode
+    ? 'Changes will not affect running contract.'
+    : 'Sell your hashpower on the Lumerin Marketplace';
   return (
     <Modal onClick={handleClose}>
       <Body onClick={handlePropagation}>
         {CloseModal(handleClose)}
         {showSuccess ? (
-          <CreateContractSuccessPage close={handleClose} />
+          <CreateContractSuccessPage
+            close={handleClose}
+            isEditMode={isEditMode}
+          />
         ) : isPreview ? (
           <CreateContractPreview
             isCreating={isCreating}
             data={getValues()}
             close={() => setIsPreview(false)}
-            submit={wrapHandleDeploy}
+            submit={isEditMode ? wrapHandleUpdate : wrapHandleDeploy}
+            isEditMode={isEditMode}
             symbol={symbol}
           />
         ) : (
           <>
             <TitleWrapper>
-              <Title>Create new contract</Title>
-              <Subtitle>
-                Sell your hashpower on the Lumerin Marketplace
-              </Subtitle>
+              <Title>{title}</Title>
+              <Subtitle>{subtitle}</Subtitle>
             </TitleWrapper>
             <Form onSubmit={() => setIsPreview(true)}>
               {/* <Row>
@@ -259,7 +287,7 @@ function CreateContractModal(props) {
                 <Row style={{ justifyContent: 'center' }}>
                   {/* <LeftBtn onClick={handleSaveDraft}>Save as Draft</LeftBtn> */}
                   <RightBtn disabled={!formState?.isValid} type="submit">
-                    Create Contract
+                    {buttonLabel}
                   </RightBtn>
                 </Row>
               </InputGroup>
