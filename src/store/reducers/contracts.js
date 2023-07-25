@@ -128,6 +128,20 @@ const reducer = handleActions(
         ...state,
         actives: filtered
       };
+    },
+
+    'edit-contract-state': (state, { payload }) => {
+      const { [payload.id]: contract, ...filtered } = state.actives;
+      return {
+        ...state,
+        actives: {
+          ...filtered,
+          [payload.id]: {
+            ...contract,
+            ...payload
+          }
+        }
+      };
     }
   },
   initialState

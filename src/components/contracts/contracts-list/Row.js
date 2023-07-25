@@ -57,6 +57,7 @@ const STATE_COLOR = {
 function Row({
   contract,
   cancel,
+  edit,
   deleteContract,
   address,
   ratio,
@@ -66,10 +67,14 @@ function Row({
   btcRate,
   symbol
 }) {
-  console.log('🚀 ~ file: Row.js:69 ~ symbol:', symbol);
   // TODO: Add better padding
   const context = useContext(ToastsContext);
   const [isPending, setIsPending] = useState(false);
+
+  const speed = contract.futureTerms?.speed || contract.speed;
+  const length = contract.futureTerms?.length || contract.length;
+  const price = contract.futureTerms?.price || contract.price;
+  const limit = contract.futureTerms?.limit || contract.limit;
 
   useEffect(() => {
     setIsPending(false);
@@ -92,6 +97,16 @@ function Row({
       .finally(() => {
         setIsPending(false);
       });
+  };
+
+  const handleEdit = () => {
+    edit({
+      ...contract,
+      price,
+      length,
+      speed,
+      limit
+    });
   };
 
   const handleDelete = () => {
@@ -145,9 +160,12 @@ function Row({
       return handleCancel(CLOSEOUT_TYPE.Claim);
     }
     if (value === 3) {
-      return handleCancel(CLOSEOUT_TYPE.Close);
+      return handleEdit();
     }
     if (value === 4) {
+      return handleCancel(CLOSEOUT_TYPE.Close);
+    }
+    if (value === 5) {
       return handleDelete();
     }
   };
@@ -177,14 +195,14 @@ function Row({
         </SmallAssetContainer>
       )}
 
-      <Value>{formatPrice(contract.price, symbol)}</Value>
+      <Value>{formatPrice(price, symbol)}</Value>
       <Value
       // data-rh={`${formatExpNumber(btcPerThReward)} BTC/TH/day`}
       >
         {formatExpNumber(btcPerThReward)} BTC/TH/day
       </Value>
-      <Value>{formatDuration(contract.length)}</Value>
-      <Value>{formatSpeed(contract.speed)}</Value>
+      <Value>{formatDuration(length)}</Value>
+      <Value>{formatSpeed(speed)}</Value>
       <Value>
         <ProgressBarWithLabels
           key={'stats'}
@@ -222,13 +240,18 @@ function Row({
                   disabled: !allowSendTransaction || isClaimBtnDisabled()
                 },
                 {
-                  label: 'Close',
+                  label: 'Edit',
                   value: 3,
+                  disabled: !allowSendTransaction
+                },
+                {
+                  label: 'Close',
+                  value: 4,
                   disabled: !(allowSendTransaction && isContractExpired())
                 },
                 {
                   label: 'Archive',
-                  value: 4,
+                  value: 5,
                   disabled: !allowSendTransaction || contract.isDead,
                   message:
                     getContractState(contract) === CONTRACT_STATE.Running
