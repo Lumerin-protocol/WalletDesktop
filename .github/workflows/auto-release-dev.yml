@@ -39,6 +39,8 @@ jobs:
       EXPLORER_URL: ${{ secrets.EXPLORER_URL }}
       DISPLAY_NAME: ${{ secrets.DISPLAY_NAME }}
       SYMBOL: ${{ secrets.SYMBOL }}
+      SYMBOL_ETH: ${{ secrets.SYMBOL_ETH }}
+      SYMBOL_LMR: ${{ secrets.SYMBOL_LMR }}
       PROXY_ROUTER_URL: ${{ secrets.PROXY_ROUTER_URL }}
       COIN_DEFAULT_GAS_LIMIT: ${{ secrets.COIN_DEFAULT_GAS_LIMIT }}
       MAX_GAS_PRICE: ${{ secrets.MAX_GAS_PRICE }}
@@ -69,6 +71,8 @@ jobs:
           echo "DISPLAY_NAME=$DISPLAY_NAME" >> .env
           echo "EXPLORER_URL=$EXPLORER_URL" >> .env
           echo "SYMBOL=$SYMBOL" >> .env
+          echo "SYMBOL_ETH=$SYMBOL_ETH" >> .env
+          echo "SYMBOL_LMR=$SYMBOL_LMR" >> .env
           echo "PROXY_ROUTER_URL=$PROXY_ROUTER_URL" >> .env
           echo "COIN_DEFAULT_GAS_LIMIT=$COIN_DEFAULT_GAS_LIMIT" >> .env
           echo "MAX_GAS_PRICE=$MAX_GAS_PRICE" >> .env
