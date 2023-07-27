@@ -33,6 +33,8 @@ const chain = {
 
   faucetUrl: process.env.FAUCET_URL,
 
+  titanLightningPool: process.env.TITAN_LIGHTNING_POOL,
+
   bypassAuth: process.env.BYPASS_AUTH === "true",
 };
 

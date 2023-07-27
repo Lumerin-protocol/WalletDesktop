@@ -145,3 +145,9 @@ export const toRfc2396 = (pool, username) => {
   // This also should maintain consistency of data between UI/Blockchain/Proxy Router
   return `stratum+tcp://${username}:${password}@${address}:${port}`;
 };
+
+export const generatePoolUrl = (account, poolAddress) => {
+  const password = '';
+  const username = encodeURIComponent(account);
+  return `stratum+tcp://${username}:${password}@${poolAddress}`;
+};
