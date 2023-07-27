@@ -61,7 +61,8 @@ function BuyerHubRow({
   ratio,
   explorerUrl,
   cancel,
-  allowSendTransaction
+  allowSendTransaction,
+  symbol
 }) {
   const context = useContext(ToastsContext);
   const [isPending, setIsPending] = useState(false);
@@ -108,7 +109,7 @@ function BuyerHubRow({
         </SmallAssetContainer>
       )}
 
-      <Value>{formatPrice(contract.price)}</Value>
+      <Value>{formatPrice(contract.price, symbol)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
       {isPending ? (

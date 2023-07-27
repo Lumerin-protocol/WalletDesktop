@@ -26,7 +26,9 @@ const withTxRowState = WrappedComponent => {
   const mapStateToProps = (state, props) => ({
     explorerUrl: selectors.getTransactionExplorerUrl(state, {
       hash: props.tx.hash
-    })
+    }),
+    symbol: selectors.getCoinSymbol(state),
+    symbolEth: selectors.getSymbolEth(state)
   });
 
   return connect(mapStateToProps)(Container);

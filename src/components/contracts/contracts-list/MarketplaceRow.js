@@ -4,7 +4,12 @@ import { IconExternalLink } from '@tabler/icons';
 
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
 import { Btn } from '../../common';
-import { formatDuration, formatSpeed, formatPrice } from '../utils';
+import {
+  formatDuration,
+  formatSpeed,
+  formatPrice,
+  getContractState
+} from '../utils';
 import Spinner from '../../common/Spinner';
 import { abbreviateAddress } from '../../../utils';
 import ProgressBarWithLabels from '../../common/ProgressBar';
@@ -15,8 +20,9 @@ const Container = styled.div`
   grid-template-columns: ${p => p.ratio.map(x => `${x}fr`).join(' ')};
   text-align: center;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
-  cursor: pointer;
+  cursor: ${p => p.cursor || 'pointer'};
   height: 66px;
+  opacity: ${p => p.opacity || 1};
 `;
 
 const Value = styled.label`
@@ -48,7 +54,9 @@ function MarketplaceRow({
   ratio,
   explorerUrl,
   onPurchase,
-  allowSendTransaction
+  allowSendTransaction,
+  address,
+  symbol
 }) {
   // TODO: Add better padding
   const [isPending, setIsPending] = useState(false);
@@ -59,13 +67,19 @@ function MarketplaceRow({
 
   const successCount = contract?.stats?.successCount || 0;
   const failCount = contract?.stats?.failCount || 0;
+  const isRunning = Number(contract.state) !== 0;
+  const iAmSeller = contract.seller === address;
 
   return (
-    <Container ratio={ratio}>
+    <Container
+      ratio={ratio}
+      opacity={isRunning ? 0.5 : 1}
+      data-rh={isRunning ? getContractState(contract) : null}
+    >
       <ContractValue onClick={() => window.openLink(explorerUrl)}>
         {abbreviateAddress(contract.id)} <IconExternalLink width={'1.4rem'} />
       </ContractValue>
-      <Value>{formatPrice(contract.price)}</Value>
+      <Value>{formatPrice(contract.price, symbol)}</Value>
       <Value>{formatDuration(contract.length)}</Value>
       <Value>{formatSpeed(contract.speed)}</Value>
       <Value>
@@ -79,10 +93,11 @@ function MarketplaceRow({
         <Value>
           <Spinner size="25px" /> Purchasing..
         </Value>
-      ) : (
+      ) : !isRunning ? (
         <Value>
           <ActionButton
-            disabled={!allowSendTransaction}
+            disabled={!allowSendTransaction || iAmSeller}
+            data-rh={iAmSeller ? 'You are seller' : null}
             onClick={e => {
               e.stopPropagation();
               onPurchase(contract);
@@ -91,6 +106,8 @@ function MarketplaceRow({
             Purchase
           </ActionButton>
         </Value>
+      ) : (
+        <></>
       )}
     </Container>
   );

@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import Select from 'react-select';
 
 const Container = styled.div`
-  margin: 10px 0;
+  /* margin: 10px 0; */
+  margin-left: -10px;
   width: fit-content;
   color: ${p => p.theme.colors.primary};
   font-weight: bold;
@@ -41,6 +42,14 @@ const rangeSelectOptions = [
   {
     label: 'Speed: Fast to Slow',
     value: 'DescSpeed'
+  },
+  {
+    label: 'State: Available First',
+    value: 'AvailableFirst'
+  },
+  {
+    label: 'State: Running First',
+    value: 'RunningFirst'
   }
 ];
 
@@ -56,6 +65,8 @@ export default function Sort(props) {
             control: (base, state) => ({
               ...base,
               width: 'fit-content',
+              minWidth: '150px',
+              textAlign: 'right',
               cursor: 'pointer',
               color: '#0E4353',
               border: state.isFocused ? 0 : 0,

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { List as RVList, AutoSizer } from 'react-virtualized';
 import {
   Modal,
   Body,
@@ -35,17 +36,32 @@ function ArchiveModal(props) {
       });
   };
 
+  const rowRenderer = deletedContracts => ({ key, index, style }) => (
+    <ArchiveRow
+      key={deletedContracts[index].id}
+      contract={deletedContracts[index]}
+      handleRestore={handleRestore}
+    />
+  );
+
   return (
     <Modal onClick={handleClose}>
-      <Body onClick={handlePropagation}>
+      <Body height={'400px'} onClick={handlePropagation}>
         {CloseModal(handleClose)}
         <TitleWrapper>
           <Title>Archived contracts</Title>
         </TitleWrapper>
-        {deletedContracts &&
-          deletedContracts.map(c => (
-            <ArchiveRow key={c.id} contract={c} handleRestore={handleRestore} />
-          ))}
+        <AutoSizer width={400}>
+          {({ width, height }) => (
+            <RVList
+              rowRenderer={rowRenderer(deletedContracts)}
+              rowHeight={50}
+              rowCount={deletedContracts.length}
+              height={height || 500} // defaults for tests
+              width={width || 500} // defaults for tests
+            />
+          )}
+        </AutoSizer>
       </Body>
     </Modal>
   );

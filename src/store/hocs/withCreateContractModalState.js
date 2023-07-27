@@ -40,6 +40,7 @@ const withCreateContractModalState = WrappedComponent => {
     pool: selectors.getBuyerPool(state),
     btcRate: selectors.getRateBtc(state),
     lmrRate: selectors.getRate(state),
+    symbol: selectors.getCoinSymbol(state),
     explorerUrl: props.contract
       ? selectors.getContractExplorerUrl(state, {
           hash: props.contract.id

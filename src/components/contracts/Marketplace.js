@@ -9,6 +9,8 @@ import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 import MarketplaceRow from './contracts-list/MarketplaceRow';
 import PurchaseContractModal from './modals/PurchaseModal/PurchaseContractModal';
 import { getContractEndTimestamp } from './utils';
+import Toggle from '../reports/Toggle';
+import theme from '../../ui/theme';
 
 function Marketplace({
   hasContracts,
@@ -26,13 +28,15 @@ function Marketplace({
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
+  const [showAll, setShowAll] = useState(true);
+
   const [contractToPurchase, setContractToPurchase] = useState(undefined);
   const [showSuccess, setShowSuccess] = useState(false);
   const context = useContext(ToastsContext);
+  const contractStateFilter = c =>
+    showAll ? true : Number(c.state) === 0 && c.seller !== address;
   const contractsToShow = contracts.filter(
-    x =>
-      (Number(x.state) === 0 && x.seller !== address && !x.isDead) ||
-      x.inProgress
+    x => (contractStateFilter(x) && !x.isDead) || x.inProgress
   );
 
   const stats = {
@@ -138,14 +142,27 @@ function Marketplace({
       />
     </ContractsRowContainer>
   );
-
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
         title="Marketplace"
         address={address}
         copyToClipboard={copyToClipboard}
-      ></LayoutHeader>
+      >
+        <Toggle
+          backgroundColorChecked={theme.colors.primary}
+          backgroundColorUnchecked={theme.colors.cancelled}
+          labelLeft={'Show all'}
+          onChange={e => setShowAll(!showAll)}
+          checked={showAll}
+          height={25}
+          width={45}
+          sliderHeight={18}
+          sliderWidth={18}
+          translate={18}
+          labelColor={theme.colors.primary}
+        ></Toggle>
+      </LayoutHeader>
 
       <ContractsList
         stats={stats}

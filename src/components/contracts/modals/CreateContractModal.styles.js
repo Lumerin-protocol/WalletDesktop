@@ -40,7 +40,7 @@ export const Body = styled.div`
   z-index: 20;
   background-color: ${p => p.theme.colors.light};
   width: 45%;
-  height: fit-content;
+  height: ${p => p.height || 'fit-content'};
   border-radius: 15px;
   padding: 3rem 5%;
   max-width: 600px;

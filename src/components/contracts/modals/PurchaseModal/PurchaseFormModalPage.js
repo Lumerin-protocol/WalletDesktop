@@ -42,7 +42,8 @@ export const PurchaseFormModalPage = ({
   handleSubmit,
   register,
   close,
-  formState
+  formState,
+  symbol
 }) => {
   const [isEditPool, setIsEditPool] = useState(false);
 
@@ -91,11 +92,11 @@ export const PurchaseFormModalPage = ({
           <div>
             <SmallTitle>Price</SmallTitle>
             <Values>
-              {fromTokenBaseUnitsToLMR(contract.price)} LMR (≈ $
+              {fromTokenBaseUnitsToLMR(contract.price)} {symbol} (≈ $
               {(fromTokenBaseUnitsToLMR(contract.price) * rate).toFixed(2)} USD)
             </Values>
             <SmallTitle>
-              + {fromTokenBaseUnitsToLMR(contract.price) * 0.01} LMR fee
+              + {fromTokenBaseUnitsToLMR(contract.price) * 0.01} {symbol} fee
               <IconQuestionCircle
                 data-rh="All proceeds are subject to a 1% marketplace fee"
                 width={'1.7rem'}

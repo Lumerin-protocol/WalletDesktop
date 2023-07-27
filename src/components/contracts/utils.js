@@ -59,12 +59,12 @@ export const formatTimestamp = (timestamp, timer, state) => {
   }
 };
 
-export const formatPrice = price => {
+export const formatPrice = (price, symbol) => {
   const value = Number(price) / lmrDecimals;
   if (Number.isNaN(value)) {
-    return '0 LMR';
+    return `0 ${symbol}`;
   }
-  return `${Math.round(value * 100) / 100} LMR`;
+  return `${Math.round(value * 100) / 100} ${symbol}`;
 };
 
 export const formatBtcPerTh = networkDifficulty => {
@@ -72,7 +72,7 @@ export const formatBtcPerTh = networkDifficulty => {
   const profitPerTh = (1000000000000 / networkHashrate) * (8 * 144);
 
   const fixedValue = Number(profitPerTh).toFixed(8);
-  return `${toMicro(fixedValue)}`;
+  return fixedValue;
 };
 
 export const formatDuration = duration => {
@@ -139,8 +139,8 @@ export const getContractRewardBtcPerTh = (contract, btcRate, lmrRate) => {
   const contractUsdPrice = (contract.price / lmrDecimals) * lmrRate;
   const contractBtcPrice = contractUsdPrice / btcRate;
   const result = contractBtcPrice / speed / lengthDays;
-  return toMicro(result).toFixed(3);
+  return result;
 };
 
 export const formatExpNumber = value =>
-  value.toFixed(20).replace(/(?<=\.\d*[1-9])0+$|\.0*$/, '');
+  value.toFixed(10).replace(/(?<=\.\d*[1-9])0+$|\.0*$/, '');

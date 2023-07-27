@@ -20,7 +20,8 @@ const withContractsRowState = WrappedComponent => {
     }),
     networkDifficulty: selectors.getNetworkDifficulty(state),
     lmrRate: selectors.getRate(state),
-    btcRate: selectors.getRateBtc(state)
+    btcRate: selectors.getRateBtc(state),
+    symbol: selectors.getCoinSymbol(state)
   });
 
   return connect(mapStateToProps)(Container);
