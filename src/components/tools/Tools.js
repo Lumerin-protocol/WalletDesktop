@@ -100,13 +100,6 @@ const StyledParagraph = styled.p`
   }
 `;
 
-const FullUrl = styled.div`
-  font-size: 1.4rem;
-  font-style: italic;
-  text-decoration: underline;
-  margin-top: 5px;
-`;
-
 const WalletInfo = styled.h4`
   color: ${p => p.theme.colors.dark};
 `;
@@ -319,9 +312,6 @@ const Tools = props => {
                     <span>Seller Default Account:</span>{' '}
                     {sellerPoolParts?.account}{' '}
                   </div>
-                  <FullUrl>
-                    Full Url: {proxyRouterSettings?.sellerDefaultPool}
-                  </FullUrl>
                 </StyledParagraph>
                 <StyledParagraph>
                   <div>
@@ -331,9 +321,6 @@ const Tools = props => {
                     <span>Buyer Default Account:</span>{' '}
                     {buyerPoolParts?.account}{' '}
                   </div>
-                  <FullUrl>
-                    Full Url: {proxyRouterSettings?.buyerDefaultPool}
-                  </FullUrl>
                 </StyledParagraph>
                 <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
               </>
