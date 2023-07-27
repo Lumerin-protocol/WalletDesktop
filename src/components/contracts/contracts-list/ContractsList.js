@@ -100,6 +100,8 @@ function ContractsList({
   tabs,
   isSellerTab,
   stats,
+  edit,
+  setEditContractData,
   sellerStats
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
@@ -143,6 +145,8 @@ function ContractsList({
         deleteContract={deleteContract}
         address={address}
         ratio={ratio}
+        edit={edit}
+        setEditContractData={setEditContractData}
         allowSendTransaction={allowSendTransaction}
       />
     </ContractsRowContainer>

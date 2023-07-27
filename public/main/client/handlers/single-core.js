@@ -1,4 +1,4 @@
-"use strict";
+
 
 const pTimeout = require("p-timeout");
 const logger = require("../../../logger");
@@ -65,6 +65,27 @@ const purchaseContract = async function(data, { api }) {
     })
   )(data, { api });
 };
+
+const editContract = async function(data, { api }) {
+  data.walletId = wallet.getAddress().address;
+  data.password = await auth.getSessionPassword();
+
+  if (typeof data.walletId !== "string") {
+    throw new WalletError("WalletId is not defined");
+  }
+  return withAuth((privateKey) =>
+    api.contracts.editContract({
+      contractId: data.id,
+      price: data.price,
+      speed: data.speed,
+      duration: data.duration,
+      password: data.password,
+      walletId: data.walletId,
+      privateKey,
+    })
+  )(data, { api });
+};
+
 
 const claimFaucet = async function(data, { api }) {
   data.walletId = wallet.getAddress().address;
@@ -163,9 +184,7 @@ const onboardingCompleted = (data, core) => {
       )
     )
     .then(() => true)
-    .catch((err) => {
-      error: new WalletError("Onboarding unable to be completed: ", err);
-    });
+    .catch((err) => ({error: new WalletError("Onboarding unable to be completed: ", err)}));
 };
 
 const recoverFromMnemonic = function(data, core) {
@@ -199,7 +218,7 @@ function onLoginSubmit({ password }, core) {
     openWallet(core, password);
 
     return isValid;
-  });
+  }).catch(logger.error);
 }
 function refreshAllSockets({ url }, { api, emitter }) {
   emitter.emit("sockets-scan-started", {});
@@ -244,7 +263,8 @@ function refreshAllTransactions({ address }, { api, emitter }) {
 }
 
 function refreshAllContracts({}, { api }) {
-  return api.contracts.refreshContracts();
+  const walletId = wallet.getAddress().address;
+  return api.contracts.refreshContracts(null, walletId);
 }
 
 function refreshTransaction({ hash, address }, { api }) {
@@ -365,4 +385,5 @@ module.exports = {
   hasStoredSecretPhrase,
   getPastTransactions,
   setContractDeleteStatus,
+  editContract,
 };
