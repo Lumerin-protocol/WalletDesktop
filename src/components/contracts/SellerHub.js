@@ -142,7 +142,9 @@ function SellerHub({
       type: 'edit-contract-state',
       payload: {
         id,
-        ...contract
+        ...contract,
+        length: contract.duration,
+        seller: contract.sellerAddress
       }
     });
   };
@@ -162,9 +164,9 @@ function SellerHub({
 
     const contract = {
       id: contractId,
-      price: contractDetails.price * lmrDecimals,
-      speed: contractDetails.speed * 10 ** 12, // THs
-      duration: contractDetails.time * 3600, // Hours to seconds
+      price: (contractDetails.price * lmrDecimals).toString(),
+      speed: (contractDetails.speed * 10 ** 12).toString(), // THs
+      duration: (contractDetails.time * 3600).toString(), // Hours to seconds
       sellerAddress: contractDetails.address
     };
 
@@ -173,7 +175,8 @@ function SellerHub({
       .editContract(contract)
       .then(() => {
         setShowSuccess(true);
-        dispatchEditContract(contract.id, contract);
+        contractsRefresh(true);
+        // dispatchEditContract(contract.id, contract); // TODO: investigate rows are not rerendering
       })
       .catch(error => {
         context.toast('error', error.message || error);
