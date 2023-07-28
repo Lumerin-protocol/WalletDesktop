@@ -40,7 +40,7 @@ export const Body = styled.div`
   z-index: 20;
   background-color: ${p => p.theme.colors.light};
   width: 45%;
-  height: fit-content;
+  height: ${p => p.height || 'fit-content'};
   border-radius: 15px;
   padding: 3rem 5%;
   max-width: 600px;
@@ -121,6 +121,13 @@ export const Input = styled.input`
   ::placeholder {
     color: rgba(1, 67, 83, 0.56);
   }
+
+  ${props =>
+    props.id === 'price' &&
+    `
+      display: inline-block;
+      width: 50%;
+    `};
 `;
 
 export const Select = styled.select`

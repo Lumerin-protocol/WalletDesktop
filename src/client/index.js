@@ -119,8 +119,12 @@ const createClient = function(createStore) {
     onLoginSubmit: utils.forwardToMainProcess('login-submit'),
     createContract: utils.forwardToMainProcess('create-contract', 750000),
     purchaseContract: utils.forwardToMainProcess('purchase-contract', 750000),
+    editContract: utils.forwardToMainProcess('purchase-contract', 750000),
     cancelContract: utils.forwardToMainProcess('cancel-contract', 750000),
-    deleteContract: utils.forwardToMainProcess('delete-contract', 750000),
+    setDeleteContractStatus: utils.forwardToMainProcess(
+      'set-delete-contract-status',
+      750000
+    ),
     getGasLimit: utils.forwardToMainProcess('get-gas-limit'),
     getGasPrice: utils.forwardToMainProcess('get-gas-price'),
     getPastTransactions: utils.forwardToMainProcess(
@@ -130,6 +134,7 @@ const createClient = function(createStore) {
     sendLmr: utils.forwardToMainProcess('send-lmr', 750000),
     sendEth: utils.forwardToMainProcess('send-eth', 750000),
     clearCache: utils.forwardToMainProcess('clear-cache'),
+    handleClientSideError: utils.forwardToMainProcess('handle-client-error'),
     startDiscovery: utils.forwardToMainProcess('start-discovery'),
     stopDiscovery: utils.forwardToMainProcess('stop-discovery'),
     setMinerPool: utils.forwardToMainProcess('set-miner-pool'),

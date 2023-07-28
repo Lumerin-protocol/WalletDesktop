@@ -39,6 +39,8 @@ jobs:
       EXPLORER_URL: ${{ secrets.EXPLORER_URL }}
       DISPLAY_NAME: ${{ secrets.DISPLAY_NAME }}
       SYMBOL: ${{ secrets.SYMBOL }}
+      SYMBOL_ETH: ${{ secrets.SYMBOL_ETH }}
+      SYMBOL_LMR: ${{ secrets.SYMBOL_LMR }}
       PROXY_ROUTER_URL: ${{ secrets.PROXY_ROUTER_URL }}
       COIN_DEFAULT_GAS_LIMIT: ${{ secrets.COIN_DEFAULT_GAS_LIMIT }}
       MAX_GAS_PRICE: ${{ secrets.MAX_GAS_PRICE }}
@@ -50,6 +52,7 @@ jobs:
       ETH_NODE_ADDRESS_HTTP: ${{ vars.ETH_NODE_ADDRESS_HTTP }}
       ETH_NODE_ADDRESS_HTTP2: ${{ vars.ETH_NODE_ADDRESS_HTTP2 }}
       ETH_NODE_ADDRESS_HTTP3: ${{ vars.ETH_NODE_ADDRESS_HTTP3 }}
+      TITAN_LIGHTNING_POOL: ${{ secrets.TITAN_LIGHTNING_POOL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -67,6 +70,8 @@ jobs:
           echo "EXPLORER_URL=$EXPLORER_URL" >> .env
           echo "DISPLAY_NAME=$DISPLAY_NAME" >> .env
           echo "SYMBOL=$SYMBOL" >> .env
+          echo "SYMBOL_ETH=$SYMBOL_ETH" >> .env
+          echo "SYMBOL_LMR=$SYMBOL_LMR" >> .env
           echo "PROXY_ROUTER_URL=$PROXY_ROUTER_URL" >> .env
           echo "COIN_DEFAULT_GAS_LIMIT=$COIN_DEFAULT_GAS_LIMIT" >> .env
           echo "MAX_GAS_PRICE=$MAX_GAS_PRICE" >> .env
@@ -78,23 +83,37 @@ jobs:
           echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
           echo "ETH_NODE_ADDRESS_HTTP2=$ETH_NODE_ADDRESS_HTTP2" >> .env
           echo "ETH_NODE_ADDRESS_HTTP3=$ETH_NODE_ADDRESS_HTTP3" >> .env
+          echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
           echo "NODE_ENV=production" >> .env
         shell: bash
       - name: Set env from gitlab
         run: |
-          variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "ETH_NODE_ADDRESS" "PROXY_ROUTER_URL")
-          curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables?per_page=1000" | jq -c '.[]' | 
-            while IFS= read -r line; do
-              scope=$(<<<"$line" jq -r .environment_scope);
-              if [ "${scope}" = "${{ matrix.environment }}" ] || [ "${scope}" = '*' ]
-              then
+            variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "ETH_NODE_ADDRESS" "PROXY_ROUTER_URL")
+            gitlabVars=$(curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables?per_page=1000")
+            echo $gitlabVars | jq -c '.[]' | 
+              while IFS= read -r line; do
                 key=$(<<<"$line" jq -r .key);
                 if [[ " ${variables[*]} " =~ " ${key} " ]]; then
-                 value=$(<<<"$line" jq -r .value);
-                 echo "$key=$value" >> .env
+                  scope=$(<<<"$line" jq -r .environment_scope);
+                  value=$(<<<"$line" jq -r .value);
+                  if [ "${scope}" = '*' ]
+                  then
+                    echo "$key=$value" >> .env
+                  fi
                 fi
-              fi
-            done
+              done
+            echo $gitlabVars | jq -c '.[]' | 
+              while IFS= read -r line; do
+                key=$(<<<"$line" jq -r .key);
+                if [[ " ${variables[*]} " =~ " ${key} " ]]; then
+                  scope=$(<<<"$line" jq -r .environment_scope);
+                  value=$(<<<"$line" jq -r .value);
+                  if [ "${scope}" = "${{ matrix.environment }}" ]
+                  then
+                    echo "$key=$value" >> .env
+                  fi
+                fi
+              done
         shell: bash
       - name: Fetch latest Proxy Router
         run: |

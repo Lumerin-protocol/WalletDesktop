@@ -14,21 +14,107 @@ import {
 } from './ContractsList.styles';
 import { ContractsRowContainer } from './ContractsRow.styles';
 import StatusHeader from './StatusHeader';
+import Search from './Search';
+import styled from 'styled-components';
+import Sort from './Sort';
+import { fromMicro, formatExpNumber } from '../utils';
+import { Btn } from '../../common';
+
+const Stats = styled.div`
+  color: #0e4353;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
+const StatValue = styled.div`
+  background-color: white;
+  padding: 5px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 100;
+  font-size: 1.5rem;
+  border-radius: 8px;
+
+  b {
+    margin-left: 3px;
+  }
+`;
+
+const VerticalDivider = styled.div`
+  margin-top: 5px;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.25);
+  height: 20px;
+  border: 0.5px solid rgba(0, 0, 0, 0.25);
+`;
+
+const ContractBtn = styled(Btn)`
+  font-size: 1.3rem;
+  padding: 0.6rem 1.4rem;
+
+  @media (min-width: 1040px) {
+    margin-left: 0;
+  }
+`;
+
+const sorting = (contracts, sortBy) => {
+  switch (sortBy?.value) {
+    case 'AscPrice':
+      return contracts.sort((a, b) => a.price - b.price);
+    case 'DescPrice':
+      return contracts.sort((a, b) => b.price - a.price);
+    case 'AscDuration':
+      return contracts.sort((a, b) => a.length - b.length);
+    case 'DescDuration':
+      return contracts.sort((a, b) => b.length - a.length);
+    case 'AscSpeed':
+      return contracts.sort((a, b) => a.speed - b.speed);
+    case 'DescSpeed':
+      return contracts.sort((a, b) => b.speed - a.speed);
+    case 'AvailableFirst':
+      return contracts.sort((a, b) => (+b.state > +a.state ? -1 : 1));
+    case 'RunningFirst':
+      return contracts.sort((a, b) => (+b.state > +a.state ? 1 : -1));
+    default:
+      return contracts.sort((a, b) => (+b.state > +a.state ? -1 : 1));
+  }
+};
 
 function ContractsList({
   contracts,
   syncStatus,
   cancel,
   deleteContract,
+  createContract,
   address,
   contractsRefresh,
   noContractsMessage,
   customRowRenderer,
   allowSendTransaction,
-  tabs
+  tabs,
+  isSellerTab,
+  stats,
+  edit,
+  setEditContractData,
+  sellerStats
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
-  const hasContracts = contracts.length;
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState(null);
+
+  let contractsToShow = search
+    ? contracts.filter(c => c.id.toLowerCase().includes(search.toLowerCase()))
+    : contracts;
+
+  contractsToShow = sorting(contractsToShow, sort);
+
+  const hasContracts = contractsToShow.length;
   const defaultTabs = [
     { value: 'timestamp', name: 'Started', ratio: 2 },
     { name: 'Status', ratio: 1 },
@@ -59,26 +145,101 @@ function ContractsList({
         deleteContract={deleteContract}
         address={address}
         ratio={ratio}
+        edit={edit}
+        setEditContractData={setEditContractData}
         allowSendTransaction={allowSendTransaction}
       />
     </ContractsRowContainer>
   );
 
   const filterExtractValue = ({ status }) => status;
-
   return (
     <Container data-testid="Contracts-list">
-      <Flex.Row grow="1">
-        <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
+      <Flex.Row grow="1" style={{ flexDirection: 'column' }}>
+        <Flex.Row style={{ justifyContent: 'space-between', margin: '10px 0' }}>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            {isSellerTab ? (
+              <ContractBtn
+                data-disabled={!allowSendTransaction}
+                onClick={allowSendTransaction ? createContract : () => {}}
+              >
+                Create Contract
+              </ContractBtn>
+            ) : (
+              <></>
+            )}
+            <Search onSearch={setSearch} />
+            {/* <Sort sort={sort} setSort={setSort} /> */}
+            <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
+          </div>
+          <Sort sort={sort} setSort={setSort} />
+          {/* <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} /> */}
+        </Flex.Row>
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap'
+          }}
+        >
+          {stats && (
+            <Stats>
+              <StatValue>
+                Total: <b>{stats.count}</b>
+              </StatValue>
+              <VerticalDivider />
+              <StatValue>
+                Rented: <b>{stats.rented}</b>
+              </StatValue>
+              <VerticalDivider />
+              <StatValue>
+                Expires in 1h: <b>{stats.expiresInHour}</b>
+              </StatValue>
+            </Stats>
+          )}
+          {sellerStats && (
+            <Stats>
+              <StatValue>
+                Contracts: <b> {sellerStats.count}</b>
+              </StatValue>
+              <VerticalDivider />
+              <StatValue>
+                Posted: <b> {sellerStats.totalPosted} TH/s</b>
+              </StatValue>
+              <VerticalDivider />
+              <StatValue>
+                Rented: <b> {sellerStats.rented} TH/s</b>
+              </StatValue>
+              <VerticalDivider />
+              <StatValue
+              // data-rh={
+              //   sellerStats.networkReward
+              //     ? `${formatExpNumber(
+              //         fromMicro(sellerStats.networkReward)
+              //       )} BTC/TH/day`
+              //     : 'Calculating...'
+              // }
+              >
+                Est. Network Profitability:{' '}
+                <b>
+                  {sellerStats.networkReward
+                    ? `${sellerStats.networkReward} BTC/TH/day`
+                    : 'Calculating...'}
+                </b>
+              </StatValue>
+            </Stats>
+          )}
+        </div>
       </Flex.Row>
       <Contracts>
-        <ItemFilter extractValue={filterExtractValue} items={contracts}>
-          {({ filteredItems, onFilterChange, activeFilter }) => (
+        <ItemFilter extractValue={filterExtractValue} items={contractsToShow}>
+          {({ filteredItems }) => (
             <React.Fragment>
               <Header
-                onFilterChange={onFilterChange}
-                activeFilter={activeFilter}
-                syncStatus={syncStatus}
+                onFilterChange={() => {}}
+                activeFilter={null}
                 tabs={tabsToShow}
               />
 
@@ -104,7 +265,7 @@ function ContractsList({
                           : rowRenderer(filteredItems, ratio)
                       }
                       rowHeight={66}
-                      rowCount={contracts.length}
+                      rowCount={contractsToShow.length}
                       height={height || 500} // defaults for tests
                       width={width || 500} // defaults for tests
                     />

@@ -2,9 +2,8 @@
 
 const chalk = require('chalk');
 const logger = require('electron-log');
-const isDev = require('electron-is-dev');
 const stringify = require('json-stringify-safe');
-const unhandled = require('electron-unhandled');
+const config = require('./config');
 
 logger.transports.file.appName = 'lumerin-wallet-desktop';
 
@@ -20,6 +19,9 @@ function getColorLevel (level = '') {
 }
 
 logger.transports.console = function ({ date, level, data }) {
+  if(!config.debug && !['error', 'warn', 'info'].includes(level))
+    return;
+  
   const color = getColorLevel(level);
 
   const text = data.shift();
@@ -36,11 +38,10 @@ logger.transports.console = function ({ date, level, data }) {
   );
 }
 
-if (isDev) {
+if (config.debug) {
   logger.transports.console.level = 'debug';
   logger.transports.file.level = 'debug';
 }
 
-unhandled({ logger: logger.error });
 
 module.exports = logger;

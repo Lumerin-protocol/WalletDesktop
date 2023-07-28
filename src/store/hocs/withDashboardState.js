@@ -3,6 +3,7 @@ import { withClient } from './clientContext';
 import selectors from '../selectors';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { ToastsContext } from '../../components/toasts';
 
 const withDashboardState = WrappedComponent => {
   class Container extends React.Component {
@@ -17,6 +18,8 @@ const withDashboardState = WrappedComponent => {
         copyToClipboard: PropTypes.func.isRequired
       }).isRequired
     };
+
+    static contextType = ToastsContext;
 
     static displayName = `withDashboardState(${WrappedComponent.displayName ||
       WrappedComponent.name})`;
@@ -34,12 +37,16 @@ const withDashboardState = WrappedComponent => {
           chain: this.props.chain
         })
         .then(() => this.setState({ refreshStatus: 'success' }))
-        .catch(() =>
+        .catch(() => {
+          this.context.toast(
+            'error',
+            'We’re experiencing connection problems.  Please wait a few minutes and try again'
+          );
           this.setState({
             refreshStatus: 'failure',
             refreshError: 'Could not refresh'
-          })
-        );
+          });
+        });
     };
 
     render() {

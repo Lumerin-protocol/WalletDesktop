@@ -8,17 +8,6 @@ import debounce from 'lodash/debounce';
 import React from 'react';
 import { lmrDecimals, ethDecimals } from '../../utils/coinValue';
 
-export const rangeSelectOptions = [
-  {
-    label: 'LMR',
-    value: 'LMR'
-  },
-  {
-    label: 'ETH',
-    value: 'ETH'
-  }
-];
-
 const withTransactionModalState = WrappedComponent => {
   class Container extends React.Component {
     // static propTypes = {
@@ -45,6 +34,17 @@ const withTransactionModalState = WrappedComponent => {
     static displayName = `withTransactionModalState(${WrappedComponent.displayName ||
       WrappedComponent.name})`;
 
+    rangeSelectOptions = [
+      {
+        label: this.props.symbol,
+        value: 'LMR'
+      },
+      {
+        label: this.props.symbolEth,
+        value: 'ETH'
+      }
+    ];
+
     initialState = {
       copyBtnLabel: 'Copy to clipboard',
       gasEstimateError: false,
@@ -55,7 +55,7 @@ const withTransactionModalState = WrappedComponent => {
       gasPrice: this.props.client.fromWei(this.props.chainGasPrice, 'gwei'),
       gasLimit: this.props.coinDefaultGasLimit,
       estimatedFee: null,
-      selectedCurrency: rangeSelectOptions[0],
+      selectedCurrency: this.rangeSelectOptions[0],
       errors: {
         coinAmount: '',
         toAddress: '',
@@ -196,11 +196,11 @@ const withTransactionModalState = WrappedComponent => {
         coinAmount: this.state.coinAmount,
         usdAmount: this.state.usdAmount
       });
-      const { sendLmrFeatureStatus } = this.props;
+      const { sendLmrFeatureStatus, symbol } = this.props;
 
       const sendLmrDisabledReason =
         sendLmrFeatureStatus === 'no-funds'
-          ? 'You need some LMR to send'
+          ? `You need some ${symbol} to send`
           : sendLmrFeatureStatus === 'offline'
           ? "Can't send while offline"
           : null;
@@ -242,7 +242,9 @@ const withTransactionModalState = WrappedComponent => {
     ethBalanceWei: selectors.getWalletEthBalance(state),
     lmrCoinPrice: selectors.getRate(state),
     ethCoinPrice: selectors.getRateEth(state),
-    from: selectors.getWalletAddress(state)
+    from: selectors.getWalletAddress(state),
+    symbol: selectors.getCoinSymbol(state),
+    symbolEth: selectors.getSymbolEth(state)
   });
 
   return connect(mapStateToProps)(withClient(Container));

@@ -1,5 +1,3 @@
-"use strict";
-
 const handlers = require("../handlers");
 const utils = require("./utils");
 
@@ -20,8 +18,9 @@ const listeners = {
   "send-eth": handlers.sendEth,
   "create-contract": handlers.createContract,
   "purchase-contract": handlers.purchaseContract,
+  "edit-contract": handlers.editContract,
   "cancel-contract": handlers.cancelContract,
-  "delete-contract": handlers.deleteContract,
+  "set-delete-contract-status": handlers.setContractDeleteStatus,
   "start-discovery": handlers.startDiscovery,
   "stop-discovery": handlers.stopDiscovery,
   "set-miner-pool": handlers.setMinerPool,

@@ -41,7 +41,8 @@ export const PurchasePreviewModalPage = ({
   inputs,
   isPurchasing,
   onBackToForm,
-  onPurchase
+  onPurchase,
+  symbol
 }) => (
   <>
     <TitleWrapper>
@@ -82,7 +83,8 @@ export const PurchasePreviewModalPage = ({
               key={'price'}
               style={{ marginRight: '4px', height: '1.4rem' }}
             />
-            {fromTokenBaseUnitsToLMR(contract.price) * 1.01} LMR (fees included)
+            {fromTokenBaseUnitsToLMR(contract.price) * 1.01} {symbol} (fees
+            included)
           </Values>
         </div>
       </ContractInfoContainer>

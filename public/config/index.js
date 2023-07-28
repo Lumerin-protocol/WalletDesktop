@@ -3,7 +3,8 @@
 const chain = {
   displayName: process.env.DISPLAY_NAME,
   chainId: process.env.CHAIN_ID,
-  symbol: process.env.SYMBOL,
+  symbol: process.env.SYMBOL_LMR || process.env.SYMBOL || 'LMR',
+  symbolEth: process.env.SYMBOL_ETH || 'ETH',
 
   lmrTokenAddress: process.env.LUMERIN_TOKEN_ADDRESS,
   cloneFactoryAddress: process.env.CLONE_FACTORY_ADDRESS,
@@ -32,13 +33,15 @@ const chain = {
 
   faucetUrl: process.env.FAUCET_URL,
 
+  titanLightningPool: process.env.TITAN_LIGHTNING_POOL,
+
   bypassAuth: process.env.BYPASS_AUTH === "true",
 };
 
 module.exports = {
   chain,
   dbAutocompactionInterval: 30000,
-  debug: process.env.DEBUG === "true",
+  debug: process.env.DEBUG === "true" && process.env.IGNORE_DEBUG_LOGS !== "true",
   devTools: process.env.DEV_TOOLS === "true",
   explorerDebounce: 2000,
   ratesUpdateMs: 30000,

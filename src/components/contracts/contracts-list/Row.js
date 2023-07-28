@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTimer } from 'react-timer-hook';
+import { IconCircle } from '@tabler/icons';
 import { ToastsContext } from '../../toasts';
 import styled from 'styled-components';
 
@@ -16,7 +17,9 @@ import {
   formatPrice,
   isContractClosed,
   getContractState,
-  getContractEndTimestamp
+  getContractEndTimestamp,
+  getContractRewardBtcPerTh,
+  formatExpNumber
 } from '../utils';
 import {
   ActionButton,
@@ -24,6 +27,7 @@ import {
   SmallAssetContainer
 } from './ContractsRow.styles';
 import ContractActions from '../../common/ContractActions';
+import ProgressBarWithLabels from '../../common/ProgressBar';
 
 const Container = styled.div`
   padding: 1.2rem 0;
@@ -53,15 +57,24 @@ const STATE_COLOR = {
 function Row({
   contract,
   cancel,
+  edit,
   deleteContract,
   address,
   ratio,
   explorerUrl,
-  allowSendTransaction
+  allowSendTransaction,
+  lmrRate,
+  btcRate,
+  symbol
 }) {
   // TODO: Add better padding
   const context = useContext(ToastsContext);
   const [isPending, setIsPending] = useState(false);
+
+  const speed = contract.futureTerms?.speed || contract.speed;
+  const length = contract.futureTerms?.length || contract.length;
+  const price = contract.futureTerms?.price || contract.price;
+  const limit = contract.futureTerms?.limit || contract.limit;
 
   useEffect(() => {
     setIsPending(false);
@@ -86,11 +99,22 @@ function Row({
       });
   };
 
+  const handleEdit = () => {
+    edit({
+      ...contract,
+      price,
+      length,
+      speed,
+      limit
+    });
+  };
+
   const handleDelete = () => {
     setIsPending(true);
     deleteContract({
       contractId: contract.id,
-      walletAddress: contract.seller
+      walletAddress: contract.seller,
+      deleteContract: true
     })
       .catch(e => {
         context.toast('error', `Failed to delete contract: ${e.message}`);
@@ -130,27 +154,63 @@ function Row({
 
   const handleActionSelector = value => {
     if (value === 1) {
-      return handleCancel(CLOSEOUT_TYPE.Claim);
+      return window.openLink(explorerUrl);
     }
     if (value === 2) {
-      return handleCancel(CLOSEOUT_TYPE.Close);
+      return handleCancel(CLOSEOUT_TYPE.Claim);
     }
     if (value === 3) {
+      return handleEdit();
+    }
+    if (value === 4) {
+      return handleCancel(CLOSEOUT_TYPE.Close);
+    }
+    if (value === 5) {
       return handleDelete();
     }
   };
 
+  const btcPerThReward = getContractRewardBtcPerTh(contract, btcRate, lmrRate);
+
+  const successCount = contract?.stats?.successCount || 0;
+  const failCount = contract?.stats?.failCount || 0;
+
   return (
     <Container ratio={ratio}>
-      <Value>
+      {/* <Value>
         {formatTimestamp(contract.timestamp, timer, contract.state)}
+      </Value> */}
+      {contract.state === CONTRACT_STATE.Avaliable ? (
+        <SmallAssetContainer data-rh={getContractState(contract)}>
+          <IconCircle
+            data-rh={getContractState(contract)}
+            fill={getClockColor(contract)}
+            size="3rem"
+            stroke="currentColor"
+          ></IconCircle>
+        </SmallAssetContainer>
+      ) : (
+        <SmallAssetContainer data-rh={getContractState(contract)}>
+          <ClockIcon size="3rem" fill={getClockColor(contract)} />
+        </SmallAssetContainer>
+      )}
+
+      <Value>{formatPrice(price, symbol)}</Value>
+      <Value
+      // data-rh={`${formatExpNumber(btcPerThReward)} BTC/TH/day`}
+      >
+        {formatExpNumber(btcPerThReward)} BTC/TH/day
       </Value>
-      <SmallAssetContainer data-rh={getContractState(contract)}>
-        <ClockIcon size="3rem" fill={getClockColor(contract)} />
-      </SmallAssetContainer>
-      <Value>{formatPrice(contract.price)}</Value>
-      <Value>{formatDuration(contract.length)}</Value>
-      <Value>{formatSpeed(contract.speed)}</Value>
+      <Value>{formatDuration(length)}</Value>
+      <Value>{formatSpeed(speed)}</Value>
+      <Value>
+        <ProgressBarWithLabels
+          key={'stats'}
+          completed={successCount}
+          remaining={failCount}
+        />
+      </Value>
+      <Value>{formatPrice(contract.balance, symbol)}</Value>
       {contract.seller === address &&
         (isPending ? (
           <Value>
@@ -171,18 +231,27 @@ function Row({
                   hidden: true
                 },
                 {
+                  label: 'View',
+                  value: 1
+                },
+                {
                   label: 'Claim Funds',
-                  value: 1,
+                  value: 2,
                   disabled: !allowSendTransaction || isClaimBtnDisabled()
                 },
                 {
+                  label: 'Edit',
+                  value: 3,
+                  disabled: !allowSendTransaction
+                },
+                {
                   label: 'Close',
-                  value: 2,
+                  value: 4,
                   disabled: !(allowSendTransaction && isContractExpired())
                 },
                 {
-                  label: 'Delete',
-                  value: 3,
+                  label: 'Archive',
+                  value: 5,
                   disabled: !allowSendTransaction || contract.isDead,
                   message:
                     getContractState(contract) === CONTRACT_STATE.Running

@@ -16,11 +16,11 @@ const withSendDrawerState = WrappedComponent => {
       WrappedComponent.name})`;
 
     render() {
-      const { sendLmrFeatureStatus } = this.props;
+      const { sendLmrFeatureStatus, coinSymbol } = this.props;
 
       const sendLmrDisabledReason =
         sendLmrFeatureStatus === 'no-funds'
-          ? 'You need some LMR to send'
+          ? `You need some ${coinSymbol} to send`
           : sendLmrFeatureStatus === 'offline'
           ? "Can't send while offline"
           : null;

@@ -1,6 +1,9 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.1.11",
+  "version": "1.1.31",
+  "engines": {
+    "node": ">=14"
+  },
   "author": {
     "name": "Lumerin",
     "email": "developer@lumerin.io",
@@ -39,7 +42,7 @@
   },
   "dependencies": {
     "@electron/remote": "2.0.9",
-    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.53",
+    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.62",
     "@reach/menu-button": "0.17.0",
     "@tabler/icons": "1.119.0",
     "@vscode/sudo-prompt": "9.3.1",
@@ -58,7 +61,6 @@
     "electron-is-dev": "2.0.0",
     "electron-log": "4.3.0",
     "electron-settings": "4.0.2",
-    "electron-unhandled": "3.0.2",
     "electron-updater": "4.3.0",
     "electron-window-state": "5.0.3",
     "json-stringify-safe": "5.0.1",

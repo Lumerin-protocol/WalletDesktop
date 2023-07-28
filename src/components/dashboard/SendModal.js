@@ -38,7 +38,7 @@ class SendModal extends React.Component {
         items={[
           {
             id: 'lmr',
-            label: 'LMR',
+            label: this.props.symbol,
             'data-rh': this.props.sendLmrDisabledReason,
             disabled: this.props.sendLmrDisabled
           },

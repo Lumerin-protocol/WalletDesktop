@@ -16,6 +16,7 @@ import ConfirmProxyConfigModal from './ConfirmProxyConfigModal';
 import RevealSecretPhraseModal from './RevealSecretPhraseModal';
 import { Message } from './ConfirmModal.styles';
 import ExportPrivateKeyModal from './ExportPrivateKeyModal';
+import { generatePoolUrl } from '../../utils';
 
 const Container = styled.div`
   margin-left: 2rem;
@@ -93,6 +94,10 @@ const Subtitle = styled.h3`
 
 const StyledParagraph = styled.p`
   color: ${p => p.theme.colors.dark};
+
+  span {
+    font-weight: bold;
+  }
 `;
 
 const WalletInfo = styled.h4`
@@ -107,6 +112,15 @@ export const Input = styled(TextInput)`
   padding: 1.2rem 1.2rem;
   margin-top: 0.25rem;
 `;
+
+const getPoolAndAccount = url => {
+  if (!url) return {};
+  const addressParts = url.replace('stratum+tcp://', '').split(':');
+  return {
+    account: decodeURIComponent(addressParts[0]),
+    pool: `${addressParts[1].slice(1)}:${addressParts[2]}`
+  };
+};
 
 const Tools = props => {
   const {
@@ -132,11 +146,25 @@ const Tools = props => {
       proxyRouterEditMode: false,
       isFetching: true
     });
+    const [sellerPoolParts, setSellerPoolParts] = useState(null);
+    const [buyerPoolParts, setBuyerPoolParts] = useState(null);
+
     const context = useContext(ToastsContext);
+
+    const logPath = (() => {
+      if (window.navigator.userAgent.indexOf('Win') !== -1)
+        return '%USERPROFILE%\\AppData\\Roaming\\lumerin-wallet-desktop\\logs\\main.log';
+      if (window.navigator.userAgent.indexOf('Mac') !== -1)
+        return '~/Library/Logs/lumerin-wallet-desktop/main.log';
+      return '~/.config/lumerin-wallet-desktop/logs/main.log';
+    })();
 
     useEffect(() => {
       getProxyRouterSettings()
         .then(data => {
+          setSellerPoolParts(getPoolAndAccount(data.sellerDefaultPool));
+          setBuyerPoolParts(getPoolAndAccount(data.buyerDefaultPool));
+
           setProxyRouterSettings({
             ...data,
             isFetching: false
@@ -277,41 +305,91 @@ const Tools = props => {
             ) : !proxyRouterSettings.proxyRouterEditMode ? (
               <>
                 <StyledParagraph>
-                  Seller default pool: "{proxyRouterSettings.sellerDefaultPool}"
+                  <div>
+                    <span>Seller Default Pool:</span> {sellerPoolParts?.pool}{' '}
+                  </div>
+                  <div>
+                    <span>Seller Default Account:</span>{' '}
+                    {sellerPoolParts?.account}{' '}
+                  </div>
                 </StyledParagraph>
                 <StyledParagraph>
-                  Buyer default pool: "{proxyRouterSettings.buyerDefaultPool}"
+                  <div>
+                    <span>Buyer Default Pool:</span> {buyerPoolParts?.pool}{' '}
+                  </div>
+                  <div>
+                    <span>Buyer Default Account:</span>{' '}
+                    {buyerPoolParts?.account}{' '}
+                  </div>
                 </StyledParagraph>
                 <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
               </>
             ) : (
               <>
                 <StyledParagraph>
-                  Seller default pool:{' '}
+                  Seller Default Pool:{' '}
                   <Input
                     onChange={e =>
-                      setProxyRouterSettings({
-                        ...proxyRouterSettings,
-                        sellerDefaultPool: e.value
+                      setSellerPoolParts({
+                        ...sellerPoolParts,
+                        pool: e.value
                       })
                     }
-                    value={proxyRouterSettings.sellerDefaultPool}
+                    value={sellerPoolParts?.pool}
                   />
                 </StyledParagraph>
                 <StyledParagraph>
-                  Buyer default pool:{' '}
+                  Seller Default Account:{' '}
                   <Input
                     onChange={e =>
-                      setProxyRouterSettings({
-                        ...proxyRouterSettings,
-                        buyerDefaultPool: e.value
+                      setSellerPoolParts({
+                        ...sellerPoolParts,
+                        account: e.value
                       })
                     }
-                    value={proxyRouterSettings.buyerDefaultPool}
+                    value={sellerPoolParts?.account}
+                  />
+                </StyledParagraph>
+                <hr></hr>
+                <StyledParagraph>
+                  Buyer Default Pool:{' '}
+                  <Input
+                    onChange={e =>
+                      setBuyerPoolParts({
+                        ...buyerPoolParts,
+                        pool: e.value
+                      })
+                    }
+                    value={buyerPoolParts?.pool}
+                  />
+                </StyledParagraph>
+                <StyledParagraph>
+                  Buyer Default Account:{' '}
+                  <Input
+                    onChange={e =>
+                      setBuyerPoolParts({
+                        ...buyerPoolParts,
+                        account: e.value
+                      })
+                    }
+                    value={buyerPoolParts?.account}
                   />
                 </StyledParagraph>
                 <StyledBtn
-                  onClick={() => onActiveModalClick('confirm-proxy-restart')}
+                  onClick={() => {
+                    setProxyRouterSettings({
+                      ...proxyRouterSettings,
+                      sellerDefaultPool: generatePoolUrl(
+                        sellerPoolParts.account,
+                        sellerPoolParts.pool
+                      ),
+                      buyerDefaultPool: generatePoolUrl(
+                        buyerPoolParts.account,
+                        buyerPoolParts.pool
+                      )
+                    });
+                    onActiveModalClick('confirm-proxy-restart');
+                  }}
                 >
                   Save
                 </StyledBtn>
@@ -424,6 +502,14 @@ const Tools = props => {
               onLater={onCloseModal}
               isOpen={state.activeModal === 'confirm-logout'}
             />
+          </Sp>
+
+          <Sp mt={5}>
+            <Subtitle>Logs</Subtitle>
+            <StyledParagraph>
+              You can find wallet logs in the file: <br />
+              <i>{logPath}</i>
+            </StyledParagraph>
           </Sp>
 
           {/* <Sp mt={5}>

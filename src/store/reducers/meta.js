@@ -8,7 +8,10 @@ export const initialState = {
   rateLastUpdated: null,
   gasPrice: null,
   height: -1,
-  rate: null
+  rate: null,
+  rateEth: null,
+  rateBtc: null,
+  networkDifficulty: null
 };
 
 const reducer = handleActions(
@@ -51,6 +54,20 @@ const reducer = handleActions(
           rateEth: payload.price
         };
       }
+
+      if (payload.token === 'BTC') {
+        return {
+          ...state,
+          rateBtc: payload.price
+        };
+      }
+    },
+
+    'network-difficulty-updated': (state, { payload }) => {
+      return {
+        ...state,
+        networkDifficulty: payload.difficulty
+      };
     },
 
     'gas-price-updated': (state, { payload }) => ({
