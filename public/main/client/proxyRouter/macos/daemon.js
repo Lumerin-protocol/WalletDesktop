@@ -21,7 +21,7 @@ const getMacosDaemonPath = (daemonName) => {
 
 const getCommandToRunDaemon = async (pathToDaemon, envs) => {
   const setEnvsCommand = envs
-    .map((e) => `sudo launchctl setenv ${e[0]} ${e[1]}`)
+    .map((e) => `sudo launchctl setenv LMR_${e[0]} ${e[1]}`)
     .join(";");
   return `sudo launchctl unload ${pathToDaemon}; ${setEnvsCommand}; sudo launchctl load ${pathToDaemon}`;
 };
