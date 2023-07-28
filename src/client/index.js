@@ -119,7 +119,7 @@ const createClient = function(createStore) {
     onLoginSubmit: utils.forwardToMainProcess('login-submit'),
     createContract: utils.forwardToMainProcess('create-contract', 750000),
     purchaseContract: utils.forwardToMainProcess('purchase-contract', 750000),
-    editContract: utils.forwardToMainProcess('purchase-contract', 750000),
+    editContract: utils.forwardToMainProcess('edit-contract', 750000),
     cancelContract: utils.forwardToMainProcess('cancel-contract', 750000),
     setDeleteContractStatus: utils.forwardToMainProcess(
       'set-delete-contract-status',
