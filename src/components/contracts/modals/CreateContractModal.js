@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import withCreateContractModalState from '../../../store/hocs/withCreateContractModalState';
 import {
-  Modal,
-  Body,
   TitleWrapper,
   Title,
   Subtitle,
@@ -13,14 +11,14 @@ import {
   Label,
   Sublabel,
   RightBtn,
-  CloseModal,
   ErrorLabel
 } from './CreateContractModal.styles';
 import { useForm } from 'react-hook-form';
 import { CreateContractPreview } from './CreateContractPreview';
 import { CreateContractSuccessPage } from './CreateContractSuccessPage';
-import { toMicro } from '../utils';
 import { lmrDecimals } from '../../../utils/coinValue';
+
+import Modal from './Modal';
 
 const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
   const lengthDays = time / 24;
@@ -99,7 +97,6 @@ function CreateContractModal(props) {
     setIsPreview(false);
     close(e);
   };
-  const handlePropagation = e => e.stopPropagation();
 
   if (!isActive) {
     return <></>;
@@ -132,31 +129,29 @@ function CreateContractModal(props) {
     ? 'Changes will not affect running contract.'
     : 'Sell your hashpower on the Lumerin Marketplace';
   return (
-    <Modal onClick={handleClose}>
-      <Body onClick={handlePropagation}>
-        {CloseModal(handleClose)}
-        {showSuccess ? (
-          <CreateContractSuccessPage
-            close={handleClose}
-            isEditMode={isEditMode}
-          />
-        ) : isPreview ? (
-          <CreateContractPreview
-            isCreating={isCreating}
-            data={getValues()}
-            close={() => setIsPreview(false)}
-            submit={isEditMode ? wrapHandleUpdate : wrapHandleDeploy}
-            isEditMode={isEditMode}
-            symbol={symbol}
-          />
-        ) : (
-          <>
-            <TitleWrapper>
-              <Title>{title}</Title>
-              <Subtitle>{subtitle}</Subtitle>
-            </TitleWrapper>
-            <Form onSubmit={() => setIsPreview(true)}>
-              {/* <Row>
+    <Modal onClose={handleClose}>
+      {showSuccess ? (
+        <CreateContractSuccessPage
+          close={handleClose}
+          isEditMode={isEditMode}
+        />
+      ) : isPreview ? (
+        <CreateContractPreview
+          isCreating={isCreating}
+          data={getValues()}
+          close={() => setIsPreview(false)}
+          submit={isEditMode ? wrapHandleUpdate : wrapHandleDeploy}
+          isEditMode={isEditMode}
+          symbol={symbol}
+        />
+      ) : (
+        <>
+          <TitleWrapper>
+            <Title>{title}</Title>
+            <Subtitle>{subtitle}</Subtitle>
+          </TitleWrapper>
+          <Form onSubmit={() => setIsPreview(true)}>
+            {/* <Row>
                 <InputGroup>
                   <Label htmlFor="address">Ethereum Address *</Label>
                   <Input
@@ -182,119 +177,118 @@ function CreateContractModal(props) {
                   )}
                 </InputGroup>
               </Row> */}
-              <Row>
-                <InputGroup>
-                  <Label htmlFor="time">Duration *</Label>
-                  <Input
-                    {...timeField}
-                    onChange={e => {
-                      setTime(e.target.value);
-                      timeField.onChange(e);
-                    }}
-                    placeholder="# of hours"
-                    type="number"
-                    name="time"
-                    id="time"
-                  />
-                  <Sublabel>Contract Length (min 24 hrs, max 48 hrs)</Sublabel>
-                  {formState?.errors?.time?.type === 'required' && (
-                    <ErrorLabel>Duration is required</ErrorLabel>
-                  )}
-                  {formState?.errors?.time?.type === 'min' && (
-                    <ErrorLabel>{'Minimum 24 hours'}</ErrorLabel>
-                  )}
-                  {formState?.errors?.time?.type === 'max' && (
-                    <ErrorLabel>{'Maximum 48 hours'}</ErrorLabel>
-                  )}
-                </InputGroup>
-              </Row>
-              <Row>
-                <InputGroup>
-                  <Label htmlFor="speed">Speed *</Label>
-                  <Input
-                    {...speedField}
-                    onChange={e => {
-                      setSpeed(e.target.value);
-                      speedField.onChange(e);
-                    }}
-                    placeholder="Number of TH/s"
-                    type="number"
-                    name="speed"
-                    id="speed"
-                  />
-                  <Sublabel>Amount of TH/s Contracted (min 100 TH/s)</Sublabel>
-                  {formState?.errors?.speed?.type === 'required' && (
-                    <ErrorLabel>Speed is required</ErrorLabel>
-                  )}
-                  {formState?.errors?.speed?.type === 'min' && (
-                    <ErrorLabel>Minimum 100 TH/s</ErrorLabel>
-                  )}
-                  {formState?.errors?.speed?.type === 'max' && (
-                    <ErrorLabel>Maximum 1000 TH/s</ErrorLabel>
-                  )}
-                </InputGroup>
-              </Row>
-              <Row>
-                <InputGroup>
-                  <div>
-                    <Label htmlFor="price">List Price ({symbol}) *</Label>
-                  </div>
-                  <div>
-                    <Input
-                      {...priceField}
-                      onChange={e => {
-                        setPrice(e.target.value);
-                        priceField.onChange(e);
-                      }}
-                      placeholder={`${symbol} for Hash Power`}
-                      type="number"
-                      name="price"
-                      id="price"
-                    />{' '}
-                    {!!price && !!speed && !!length && (
-                      <Sublabel>
-                        ~{' '}
-                        {getContractRewardBtcPerTh(
-                          price,
-                          length,
-                          speed,
-                          btcRate,
-                          lmrRate
-                        )}{' '}
-                        BTC/TH/day
-                      </Sublabel>
-                    )}
-                  </div>
-                  <Sublabel>
-                    This is the price you will deploy your contract to the
-                    marketplace.
-                  </Sublabel>
-                  {formState?.errors?.price?.type === 'required' && (
-                    <ErrorLabel>Price is required</ErrorLabel>
-                  )}
-                  {formState?.errors?.price?.type === 'min' && (
-                    <ErrorLabel>Minimum 1 {symbol}</ErrorLabel>
-                  )}
-                </InputGroup>
-              </Row>
-              <InputGroup
-                style={{
-                  textAlign: 'center',
-                  justifyContent: 'space-between',
-                  height: '60px'
-                }}
-              >
-                <Row style={{ justifyContent: 'center' }}>
-                  {/* <LeftBtn onClick={handleSaveDraft}>Save as Draft</LeftBtn> */}
-                  <RightBtn disabled={!formState?.isValid} type="submit">
-                    {buttonLabel}
-                  </RightBtn>
-                </Row>
+            <Row>
+              <InputGroup>
+                <Label htmlFor="time">Duration *</Label>
+                <Input
+                  {...timeField}
+                  onChange={e => {
+                    setTime(e.target.value);
+                    timeField.onChange(e);
+                  }}
+                  placeholder="# of hours"
+                  type="number"
+                  name="time"
+                  id="time"
+                />
+                <Sublabel>Contract Length (min 24 hrs, max 48 hrs)</Sublabel>
+                {formState?.errors?.time?.type === 'required' && (
+                  <ErrorLabel>Duration is required</ErrorLabel>
+                )}
+                {formState?.errors?.time?.type === 'min' && (
+                  <ErrorLabel>{'Minimum 24 hours'}</ErrorLabel>
+                )}
+                {formState?.errors?.time?.type === 'max' && (
+                  <ErrorLabel>{'Maximum 48 hours'}</ErrorLabel>
+                )}
               </InputGroup>
-            </Form>
-          </>
-        )}
-      </Body>
+            </Row>
+            <Row>
+              <InputGroup>
+                <Label htmlFor="speed">Speed *</Label>
+                <Input
+                  {...speedField}
+                  onChange={e => {
+                    setSpeed(e.target.value);
+                    speedField.onChange(e);
+                  }}
+                  placeholder="Number of TH/s"
+                  type="number"
+                  name="speed"
+                  id="speed"
+                />
+                <Sublabel>Amount of TH/s Contracted (min 100 TH/s)</Sublabel>
+                {formState?.errors?.speed?.type === 'required' && (
+                  <ErrorLabel>Speed is required</ErrorLabel>
+                )}
+                {formState?.errors?.speed?.type === 'min' && (
+                  <ErrorLabel>Minimum 100 TH/s</ErrorLabel>
+                )}
+                {formState?.errors?.speed?.type === 'max' && (
+                  <ErrorLabel>Maximum 1000 TH/s</ErrorLabel>
+                )}
+              </InputGroup>
+            </Row>
+            <Row>
+              <InputGroup>
+                <div>
+                  <Label htmlFor="price">List Price ({symbol}) *</Label>
+                </div>
+                <div>
+                  <Input
+                    {...priceField}
+                    onChange={e => {
+                      setPrice(e.target.value);
+                      priceField.onChange(e);
+                    }}
+                    placeholder={`${symbol} for Hash Power`}
+                    type="number"
+                    name="price"
+                    id="price"
+                  />{' '}
+                  {!!price && !!speed && !!length && (
+                    <Sublabel>
+                      ~{' '}
+                      {getContractRewardBtcPerTh(
+                        price,
+                        length,
+                        speed,
+                        btcRate,
+                        lmrRate
+                      )}{' '}
+                      BTC/TH/day
+                    </Sublabel>
+                  )}
+                </div>
+                <Sublabel>
+                  This is the price you will deploy your contract to the
+                  marketplace.
+                </Sublabel>
+                {formState?.errors?.price?.type === 'required' && (
+                  <ErrorLabel>Price is required</ErrorLabel>
+                )}
+                {formState?.errors?.price?.type === 'min' && (
+                  <ErrorLabel>Minimum 1 {symbol}</ErrorLabel>
+                )}
+              </InputGroup>
+            </Row>
+            <InputGroup
+              style={{
+                textAlign: 'center',
+                justifyContent: 'space-between',
+                height: '60px'
+              }}
+            >
+              <Row style={{ justifyContent: 'center' }}>
+                {/* <LeftBtn onClick={handleSaveDraft}>Save as Draft</LeftBtn> */}
+                <RightBtn disabled={!formState?.isValid} type="submit">
+                  {buttonLabel}
+                </RightBtn>
+              </Row>
+            </InputGroup>
+          </Form>
+        </>
+      )}
     </Modal>
   );
 }

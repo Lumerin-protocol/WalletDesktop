@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import withCreateContractModalState from '../../../../store/hocs/withCreateContractModalState';
-import { Modal, Body, CloseModal } from '../CreateContractModal.styles';
 import { withRouter } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
@@ -8,6 +7,7 @@ import { PurchaseFormModalPage } from './PurchaseFormModalPage';
 import { PurchasePreviewModalPage } from './PurchasePreviewModalPage';
 import { toRfc2396 } from '../../../../utils';
 import { PurchaseSuccessPage } from './PurchaseSuccessPage';
+import Modal from '../Modal';
 
 function PurchaseContractModal(props) {
   const {
@@ -54,7 +54,6 @@ function PurchaseContractModal(props) {
     setIsPreview(false);
     close(e);
   };
-  const handlePropagation = e => e.stopPropagation();
 
   const wrapHandlePurchase = async () => {
     setIsPurchasing(true);
@@ -85,37 +84,33 @@ function PurchaseContractModal(props) {
   };
 
   return (
-    <Modal onClick={handleClose}>
-      <Body onClick={handlePropagation}>
-        {CloseModal(handleClose)}
-
-        {showSuccess ? (
-          <PurchaseSuccessPage
-            close={handleClose}
-            contractId={contract.id}
-            price={contract.price}
-            symbol={symbol}
-          />
-        ) : isPreview ? (
-          <PurchasePreviewModalPage
-            {...pagesProps}
-            isPurchasing={isPurchasing}
-            onBackToForm={() => setIsPreview(false)}
-            onPurchase={wrapHandlePurchase}
-            symbol={symbol}
-          />
-        ) : (
-          <PurchaseFormModalPage
-            {...pagesProps}
-            close={close}
-            register={register}
-            handleSubmit={handleSubmit}
-            formState={formState}
-            onFinished={() => setIsPreview(true)}
-            symbol={symbol}
-          />
-        )}
-      </Body>
+    <Modal onClose={handleClose}>
+      {showSuccess ? (
+        <PurchaseSuccessPage
+          close={handleClose}
+          contractId={contract.id}
+          price={contract.price}
+          symbol={symbol}
+        />
+      ) : isPreview ? (
+        <PurchasePreviewModalPage
+          {...pagesProps}
+          isPurchasing={isPurchasing}
+          onBackToForm={() => setIsPreview(false)}
+          onPurchase={wrapHandlePurchase}
+          symbol={symbol}
+        />
+      ) : (
+        <PurchaseFormModalPage
+          {...pagesProps}
+          close={close}
+          register={register}
+          handleSubmit={handleSubmit}
+          formState={formState}
+          onFinished={() => setIsPreview(true)}
+          symbol={symbol}
+        />
+      )}
     </Modal>
   );
 }
