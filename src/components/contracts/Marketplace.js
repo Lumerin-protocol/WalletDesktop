@@ -39,11 +39,12 @@ function Marketplace({
     x => (contractStateFilter(x) && !x.isDead) || x.inProgress
   );
 
+  const activeContracts = contracts?.filter(x => !x.isDead);
   const stats = {
-    count: contracts.length ?? 0,
-    rented: contracts?.filter(x => Number(x.state) === 1)?.length ?? 0,
+    count: activeContracts.length ?? 0,
+    rented: activeContracts?.filter(x => Number(x.state) === 1)?.length ?? 0,
     expiresInHour:
-      contracts?.filter(c => {
+      activeContracts?.filter(c => {
         const endDate = getContractEndTimestamp(c);
         const utcNow = new Date();
         const limit = utcNow.setHours(utcNow.getHours() + 1);
