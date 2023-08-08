@@ -36,7 +36,7 @@ const runLinuxDaemons = async (resourcePath, config) => {
   );
   const buyerRunCommand = await getCommandToRunDaemon(
     buyerServiceName,
-    getProxyRouterEnvs(config, PROXY_ROUTER_MODE.Buyer)
+    getCommandWithEnv(config, PROXY_ROUTER_MODE.Buyer)
   );
 
   const commands = [
