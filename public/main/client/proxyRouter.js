@@ -47,7 +47,7 @@ const isProxyRouterHealthy = async (api, url) => {
   }
 };
 
-const runProxyRouter = async (config, mode = PROXY_ROUTER_MODE.Seller) => {
+const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
   const modes = {
     [PROXY_ROUTER_MODE.Buyer]: [
       `--proxy-address=0.0.0.0:${config.buyerProxyPort}`,
