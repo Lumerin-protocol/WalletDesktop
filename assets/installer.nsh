@@ -1,3 +1,13 @@
+!macro customHeader
+   RequestExecutionLevel admin
+!macroend
+
 !macro customUnInstall
-  ExecWait "TaskKill /IM proxy-router.exe /F"
+  ${ifNot} ${isUpdated}
+    ExecWait "TaskKill /IM proxy-router.exe /F"
+    ExecWait "sc stop proxySeller"
+    ExecWait "sc stop proxyBuyer"
+    ExecWait "sc delete proxySeller"
+    ExecWait "sc delete proxyBuyer"
+  ${endIf}
 !macroend

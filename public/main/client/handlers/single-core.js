@@ -1,5 +1,7 @@
 
 
+const os = require("os");
+
 const pTimeout = require("p-timeout");
 const logger = require("../../../logger");
 const auth = require("../auth");
@@ -154,12 +156,15 @@ function createWallet(data, core, isOpen = true) {
 const restartProxyRouter = async (data, { emitter, api }) => {
   const password = await auth.getSessionPassword();
 
-  api["proxy-router"].kill(config.chain.buyerProxyPort).catch(logger.error);
-  await api["proxy-router"]
-    .kill(config.chain.sellerProxyPort)
-    .catch(logger.error);
-
-  emitter.emit("open-proxy-router", { password });
+  if (['darwin', 'win32', 'linux'].includes(os.platform()) ) {
+    emitter.emit("open-proxy-router", { password, restartDaemon: true });
+  } else {
+    api["proxy-router"].kill(config.chain.buyerProxyPort).catch(logger.error);
+    await api["proxy-router"]
+      .kill(config.chain.sellerProxyPort)
+      .catch(logger.error);
+    emitter.emit("open-proxy-router", { password });
+  }
 };
 
 async function openWallet({ emitter }, password) {
@@ -310,7 +315,6 @@ const getLmrTransferGasLimit = (data, { api }) =>
   api.lumerin.estimateGasTransfer(data);
 
 const getAddressAndPrivateKey = async (data, { api }) => {
-
   const isValid = await auth.isValidPassword(data.password);
   if (!isValid) {
     return { error: new WalletError("Invalid password") };
@@ -343,14 +347,20 @@ const revealSecretPhrase = async (password) => {
   if (!isValid) {
     return { error: new WalletError("Invalid password") };
   }
- 
+
   const entropy = wallet.getEntropy(password);
   const mnemonic = keys.entropyToMnemonic(entropy);
   return mnemonic;
-}
+};
 
 function getPastTransactions({ address, page, pageSize }, { api }) {
-  return api.explorer.getPastCoinTransactions(0, undefined, address, page, pageSize);
+  return api.explorer.getPastCoinTransactions(
+    0,
+    undefined,
+    address,
+    page,
+    pageSize
+  );
 }
 
 module.exports = {
