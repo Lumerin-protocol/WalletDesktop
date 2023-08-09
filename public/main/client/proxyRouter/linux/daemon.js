@@ -13,7 +13,7 @@ const getInstallLinuxServiceCommand = async (daemonName, pathToExecutable) => {
 
 const getCommandToRunDaemon = async (serviceName, envs) => {
   const setEnvsCommand = envs
-    .map((e) => `sudo systemctl set-environment LMR_${e[0]}=${e[1]}`)
+    .map((e) => `sudo systemctl set-environment ${e[0]}=${e[1]}`)
     .join(";");
   return `sudo systemctl daemon-reload; ${setEnvsCommand}; sudo service ${serviceName} restart`;
 };
