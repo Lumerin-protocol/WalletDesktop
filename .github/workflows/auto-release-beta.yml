@@ -167,13 +167,13 @@ jobs:
         run: npm run web-build
       - name: Publish Mac
         if: matrix.target == 'macos'
-        run: npm run r -- --c.extraMetadata.version=${{github.ref_name}} -m
+        run: npm run r -- --c.extraMetadata.version=v${{github.ref_name}} -m
       - name: Publish Mac arm
         if: matrix.target == 'macos-arm'
-        run: npm run r -- --c.extraMetadata.version=${{github.ref_name}} -m --arm64
+        run: npm run r -- --c.extraMetadata.version=v${{github.ref_name}} -m --arm64
       - name: Publish Linux
         if: matrix.target == 'ubuntu'
-        run: npm run r -- --c.extraMetadata.version=${{github.ref_name}} -l
+        run: npm run r -- --c.extraMetadata.version=v${{github.ref_name}} -l
       - name: Publish Windows
         if: matrix.target == 'windows'
-        run: npm run r -- --c.extraMetadata.version=${{github.ref_name}} -w
+        run: npm run r -- --c.extraMetadata.version=v${{github.ref_name}} -w
