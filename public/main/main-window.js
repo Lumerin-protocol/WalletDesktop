@@ -38,31 +38,7 @@ function initAutoUpdate() {
   if (isDev) {
     return;
   }
-  if (process.platform === "linux") {
-    return;
-  }
-
-  autoUpdater.on("checking-for-update", () =>
-    logger.info("Checking for update...")
-  );
-  autoUpdater.on("update-available", () => logger.info("Update available."));
-  autoUpdater.on("download-progress", function(progressObj) {
-    let msg = `Download speed: ${progressObj.bytesPerSecond}`;
-    msg += ` - Downloaded ${progressObj.percent}%`;
-    msg += ` (${progressObj.transferred}/${progressObj.total})`;
-    logger.info(msg);
-  });
-  autoUpdater.on("update-downloaded", (info) => showUpdateNotification(info));
-  autoUpdater.on("update-not-available", () =>
-    logger.info("Update not available.")
-  );
-  autoUpdater.on("error", (err) =>
-    logger.error(`Error in auto-updater. ${err}`)
-  );
-
-  autoUpdater.checkForUpdates().catch(function(err) {
-    logger.warn("Could not find updates", err.message);
-  });
+  autoUpdater.checkForUpdatesAndNotify();
 }
 
 function loadWindow(config) {
