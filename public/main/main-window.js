@@ -1,5 +1,3 @@
-
-
 const { app, BrowserWindow, Notification, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const isDev = require("electron-is-dev");
@@ -38,7 +36,32 @@ function initAutoUpdate() {
   if (isDev) {
     return;
   }
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.on("checking-for-update", () =>
+    logger.info("Checking for update...")
+  );
+  autoUpdater.on("update-available", () => logger.info("Update available."));
+  autoUpdater.on("download-progress", function(progressObj) {
+    let msg = `Download speed: ${progressObj.bytesPerSecond}`;
+    msg += ` - Downloaded ${progressObj.percent}%`;
+    msg += ` (${progressObj.transferred}/${progressObj.total})`;
+    logger.info(msg);
+  });
+  autoUpdater.on("update-downloaded", (info) => showUpdateNotification(info));
+  autoUpdater.on("update-not-available", () =>
+    logger.info("Update not available.")
+  );
+  autoUpdater.on("error", (err) =>
+    logger.error(`Error in auto-updater. ${err}`)
+  );
+
+  autoUpdater
+    .checkForUpdatesAndNotify()
+    .then((res) => {
+      logger.info(`Checked for the updates: ${res}`);
+    })
+    .catch(function(err) {
+      logger.warn("Could not find updates", err.message);
+    });
 }
 
 function loadWindow(config) {
@@ -118,8 +141,7 @@ function loadWindow(config) {
         type: "question",
         buttons: ["Yes", "No"],
         title: "Confirm",
-        message:
-          "Are you sure you want to quit?",
+        message: "Are you sure you want to quit?",
       });
       if (choice === 1) {
         return;
@@ -149,7 +171,7 @@ function createWindow(config) {
       : mainWindow.setFullScreen(false);
   });
 
-  const load = loadWindow.bind(null, config)
+  const load = loadWindow.bind(null, config);
 
   app.on("ready", load);
   app.on("activate", load);
