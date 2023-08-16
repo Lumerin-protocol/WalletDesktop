@@ -9,7 +9,6 @@ on:
   workflow_dispatch: # allow manual triggering of action
 env:
   GH_TOKEN: ${{ secrets.ACCESS_TOKEN }} # allow electron-builder to publish a draft release
-env:
   CI: false
 
 jobs:
