@@ -37,7 +37,7 @@
     "prepare": "husky install",
     "release": "gh release create 1.0.16 ./dist/*.exe ./dist/*.dmg ./dist/*.deb",
     "release-init": "./scripts/release",
-    "r": "electron-builder --publish always",
+    "publish": "electron-builder --publish always",
     "clear-electron-cache": "rm -rf '~/Library/Application Support/lumerin-wallet-desktop'",
     "clear-cache:eslint": "rm -rf node_modules/.cache/eslint-loader"
   },

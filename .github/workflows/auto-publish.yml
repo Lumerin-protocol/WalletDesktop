@@ -3,10 +3,10 @@ name: "Auto Publish"
 on:
   push:
     branches:
-      - beta
+      - main
     paths:
-      - 'package.json' # only release when version changes
-  workflow_dispatch: # allow manual triggering of action
+      - 'package.json'
+  workflow_dispatch:
 env:
   GH_TOKEN: ${{ secrets.ACCESS_TOKEN }} # allow electron-builder to publish a draft release
   CI: false
@@ -21,20 +21,12 @@ jobs:
         include:
           - target: ubuntu
             os: ubuntu-latest
-            artifact_name: lumerin-wallet-desktop.deb
-            asset_name: lumerin_v${{github.ref_name}}.deb
           - target: windows
             os: windows-latest
-            artifact_name: lumerin-wallet-desktop.exe
-            asset_name: lumerin_v${{github.ref_name}}.exe
           - target: macos
             os: macos-latest
-            artifact_name: lumerin-wallet-desktop.dmg
-            asset_name: lumerin_v${{github.ref_name}}.dmg
           - target: macos-arm
             os: macos-latest
-            artifact_name: lumerin-wallet-desktop.dmg
-            asset_name: lumerin_v${{github.ref_name}}_arm.dmg
     runs-on: ${{ matrix.os }}
     environment: ${{ matrix.environment }}
     env:
@@ -152,13 +144,13 @@ jobs:
         run: npm run web-build
       - name: Publish Mac
         if: matrix.target == 'macos'
-        run: npm run r -- -m
+        run: npm run publish -- -m
       - name: Publish Mac arm
         if: matrix.target == 'macos-arm'
-        run: npm run r -- -m --arm64
+        run: npm run publish -- -m --arm64
       - name: Publish Linux
         if: matrix.target == 'ubuntu'
-        run: npm run r -- -l
+        run: npm run publish -- -l
       - name: Publish Windows
         if: matrix.target == 'windows'
-        run: npm run r -- -w
+        run: npm run publish -- -w

@@ -53,7 +53,6 @@ jobs:
       ETH_NODE_ADDRESS_HTTP2: ${{ vars.ETH_NODE_ADDRESS_HTTP2 }}
       ETH_NODE_ADDRESS_HTTP3: ${{ vars.ETH_NODE_ADDRESS_HTTP3 }}
       TITAN_LIGHTNING_POOL: ${{ secrets.TITAN_LIGHTNING_POOL }}
-      GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -165,15 +164,23 @@ jobs:
         shell: bash
       - name: Build Web
         run: npm run web-build
-      - name: Publish Mac
+      - name: Build Mac
         if: matrix.target == 'macos'
-        run: npm run r -- --c.extraMetadata.version=${{github.ref_name}} -m
-      - name: Publish Mac arm
+        run: npm run desktop-build-mac
+      - name: Build Mac arm
         if: matrix.target == 'macos-arm'
-        run: npm run r -- --c.extraMetadata.version=${{github.ref_name}} -m --arm64
-      - name: Publish Linux
+        run: npm run desktop-build-mac-arm
+      - name: Build Linux
         if: matrix.target == 'ubuntu'
-        run: npm run r -- --c.extraMetadata.version=${{github.ref_name}} -l
-      - name: Publish Windows
+        run: npm run desktop-build-linux
+      - name: Build Windows
         if: matrix.target == 'windows'
-        run: npm run r -- --c.extraMetadata.version=${{github.ref_name}} -w
+        run: npm run desktop-build-win
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/${{ matrix.artifact_name }}
+          tag: ${{ github.ref }}
+          asset_name: ${{ matrix.asset_name }}
+          prerelease: true

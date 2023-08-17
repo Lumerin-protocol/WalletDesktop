@@ -46,7 +46,7 @@ function initAutoUpdate() {
     msg += ` (${progressObj.transferred}/${progressObj.total})`;
     logger.info(msg);
   });
-  autoUpdater.on("update-downloaded", (info) => showUpdateNotification(info));
+
   autoUpdater.on("update-not-available", () =>
     logger.info("Update not available.")
   );
