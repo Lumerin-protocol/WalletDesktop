@@ -122,11 +122,24 @@ const getPoolAndAccount = url => {
   };
 };
 
+const Select = styled.select`
+  width: 35%;
+  height: 40px;
+  outline: 0;
+  border: 0px;
+  background: #eaf7fc;
+  border-radius: 15px;
+  padding: 1.2rem 1.2rem;
+  margin-top: 0.25rem;
+`;
+
 const Tools = props => {
   const {
     getProxyRouterSettings,
     saveProxyRouterSettings,
-    restartProxyRouter
+    restartProxyRouter,
+    setDefaultCurrency,
+    selectedCurrency
   } = props;
 
   const RenderForm = goToReview => {
@@ -137,7 +150,8 @@ const Tools = props => {
         Show: false,
         Message: null,
         Type: 'info'
-      }
+      },
+      selectedCurrency: selectedCurrency
     };
 
     const [state, setState] = useState(defState);
@@ -273,6 +287,41 @@ const Tools = props => {
               </Flex.Row>
             </Sp>
           </form> */}
+          <Sp mt={5}>
+            <Subtitle>Seller Default Currency</Subtitle>
+            <StyledParagraph>
+              This will set default currency to display prices and balances on
+              Seller Hub.
+              <div style={{ marginTop: '1rem' }}>
+                <Select
+                  onChange={e =>
+                    setState({ ...state, selectedCurrency: e.target.value })
+                  }
+                >
+                  <option
+                    selected={state.selectedCurrency === 'BTC'}
+                    key={'BTC'}
+                    value={'BTC'}
+                  >
+                    BTC
+                  </option>
+                  <option
+                    selected={state.selectedCurrency === 'LMR'}
+                    key={'LMR'}
+                    value={'LMR'}
+                  >
+                    LMR
+                  </option>
+                </Select>
+              </div>
+            </StyledParagraph>
+            <StyledBtn
+              disabled={state.selectedCurrency === selectedCurrency}
+              onClick={() => setDefaultCurrency(state.selectedCurrency)}
+            >
+              Save
+            </StyledBtn>
+          </Sp>
           <Sp mt={5}>
             <Subtitle>Change Password</Subtitle>
             <StyledParagraph>

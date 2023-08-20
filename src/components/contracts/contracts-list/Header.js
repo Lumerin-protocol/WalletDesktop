@@ -29,6 +29,7 @@ export default function Header(props) {
       <Container>
         <Filter
           onFilterChange={props.onFilterChange}
+          onColumnOptionChange={props.onColumnOptionChange}
           activeFilter={false}
           tabs={props.tabs}
         />

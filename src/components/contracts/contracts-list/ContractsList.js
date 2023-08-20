@@ -17,7 +17,6 @@ import StatusHeader from './StatusHeader';
 import Search from './Search';
 import styled from 'styled-components';
 import Sort from './Sort';
-import { fromMicro, formatExpNumber } from '../utils';
 import { Btn } from '../../common';
 
 const Stats = styled.div`
@@ -108,6 +107,8 @@ function ContractsList({
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState(null);
 
+  const [headerOptions, setHeaderOptions] = useState({});
+
   let contractsToShow = search
     ? contracts.filter(c => c.id.toLowerCase().includes(search.toLowerCase()))
     : contracts;
@@ -135,7 +136,11 @@ function ContractsList({
     setSelectedContracts(currentTarget.dataset.hash);
   };
 
-  const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
+  const rowRenderer = (contractsList, ratio, converters) => ({
+    key,
+    index,
+    style
+  }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <ContractsRow
         data-testid="Contracts-row"
@@ -143,6 +148,7 @@ function ContractsList({
         contract={contractsList[index]}
         cancel={cancel}
         deleteContract={deleteContract}
+        converters={converters}
         address={address}
         ratio={ratio}
         edit={edit}
@@ -239,6 +245,12 @@ function ContractsList({
             <React.Fragment>
               <Header
                 onFilterChange={() => {}}
+                onColumnOptionChange={e =>
+                  setHeaderOptions({
+                    ...headerOptions,
+                    [e.type]: e.value
+                  })
+                }
                 activeFilter={null}
                 tabs={tabsToShow}
               />
@@ -261,8 +273,12 @@ function ContractsList({
                     <RVList
                       rowRenderer={
                         customRowRenderer
-                          ? customRowRenderer(filteredItems, ratio)
-                          : rowRenderer(filteredItems, ratio)
+                          ? customRowRenderer(
+                              filteredItems,
+                              ratio,
+                              headerOptions
+                            )
+                          : rowRenderer(filteredItems, ratio, headerOptions)
                       }
                       rowHeight={66}
                       rowCount={contractsToShow.length}

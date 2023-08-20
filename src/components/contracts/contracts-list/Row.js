@@ -15,7 +15,7 @@ import {
   formatSpeed,
   formatTimestamp,
   formatPrice,
-  isContractClosed,
+  convertLmrToBtc,
   getContractState,
   getContractEndTimestamp,
   getContractRewardBtcPerTh,
@@ -65,7 +65,9 @@ function Row({
   allowSendTransaction,
   lmrRate,
   btcRate,
-  symbol
+  symbol,
+  converters,
+  selectedCurrency
 }) {
   // TODO: Add better padding
   const context = useContext(ToastsContext);
@@ -195,7 +197,15 @@ function Row({
         </SmallAssetContainer>
       )}
 
-      <Value>{formatPrice(price, symbol)}</Value>
+      <Value>
+        {(converters.price
+        ? converters.price === 'LMR'
+        : selectedCurrency === 'LMR')
+          ? `${formatPrice(contract.price, 'LMR')}`
+          : `${convertLmrToBtc(contract.price, btcRate, lmrRate).toFixed(
+              10
+            )} BTC`}{' '}
+      </Value>
       <Value
       // data-rh={`${formatExpNumber(btcPerThReward)} BTC/TH/day`}
       >
@@ -210,7 +220,19 @@ function Row({
           remaining={failCount}
         />
       </Value>
-      <Value>{formatPrice(contract.balance, symbol)}</Value>
+      <Value>
+        {(converters.claimable
+        ? converters.claimable === 'LMR'
+        : selectedCurrency === 'LMR')
+          ? `${formatPrice(contract.balance, 'LMR')}`
+          : `${
+              contract.balance == 0
+                ? '0'
+                : convertLmrToBtc(contract.balance, btcRate, lmrRate).toFixed(
+                    10
+                  )
+            } BTC`}
+      </Value>
       {contract.seller === address &&
         (isPending ? (
           <Value>

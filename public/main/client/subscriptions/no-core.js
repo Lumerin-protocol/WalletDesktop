@@ -15,6 +15,8 @@ const listeners = {
   "logout": handlers.logout,
   "save-proxy-router-settings": handlers.saveProxyRouterSettings,
   "get-proxy-router-settings": handlers.getProxyRouterSettings,
+  "get-default-currency-settings": handlers.getDefaultCurrency,
+  "set-default-currency-settings": handlers.setDefaultCurrency,
 };
 
 // Subscribe to messages where no core has to react

@@ -20,12 +20,30 @@ import { lmrDecimals } from '../../../utils/coinValue';
 
 import Modal from './Modal';
 
-const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
+const getContractRewardBtcPerTh = (
+  price,
+  time,
+  speed,
+  btcRate,
+  lmrRate,
+  profit
+) => {
   const lengthDays = time / 24;
 
   const contractUsdPrice = price * lmrRate;
   const contractBtcPrice = contractUsdPrice / btcRate;
   const result = contractBtcPrice / speed / lengthDays;
+
+  const lmrEqualPrice = (profit, multiplier) =>
+    (multiplier * profit * lengthDays * speed * btcRate) / lmrRate;
+  console.log(
+    lmrEqualPrice(profit, 1),
+    lmrEqualPrice(profit, 1.05),
+    lmrEqualPrice(profit, 1.1),
+    lmrEqualPrice(profit, 1.15),
+    lmrEqualPrice(profit, 1.2)
+  );
+
   return result.toFixed(10);
 };
 
@@ -43,7 +61,8 @@ function CreateContractModal(props) {
     btcRate,
     symbol,
     isEditMode,
-    editContractData
+    editContractData,
+    networkReward
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
@@ -254,7 +273,8 @@ function CreateContractModal(props) {
                         length,
                         speed,
                         btcRate,
-                        lmrRate
+                        lmrRate,
+                        networkReward
                       )}{' '}
                       BTC/TH/day
                     </Sublabel>

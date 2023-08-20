@@ -47,6 +47,16 @@ class Root extends React.Component {
             });
         }
       })
+      .then(() => {
+        this.props.client.getDefaultCurrencySetting().then(defaultCurr => {
+          const currency =
+            defaultCurr || this.props.sellerDefaultCurrency || 'BTC';
+          this.props.dispatch({
+            type: 'set-seller-currency',
+            payload: currency
+          });
+        });
+      })
       // eslint-disable-next-line no-console
       .catch(e => {
         this.context.toast(
@@ -110,7 +120,8 @@ class Root extends React.Component {
 const mapStateToProps = state => ({
   isSessionActive: selectors.isSessionActive(state),
   hasEnoughData: selectors.hasEnoughData(state),
-  isAuthBypassed: selectors.getIsAuthBypassed(state)
+  isAuthBypassed: selectors.getIsAuthBypassed(state),
+  sellerDefaultCurrency: selectors.getSellerDefaultCurrency(state)
 });
 
 export default connect(mapStateToProps)(withClient(Root));

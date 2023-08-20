@@ -152,6 +152,12 @@ const createClient = function(createStore) {
     getProxyRouterSettings: utils.forwardToMainProcess(
       'get-proxy-router-settings'
     ),
+    getDefaultCurrencySetting: utils.forwardToMainProcess(
+      'get-default-currency-settings'
+    ),
+    setDefaultCurrencySetting: utils.forwardToMainProcess(
+      'set-default-currency-settings'
+    ),
     saveProxyRouterSettings: utils.forwardToMainProcess(
       'save-proxy-router-settings'
     ),
