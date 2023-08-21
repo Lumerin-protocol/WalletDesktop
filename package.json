@@ -61,7 +61,7 @@
     "electron-is-dev": "2.0.0",
     "electron-log": "4.3.0",
     "electron-settings": "4.0.2",
-    "electron-updater": "6.1.1",
+    "electron-updater": "6.1.4",
     "electron-window-state": "5.0.3",
     "json-stringify-safe": "5.0.1",
     "keytar": "7.9.0",
