@@ -480,21 +480,24 @@ const Tools = props => {
           </Sp>
 
           <Sp mt={5}>
-            <Subtitle>Exit</Subtitle>
-            <StyledParagraph>Logout from wallet.</StyledParagraph>
+            <Subtitle>Reset</Subtitle>
+            <StyledParagraph>Set up your wallet from scratch.</StyledParagraph>
             <StyledBtn onClick={() => onActiveModalClick('confirm-logout')}>
-              Exit
+              Reset
             </StyledBtn>
 
             <ConfirmProxyConfigModal
-              title={'Logout from wallet'}
+              title={'Reset your wallet'}
               message={
                 <>
                   <Message>
-                    You are going to restart wallet along with Proxy Router. It
-                    may affect your running contracts.
+                    Make sure you have your recovery phrase before reseting your
+                    wallet. If you don’t have your recovery phrase, we suggest
+                    you transfer all funds out of your wallet before you reset.
+                    Otherwise you will lock yourself out of your wallet, and you
+                    won’t have access to the funds in this wallet.
                   </Message>
-                  <Message>Are you sure?</Message>
+                  <Message>Continue?</Message>
                 </>
               }
               onRequestClose={onCloseModal}
