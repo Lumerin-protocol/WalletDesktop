@@ -357,7 +357,18 @@ function CreateContractModal(props) {
                 {!!price && !!speed && !!length && !!underProfit && (
                   <div>
                     <ProfitLabel
-                      onClick={() => setShowSuggested(!showSuggested)}
+                      onClick={() => {
+                        const result = calculateSuggestedPrice(
+                          length,
+                          speed,
+                          btcRate,
+                          lmrRate,
+                          networkReward,
+                          1
+                        );
+                        setSuggestedPrice(result);
+                        setShowSuggested(!showSuggested);
+                      }}
                     >
                       <ProfitMessageLabel show={showSuggested}>
                         Estimated reward is less than network reward (
