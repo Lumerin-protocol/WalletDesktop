@@ -47,12 +47,11 @@ class Root extends React.Component {
             });
         }
       })
-      .then(() => {
-        this.props.client.getDefaultCurrencySetting().then(defaultCurr => {
-          this.props.dispatch({
-            type: 'set-seller-currency',
-            payload: defaultCurr || this.props.sellerDefaultCurrency || 'BTC'
-          });
+      .then(() => this.props.client.getDefaultCurrencySetting())
+      .then(defaultCurr => {
+        this.props.dispatch({
+          type: 'set-seller-currency',
+          payload: defaultCurr || this.props.sellerDefaultCurrency || 'BTC'
         });
       })
       // eslint-disable-next-line no-console
