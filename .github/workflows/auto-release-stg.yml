@@ -53,7 +53,6 @@ jobs:
       ETH_NODE_ADDRESS_HTTP2: ${{ vars.ETH_NODE_ADDRESS_HTTP2 }}
       ETH_NODE_ADDRESS_HTTP3: ${{ vars.ETH_NODE_ADDRESS_HTTP3 }}
       TITAN_LIGHTNING_POOL: ${{ secrets.TITAN_LIGHTNING_POOL }}
-      DEFAULT_SELLER_CURRENCY: ${{ secrets.DEFAULT_SELLER_CURRENCY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -86,7 +85,6 @@ jobs:
           echo "ETH_NODE_ADDRESS_HTTP2=$ETH_NODE_ADDRESS_HTTP2" >> .env
           echo "ETH_NODE_ADDRESS_HTTP3=$ETH_NODE_ADDRESS_HTTP3" >> .env
           echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
-          echo "DEFAULT_SELLER_CURRENCY=$DEFAULT_SELLER_CURRENCY" >> .env
         shell: bash
       - name: Set env from gitlab
         run: |
