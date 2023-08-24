@@ -80,7 +80,11 @@ const withContractsState = WrappedComponent => {
     lmrBalance: selectors.getWalletLmrBalance(state),
     allowSendTransaction: selectors.isAllowSendTransaction(state),
     contractsLastUpdatedAt: selectors.getContractsLastUpdated(state),
-    networkDifficulty: selectors.getNetworkDifficulty(state)
+    networkDifficulty: selectors.getNetworkDifficulty(state),
+    lmrCoinPrice: selectors.getRate(state),
+    ethCoinPrice: selectors.getRateEth(state),
+    btcCoinPrice: selectors.getRateBtc(state),
+    selectedCurrency: selectors.getSellerSelectedCurrency(state)
   });
 
   const mapDispatchToProps = dispatch => ({

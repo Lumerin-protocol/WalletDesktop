@@ -11,22 +11,45 @@ import {
   Label,
   Sublabel,
   RightBtn,
-  ErrorLabel
+  ErrorLabel,
+  ApplyBtn,
+  ProfitMessageLabel,
+  ProfitLabel
 } from './CreateContractModal.styles';
 import { useForm } from 'react-hook-form';
 import { CreateContractPreview } from './CreateContractPreview';
 import { CreateContractSuccessPage } from './CreateContractSuccessPage';
 import { lmrDecimals } from '../../../utils/coinValue';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+import { IconChevronUp, IconChevronDown } from '@tabler/icons';
 
 import Modal from './Modal';
 
 const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
+  if (!price || !speed || !time) return;
+
   const lengthDays = time / 24;
 
   const contractUsdPrice = price * lmrRate;
   const contractBtcPrice = contractUsdPrice / btcRate;
   const result = contractBtcPrice / speed / lengthDays;
   return result.toFixed(10);
+};
+
+const calculateSuggestedPrice = (
+  time,
+  speed,
+  btcRate,
+  lmrRate,
+  profit,
+  multiplier
+) => {
+  const lengthDays = time / 24;
+  return (
+    (multiplier * profit * lengthDays * speed * btcRate) /
+    lmrRate
+  ).toFixed(0);
 };
 
 function CreateContractModal(props) {
@@ -43,7 +66,8 @@ function CreateContractModal(props) {
     btcRate,
     symbol,
     isEditMode,
-    editContractData
+    editContractData,
+    networkReward
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
@@ -51,6 +75,11 @@ function CreateContractModal(props) {
   const [price, setPrice] = useState(+editContractData.price);
   const [speed, setSpeed] = useState(editContractData.speed);
   const [length, setTime] = useState(editContractData.length);
+  const [estimatedReward, setEstimatedReward] = useState(null);
+  const [suggestedPrice, setSuggestedPrice] = useState(null);
+  const [showSuggested, setShowSuggested] = useState(false);
+  const [persent, setPersent] = useState(0);
+  const underProfit = networkReward > (estimatedReward || 0);
 
   const {
     register,
@@ -105,7 +134,31 @@ function CreateContractModal(props) {
     required: true,
     min: 24,
     max: 48,
-    value: editContractData.length ? editContractData.length / 3600 : undefined
+    value: editContractData.length ? editContractData.length / 3600 : undefined,
+    onChange: e => {
+      const reward = getContractRewardBtcPerTh(
+        price,
+        e.target.value,
+        speed,
+        btcRate,
+        lmrRate
+      );
+
+      if (reward) {
+        setEstimatedReward(reward);
+        if (!suggestedPrice) {
+          const result = calculateSuggestedPrice(
+            e.target.value,
+            speed,
+            btcRate,
+            lmrRate,
+            networkReward,
+            1
+          );
+          setSuggestedPrice(result);
+        }
+      }
+    }
   });
   const speedField = register('speed', {
     required: true,
@@ -113,15 +166,56 @@ function CreateContractModal(props) {
     max: 1000,
     value: editContractData.price
       ? editContractData.speed / 10 ** 12
-      : undefined
+      : undefined,
+    onChange: e => {
+      const reward = getContractRewardBtcPerTh(
+        price,
+        length,
+        e.target.value,
+        btcRate,
+        lmrRate
+      );
+
+      if (reward) {
+        setEstimatedReward(reward);
+        if (!suggestedPrice) {
+          const result = calculateSuggestedPrice(
+            length,
+            e.target.value,
+            btcRate,
+            lmrRate,
+            networkReward,
+            1
+          );
+          setSuggestedPrice(result);
+        }
+      }
+    }
   });
   const priceField = register('price', {
     required: true,
     min: 1,
     value: editContractData.price
       ? editContractData.price / lmrDecimals
-      : undefined
+      : undefined,
+    onChange: e => {
+      console.log(e.target.value);
+      const reward = getContractRewardBtcPerTh(
+        e.target.value,
+        length,
+        speed,
+        btcRate,
+        lmrRate
+      );
+      if (reward) {
+        setEstimatedReward(reward);
+      }
+    }
   });
+
+  function percentFormatter(v) {
+    return `${v} %`;
+  }
 
   const title = isEditMode ? 'Edit your contract' : 'Create new contract';
   const buttonLabel = isEditMode ? 'Update Contract' : 'Create Contract';
@@ -247,17 +341,7 @@ function CreateContractModal(props) {
                     id="price"
                   />{' '}
                   {!!price && !!speed && !!length && (
-                    <Sublabel>
-                      ~{' '}
-                      {getContractRewardBtcPerTh(
-                        price,
-                        length,
-                        speed,
-                        btcRate,
-                        lmrRate
-                      )}{' '}
-                      BTC/TH/day
-                    </Sublabel>
+                    <Sublabel>~ {estimatedReward} BTC/TH/day</Sublabel>
                   )}
                 </div>
                 <Sublabel>
@@ -269,6 +353,102 @@ function CreateContractModal(props) {
                 )}
                 {formState?.errors?.price?.type === 'min' && (
                   <ErrorLabel>Minimum 1 {symbol}</ErrorLabel>
+                )}
+                {!!price && !!speed && !!length && !!underProfit && (
+                  <div>
+                    <ProfitLabel
+                      onClick={() => setShowSuggested(!showSuggested)}
+                    >
+                      <ProfitMessageLabel show={showSuggested}>
+                        Estimated reward is less than network reward (
+                        {networkReward} BTC/TH/day)
+                        {showSuggested ? (
+                          <IconChevronUp width={16} height={16}></IconChevronUp>
+                        ) : (
+                          <IconChevronDown
+                            width={16}
+                            height={16}
+                          ></IconChevronDown>
+                        )}
+                      </ProfitMessageLabel>
+                      {showSuggested && (
+                        <div onClick={e => e.stopPropagation()}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              padding: '1rem',
+                              justifyContent: 'center',
+                              flexDirection: 'column',
+                              alignItems: 'center'
+                            }}
+                          >
+                            <Sublabel> Select desired premium </Sublabel>
+                            <Slider
+                              style={{ width: '80%' }}
+                              ariaValueTextFormatterForHandle={percentFormatter}
+                              tipFormatter={percentFormatter}
+                              tipProps={{
+                                placement: 'top',
+                                visible: true
+                              }}
+                              onClick={e => e.stopPropagation()}
+                              onChange={v => {
+                                setPersent(v);
+                                const result = calculateSuggestedPrice(
+                                  length,
+                                  speed,
+                                  btcRate,
+                                  lmrRate,
+                                  networkReward,
+                                  (100 + v) / 100
+                                );
+                                setSuggestedPrice(result);
+                              }}
+                              min={0}
+                              max={30}
+                            ></Slider>
+                          </div>
+                          <div>
+                            <Sublabel>Premium: {persent}% </Sublabel>
+                          </div>
+                          <div>
+                            <Sublabel>
+                              Estimated Reward:{' '}
+                              {getContractRewardBtcPerTh(
+                                suggestedPrice,
+                                length,
+                                speed,
+                                btcRate,
+                                lmrRate
+                              )}{' '}
+                              BTC/TH/day
+                            </Sublabel>
+                          </div>
+                          <Sublabel>
+                            Suggested Price: {suggestedPrice} LMR{' '}
+                          </Sublabel>
+                          <ApplyBtn
+                            onClick={() => {
+                              setValue('price', suggestedPrice);
+                              setPrice(suggestedPrice);
+                              const reward = getContractRewardBtcPerTh(
+                                suggestedPrice,
+                                length,
+                                speed,
+                                btcRate,
+                                lmrRate
+                              );
+                              if (reward) {
+                                setEstimatedReward(reward);
+                              }
+                            }}
+                          >
+                            Apply
+                          </ApplyBtn>
+                        </div>
+                      )}
+                    </ProfitLabel>
+                  </div>
                 )}
               </InputGroup>
             </Row>
