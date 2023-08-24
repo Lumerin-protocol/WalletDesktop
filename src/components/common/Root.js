@@ -49,11 +49,9 @@ class Root extends React.Component {
       })
       .then(() => {
         this.props.client.getDefaultCurrencySetting().then(defaultCurr => {
-          const currency =
-            defaultCurr || this.props.sellerDefaultCurrency || 'BTC';
           this.props.dispatch({
             type: 'set-seller-currency',
-            payload: currency
+            payload: defaultCurr || this.props.sellerDefaultCurrency || 'BTC'
           });
         });
       })

@@ -6,8 +6,7 @@ const logger = require("../../../logger");
 const storage = require("../storage");
 const auth = require("../auth");
 const wallet = require("../wallet");
-const { setProxyRouterConfig, getProxyRouterConfig } = require("../settings");
-const { getDefaultCurrencySetting, setDefaultCurrencySetting } = require("../settings");
+const { setProxyRouterConfig, getProxyRouterConfig, getDefaultCurrencySetting, setDefaultCurrencySetting} = require("../settings");
 
 const validatePassword = (data) => auth.isValidPassword(data);
 

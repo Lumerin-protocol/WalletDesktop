@@ -34,7 +34,7 @@ const chain = {
   faucetUrl: process.env.FAUCET_URL,
 
   titanLightningPool: process.env.TITAN_LIGHTNING_POOL,
-  defaultSellerCurrency: process.env.DEFAULT_SELLER_CURRENCY,
+  defaultSellerCurrency: process.env.DEFAULT_SELLER_CURRENCY || 'BTC',
 
   bypassAuth: process.env.BYPASS_AUTH === "true",
 };

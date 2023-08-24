@@ -72,7 +72,6 @@ function Row({
   // TODO: Add better padding
   const context = useContext(ToastsContext);
   const [isPending, setIsPending] = useState(false);
-
   const speed = contract.futureTerms?.speed || contract.speed;
   const length = contract.futureTerms?.length || contract.length;
   const price = contract.futureTerms?.price || contract.price;
@@ -176,6 +175,9 @@ function Row({
 
   const successCount = contract?.stats?.successCount || 0;
   const failCount = contract?.stats?.failCount || 0;
+  const isLmrSelected = (balance, selectedCurrency) => {
+    return balance ? balance === 'LMR' : selectedCurrency === 'LMR';
+  };
 
   return (
     <Container ratio={ratio}>
@@ -198,9 +200,7 @@ function Row({
       )}
 
       <Value>
-        {(converters.price
-        ? converters.price === 'LMR'
-        : selectedCurrency === 'LMR')
+        {isLmrSelected(converters.price, selectedCurrency)
           ? `${formatPrice(contract.price, 'LMR')}`
           : `${convertLmrToBtc(contract.price, btcRate, lmrRate).toFixed(
               10
@@ -221,17 +221,11 @@ function Row({
         />
       </Value>
       <Value>
-        {(converters.claimable
-        ? converters.claimable === 'LMR'
-        : selectedCurrency === 'LMR')
+        {isLmrSelected(converters.claimable, selectedCurrency)
           ? `${formatPrice(contract.balance, 'LMR')}`
-          : `${
-              contract.balance == 0
-                ? '0'
-                : convertLmrToBtc(contract.balance, btcRate, lmrRate).toFixed(
-                    10
-                  )
-            } BTC`}
+          : `${convertLmrToBtc(contract.balance, btcRate, lmrRate).toFixed(
+              contract.balance == 0 ? 0 : 10
+            )} BTC`}
       </Value>
       {contract.seller === address &&
         (isPending ? (
