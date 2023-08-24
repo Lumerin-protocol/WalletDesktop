@@ -11,7 +11,10 @@ import {
   Label,
   Sublabel,
   RightBtn,
-  ErrorLabel
+  ErrorLabel,
+  ApplyBtn,
+  ProfitMessageLabel,
+  ProfitLabel
 } from './CreateContractModal.styles';
 import { useForm } from 'react-hook-form';
 import { CreateContractPreview } from './CreateContractPreview';
@@ -19,20 +22,9 @@ import { CreateContractSuccessPage } from './CreateContractSuccessPage';
 import { lmrDecimals } from '../../../utils/coinValue';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import styled from 'styled-components';
 import { IconChevronUp, IconChevronDown } from '@tabler/icons';
 
 import Modal from './Modal';
-
-const ProfitLabel = styled.div`
-  cursor: pointer;
-  text-align: center;
-  margin-top: 1.5rem;
-  padding: 1rem 0;
-  background: rgba(0, 0, 0, 0.02);
-  border-radius: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-`;
 
 const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
   if (!price || !speed || !time) return;
@@ -59,34 +51,6 @@ const calculateSuggestedPrice = (
     lmrRate
   ).toFixed(0);
 };
-
-const ApplyBtn = styled(RightBtn)`
-  width: 15%;
-  height: 15%;
-  font-size: 1.2rem;
-  border-radius: 15px;
-  margin-left: 10px;
-  background-color: ${p => p.theme.colors.primary};
-  color: ${p => p.theme.colors.light};
-
-  @media (min-width: 1040px) {
-    margin-left: 10px;
-  }
-`;
-
-const ProfitMessageLabel = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  line-height: 1.4rem;
-  font-size: 1.1rem;
-  font-weight: bold;
-  opacity: 0.65;
-  cursor: default;
-  padding: 0 1rem;
-  border-bottom: ${p => (p.show ? '1px solid rgba(0,0,0,.125)' : '')};
-  padding-bottom: ${p => (p.show ? '1rem' : '')};
-`;
 
 function CreateContractModal(props) {
   const {
@@ -407,7 +371,6 @@ function CreateContractModal(props) {
                           ></IconChevronDown>
                         )}
                       </ProfitMessageLabel>
-
                       {showSuggested && (
                         <div onClick={e => e.stopPropagation()}>
                           <div
@@ -420,7 +383,6 @@ function CreateContractModal(props) {
                             }}
                           >
                             <Sublabel> Select desired premium </Sublabel>
-
                             <Slider
                               style={{ width: '80%' }}
                               ariaValueTextFormatterForHandle={percentFormatter}
