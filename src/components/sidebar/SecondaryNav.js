@@ -81,10 +81,11 @@ const Label = styled.span`
   }
 
   @media (min-width: 800px) {
-    opacity: 0.5;
+    opacity: 0.8;
 
     ${Button}.active & {
       opacity: 1;
+      font-weight: 700;
     }
   }
 `;

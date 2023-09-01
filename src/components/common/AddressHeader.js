@@ -6,7 +6,7 @@ import { abbreviateAddress } from '../../utils';
 import { IconCopy } from '@tabler/icons';
 
 const Container = styled.header`
-  padding: 1.5rem 0 0 2.2rem;
+  padding: 1.6rem;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -16,9 +16,9 @@ const AddressContainer = styled.div`
   display: flex;
   align-items: center;
   background-color: #fff;
-  border-radius: 15px;
-  border: 1px solid #384764;
-  padding: 0.4rem 1.25rem;
+  border-radius: 12px;
+  border: 2px solid rgba(14, 67, 83, 0.28);
+  padding: 0.5rem 1.25rem;
   color: ${p => p.theme.colors.dark};
   opacity: 0.8;
 `;
@@ -50,7 +50,7 @@ export const AddressHeader = ({ copyToClipboard, address }) => {
   return (
     <Container>
       <AddressContainer>
-        <Address data-testid="address">{abbreviateAddress(address, 6)}</Address>
+        <Address data-testid="address">{abbreviateAddress(address, 5)}</Address>
         <IconCopy
           style={{ cursor: 'pointer' }}
           onClick={onCopyToClipboardClick}
