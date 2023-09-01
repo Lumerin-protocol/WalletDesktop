@@ -8,7 +8,7 @@ const Container = styled.div`
   margin-left: -10px;
   width: fit-content;
   color: ${p => p.theme.colors.primary};
-  font-weight: bold;
+  font-weight: 500;
   display: flex;
   align-self: end;
   align-items: center;
@@ -64,8 +64,8 @@ export default function Sort(props) {
           styles={{
             control: (base, state) => ({
               ...base,
-              width: 'fit-content',
-              minWidth: '150px',
+              width: 'auto',
+              minWidth: '195px',
               textAlign: 'right',
               cursor: 'pointer',
               color: '#0E4353',
@@ -77,26 +77,44 @@ export default function Sort(props) {
               borderColor: state.isFocused ? '#0E4353' : undefined,
               background: 'transparent'
             }),
-            placeholder: base => ({ ...base, color: '#0E4353' }),
+            placeholder: base => ({
+              ...base,
+              color: '#0E4353',
+              fontSize: '1.6rem',
+              fontWeight: 700
+            }),
             singleValue: base => ({ ...base, color: '#0E4353' }),
-            indicatorsContainer: base => ({ ...base, color: '#0E4353' }),
+            indicatorsContainer: base => ({
+              ...base,
+              color: '#0E4353'
+            }),
             indicatorSeparator: base => ({ ...base, display: 'none' }),
-            dropdownIndicator: base => ({ ...base, color: '#0E4353' }),
+            dropdownIndicator: base => ({
+              ...base,
+              color: '#0E4353',
+              marginLeft: -15
+            }),
             option: (base, state) => ({
               ...base,
+              cursor: 'pointer',
               backgroundColor: state.isSelected ? '#0E4353' : undefined,
-              fontSize: '1.2rem',
+              fontSize: '1.5rem',
+              fontWeight: 500,
+              lineHeight: '1.6rem',
               color: state.isSelected ? '#FFFFFF' : undefined,
               ':active': {
                 ...base[':active'],
                 backgroundColor: '#0E435380',
                 color: '#FFFFFF'
+              },
+              ':hover': {
+                backgroundColor: '#5ADCE2'
               }
             })
           }}
           onChange={e => (e.value ? props.setSort(e) : props.setSort(null))}
           isSearchable={false}
-          placeholder="Sort By:"
+          placeholder="Sort By"
           value={props.sort}
           options={rangeSelectOptions}
         />
