@@ -44,7 +44,7 @@ const StatValue = styled.div`
   font-size: 1.5rem;
   padding: 0 4rem;
   :not(:last-child) {
-    border-right: 2px solid #a8a8a8;
+    border-right: 1.75px solid #a8a8a8;
   }
 
   h3 {
