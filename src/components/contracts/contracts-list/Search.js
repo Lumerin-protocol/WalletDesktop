@@ -24,7 +24,7 @@ const SearchInput = styled.input`
   width: 100%;
 
   ::placeholder {
-    color: ${p => p.theme.colors.primary};
+    color: #565656;
   }
 `;
 

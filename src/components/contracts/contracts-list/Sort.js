@@ -65,10 +65,10 @@ export default function Sort(props) {
             control: (base, state) => ({
               ...base,
               width: 'auto',
-              minWidth: '195px',
+              minWidth: '150px',
               textAlign: 'right',
               cursor: 'pointer',
-              color: '#0E4353',
+              color: '#252B34',
               border: state.isFocused ? 0 : 0,
               boxShadow: state.isFocused ? 0 : 0,
               '&:hover': {
@@ -79,11 +79,16 @@ export default function Sort(props) {
             }),
             placeholder: base => ({
               ...base,
-              color: '#0E4353',
-              fontSize: '1.6rem',
+              color: '#252B34',
+              fontSize: '1.4rem',
               fontWeight: 700
             }),
-            singleValue: base => ({ ...base, color: '#0E4353' }),
+            singleValue: base => ({
+              ...base,
+              color: '#0E4353',
+              fontWeight: 600,
+              fontSize: '1.4rem'
+            }),
             indicatorsContainer: base => ({
               ...base,
               color: '#0E4353'

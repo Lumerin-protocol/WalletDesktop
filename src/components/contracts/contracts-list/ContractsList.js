@@ -62,6 +62,10 @@ const ContractBtn = styled(Btn)`
   }
 `;
 
+const SearchSortWrapper = styled.div`
+  display: flex;
+`;
+
 const sorting = (contracts, sortBy) => {
   switch (sortBy?.value) {
     case 'AscPrice':
@@ -174,11 +178,13 @@ function ContractsList({
             ) : (
               <></>
             )}
-            <Search onSearch={setSearch} />
             {/* <Sort sort={sort} setSort={setSort} /> */}
             <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
           </div>
-          <Sort sort={sort} setSort={setSort} />
+          <SearchSortWrapper>
+            <Sort sort={sort} setSort={setSort} />
+            <Search onSearch={setSearch} />
+          </SearchSortWrapper>
           {/* <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} /> */}
         </Flex.Row>
 
