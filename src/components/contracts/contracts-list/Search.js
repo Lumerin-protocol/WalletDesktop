@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce';
 
 const Container = styled.div`
   background-color: white;
-  padding: 5px 15px;
+  padding: 0 15px;
   display: flex;
   justify-content: start;
   color: ${p => p.theme.colors.primary};
@@ -37,10 +37,8 @@ export default function Search(props) {
         <IconSearch
           onClick={props.refresh}
           style={{
-            width: '20px',
+            width: '16px',
             marginRight: '6px',
-            paddingBottom: '2px',
-            paddingTop: '2px',
             cursor: 'pointer'
           }}
         />
