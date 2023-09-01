@@ -28,7 +28,8 @@ const Stats = styled.div`
   border-radius: 8px;
   gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
+  margin-top: 1rem;
   padding: 1rem 3rem;
 `;
 
