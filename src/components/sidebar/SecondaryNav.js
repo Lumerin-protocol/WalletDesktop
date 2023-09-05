@@ -72,19 +72,16 @@ const Label = styled.span`
   font-weight: 500;
   text-align: left;
 
-  ${({ parent }) => parent}:hover & {
-    opacity: 0.5;
-  }
-
   ${({ parent }) => parent}:hover ${Button}.active & {
     opacity: 1;
   }
 
   @media (min-width: 800px) {
-    opacity: 0.5;
+    opacity: 0.9;
 
     ${Button}.active & {
       opacity: 1;
+      font-weight: 700;
     }
   }
 `;

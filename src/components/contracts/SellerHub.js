@@ -13,7 +13,7 @@ import { CONTRACT_STATE } from '../../enums';
 import { lmrDecimals } from '../../utils/coinValue';
 import { formatBtcPerTh } from './utils';
 import ArchiveModal from './modals/ArchiveModal/ArchiveModal';
-import { IconTrash } from '@tabler/icons';
+import { IconArchive } from '@tabler/icons';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -308,7 +308,7 @@ function SellerHub({
             style={{ display: 'flex' }}
             data-rh={showArchive ? null : `You have no archived contracts`}
           >
-            <IconTrash style={{ display: 'inline-block' }} /> Archived
+            <IconArchive style={{ display: 'inline-block' }} /> Archived
           </span>
         </ArchiveBtn>
       </LayoutHeader>
