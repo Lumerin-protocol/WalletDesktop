@@ -17,6 +17,8 @@ const listeners = {
   "get-proxy-router-settings": handlers.getProxyRouterSettings,
   "get-default-currency-settings": handlers.getDefaultCurrency,
   "set-default-currency-settings": handlers.setDefaultCurrency,
+  "get-custom-env-values": handlers.getCustomEnvs,
+  "set-custom-env-values": handlers.setCustomEnvs,
 };
 
 // Subscribe to messages where no core has to react

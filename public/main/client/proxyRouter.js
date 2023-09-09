@@ -69,6 +69,8 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
     const out = openLogFile(`${mode}-out`);
     const err = openLogFile(`${mode}-err`);
 
+    console.log('CONFIG', config);
+
     const ls = spawn(
       `${resourcePath}/executables/proxy-router`,
       [

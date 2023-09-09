@@ -6,7 +6,13 @@ const logger = require("../../../logger");
 const storage = require("../storage");
 const auth = require("../auth");
 const wallet = require("../wallet");
-const { setProxyRouterConfig, getProxyRouterConfig, getDefaultCurrencySetting, setDefaultCurrencySetting} = require("../settings");
+const { 
+  setProxyRouterConfig, 
+  getProxyRouterConfig, 
+  getDefaultCurrencySetting, 
+  setDefaultCurrencySetting,
+  getKey,
+  setKey} = require("../settings");
 
 const validatePassword = (data) => auth.isValidPassword(data);
 
@@ -48,6 +54,9 @@ const handleClientSideError = (data) => {
 const getDefaultCurrency = async () => getDefaultCurrencySetting();
 const setDefaultCurrency = async (curr) => setDefaultCurrencySetting(curr);
 
+const getCustomEnvs = async () => getKey('customEnvs');
+const setCustomEnvs = async (value) => setKey('customEnvs', value);
+
 module.exports = {
   validatePassword,
   changePassword,
@@ -57,5 +66,7 @@ module.exports = {
   getProxyRouterSettings,
   handleClientSideError,
   getDefaultCurrency,
-  setDefaultCurrency
+  setDefaultCurrency,
+  getCustomEnvs,
+  setCustomEnvs
 };

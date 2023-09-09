@@ -100,6 +100,10 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         { password },
         { api }
       );
+
+      const customEthNode = await settings.getKey('customEnvs');
+      console.log('CUSTOM NODE', customEthNode);
+
       const config = {
         privateKey,
         walletAddress: address,
