@@ -53,7 +53,7 @@ function Marketplace({
   };
 
   const handlePurchase = async (data, contract, url) => {
-    if (lmrBalance * 10 ** 8 < Number(contract.price * 1.01)) {
+    if (lmrBalance * 10 ** 8 < Number(contract.price)) {
       setIsModalActive(false);
       context.toast('error', 'Insufficient balance');
       return;
