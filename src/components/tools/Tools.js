@@ -142,8 +142,13 @@ const Tools = props => {
     saveProxyRouterSettings,
     restartProxyRouter,
     setDefaultCurrency,
-    selectedCurrency
+    selectedCurrency,
+    getCustomEnvs,
+    setCustomEnvs,
+    config
   } = props;
+
+  console.log(config);
 
   const RenderForm = goToReview => {
     const defState = {
@@ -155,9 +160,7 @@ const Tools = props => {
         Type: 'info'
       },
       selectedCurrency: selectedCurrency,
-      envs: {
-        ethNode: ''
-      }
+      customEnvs: {}
     };
 
     const [state, setState] = useState(defState);
@@ -193,6 +196,10 @@ const Tools = props => {
         .catch(err => {
           context.toast('error', 'Failed to fetch proxy-router settings');
         });
+
+      getCustomEnvs().then(envs => {
+        setState({ ...state, customEnvs: envs });
+      });
     }, []);
 
     const onCloseModal = () => {
@@ -592,36 +599,60 @@ const Tools = props => {
                 <Subtitle>HTTP ETH Node: </Subtitle>
                 <StyledParagraph>
                   <Input
+                    placeholder={config.chain.httpApiUrls[0]}
                     onChange={e =>
-                      setSellerPoolParts({
-                        ...sellerPoolParts,
-                        pool: e.value
+                      setState({
+                        ...state,
+                        customEnvs: { ...state.customEnvs, httpNode: e.value }
                       })
                     }
-                    value={sellerPoolParts?.pool}
+                    value={state.customEnvs?.httpNode || ''}
                   />
+                  <StyledParagraph>
+                    BE CAREFULL. This may affect stable work of the wallet.
+                    Integration with blockchain may be broken. In case of
+                    unexpected behaviour try to reset to the default values.
+                  </StyledParagraph>
                 </StyledParagraph>
 
                 <StyledParagraph>
                   <Subtitle>Web Socket ETH Node: </Subtitle>
                   <Input
+                    placeholder={config.chain.wsApiUrl}
                     onChange={e =>
-                      setSellerPoolParts({
-                        ...sellerPoolParts,
-                        pool: e.value
+                      setState({
+                        ...state,
+                        customEnvs: { ...state.customEnvs, wsNode: e.value }
                       })
                     }
-                    value={sellerPoolParts?.pool}
+                    value={state.customEnvs?.wsNode || ''}
                   />
+                  <StyledParagraph>
+                    BE CAREFULL. It may cause affect on contracts execution
+                  </StyledParagraph>
                 </StyledParagraph>
-
-                <StyledBtn
-                  onClick={() => {
-                    onActiveModalClick('confirm-proxy-restart');
-                  }}
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
-                  Save
-                </StyledBtn>
+                  <StyledBtn
+                    onClick={() => {
+                      console.log(state);
+                      setCustomEnvs(state.customEnvs);
+                      //onActiveModalClick('confirm-proxy-restart');
+                    }}
+                  >
+                    Save
+                  </StyledBtn>
+                  <StyledBtn
+                    onClick={() => {
+                      console.log(state);
+                      setCustomEnvs(state.customEnvs);
+                      //onActiveModalClick('confirm-proxy-restart');
+                    }}
+                  >
+                    Reset
+                  </StyledBtn>
+                </div>
               </TabPanel>
 
               <TabPanel>

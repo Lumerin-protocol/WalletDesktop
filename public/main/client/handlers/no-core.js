@@ -57,6 +57,8 @@ const setDefaultCurrency = async (curr) => setDefaultCurrencySetting(curr);
 const getCustomEnvs = async () => getKey('customEnvs');
 const setCustomEnvs = async (value) => setKey('customEnvs', value);
 
+const restartWallet = () => restart(1);
+
 module.exports = {
   validatePassword,
   changePassword,
@@ -68,5 +70,6 @@ module.exports = {
   getDefaultCurrency,
   setDefaultCurrency,
   getCustomEnvs,
-  setCustomEnvs
+  setCustomEnvs,
+  restartWallet
 };

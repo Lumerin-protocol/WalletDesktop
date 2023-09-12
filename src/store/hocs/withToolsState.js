@@ -133,6 +133,8 @@ const withToolsState = WrappedComponent => {
           getProxyRouterSettings={this.props.client.getProxyRouterSettings}
           saveProxyRouterSettings={this.props.client.saveProxyRouterSettings}
           restartProxyRouter={this.props.client.restartProxyRouter}
+          getCustomEnvs={this.props.client.getCustomEnvValues}
+          setCustomEnvs={this.props.client.setCustomEnvValues}
           {...this.state}
           {...this.props}
         />
@@ -141,7 +143,8 @@ const withToolsState = WrappedComponent => {
   }
 
   const mapStateToProps = (state, props) => ({
-    selectedCurrency: selectors.getSellerSelectedCurrency(state)
+    selectedCurrency: selectors.getSellerSelectedCurrency(state),
+    config: state.config
   });
 
   const mapDispatchToProps = dispatch => ({

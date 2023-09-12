@@ -101,12 +101,13 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         { api }
       );
 
-      const customEthNode = await settings.getKey('customEnvs');
-      console.log('CUSTOM NODE', customEthNode);
+      const customEnvs = await settings.getKey('customEnvs');
+      console.log(customEnvs);
 
       const config = {
         privateKey,
         walletAddress: address,
+        customEnvs,
         ...coreConfig.chain,
         ...proxyRouterUserConfig,
       };
