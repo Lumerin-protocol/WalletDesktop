@@ -25,7 +25,8 @@ export const CreateContractPreview = ({
   submit,
   isCreating,
   close,
-  symbol
+  symbol,
+  marketplaceFee
 }) => (
   <>
     <TitleWrapper>
@@ -67,7 +68,8 @@ export const CreateContractPreview = ({
         </div>
       </ContractInfoContainer>
       <SmallTitle style={{ marginTop: '10px' }}>
-        All proceeds are subject to a 1% marketplace fee
+        All proceeds are subject to a non-refundable {marketplaceFee / 10 ** 18}{' '}
+        ETH marketplace fee, including contract creation and claiming funds
       </SmallTitle>
     </TitleWrapper>
     {isCreating ? (
