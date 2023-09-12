@@ -27,6 +27,7 @@ import {
   ActionsGroup,
   ContractInfoContainer
 } from './common.styles';
+import { fromTokenBaseUnitsToETH } from '../../../../utils/coinValue';
 
 const calculateAddress = (address, contractId) => {
   if (!address || !contractId) return null;
@@ -86,7 +87,7 @@ export const PurchasePreviewModalPage = ({
             />
             {fromTokenBaseUnitsToLMR(contract.price)} {symbol}
             <span style={{ fontSize: '1rem', marginLeft: '3px' }}>
-              (+ {marketplaceFee / 10 ** 18} ETH fee)
+              (+ {fromTokenBaseUnitsToETH(marketplaceFee)} ETH fee)
             </span>
           </Values>
         </div>

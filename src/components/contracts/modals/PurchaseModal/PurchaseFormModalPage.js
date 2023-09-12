@@ -12,6 +12,7 @@ import {
   Sublabel,
   ErrorLabel
 } from '../CreateContractModal.styles';
+import { fromTokenBaseUnitsToETH } from '../../../../utils/coinValue';
 
 import {
   Divider,
@@ -97,10 +98,11 @@ export const PurchaseFormModalPage = ({
               {(fromTokenBaseUnitsToLMR(contract.price) * rate).toFixed(2)} USD)
             </Values>
             <SmallTitle>
-              + {marketplaceFee / 10 ** 18} ETH fee
+              + {fromTokenBaseUnitsToETH(marketplaceFee)} ETH fee
               <IconQuestionCircle
-                data-rh={`All proceeds are subject to a non-refundable ${marketplaceFee /
-                  10 ** 18} ETH marketplace fee`}
+                data-rh={`All proceeds are subject to a non-refundable ${fromTokenBaseUnitsToETH(
+                  marketplaceFee
+                )} ETH marketplace fee`}
                 width={'1.7rem'}
                 style={{ padding: '0 0 1px 4px' }}
               />
