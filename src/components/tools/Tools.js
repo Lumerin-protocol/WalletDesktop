@@ -355,14 +355,14 @@ const Tools = props => {
               <>
                 <StyledParagraph>
                   <div>
-                    <span>Seller Default Pool:</span> {sellerPoolParts?.pool}{' '}
+                    <span>Proxy Default Pool:</span> {sellerPoolParts?.pool}{' '}
                   </div>
                   <div>
-                    <span>Seller Default Account:</span>{' '}
+                    <span>Proxy Default Account:</span>{' '}
                     {sellerPoolParts?.account}{' '}
                   </div>
                 </StyledParagraph>
-                <StyledParagraph>
+                {/* <StyledParagraph>
                   <div>
                     <span>Buyer Default Pool:</span> {buyerPoolParts?.pool}{' '}
                   </div>
@@ -370,13 +370,13 @@ const Tools = props => {
                     <span>Buyer Default Account:</span>{' '}
                     {buyerPoolParts?.account}{' '}
                   </div>
-                </StyledParagraph>
+                </StyledParagraph> */}
                 <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
               </>
             ) : (
               <>
                 <StyledParagraph>
-                  Seller Default Pool:{' '}
+                  Proxy Default Pool:{' '}
                   <Input
                     onChange={e =>
                       setSellerPoolParts({
@@ -388,7 +388,7 @@ const Tools = props => {
                   />
                 </StyledParagraph>
                 <StyledParagraph>
-                  Seller Default Account:{' '}
+                  Proxy Default Account:{' '}
                   <Input
                     onChange={e =>
                       setSellerPoolParts({
@@ -400,7 +400,7 @@ const Tools = props => {
                   />
                 </StyledParagraph>
                 <hr></hr>
-                <StyledParagraph>
+                {/* <StyledParagraph>
                   Buyer Default Pool:{' '}
                   <Input
                     onChange={e =>
@@ -423,7 +423,7 @@ const Tools = props => {
                     }
                     value={buyerPoolParts?.account}
                   />
-                </StyledParagraph>
+                </StyledParagraph> */}
                 <StyledBtn
                   onClick={() => {
                     setProxyRouterSettings({
@@ -431,11 +431,11 @@ const Tools = props => {
                       sellerDefaultPool: generatePoolUrl(
                         sellerPoolParts.account,
                         sellerPoolParts.pool
-                      ),
-                      buyerDefaultPool: generatePoolUrl(
-                        buyerPoolParts.account,
-                        buyerPoolParts.pool
                       )
+                      // buyerDefaultPool: generatePoolUrl(
+                      //   buyerPoolParts.account,
+                      //   buyerPoolParts.pool
+                      // )
                     });
                     onActiveModalClick('confirm-proxy-restart');
                   }}
