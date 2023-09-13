@@ -134,7 +134,7 @@
       "include": "assets/installer.nsh"
     },
     "mac": {
-      "artifactName": "${name}-${version}-${arch}.${ext}",
+      "artifactName": "${name}-${arch}.${ext}",
       "category": "public.app-category.finance",
       "icon": "./assets/lumerin.png",
       "extendInfo": {
@@ -148,7 +148,7 @@
       "publish": "github"
     },
     "linux": {
-      "artifactName": "${name}-${version}.${ext}",
+      "artifactName": "${name}.${ext}",
       "category": "Office;Finance",
       "target": [
         "deb"
@@ -157,7 +157,7 @@
       "publish": "github"
     },
     "win": {
-      "artifactName": "${name}-${version}.${ext}",
+      "artifactName": "${name}.${ext}",
       "target": "nsis",
       "icon": "./assets/lumerin.png",
       "legalTrademarks": "",
