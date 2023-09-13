@@ -67,7 +67,8 @@ function CreateContractModal(props) {
     symbol,
     isEditMode,
     editContractData,
-    networkReward
+    networkReward,
+    marketplaceFee
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
@@ -237,6 +238,7 @@ function CreateContractModal(props) {
           submit={isEditMode ? wrapHandleUpdate : wrapHandleDeploy}
           isEditMode={isEditMode}
           symbol={symbol}
+          marketplaceFee={marketplaceFee}
         />
       ) : (
         <>

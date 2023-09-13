@@ -54,6 +54,13 @@ class Root extends React.Component {
           payload: defaultCurr || this.props.sellerDefaultCurrency || 'BTC'
         });
       })
+      .then(() => this.props.client.getMarketplaceFee({}))
+      .then(fee =>
+        this.props.dispatch({
+          type: 'set-marketplace-fee',
+          payload: fee
+        })
+      )
       // eslint-disable-next-line no-console
       .catch(e => {
         this.context.toast(

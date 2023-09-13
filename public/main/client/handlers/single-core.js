@@ -262,6 +262,10 @@ function refreshAllTransactions({ address }, { api, emitter }) {
     });
 }
 
+const getMarketplaceFee = async function(data, { api }) {
+ return api.contracts.getMarketplaceFee(data);
+};
+
 function refreshAllContracts({}, { api }) {
   const walletId = wallet.getAddress().address;
   return api.contracts.refreshContracts(null, walletId);
@@ -386,4 +390,5 @@ module.exports = {
   getPastTransactions,
   setContractDeleteStatus,
   editContract,
+  getMarketplaceFee
 };

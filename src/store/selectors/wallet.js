@@ -23,6 +23,12 @@ export const getWalletAddress = createSelector(
   walletData => walletData.address
 );
 
+// Returns the marketplace fee
+export const getMarketplaceFee = createSelector(
+  getWallet,
+  walletData => walletData.marketplaceFee
+);
+
 // Returns the LMR balance of the active address in wei
 export const getWalletEthBalance = createSelector(
   getWallet,

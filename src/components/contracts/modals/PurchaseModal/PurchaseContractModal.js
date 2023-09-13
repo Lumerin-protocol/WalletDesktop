@@ -20,7 +20,8 @@ function PurchaseContractModal(props) {
     history,
     pool,
     showSuccess,
-    symbol
+    symbol,
+    marketplaceFee
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
@@ -80,7 +81,8 @@ function PurchaseContractModal(props) {
     inputs: getValues(),
     pool,
     contract,
-    rate: lmrRate
+    rate: lmrRate,
+    marketplaceFee
   };
 
   return (
