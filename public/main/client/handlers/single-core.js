@@ -154,9 +154,8 @@ function createWallet(data, core, isOpen = true) {
 const restartProxyRouter = async (data, { emitter, api }) => {
   const password = await auth.getSessionPassword();
 
-  api["proxy-router"].kill(config.chain.buyerProxyPort).catch(logger.error);
   await api["proxy-router"]
-    .kill(config.chain.sellerProxyPort)
+    .kill(config.chain.proxyPort)
     .catch(logger.error);
 
   emitter.emit("open-proxy-router", { password });

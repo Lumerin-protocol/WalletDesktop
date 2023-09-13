@@ -7,9 +7,9 @@ export const getCoinSymbol = state => state.config.chain.symbol;
 
 export const getSymbolEth = state => state.config.chain.symbolEth;
 
-export const getBuyerProxyPort = state => state.config.chain.buyerProxyPort;
+export const getBuyerProxyPort = state => state.config.chain.proxyPort;
 
-export const getSellerProxyPort = state => state.config.chain.sellerProxyPort;
+export const getSellerProxyPort = state => state.config.chain.proxyPort;
 
 export const getIsAuthBypassed = state => state.config.chain.bypassAuth;
 

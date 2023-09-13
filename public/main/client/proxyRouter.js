@@ -4,11 +4,6 @@ const { spawn } = require("child_process");
 
 const logger = require("../../logger.js");
 
-const PROXY_ROUTER_MODE = {
-  Buyer: "buyer",
-  Seller: "seller",
-};
-
 const openLogFile = (name, retry = true) => {
   try {
     const path = `${app.getPath("logs")}/${name}.log`;
@@ -42,50 +37,39 @@ const isProxyRouterHealthy = async (api, url) => {
   }
 };
 
-const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
-  const modes = {
-    [PROXY_ROUTER_MODE.Buyer]: [
-      `--proxy-address=0.0.0.0:${config.buyerProxyPort}`,
-      `--web-address=0.0.0.0:${config.buyerWebPort}`,
-      `--pool-address=${config.buyerDefaultPool}`,
-      "--hashrate-diff-threshold=0.10",
-      "--is-buyer=true",
-    ],
-    [PROXY_ROUTER_MODE.Seller]: [
-      `--proxy-address=0.0.0.0:${config.sellerProxyPort}`,
-      `--web-address=0.0.0.0:${config.sellerWebPort}`,
-      `--pool-address=${config.sellerDefaultPool}`,
-      "--hashrate-diff-threshold=0.03",
-      "--is-buyer=false",
-    ],
-  };
-
+const runProxyRouter = (config) => {
   try {
     const resourcePath =
       process.env.NODE_ENV === "production"
         ? process.resourcesPath // Prod Mode
         : `${__dirname}/../../..`; // Dev Mode
 
-    const out = openLogFile(`${mode}-out`);
-    const err = openLogFile(`${mode}-err`);
+    const out = openLogFile(`proxy-out`);
+    const err = openLogFile(`proxy-err`);
 
     const ls = spawn(
       `${resourcePath}/executables/proxy-router`,
       [
         `--contract-address=${config.cloneFactoryAddress}`,
-        "--contract-hashrate-adjustment=1.1",
         `--eth-node-address=${config.wsApiUrl}`,
+
         "--miner-vetting-duration=5m",
-        "--pool-conn-timeout=15m",
-        "--pool-max-duration=7m",
-        "--pool-min-duration=2m",
-        "--stratum-socket-buffer=4",
-        "--validation-buffer-period=15m",
-        "--miner-submit-err-limit=0",
-        `--wallet-address=${config.walletAddress}`,
+        "--miner-share-timeout=5m",
+
+        "--hashrate-error-threshold=0.05",
+        "--hashrate-cycle-duration=5m",
+        "--hashrate-share-timeout=4m",
+        "--hashrate-validation-start-timeout=10m",
+
+        "--log-level-app=info",
+        "--log-level-scheduler=info",
+        "--log-level-proxy=info",
+        "--log-level-connection=info",
+
         `--wallet-private-key=${config.privateKey}`,
-        "--log-level=debug",
-        ...modes[mode],
+        `--proxy-address=0.0.0.0:${config.proxyPort}`,
+        `--web-address=0.0.0.0:${config.proxyWebPort}`,
+        `--pool-address=${config.sellerDefaultPool}`,
       ],
       {
         detached: true,
@@ -96,9 +80,9 @@ const runProxyRouter = (config, mode = PROXY_ROUTER_MODE.Seller) => {
     ls.unref();
     return;
   } catch (err) {
-    logger.debug(`ProxyRouter-${mode} run error: ${err}`);
+    logger.debug(`ProxyRouter run error: ${err}`);
     throw err;
   }
 };
 
-module.exports = { runProxyRouter, PROXY_ROUTER_MODE, isProxyRouterHealthy };
+module.exports = { runProxyRouter, isProxyRouterHealthy };
