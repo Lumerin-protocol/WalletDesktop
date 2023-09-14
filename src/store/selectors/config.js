@@ -20,6 +20,7 @@ export const getBuyerPool = state => state.config.buyerDefaultPool;
 export const getRecaptchaSiteKey = state => state.config.recaptchaSiteKey;
 
 export const getFaucetUrl = state => state.config.chain.faucetUrl;
+export const showFaucet = state => state.config.chain.showFaucet;
 
 export const getSellerSelectedCurrency = state => state.config.sellerCurrency;
 
