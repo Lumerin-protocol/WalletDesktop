@@ -79,7 +79,7 @@ function loadWindow(config) {
   const mainWindowState = windowStateKeeper({
     // defaultWidth: 660,
     defaultWidth: 820,
-    defaultHeight: 700,
+    defaultHeight: 800,
   });
 
   // TODO this should be read from config
@@ -90,7 +90,7 @@ function loadWindow(config) {
     // maxWidth: 660,
     // maxHeight: 700,
     minWidth: 660,
-    minHeight: 700,
+    minHeight: 800,
     backgroundColor: "#323232",
     webPreferences: {
       enableRemoteModule: true,
