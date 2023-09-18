@@ -27,11 +27,11 @@ jobs:
             asset_name: lumerin_v${{github.ref_name}}.exe
           - target: macos
             os: macos-latest
-            artifact_name: lumerin-wallet-desktop.dmg
+            artifact_name: lumerin-wallet-desktop-x64.dmg
             asset_name: lumerin_v${{github.ref_name}}.dmg
           - target: macos-arm
             os: macos-latest
-            artifact_name: lumerin-wallet-desktop.dmg
+            artifact_name: lumerin-wallet-desktop-arm64.dmg
             asset_name: lumerin_v${{github.ref_name}}_arm.dmg
     runs-on: ${{ matrix.os }}
     environment: ${{ matrix.environment }}
