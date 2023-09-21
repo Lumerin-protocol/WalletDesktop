@@ -70,7 +70,7 @@ export const CreateContractPreview = ({
       <SmallTitle style={{ marginTop: '10px' }}>
         All proceeds are subject to a non-refundable{' '}
         {fromTokenBaseUnitsToETH(marketplaceFee)} ETH marketplace fee, including
-        contract creation and claiming funds
+        contract creation/updating and claiming funds
       </SmallTitle>
     </TitleWrapper>
     {isCreating ? (

@@ -73,6 +73,7 @@ function Marketplace({
         speed: contract.speed,
         price: contract.price,
         length: contract.length,
+        version: contract.version,
         url
       })
       .then(d => {
