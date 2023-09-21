@@ -50,6 +50,7 @@ jobs:
       REQUIRED_PASSWORD_ENTROPY: ${{ secrets.REQUIRED_PASSWORD_ENTROPY }}
       RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
       FAUCET_URL: ${{ secrets.FAUCET_URL }}
+      SHOW_FAUCET: ${{ secrets.SHOW_FAUCET }}
       ETH_NODE_ADDRESS_HTTP: ${{ vars.ETH_NODE_ADDRESS_HTTP }}
       ETH_NODE_ADDRESS_HTTP2: ${{ vars.ETH_NODE_ADDRESS_HTTP2 }}
       ETH_NODE_ADDRESS_HTTP3: ${{ vars.ETH_NODE_ADDRESS_HTTP3 }}
@@ -81,6 +82,7 @@ jobs:
           echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
           echo "RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY" >> .env
           echo "FAUCET_URL=$FAUCET_URL" >> .env
+          echo "SHOW_FAUCET=$SHOW_FAUCET" >> .env
           echo "NODE_ENV=production" >> .env
           echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
           echo "ETH_NODE_ADDRESS_HTTP2=$ETH_NODE_ADDRESS_HTTP2" >> .env

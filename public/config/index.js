@@ -28,6 +28,7 @@ const chain = {
     .SPROXY_WEB_DEFAULT_PORT || 8081}`,
 
   faucetUrl: process.env.FAUCET_URL,
+  showFaucet: process.env.SHOW_FAUCET === "true",
 
   titanLightningPool: process.env.TITAN_LIGHTNING_POOL,
   defaultSellerCurrency: process.env.DEFAULT_SELLER_CURRENCY || 'BTC',
