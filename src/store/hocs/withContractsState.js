@@ -29,12 +29,13 @@ const withContractsState = WrappedComponent => {
       refreshError: null
     };
 
-    contractsRefresh = () => {
+    contractsRefresh = (force = false) => {
       const now = parseInt(Date.now() / 1000, 10);
       const timeout = 15; // seconds
       if (
         this.props.contractsLastUpdatedAt &&
-        now - this.props.contractsLastUpdatedAt < timeout
+        now - this.props.contractsLastUpdatedAt < timeout &&
+        !force
       ) {
         this.props.setPendingRefresh();
         setTimeout(() => {
@@ -79,7 +80,11 @@ const withContractsState = WrappedComponent => {
     lmrBalance: selectors.getWalletLmrBalance(state),
     allowSendTransaction: selectors.isAllowSendTransaction(state),
     contractsLastUpdatedAt: selectors.getContractsLastUpdated(state),
-    networkDifficulty: selectors.getNetworkDifficulty(state)
+    networkDifficulty: selectors.getNetworkDifficulty(state),
+    lmrCoinPrice: selectors.getRate(state),
+    ethCoinPrice: selectors.getRateEth(state),
+    btcCoinPrice: selectors.getRateBtc(state),
+    selectedCurrency: selectors.getSellerSelectedCurrency(state)
   });
 
   const mapDispatchToProps = dispatch => ({

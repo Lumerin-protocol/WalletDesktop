@@ -136,10 +136,14 @@ export const getContractRewardBtcPerTh = (contract, btcRate, lmrRate) => {
   const lengthDays = contract.length / 60 / 60 / 24;
   const speed = Number(contract.speed) / 10 ** 12;
 
-  const contractUsdPrice = (contract.price / lmrDecimals) * lmrRate;
-  const contractBtcPrice = contractUsdPrice / btcRate;
+  const contractBtcPrice = convertLmrToBtc(contract.price, btcRate, lmrRate);
   const result = contractBtcPrice / speed / lengthDays;
   return result;
+};
+
+export const convertLmrToBtc = (value, btcRate, lmrRate) => {
+  const contractUsdPrice = (value / lmrDecimals) * lmrRate;
+  return contractUsdPrice / btcRate;
 };
 
 export const formatExpNumber = value =>

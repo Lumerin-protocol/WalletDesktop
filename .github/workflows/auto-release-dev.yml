@@ -7,6 +7,7 @@ on:
 
 env:
   CI: false
+  GH_TOKEN: ${{ secrets.ACCESS_TOKEN }} # allow electron-builder to publish a draft release
 
 jobs:
   build:
@@ -26,11 +27,11 @@ jobs:
             asset_name: lumerin_v${{github.ref_name}}.exe
           - target: macos
             os: macos-latest
-            artifact_name: lumerin-wallet-desktop.dmg
+            artifact_name: lumerin-wallet-desktop-x64.dmg
             asset_name: lumerin_v${{github.ref_name}}.dmg
           - target: macos-arm
             os: macos-latest
-            artifact_name: lumerin-wallet-desktop.dmg
+            artifact_name: lumerin-wallet-desktop-arm64.dmg
             asset_name: lumerin_v${{github.ref_name}}_arm.dmg
     runs-on: ${{ matrix.os }}
     environment: ${{ matrix.environment }}
@@ -49,9 +50,8 @@ jobs:
       REQUIRED_PASSWORD_ENTROPY: ${{ secrets.REQUIRED_PASSWORD_ENTROPY }}
       RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
       FAUCET_URL: ${{ secrets.FAUCET_URL }}
+      SHOW_FAUCET: ${{ secrets.SHOW_FAUCET }}
       ETH_NODE_ADDRESS_HTTP: ${{ vars.ETH_NODE_ADDRESS_HTTP }}
-      ETH_NODE_ADDRESS_HTTP2: ${{ vars.ETH_NODE_ADDRESS_HTTP2 }}
-      ETH_NODE_ADDRESS_HTTP3: ${{ vars.ETH_NODE_ADDRESS_HTTP3 }}
       TITAN_LIGHTNING_POOL: ${{ secrets.TITAN_LIGHTNING_POOL }}
     steps:
       - name: Checkout
@@ -81,10 +81,9 @@ jobs:
           echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
           echo "RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY" >> .env
           echo "FAUCET_URL=$FAUCET_URL" >> .env
+          echo "SHOW_FAUCET=$SHOW_FAUCET" >> .env
           echo "NODE_ENV=production" >> .env
           echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
-          #echo "ETH_NODE_ADDRESS_HTTP2=$ETH_NODE_ADDRESS_HTTP2" >> .env
-          #echo "ETH_NODE_ADDRESS_HTTP3=$ETH_NODE_ADDRESS_HTTP3" >> .env
           echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
         shell: bash
       - name: Set env from gitlab

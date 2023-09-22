@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import withContractsState from '../../store/hocs/withContractsState';
 import { LayoutHeader } from '../common/LayoutHeader';
@@ -6,6 +6,29 @@ import { View } from '../common/View';
 import BuyerHubRow from './contracts-list/BuyerHubRow';
 import ContractsList from './contracts-list/ContractsList';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
+
+import HistoryModal from './modals/HistoryModal/HistoryModal';
+import { IconHistory } from '@tabler/icons';
+
+import styled from 'styled-components';
+import { Btn } from '../common';
+
+const HistoryBtn = styled(Btn)`
+  margin: 0 0 0 auto;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  padding: 0.4rem 1.1rem 0.4rem 0.9rem;
+  box-shadow: none;
+
+  svg {
+    margin-right: 4px;
+  }
+  color: ${p => p.theme.colors.primary};
+  background-color: transparent;
+`;
 
 function BuyerHub({
   contracts,
@@ -63,13 +86,28 @@ function BuyerHub({
     </ContractsRowContainer>
   );
 
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+
+  const contractsWithHistory = contracts.filter(c => c.history.length);
+  const showHistory = contractsWithHistory.length;
+  const onHistoryOpen = () => setIsHistoryModalOpen(true);
+
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
         title="Buyer Hub"
         address={address}
         copyToClipboard={copyToClipboard}
-      ></LayoutHeader>
+      >
+        <HistoryBtn disabled={!showHistory} onClick={onHistoryOpen}>
+          <span
+            style={{ display: 'flex' }}
+            data-rh={showHistory ? null : `You have no purchase history`}
+          >
+            <IconHistory style={{ display: 'inline-block' }} /> History
+          </span>
+        </HistoryBtn>
+      </LayoutHeader>
 
       {/* <TotalsBlock /> */}
 
@@ -82,6 +120,14 @@ function BuyerHub({
         customRowRenderer={rowRenderer}
         noContractsMessage={'You have no contracts.'}
         tabs={tabs}
+      />
+
+      <HistoryModal
+        isActive={isHistoryModalOpen}
+        historyContracts={contractsWithHistory}
+        close={() => {
+          setIsHistoryModalOpen(false);
+        }}
       />
     </View>
   );

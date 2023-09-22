@@ -12,6 +12,7 @@ import withSidebarState from '../../store/hocs/withSidebarState';
 const Container = styled.div`
   background: ${p => p.theme.colors.light};
   width: 7rem;
+  padding-bottom: 4.5rem;
   display: flex;
   flex-direction: column;
   transition: width 0.2s;
@@ -91,7 +92,6 @@ function Sidebar(props) {
       <IconLogoContainer parent={Container}>
         <SidebarLumerinLightIcon size="6rem" />
       </IconLogoContainer>
-      <AddressHeader address={address} copyToClipboard={copyToClipboard} />
       <NavContainer>
         <PrimaryNavContainer>
           <PrimaryNav
@@ -108,6 +108,7 @@ function Sidebar(props) {
             parent={Container}
           />
         </nav>
+        <AddressHeader address={address} copyToClipboard={copyToClipboard} />
       </NavContainer>
     </Container>
   );

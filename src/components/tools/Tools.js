@@ -122,11 +122,24 @@ const getPoolAndAccount = url => {
   };
 };
 
+const Select = styled.select`
+  width: 35%;
+  height: 40px;
+  outline: 0;
+  border: 0px;
+  background: #eaf7fc;
+  border-radius: 15px;
+  padding: 1.2rem 1.2rem;
+  margin-top: 0.25rem;
+`;
+
 const Tools = props => {
   const {
     getProxyRouterSettings,
     saveProxyRouterSettings,
-    restartProxyRouter
+    restartProxyRouter,
+    setDefaultCurrency,
+    selectedCurrency
   } = props;
 
   const RenderForm = goToReview => {
@@ -137,7 +150,8 @@ const Tools = props => {
         Show: false,
         Message: null,
         Type: 'info'
-      }
+      },
+      selectedCurrency: selectedCurrency
     };
 
     const [state, setState] = useState(defState);
@@ -274,6 +288,41 @@ const Tools = props => {
             </Sp>
           </form> */}
           <Sp mt={5}>
+            <Subtitle>Seller Default Currency</Subtitle>
+            <StyledParagraph>
+              This will set default currency to display prices and balances on
+              Seller Hub.
+              <div style={{ marginTop: '1rem' }}>
+                <Select
+                  onChange={e =>
+                    setState({ ...state, selectedCurrency: e.target.value })
+                  }
+                >
+                  <option
+                    selected={state.selectedCurrency === 'BTC'}
+                    key={'BTC'}
+                    value={'BTC'}
+                  >
+                    BTC
+                  </option>
+                  <option
+                    selected={state.selectedCurrency === 'LMR'}
+                    key={'LMR'}
+                    value={'LMR'}
+                  >
+                    LMR
+                  </option>
+                </Select>
+              </div>
+            </StyledParagraph>
+            <StyledBtn
+              disabled={state.selectedCurrency === selectedCurrency}
+              onClick={() => setDefaultCurrency(state.selectedCurrency)}
+            >
+              Save
+            </StyledBtn>
+          </Sp>
+          <Sp mt={5}>
             <Subtitle>Change Password</Subtitle>
             <StyledParagraph>
               This will allow you to change the password you use to access the
@@ -306,14 +355,14 @@ const Tools = props => {
               <>
                 <StyledParagraph>
                   <div>
-                    <span>Seller Default Pool:</span> {sellerPoolParts?.pool}{' '}
+                    <span>Proxy Default Pool:</span> {sellerPoolParts?.pool}{' '}
                   </div>
                   <div>
-                    <span>Seller Default Account:</span>{' '}
+                    <span>Proxy Default Account:</span>{' '}
                     {sellerPoolParts?.account}{' '}
                   </div>
                 </StyledParagraph>
-                <StyledParagraph>
+                {/* <StyledParagraph>
                   <div>
                     <span>Buyer Default Pool:</span> {buyerPoolParts?.pool}{' '}
                   </div>
@@ -321,13 +370,13 @@ const Tools = props => {
                     <span>Buyer Default Account:</span>{' '}
                     {buyerPoolParts?.account}{' '}
                   </div>
-                </StyledParagraph>
+                </StyledParagraph> */}
                 <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
               </>
             ) : (
               <>
                 <StyledParagraph>
-                  Seller Default Pool:{' '}
+                  Proxy Default Pool:{' '}
                   <Input
                     onChange={e =>
                       setSellerPoolParts({
@@ -339,7 +388,7 @@ const Tools = props => {
                   />
                 </StyledParagraph>
                 <StyledParagraph>
-                  Seller Default Account:{' '}
+                  Proxy Default Account:{' '}
                   <Input
                     onChange={e =>
                       setSellerPoolParts({
@@ -351,7 +400,7 @@ const Tools = props => {
                   />
                 </StyledParagraph>
                 <hr></hr>
-                <StyledParagraph>
+                {/* <StyledParagraph>
                   Buyer Default Pool:{' '}
                   <Input
                     onChange={e =>
@@ -374,7 +423,7 @@ const Tools = props => {
                     }
                     value={buyerPoolParts?.account}
                   />
-                </StyledParagraph>
+                </StyledParagraph> */}
                 <StyledBtn
                   onClick={() => {
                     setProxyRouterSettings({
@@ -382,11 +431,11 @@ const Tools = props => {
                       sellerDefaultPool: generatePoolUrl(
                         sellerPoolParts.account,
                         sellerPoolParts.pool
-                      ),
-                      buyerDefaultPool: generatePoolUrl(
-                        buyerPoolParts.account,
-                        buyerPoolParts.pool
                       )
+                      // buyerDefaultPool: generatePoolUrl(
+                      //   buyerPoolParts.account,
+                      //   buyerPoolParts.pool
+                      // )
                     });
                     onActiveModalClick('confirm-proxy-restart');
                   }}
@@ -480,21 +529,24 @@ const Tools = props => {
           </Sp>
 
           <Sp mt={5}>
-            <Subtitle>Exit</Subtitle>
-            <StyledParagraph>Logout from wallet.</StyledParagraph>
+            <Subtitle>Reset</Subtitle>
+            <StyledParagraph>Set up your wallet from scratch.</StyledParagraph>
             <StyledBtn onClick={() => onActiveModalClick('confirm-logout')}>
-              Exit
+              Reset
             </StyledBtn>
 
             <ConfirmProxyConfigModal
-              title={'Logout from wallet'}
+              title={'Reset your wallet'}
               message={
                 <>
                   <Message>
-                    You are going to restart wallet along with Proxy Router. It
-                    may affect your running contracts.
+                    Make sure you have your recovery phrase before reseting your
+                    wallet. If you don’t have your recovery phrase, we suggest
+                    you transfer all funds out of your wallet before you reset.
+                    Otherwise you will lock yourself out of your wallet, and you
+                    won’t have access to the funds in this wallet.
                   </Message>
-                  <Message>Are you sure?</Message>
+                  <Message>Continue?</Message>
                 </>
               }
               onRequestClose={onCloseModal}

@@ -61,6 +61,7 @@ const BalanceBlock = ({
   sendDisabledReason,
   recaptchaSiteKey,
   faucetUrl,
+  showFaucet,
   walletAddress,
   onTabSwitch,
   symbol,
@@ -113,15 +114,17 @@ const BalanceBlock = ({
               Send
             </Btn>
 
-            <BtnAccent
-              data-modal="claim"
-              onClick={claimFaucet}
-              data-rh={`Payout from the faucet is 2 ${symbol} and 0.01 ${symbolEth} per day.\n
-                Wallet addresses are limited to one request every 24 hours.`}
-              block
-            >
-              Get Tokens
-            </BtnAccent>
+            {showFaucet && (
+              <BtnAccent
+                data-modal="claim"
+                onClick={claimFaucet}
+                data-rh={`Payout from the faucet is 2 ${symbol} and 0.01 ${symbolEth} per day.\n
+          Wallet addresses are limited to one request every 24 hours.`}
+                block
+              >
+                Get Tokens
+              </BtnAccent>
+            )}
           </BtnRow>
         </SecondaryContainer>
       </Container>

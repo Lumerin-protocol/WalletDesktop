@@ -18,6 +18,7 @@ const withContractsRowState = WrappedComponent => {
     explorerUrl: selectors.getContractExplorerUrl(state, {
       hash: props.contract.id
     }),
+    selectedCurrency: selectors.getSellerSelectedCurrency(state),
     networkDifficulty: selectors.getNetworkDifficulty(state),
     lmrRate: selectors.getRate(state),
     btcRate: selectors.getRateBtc(state),
