@@ -3,7 +3,7 @@ name: Auto Release Staging
 on:
   push:
     tags:
-      - '*-stg'
+      - "*-stg"
 
 env:
   CI: false
@@ -52,8 +52,6 @@ jobs:
       FAUCET_URL: ${{ secrets.FAUCET_URL }}
       SHOW_FAUCET: ${{ secrets.SHOW_FAUCET }}
       ETH_NODE_ADDRESS_HTTP: ${{ vars.ETH_NODE_ADDRESS_HTTP }}
-      ETH_NODE_ADDRESS_HTTP2: ${{ vars.ETH_NODE_ADDRESS_HTTP2 }}
-      ETH_NODE_ADDRESS_HTTP3: ${{ vars.ETH_NODE_ADDRESS_HTTP3 }}
       TITAN_LIGHTNING_POOL: ${{ secrets.TITAN_LIGHTNING_POOL }}
     steps:
       - name: Checkout
@@ -85,38 +83,36 @@ jobs:
           echo "SHOW_FAUCET=$SHOW_FAUCET" >> .env
           echo "NODE_ENV=production" >> .env
           echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
-          echo "ETH_NODE_ADDRESS_HTTP2=$ETH_NODE_ADDRESS_HTTP2" >> .env
-          echo "ETH_NODE_ADDRESS_HTTP3=$ETH_NODE_ADDRESS_HTTP3" >> .env
           echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
         shell: bash
       - name: Set env from gitlab
         run: |
-            variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "ETH_NODE_ADDRESS" "PROXY_ROUTER_URL")
-            gitlabVars=$(curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables?per_page=1000")
-            echo $gitlabVars | jq -c '.[]' | 
-              while IFS= read -r line; do
-                key=$(<<<"$line" jq -r .key);
-                if [[ " ${variables[*]} " =~ " ${key} " ]]; then
-                  scope=$(<<<"$line" jq -r .environment_scope);
-                  value=$(<<<"$line" jq -r .value);
-                  if [ "${scope}" = '*' ]
-                  then
-                    echo "$key=$value" >> .env
-                  fi
+          variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "ETH_NODE_ADDRESS" "PROXY_ROUTER_URL")
+          gitlabVars=$(curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables?per_page=1000")
+          echo $gitlabVars | jq -c '.[]' | 
+            while IFS= read -r line; do
+              key=$(<<<"$line" jq -r .key);
+              if [[ " ${variables[*]} " =~ " ${key} " ]]; then
+                scope=$(<<<"$line" jq -r .environment_scope);
+                value=$(<<<"$line" jq -r .value);
+                if [ "${scope}" = '*' ]
+                then
+                  echo "$key=$value" >> .env
                 fi
-              done
-            echo $gitlabVars | jq -c '.[]' | 
-              while IFS= read -r line; do
-                key=$(<<<"$line" jq -r .key);
-                if [[ " ${variables[*]} " =~ " ${key} " ]]; then
-                  scope=$(<<<"$line" jq -r .environment_scope);
-                  value=$(<<<"$line" jq -r .value);
-                  if [ "${scope}" = "${{ matrix.environment }}" ]
-                  then
-                    echo "$key=$value" >> .env
-                  fi
+              fi
+            done
+          echo $gitlabVars | jq -c '.[]' | 
+            while IFS= read -r line; do
+              key=$(<<<"$line" jq -r .key);
+              if [[ " ${variables[*]} " =~ " ${key} " ]]; then
+                scope=$(<<<"$line" jq -r .environment_scope);
+                value=$(<<<"$line" jq -r .value);
+                if [ "${scope}" = "${{ matrix.environment }}" ]
+                then
+                  echo "$key=$value" >> .env
                 fi
-              done
+              fi
+            done
         shell: bash
       - name: Fetch latest Proxy Router
         run: |

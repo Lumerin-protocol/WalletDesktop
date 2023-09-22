@@ -1,3 +1,12 @@
+const { parseJSONArray } = require('./utils')
+
+let httpApiUrls
+
+try {
+  httpApiUrls = parseJSONArray(process.env.ETH_NODE_ADDRESS_HTTP)
+} catch (err) {
+  throw new Error(`Invalid ETH_NODE_ADDRESS_HTTP: ${err?.message}`);
+}
 
 
 const chain = {
@@ -13,7 +22,7 @@ const chain = {
   proxyRouterUrl: process.env.PROXY_ROUTER_URL,
   explorerUrl: process.env.EXPLORER_URL,
   wsApiUrl: process.env.ETH_NODE_ADDRESS,
-  httpApiUrls: [process.env.ETH_NODE_ADDRESS_HTTP, process.env.ETH_NODE_ADDRESS_HTTP2, process.env.ETH_NODE_ADDRESS_HTTP3] || ['https://rpc.ankr.com/eth_sepolia'],
+  httpApiUrls: httpApiUrls,
   ipLookupUrl: process.env.IP_LOOKUP_URL,
 
   coinDefaultGasLimit: process.env.COIN_DEFAULT_GAS_LIMIT,
