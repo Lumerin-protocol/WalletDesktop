@@ -97,7 +97,11 @@ jobs:
                 value=$(<<<"$line" jq -r .value);
                 if [ "${scope}" = '*' ]
                 then
-                  echo "$key=$value" >> .env
+                  if [ "${key}" = 'WALLET_ETH_NODE_ADDRESS' ]; then
+                    echo "ETH_NODE_ADDRESS=$value"  >> .env
+                  else
+                    echo "$key=$value" >> .env
+                  fi
                 fi
               fi
             done
@@ -109,7 +113,11 @@ jobs:
                 value=$(<<<"$line" jq -r .value);
                 if [ "${scope}" = "${{ matrix.environment }}" ]
                 then
-                  echo "$key=$value" >> .env
+                  if [ "${key}" = 'WALLET_ETH_NODE_ADDRESS' ]; then
+                    echo "ETH_NODE_ADDRESS=$value"  >> .env
+                  else
+                    echo "$key=$value" >> .env
+                  fi
                 fi
               fi
             done
