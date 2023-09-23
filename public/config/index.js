@@ -1,3 +1,12 @@
+const { parseJSONArray } = require('./utils')
+
+let httpApiUrls
+
+try {
+  httpApiUrls = parseJSONArray(process.env.ETH_NODE_ADDRESS_HTTP)
+} catch (err) {
+  throw new Error(`Invalid ETH_NODE_ADDRESS_HTTP: ${err?.message}`);
+}
 
 
 const chain = {
@@ -13,7 +22,7 @@ const chain = {
   proxyRouterUrl: process.env.PROXY_ROUTER_URL,
   explorerUrl: process.env.EXPLORER_URL,
   wsApiUrl: process.env.ETH_NODE_ADDRESS,
-  httpApiUrls: [process.env.ETH_NODE_ADDRESS_HTTP, process.env.ETH_NODE_ADDRESS_HTTP2, process.env.ETH_NODE_ADDRESS_HTTP3] || ['https://rpc.ankr.com/eth_sepolia'],
+  httpApiUrls: httpApiUrls,
   ipLookupUrl: process.env.IP_LOOKUP_URL,
 
   coinDefaultGasLimit: process.env.COIN_DEFAULT_GAS_LIMIT,
@@ -21,19 +30,17 @@ const chain = {
   defaultGasPrice: process.env.DEFAULT_GAS_PRICE,
   maxGasPrice: process.env.MAX_GAS_PRICE,
 
-  sellerProxyPort: process.env.SELLER_PROXY_DEFAULT_PORT || 3333,
-  buyerProxyPort: process.env.BUYER_PROXY_DEFAULT_PORT || 3334,
-  sellerWebPort: process.env.SELLER_WEB_DEFAULT_PORT || 8081,
-  buyerWebPort: process.env.BUYER_WEB_DEFAULT_PORT || 8082,
+  proxyPort: process.env.PROXY_DEFAULT_PORT || 3333,
+  proxyWebPort: process.env.PROXY_WEB_DEFAULT_PORT || 8081,
 
-  localSellerProxyRouterUrl: `http://localhost:${process.env
-    .SELLER_WEB_DEFAULT_PORT || 8081}`,
-  localBuyerProxyRouterUrl: `http://localhost:${process.env
-    .BUYER_WEB_DEFAULT_PORT || 8082}`,
+  localProxyRouterUrl: `http://localhost:${process.env
+    .SPROXY_WEB_DEFAULT_PORT || 8081}`,
 
   faucetUrl: process.env.FAUCET_URL,
+  showFaucet: process.env.SHOW_FAUCET === "true",
 
   titanLightningPool: process.env.TITAN_LIGHTNING_POOL,
+  defaultSellerCurrency: process.env.DEFAULT_SELLER_CURRENCY || 'BTC',
 
   bypassAuth: process.env.BYPASS_AUTH === "true",
 };

@@ -1,5 +1,3 @@
-
-
 const { app, BrowserWindow, Notification, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const isDev = require("electron-is-dev");
@@ -38,10 +36,6 @@ function initAutoUpdate() {
   if (isDev) {
     return;
   }
-  if (process.platform === "linux") {
-    return;
-  }
-
   autoUpdater.on("checking-for-update", () =>
     logger.info("Checking for update...")
   );
@@ -52,7 +46,7 @@ function initAutoUpdate() {
     msg += ` (${progressObj.transferred}/${progressObj.total})`;
     logger.info(msg);
   });
-  autoUpdater.on("update-downloaded", (info) => showUpdateNotification(info));
+
   autoUpdater.on("update-not-available", () =>
     logger.info("Update not available.")
   );
@@ -60,9 +54,14 @@ function initAutoUpdate() {
     logger.error(`Error in auto-updater. ${err}`)
   );
 
-  autoUpdater.checkForUpdates().catch(function(err) {
-    logger.warn("Could not find updates", err.message);
-  });
+  autoUpdater
+    .checkForUpdatesAndNotify()
+    .then((res) => {
+      logger.info(`Checked for the updates: ${res}`);
+    })
+    .catch(function(err) {
+      logger.warn("Could not find updates", err.message);
+    });
 }
 
 function loadWindow(config) {
@@ -80,7 +79,7 @@ function loadWindow(config) {
   const mainWindowState = windowStateKeeper({
     // defaultWidth: 660,
     defaultWidth: 820,
-    defaultHeight: 700,
+    defaultHeight: 800,
   });
 
   // TODO this should be read from config
@@ -91,7 +90,7 @@ function loadWindow(config) {
     // maxWidth: 660,
     // maxHeight: 700,
     minWidth: 660,
-    minHeight: 700,
+    minHeight: 800,
     backgroundColor: "#323232",
     webPreferences: {
       enableRemoteModule: true,
@@ -142,8 +141,7 @@ function loadWindow(config) {
         type: "question",
         buttons: ["Yes", "No"],
         title: "Confirm",
-        message:
-          "Are you sure you want to quit?",
+        message: "Are you sure you want to quit?",
       });
       if (choice === 1) {
         return;
@@ -173,7 +171,7 @@ function createWindow(config) {
       : mainWindow.setFullScreen(false);
   });
 
-  const load = loadWindow.bind(null, config)
+  const load = loadWindow.bind(null, config);
 
   app.on("ready", load);
   app.on("activate", load);

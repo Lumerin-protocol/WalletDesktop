@@ -39,11 +39,12 @@ function Marketplace({
     x => (contractStateFilter(x) && !x.isDead) || x.inProgress
   );
 
+  const activeContracts = contracts?.filter(x => !x.isDead);
   const stats = {
-    count: contracts.length ?? 0,
-    rented: contracts?.filter(x => Number(x.state) === 1)?.length ?? 0,
+    count: activeContracts.length ?? 0,
+    rented: activeContracts?.filter(x => Number(x.state) === 1)?.length ?? 0,
     expiresInHour:
-      contracts?.filter(c => {
+      activeContracts?.filter(c => {
         const endDate = getContractEndTimestamp(c);
         const utcNow = new Date();
         const limit = utcNow.setHours(utcNow.getHours() + 1);
@@ -52,7 +53,7 @@ function Marketplace({
   };
 
   const handlePurchase = async (data, contract, url) => {
-    if (lmrBalance * 10 ** 8 < Number(contract.price * 1.01)) {
+    if (lmrBalance * 10 ** 8 < Number(contract.price)) {
       setIsModalActive(false);
       context.toast('error', 'Insufficient balance');
       return;
@@ -72,6 +73,7 @@ function Marketplace({
         speed: contract.speed,
         price: contract.price,
         length: contract.length,
+        version: contract.version,
         url
       })
       .then(d => {

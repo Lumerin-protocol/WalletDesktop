@@ -28,7 +28,8 @@ const listeners = {
   "get-local-ip": handlers.getLocalIp,
   "restart-proxy-router": handlers.restartProxyRouter,
   "claim-faucet": handlers.claimFaucet,
-  'get-private-key': handlers.getAddressAndPrivateKey
+  'get-private-key': handlers.getAddressAndPrivateKey,
+  "get-marketplace-fee": handlers.getMarketplaceFee
 };
 
 let coreListeners = {};

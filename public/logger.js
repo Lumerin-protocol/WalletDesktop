@@ -19,12 +19,7 @@ function getColorLevel (level = '') {
 }
 
 logger.transports.console = function ({ date, level, data }) {
-  if(!config.debug && !['error', 'warn', 'info'].includes(level))
-    return;
-  
   const color = getColorLevel(level);
-
-  const text = data.shift();
 
   let meta = '';
   if (data.length) {
@@ -34,13 +29,16 @@ logger.transports.console = function ({ date, level, data }) {
 
   // eslint-disable-next-line no-console
   console.log(
-    `${date.toISOString()} - ${chalk[color](level)}:\t${text}\t${meta}`
+    `${date.toISOString()} - ${chalk[color](level)}:\t${meta}`
   );
 }
 
 if (config.debug) {
   logger.transports.console.level = 'debug';
   logger.transports.file.level = 'debug';
+} else {
+  logger.transports.console.level = 'warn';
+  logger.transports.file.level = 'warn';
 }
 
 

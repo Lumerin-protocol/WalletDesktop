@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
 import { uniqueId } from 'lodash';
+import styled from 'styled-components';
 
 const Container = styled.div`
   display: grid;
@@ -36,15 +36,59 @@ const Tab = styled.button`
   }
 `;
 
-export default function Filter({ onFilterChange, activeFilter, tabs }) {
+const Select = styled.select`
+  outline: 0;
+  border: 0px;
+  letter-spacing: 1.4px;
+  line-height: 1.2rem;
+  font-size: 1.2rem;
+  background: transparent;
+  border-radius: 15px;
+  font-weight: bold;
+  font: inherit;
+  color: ${p => p.theme.colors.primary};
+`;
+
+export default function Filter({
+  onFilterChange,
+  activeFilter,
+  tabs,
+  onColumnOptionChange
+}) {
   return (
     <Container ratio={tabs.map(x => x.ratio)}>
       {tabs &&
-        tabs.map(t => (
-          <Tab key={t.value || uniqueId()} isActive={activeFilter === t.value}>
-            {t.name}
-          </Tab>
-        ))}
+        tabs.map(t =>
+          t.options ? (
+            <Tab
+              key={t.value || uniqueId()}
+              isActive={activeFilter === t.value}
+            >
+              <Select
+                name={t.name}
+                onChange={e => {
+                  onColumnOptionChange({
+                    value: e.target.value,
+                    type: t.value
+                  });
+                }}
+              >
+                {t.options.map(o => (
+                  <option key={o.value} value={o.value} selected={o.selected}>
+                    {o.label}
+                  </option>
+                ))}
+              </Select>
+            </Tab>
+          ) : (
+            <Tab
+              key={t.value || uniqueId()}
+              isActive={activeFilter === t.value}
+            >
+              {t.name}
+            </Tab>
+          )
+        )}
     </Container>
   );
 }

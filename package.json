@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.1.32",
+  "version": "1.2.7",
   "engines": {
     "node": ">=14"
   },
@@ -22,11 +22,11 @@
     "debug": "concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . --inspect\"",
     "dev": "npm run clear-electron-cache && concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && DEBUG=true ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . \"",
     "web-build": "npm run clear-cache:eslint && react-scripts build",
-    "desktop-build": "PYTHON_PATH=/usr/local/bin/python electron-builder -wlm --c.extraMetadata.main=build/electron.js",
-    "desktop-build-mac": "electron-builder -m --c.extraMetadata.main=build/electron.js",
-    "desktop-build-mac-arm": "electron-builder -m --c.extraMetadata.main=build/electron.js --arm64",
-    "desktop-build-linux": "electron-builder -l --c.extraMetadata.main=build/electron.js",
-    "desktop-build-win": "electron-builder -w --c.extraMetadata.main=build/electron.js",
+    "desktop-build": "PYTHON_PATH=/usr/local/bin/python electron-builder -wlm --c.extraMetadata.main=build/electron.js --publish=never",
+    "desktop-build-mac": "electron-builder -m --c.extraMetadata.main=build/electron.js --publish=never",
+    "desktop-build-mac-arm": "electron-builder -m --c.extraMetadata.main=build/electron.js --arm64 --publish=never",
+    "desktop-build-linux": "electron-builder -l --c.extraMetadata.main=build/electron.js --publish=never",
+    "desktop-build-win": "electron-builder -w --c.extraMetadata.main=build/electron.js --publish=never",
     "dist": "npm run web-build && npm run desktop-build",
     "env": "run-script-os",
     "env:win32": ".\\scripts\\env.bat",
@@ -37,12 +37,13 @@
     "prepare": "husky install",
     "release": "gh release create 1.0.16 ./dist/*.exe ./dist/*.dmg ./dist/*.deb",
     "release-init": "./scripts/release",
+    "publish": "electron-builder --publish always",
     "clear-electron-cache": "rm -rf '~/Library/Application Support/lumerin-wallet-desktop'",
     "clear-cache:eslint": "rm -rf node_modules/.cache/eslint-loader"
   },
   "dependencies": {
     "@electron/remote": "2.0.9",
-    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.62",
+    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.70",
     "@reach/menu-button": "0.17.0",
     "@tabler/icons": "1.119.0",
     "axios": "0.27.2",
@@ -60,7 +61,7 @@
     "electron-is-dev": "2.0.0",
     "electron-log": "4.3.0",
     "electron-settings": "4.0.2",
-    "electron-updater": "4.3.0",
+    "electron-updater": "6.1.4",
     "electron-window-state": "5.0.3",
     "json-stringify-safe": "5.0.1",
     "keytar": "7.9.0",
@@ -74,6 +75,7 @@
     "qrcode.react": "3.1.0",
     "raven": "2.6.4",
     "raven-js": "3.27.0",
+    "rc-slider": "10.2.1",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-hint": "3.2.1",
@@ -100,7 +102,7 @@
   "devDependencies": {
     "concurrently": "6.2.0",
     "electron": "18.3.15",
-    "electron-builder": "23.0.2",
+    "electron-builder": "24.6.3",
     "electron-devtools-installer": "3.2.0",
     "electron-notarize": "1.0.0",
     "expect": "22.4.3",
@@ -115,6 +117,7 @@
   },
   "build": {
     "appId": "io.lumerin.wallet.desktop",
+    "generateUpdatesFilesForAllChannels": true,
     "productName": "Lumerin Wallet",
     "files": [
       ".env",
@@ -131,7 +134,7 @@
       "include": "assets/installer.nsh"
     },
     "mac": {
-      "artifactName": "${name}.${ext}",
+      "artifactName": "${name}-${arch}.${ext}",
       "category": "public.app-category.finance",
       "icon": "./assets/lumerin.png",
       "extendInfo": {
@@ -141,7 +144,8 @@
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "./entitlements.mac.plist",
-      "entitlementsInherit": "./entitlements.mac.plist"
+      "entitlementsInherit": "./entitlements.mac.plist",
+      "publish": "github"
     },
     "linux": {
       "artifactName": "${name}.${ext}",
@@ -149,13 +153,15 @@
       "target": [
         "deb"
       ],
-      "icon": "./assets/lumerin.png"
+      "icon": "./assets/lumerin.png",
+      "publish": "github"
     },
     "win": {
       "artifactName": "${name}.${ext}",
       "target": "nsis",
       "icon": "./assets/lumerin.png",
-      "legalTrademarks": ""
+      "legalTrademarks": "",
+      "publish": "github"
     }
   },
   "config": {

@@ -46,6 +46,7 @@ const Main = styled.div`
   overflow-y: hidden;
   min-height: 100vh;
   background: #eaf7fc;
+  padding-top: 1.4rem;
   background-image: url(${bgImage});
   background-position: right;
   background-repeat: no-repeat;

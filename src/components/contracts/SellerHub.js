@@ -13,7 +13,7 @@ import { CONTRACT_STATE } from '../../enums';
 import { lmrDecimals } from '../../utils/coinValue';
 import { formatBtcPerTh } from './utils';
 import ArchiveModal from './modals/ArchiveModal/ArchiveModal';
-import { IconTrash } from '@tabler/icons';
+import { IconArchive } from '@tabler/icons';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -67,17 +67,6 @@ const ArchiveBtn = styled(Btn)`
   background-color: transparent;
 `;
 
-const tabs = [
-  { name: 'Status', ratio: 1 },
-  { value: 'price', name: 'Price', ratio: 1 },
-  { value: 'btc-th', name: 'BTC/TH/day', ratio: 1 },
-  { value: 'length', name: 'Duration', ratio: 1 },
-  { value: 'speed', name: 'Speed', ratio: 1 },
-  { value: 'history', name: 'History', ratio: 1 },
-  { value: 'funds', name: 'Funds', ratio: 1 },
-  { value: 'action', name: 'Actions', ratio: 1 }
-];
-
 function SellerHub({
   contracts,
   hasContracts,
@@ -90,6 +79,7 @@ function SellerHub({
   contractsRefresh,
   allowSendTransaction,
   networkDifficulty,
+  selectedCurrency,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -98,6 +88,49 @@ function SellerHub({
   const [editContractData, setEditContractData] = useState({});
   const context = useContext(ToastsContext);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  const tabs = [
+    { name: 'Status', ratio: 1 },
+    {
+      value: 'price',
+      name: 'Price',
+      ratio: 1,
+      options: [
+        {
+          label: 'Price (BTC)',
+          value: 'BTC',
+          selected: selectedCurrency === 'BTC'
+        },
+        {
+          label: 'Price (LMR)',
+          value: 'LMR',
+          selected: selectedCurrency === 'LMR'
+        }
+      ]
+    },
+    { value: 'btc-th', name: 'BTC/TH/day', ratio: 1 },
+    { value: 'length', name: 'Duration', ratio: 1 },
+    { value: 'speed', name: 'Speed', ratio: 1 },
+    { value: 'history', name: 'History', ratio: 1 },
+    {
+      value: 'claimable',
+      name: 'Сlaimable',
+      ratio: 1,
+      options: [
+        {
+          label: 'Сlaimable (BTC)',
+          value: 'BTC',
+          selected: selectedCurrency === 'BTC'
+        },
+        {
+          label: 'Сlaimable (LMR)',
+          value: 'LMR',
+          selected: selectedCurrency === 'LMR'
+        }
+      ]
+    },
+    { value: 'action', name: 'Actions', ratio: 1 }
+  ];
 
   // static propTypes = {
   //   sendDisabledReason: PropTypes.string,
@@ -142,7 +175,9 @@ function SellerHub({
       type: 'edit-contract-state',
       payload: {
         id,
-        ...contract
+        ...contract,
+        length: contract.duration,
+        seller: contract.sellerAddress
       }
     });
   };
@@ -162,9 +197,9 @@ function SellerHub({
 
     const contract = {
       id: contractId,
-      price: contractDetails.price * lmrDecimals,
-      speed: contractDetails.speed * 10 ** 12, // THs
-      duration: contractDetails.time * 3600, // Hours to seconds
+      price: (contractDetails.price * lmrDecimals).toString(),
+      speed: (contractDetails.speed * 10 ** 12).toString(), // THs
+      duration: (contractDetails.time * 3600).toString(), // Hours to seconds
       sellerAddress: contractDetails.address
     };
 
@@ -173,7 +208,8 @@ function SellerHub({
       .editContract(contract)
       .then(() => {
         setShowSuccess(true);
-        dispatchEditContract(contract.id, contract);
+        contractsRefresh(true);
+        // dispatchEditContract(contract.id, contract); // TODO: investigate rows are not rerendering
       })
       .catch(error => {
         context.toast('error', error.message || error);
@@ -272,7 +308,7 @@ function SellerHub({
             style={{ display: 'flex' }}
             data-rh={showArchive ? null : `You have no archived contracts`}
           >
-            <IconTrash style={{ display: 'inline-block' }} /> Archived
+            <IconArchive style={{ display: 'inline-block' }} /> Archived
           </span>
         </ArchiveBtn>
       </LayoutHeader>
@@ -301,6 +337,7 @@ function SellerHub({
         deploy={handleContractDeploy}
         close={handleCloseModal}
         showSuccess={showSuccess}
+        networkReward={sellerStats.networkReward}
         editContractData={{}}
       />
 

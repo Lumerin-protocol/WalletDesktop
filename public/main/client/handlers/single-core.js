@@ -154,9 +154,8 @@ function createWallet(data, core, isOpen = true) {
 const restartProxyRouter = async (data, { emitter, api }) => {
   const password = await auth.getSessionPassword();
 
-  api["proxy-router"].kill(config.chain.buyerProxyPort).catch(logger.error);
   await api["proxy-router"]
-    .kill(config.chain.sellerProxyPort)
+    .kill(config.chain.proxyPort)
     .catch(logger.error);
 
   emitter.emit("open-proxy-router", { password });
@@ -261,6 +260,10 @@ function refreshAllTransactions({ address }, { api, emitter }) {
       return {};
     });
 }
+
+const getMarketplaceFee = async function(data, { api }) {
+ return api.contracts.getMarketplaceFee(data);
+};
 
 function refreshAllContracts({}, { api }) {
   const walletId = wallet.getAddress().address;
@@ -386,4 +389,5 @@ module.exports = {
   getPastTransactions,
   setContractDeleteStatus,
   editContract,
+  getMarketplaceFee
 };
