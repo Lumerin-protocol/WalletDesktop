@@ -177,7 +177,7 @@ const Tools = props => {
       getProxyRouterSettings()
         .then(data => {
           setSellerPoolParts(getPoolAndAccount(data.sellerDefaultPool));
-          setBuyerPoolParts(getPoolAndAccount(data.buyerDefaultPool));
+          setBuyerPoolParts(getPoolAndAccount(data.sellerDefaultPool));
 
           setProxyRouterSettings({
             ...data,
@@ -213,7 +213,7 @@ const Tools = props => {
       });
       return saveProxyRouterSettings({
         sellerDefaultPool: proxyRouterSettings.sellerDefaultPool,
-        buyerDefaultPool: proxyRouterSettings.buyerDefaultPool
+        buyerDefaultPool: proxyRouterSettings.sellerDefaultPool
       })
         .catch(() => {
           context.toast('error', 'Failed to save proxy-router settings');

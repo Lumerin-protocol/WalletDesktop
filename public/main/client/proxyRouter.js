@@ -47,35 +47,39 @@ const runProxyRouter = (config) => {
     const out = openLogFile(`proxy-out`);
     const err = openLogFile(`proxy-err`);
 
+    const proxyConfig = [
+      `--contract-address=${config.cloneFactoryAddress}`,
+      `--eth-node-address=${config.wsApiUrl}`,
+
+      "--miner-vetting-duration=5m",
+      "--miner-share-timeout=10m",
+
+      "--hashrate-error-threshold=0.05",
+      "--hashrate-cycle-duration=5m",
+      "--hashrate-share-timeout=7m",
+      "--hashrate-validation-start-timeout=15m",
+
+      "--log-level-app=info",
+      "--log-level-scheduler=info",
+      "--log-level-proxy=info",
+      "--log-level-connection=info",
+
+      `--wallet-private-key=${config.privateKey}`,
+      `--proxy-address=0.0.0.0:${config.proxyPort}`,
+      `--web-address=0.0.0.0:${config.proxyWebPort}`,
+      `--pool-address=${config.sellerDefaultPool}`,
+    ];
+
     const ls = spawn(
       `${resourcePath}/executables/proxy-router`,
-      [
-        `--contract-address=${config.cloneFactoryAddress}`,
-        `--eth-node-address=${config.wsApiUrl}`,
-
-        "--miner-vetting-duration=5m",
-        "--miner-share-timeout=10m",
-
-        "--hashrate-error-threshold=0.05",
-        "--hashrate-cycle-duration=5m",
-        "--hashrate-share-timeout=7m",
-        "--hashrate-validation-start-timeout=15m",
-
-        "--log-level-app=info",
-        "--log-level-scheduler=info",
-        "--log-level-proxy=info",
-        "--log-level-connection=info",
-
-        `--wallet-private-key=${config.privateKey}`,
-        `--proxy-address=0.0.0.0:${config.proxyPort}`,
-        `--web-address=0.0.0.0:${config.proxyWebPort}`,
-        `--pool-address=${config.sellerDefaultPool}`,
-      ],
+      proxyConfig,
       {
         detached: true,
         stdio: ["ignore", out, err],
       }
     );
+
+    logger.error(`This is not error, but important info. Proxy config: ${JSON.stringify(proxyConfig.filter(c => !c.includes('private-key')))}`);
 
     ls.unref();
     return;
