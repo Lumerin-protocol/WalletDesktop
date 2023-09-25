@@ -48,7 +48,7 @@ export const AddressHeader = ({ copyToClipboard, address }) => {
   };
 
   return (
-    <Container>
+    <Container className="sidebar-address">
       <AddressContainer>
         <Address data-testid="address">{abbreviateAddress(address, 5)}</Address>
         <IconCopy

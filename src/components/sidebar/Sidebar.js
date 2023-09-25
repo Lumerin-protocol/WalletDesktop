@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import SecondaryNav from './SecondaryNav';
 import PrimaryNav from './PrimaryNav';
-import { SidebarLumerinLightIcon } from '../icons/SidebarLumerinLightIcon';
+import LumerinLogo from '../icons/LumerinLogo';
 
 import { ReactComponent as LumerinLogoFull } from '../icons/LumerinLogoFull.svg';
 import { AddressHeader } from '../common/AddressHeader';
@@ -22,14 +22,28 @@ const Container = styled.div`
   left: 0;
   bottom: 0;
   z-index: 3;
+
+  .sidebar-address {
+    display: none;
+  }
+
   &:hover {
     width: 210px;
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.2);
+
+    .sidebar-address {
+      display: block;
+    }
   }
   @media (min-width: 800px) {
     position: relative;
     min-width: 210px;
     width: 210px;
+
+    .sidebar-address {
+      display: block;
+    }
+
     &:hover {
       box-shadow: none;
     }
@@ -51,9 +65,11 @@ const FullLogoContainer = styled.div`
 `;
 
 const IconLogoContainer = styled.div`
-  padding: 2rem 0.8rem;
+  padding: 40px 0.8rem 2rem 0.8rem;
   height: 100px;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-shrink: 0;
 
   ${({ parent }) => parent}:hover & {
@@ -90,7 +106,7 @@ function Sidebar(props) {
       </FullLogoContainer>
 
       <IconLogoContainer parent={Container}>
-        <SidebarLumerinLightIcon size="6rem" />
+        <LumerinLogo style={{ width: '5rem' }} />
       </IconLogoContainer>
       <NavContainer>
         <PrimaryNavContainer>
