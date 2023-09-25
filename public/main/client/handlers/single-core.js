@@ -328,6 +328,8 @@ const refreshProxyRouterConnection = async (data, { api }) =>
 
 const getLocalIp = async ({}, { api }) => api["proxy-router"].getLocalIp();
 
+const isProxyPortPublic = async (data, { api }) => api["proxy-router"].isProxyPortPublic(data);
+
 const logout = async (data) => {
   return cleanupDb();
 };
@@ -389,5 +391,6 @@ module.exports = {
   getPastTransactions,
   setContractDeleteStatus,
   editContract,
-  getMarketplaceFee
+  getMarketplaceFee,
+  isProxyPortPublic,
 };

@@ -53,6 +53,8 @@ jobs:
       SHOW_FAUCET: ${{ secrets.SHOW_FAUCET }}
       ETH_NODE_ADDRESS_HTTP: ${{ vars.ETH_NODE_ADDRESS_HTTP }}
       TITAN_LIGHTNING_POOL: ${{ secrets.TITAN_LIGHTNING_POOL }}
+      PORT_CHECKER_URL: ${{ vars.PORT_CHECKER_URL }}
+      PORT_CHECK_ERROR_LINK: ${{ vars.PORT_CHECK_ERROR_LINK }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -84,6 +86,8 @@ jobs:
           echo "NODE_ENV=production" >> .env
           echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
           echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
+          echo "PORT_CHECKER_URL=$PORT_CHECKER_URL" >> .env
+          echo "PORT_CHECK_ERROR_LINK=$PORT_CHECK_ERROR_LINK" >> .env
         shell: bash
       - name: Set env from gitlab
         run: |

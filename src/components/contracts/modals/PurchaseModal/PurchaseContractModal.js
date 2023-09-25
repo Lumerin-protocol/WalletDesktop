@@ -16,12 +16,14 @@ function PurchaseContractModal(props) {
     close,
     contract,
     explorerUrl,
+    portCheckErrorLink,
     lmrRate,
     history,
     pool,
     showSuccess,
     symbol,
-    marketplaceFee
+    marketplaceFee,
+    isProxyPortPublic
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
@@ -101,6 +103,8 @@ function PurchaseContractModal(props) {
           onBackToForm={() => setIsPreview(false)}
           onPurchase={wrapHandlePurchase}
           symbol={symbol}
+          isProxyPortPublic={isProxyPortPublic}
+          portCheckErrorLink={portCheckErrorLink}
         />
       ) : (
         <PurchaseFormModalPage
