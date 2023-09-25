@@ -24,6 +24,7 @@ const withCreateContractModalState = WrappedComponent => {
       return (
         <WrappedComponent
           copyToClipboard={this.props.client.copyToClipboard}
+          isProxyPortPublic={this.props.client.isProxyPortPublic}
           {...this.props}
           {...this.state}
         />
@@ -46,7 +47,8 @@ const withCreateContractModalState = WrappedComponent => {
       ? selectors.getContractExplorerUrl(state, {
           hash: props.contract.id
         })
-      : null
+      : null,
+    portCheckErrorLink: selectors.getPortCheckErrorLink(state)
   });
 
   return connect(mapStateToProps)(withClient(Container));
