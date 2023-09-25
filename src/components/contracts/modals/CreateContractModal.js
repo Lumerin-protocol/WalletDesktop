@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import withCreateContractModalState from '../../../store/hocs/withCreateContractModalState';
 import {
-  Modal,
-  Body,
   TitleWrapper,
   Title,
   Subtitle,
@@ -13,21 +11,45 @@ import {
   Label,
   Sublabel,
   RightBtn,
-  CloseModal,
-  ErrorLabel
+  ErrorLabel,
+  ApplyBtn,
+  ProfitMessageLabel,
+  ProfitLabel
 } from './CreateContractModal.styles';
 import { useForm } from 'react-hook-form';
 import { CreateContractPreview } from './CreateContractPreview';
 import { CreateContractSuccessPage } from './CreateContractSuccessPage';
-import { toMicro } from '../utils';
+import { lmrDecimals } from '../../../utils/coinValue';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+import { IconChevronUp, IconChevronDown } from '@tabler/icons';
+
+import Modal from './Modal';
 
 const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
+  if (!price || !speed || !time) return;
+
   const lengthDays = time / 24;
 
   const contractUsdPrice = price * lmrRate;
   const contractBtcPrice = contractUsdPrice / btcRate;
   const result = contractBtcPrice / speed / lengthDays;
-  return toMicro(result).toFixed(3);
+  return result.toFixed(10);
+};
+
+const calculateSuggestedPrice = (
+  time,
+  speed,
+  btcRate,
+  lmrRate,
+  profit,
+  multiplier
+) => {
+  const lengthDays = time / 24;
+  return (
+    (multiplier * profit * lengthDays * speed * btcRate) /
+    lmrRate
+  ).toFixed(0);
 };
 
 function CreateContractModal(props) {
@@ -35,19 +57,30 @@ function CreateContractModal(props) {
     isActive,
     save,
     deploy,
+    edit,
     close,
     client,
     address,
     showSuccess,
     lmrRate,
-    btcRate
+    btcRate,
+    symbol,
+    isEditMode,
+    editContractData,
+    networkReward,
+    marketplaceFee
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [price, setPrice] = useState();
-  const [speed, setSpeed] = useState();
-  const [length, setTime] = useState();
+  const [price, setPrice] = useState(+editContractData.price);
+  const [speed, setSpeed] = useState(editContractData.speed);
+  const [length, setTime] = useState(editContractData.length);
+  const [estimatedReward, setEstimatedReward] = useState(null);
+  const [suggestedPrice, setSuggestedPrice] = useState(null);
+  const [showSuggested, setShowSuggested] = useState(false);
+  const [persent, setPersent] = useState(0);
+  const underProfit = networkReward > (estimatedReward || 0);
 
   const {
     register,
@@ -65,6 +98,9 @@ function CreateContractModal(props) {
 
   const resetValues = () => {
     reset();
+    setPrice();
+    setSpeed();
+    setTime();
     setValue('address', address);
   };
 
@@ -77,12 +113,20 @@ function CreateContractModal(props) {
     setIsPreview(false);
   };
 
+  const wrapHandleUpdate = async e => {
+    e.preventDefault();
+    setIsCreating(true);
+    await edit(e, getValues(), editContractData.id, editContractData);
+    resetValues();
+    setIsCreating(false);
+    setIsPreview(false);
+  };
+
   const handleClose = e => {
     resetValues();
     setIsPreview(false);
     close(e);
   };
-  const handlePropagation = e => e.stopPropagation();
 
   if (!isActive) {
     return <></>;
@@ -90,40 +134,120 @@ function CreateContractModal(props) {
   const timeField = register('time', {
     required: true,
     min: 24,
-    max: 48
+    max: 48,
+    value: editContractData.length ? editContractData.length / 3600 : undefined,
+    onChange: e => {
+      const reward = getContractRewardBtcPerTh(
+        price,
+        e.target.value,
+        speed,
+        btcRate,
+        lmrRate
+      );
+
+      if (reward) {
+        setEstimatedReward(reward);
+        if (!suggestedPrice) {
+          const result = calculateSuggestedPrice(
+            e.target.value,
+            speed,
+            btcRate,
+            lmrRate,
+            networkReward,
+            1
+          );
+          setSuggestedPrice(result);
+        }
+      }
+    }
   });
   const speedField = register('speed', {
     required: true,
     min: 100,
-    max: 1000
+    max: 1000,
+    value: editContractData.price
+      ? editContractData.speed / 10 ** 12
+      : undefined,
+    onChange: e => {
+      const reward = getContractRewardBtcPerTh(
+        price,
+        length,
+        e.target.value,
+        btcRate,
+        lmrRate
+      );
+
+      if (reward) {
+        setEstimatedReward(reward);
+        if (!suggestedPrice) {
+          const result = calculateSuggestedPrice(
+            length,
+            e.target.value,
+            btcRate,
+            lmrRate,
+            networkReward,
+            1
+          );
+          setSuggestedPrice(result);
+        }
+      }
+    }
   });
   const priceField = register('price', {
     required: true,
-    min: 1
+    min: 1,
+    value: editContractData.price
+      ? editContractData.price / lmrDecimals
+      : undefined,
+    onChange: e => {
+      console.log(e.target.value);
+      const reward = getContractRewardBtcPerTh(
+        e.target.value,
+        length,
+        speed,
+        btcRate,
+        lmrRate
+      );
+      if (reward) {
+        setEstimatedReward(reward);
+      }
+    }
   });
+
+  function percentFormatter(v) {
+    return `${v} %`;
+  }
+
+  const title = isEditMode ? 'Edit your contract' : 'Create new contract';
+  const buttonLabel = isEditMode ? 'Update Contract' : 'Create Contract';
+  const subtitle = isEditMode
+    ? 'Changes will not affect running contract.'
+    : 'Sell your hashpower on the Lumerin Marketplace';
   return (
-    <Modal onClick={handleClose}>
-      <Body onClick={handlePropagation}>
-        {CloseModal(handleClose)}
-        {showSuccess ? (
-          <CreateContractSuccessPage close={handleClose} />
-        ) : isPreview ? (
-          <CreateContractPreview
-            isCreating={isCreating}
-            data={getValues()}
-            close={() => setIsPreview(false)}
-            submit={wrapHandleDeploy}
-          />
-        ) : (
-          <>
-            <TitleWrapper>
-              <Title>Create new contract</Title>
-              <Subtitle>
-                Sell your hashpower on the Lumerin Marketplace
-              </Subtitle>
-            </TitleWrapper>
-            <Form onSubmit={() => setIsPreview(true)}>
-              {/* <Row>
+    <Modal onClose={handleClose}>
+      {showSuccess ? (
+        <CreateContractSuccessPage
+          close={handleClose}
+          isEditMode={isEditMode}
+        />
+      ) : isPreview ? (
+        <CreateContractPreview
+          isCreating={isCreating}
+          data={getValues()}
+          close={() => setIsPreview(false)}
+          submit={isEditMode ? wrapHandleUpdate : wrapHandleDeploy}
+          isEditMode={isEditMode}
+          symbol={symbol}
+          marketplaceFee={marketplaceFee}
+        />
+      ) : (
+        <>
+          <TitleWrapper>
+            <Title>{title}</Title>
+            <Subtitle>{subtitle}</Subtitle>
+          </TitleWrapper>
+          <Form onSubmit={() => setIsPreview(true)}>
+            {/* <Row>
                 <InputGroup>
                   <Label htmlFor="address">Ethereum Address *</Label>
                   <Input
@@ -149,119 +273,215 @@ function CreateContractModal(props) {
                   )}
                 </InputGroup>
               </Row> */}
-              <Row>
-                <InputGroup>
-                  <Label htmlFor="time">Duration *</Label>
+            <Row>
+              <InputGroup>
+                <Label htmlFor="time">Duration *</Label>
+                <Input
+                  {...timeField}
+                  onChange={e => {
+                    setTime(e.target.value);
+                    timeField.onChange(e);
+                  }}
+                  placeholder="# of hours"
+                  type="number"
+                  name="time"
+                  id="time"
+                />
+                <Sublabel>Contract Length (min 24 hrs, max 48 hrs)</Sublabel>
+                {formState?.errors?.time?.type === 'required' && (
+                  <ErrorLabel>Duration is required</ErrorLabel>
+                )}
+                {formState?.errors?.time?.type === 'min' && (
+                  <ErrorLabel>{'Minimum 24 hours'}</ErrorLabel>
+                )}
+                {formState?.errors?.time?.type === 'max' && (
+                  <ErrorLabel>{'Maximum 48 hours'}</ErrorLabel>
+                )}
+              </InputGroup>
+            </Row>
+            <Row>
+              <InputGroup>
+                <Label htmlFor="speed">Speed *</Label>
+                <Input
+                  {...speedField}
+                  onChange={e => {
+                    setSpeed(e.target.value);
+                    speedField.onChange(e);
+                  }}
+                  placeholder="Number of TH/s"
+                  type="number"
+                  name="speed"
+                  id="speed"
+                />
+                <Sublabel>Amount of TH/s Contracted (min 100 TH/s)</Sublabel>
+                {formState?.errors?.speed?.type === 'required' && (
+                  <ErrorLabel>Speed is required</ErrorLabel>
+                )}
+                {formState?.errors?.speed?.type === 'min' && (
+                  <ErrorLabel>Minimum 100 TH/s</ErrorLabel>
+                )}
+                {formState?.errors?.speed?.type === 'max' && (
+                  <ErrorLabel>Maximum 1000 TH/s</ErrorLabel>
+                )}
+              </InputGroup>
+            </Row>
+            <Row>
+              <InputGroup>
+                <div>
+                  <Label htmlFor="price">List Price ({symbol}) *</Label>
+                </div>
+                <div>
                   <Input
-                    {...timeField}
+                    {...priceField}
                     onChange={e => {
-                      setTime(e.target.value);
-                      timeField.onChange(e);
+                      setPrice(e.target.value);
+                      priceField.onChange(e);
                     }}
-                    placeholder="# of hours"
+                    placeholder={`${symbol} for Hash Power`}
                     type="number"
-                    name="time"
-                    id="time"
-                  />
-                  <Sublabel>Contract Length (min 24 hrs, max 48 hrs)</Sublabel>
-                  {formState?.errors?.time?.type === 'required' && (
-                    <ErrorLabel>Duration is required</ErrorLabel>
+                    name="price"
+                    id="price"
+                  />{' '}
+                  {!!price && !!speed && !!length && (
+                    <Sublabel>~ {estimatedReward} BTC/TH/day</Sublabel>
                   )}
-                  {formState?.errors?.time?.type === 'min' && (
-                    <ErrorLabel>{'Minimum 24 hours'}</ErrorLabel>
-                  )}
-                  {formState?.errors?.time?.type === 'max' && (
-                    <ErrorLabel>{'Maximum 48 hours'}</ErrorLabel>
-                  )}
-                </InputGroup>
-              </Row>
-              <Row>
-                <InputGroup>
-                  <Label htmlFor="speed">Speed *</Label>
-                  <Input
-                    {...speedField}
-                    onChange={e => {
-                      setSpeed(e.target.value);
-                      speedField.onChange(e);
-                    }}
-                    placeholder="Number of TH/s"
-                    type="number"
-                    name="speed"
-                    id="speed"
-                  />
-                  <Sublabel>Amount of TH/s Contracted (min 100 TH/s)</Sublabel>
-                  {formState?.errors?.speed?.type === 'required' && (
-                    <ErrorLabel>Speed is required</ErrorLabel>
-                  )}
-                  {formState?.errors?.speed?.type === 'min' && (
-                    <ErrorLabel>Minimum 100 TH/s</ErrorLabel>
-                  )}
-                  {formState?.errors?.speed?.type === 'max' && (
-                    <ErrorLabel>Maximum 1000 TH/s</ErrorLabel>
-                  )}
-                </InputGroup>
-              </Row>
-              <Row>
-                <InputGroup>
+                </div>
+                <Sublabel>
+                  This is the price you will deploy your contract to the
+                  marketplace.
+                </Sublabel>
+                {formState?.errors?.price?.type === 'required' && (
+                  <ErrorLabel>Price is required</ErrorLabel>
+                )}
+                {formState?.errors?.price?.type === 'min' && (
+                  <ErrorLabel>Minimum 1 {symbol}</ErrorLabel>
+                )}
+                {!!price && !!speed && !!length && !!underProfit && (
                   <div>
-                    <Label htmlFor="price">List Price (LMR) *</Label>
-                  </div>
-                  <div>
-                    <Input
-                      {...priceField}
-                      onChange={e => {
-                        setPrice(e.target.value);
-                        priceField.onChange(e);
-                      }}
-                      placeholder="LMR for Hash Power"
-                      type="number"
-                      name="price"
-                      id="price"
-                    />{' '}
-                    {!!price && !!speed && !!length && (
-                      <Sublabel>
-                        ~{' '}
-                        {getContractRewardBtcPerTh(
-                          price,
+                    <ProfitLabel
+                      onClick={() => {
+                        const result = calculateSuggestedPrice(
                           length,
                           speed,
                           btcRate,
-                          lmrRate
-                        )}{' '}
-                        μBTC/TH/day
-                      </Sublabel>
-                    )}
+                          lmrRate,
+                          networkReward,
+                          1
+                        );
+                        setSuggestedPrice(result);
+                        setShowSuggested(!showSuggested);
+                      }}
+                    >
+                      <ProfitMessageLabel show={showSuggested}>
+                        Estimated reward is less than network reward (
+                        {networkReward} BTC/TH/day)
+                        {showSuggested ? (
+                          <IconChevronUp width={16} height={16}></IconChevronUp>
+                        ) : (
+                          <IconChevronDown
+                            width={16}
+                            height={16}
+                          ></IconChevronDown>
+                        )}
+                      </ProfitMessageLabel>
+                      {showSuggested && (
+                        <div onClick={e => e.stopPropagation()}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              padding: '1rem',
+                              justifyContent: 'center',
+                              flexDirection: 'column',
+                              alignItems: 'center'
+                            }}
+                          >
+                            <Sublabel> Select desired premium </Sublabel>
+                            <Slider
+                              style={{ width: '80%' }}
+                              ariaValueTextFormatterForHandle={percentFormatter}
+                              tipFormatter={percentFormatter}
+                              tipProps={{
+                                placement: 'top',
+                                visible: true
+                              }}
+                              onClick={e => e.stopPropagation()}
+                              onChange={v => {
+                                setPersent(v);
+                                const result = calculateSuggestedPrice(
+                                  length,
+                                  speed,
+                                  btcRate,
+                                  lmrRate,
+                                  networkReward,
+                                  (100 + v) / 100
+                                );
+                                setSuggestedPrice(result);
+                              }}
+                              min={0}
+                              max={30}
+                            ></Slider>
+                          </div>
+                          <div>
+                            <Sublabel>Premium: {persent}% </Sublabel>
+                          </div>
+                          <div>
+                            <Sublabel>
+                              Estimated Reward:{' '}
+                              {getContractRewardBtcPerTh(
+                                suggestedPrice,
+                                length,
+                                speed,
+                                btcRate,
+                                lmrRate
+                              )}{' '}
+                              BTC/TH/day
+                            </Sublabel>
+                          </div>
+                          <Sublabel>
+                            Suggested Price: {suggestedPrice} LMR{' '}
+                          </Sublabel>
+                          <ApplyBtn
+                            onClick={() => {
+                              setValue('price', suggestedPrice);
+                              setPrice(suggestedPrice);
+                              const reward = getContractRewardBtcPerTh(
+                                suggestedPrice,
+                                length,
+                                speed,
+                                btcRate,
+                                lmrRate
+                              );
+                              if (reward) {
+                                setEstimatedReward(reward);
+                              }
+                            }}
+                          >
+                            Apply
+                          </ApplyBtn>
+                        </div>
+                      )}
+                    </ProfitLabel>
                   </div>
-                  <Sublabel>
-                    This is the price you will deploy your contract to the
-                    marketplace.
-                  </Sublabel>
-                  {formState?.errors?.price?.type === 'required' && (
-                    <ErrorLabel>Price is required</ErrorLabel>
-                  )}
-                  {formState?.errors?.price?.type === 'min' && (
-                    <ErrorLabel>Minimum 1 LMR</ErrorLabel>
-                  )}
-                </InputGroup>
-              </Row>
-              <InputGroup
-                style={{
-                  textAlign: 'center',
-                  justifyContent: 'space-between',
-                  height: '60px'
-                }}
-              >
-                <Row style={{ justifyContent: 'center' }}>
-                  {/* <LeftBtn onClick={handleSaveDraft}>Save as Draft</LeftBtn> */}
-                  <RightBtn disabled={!formState?.isValid} type="submit">
-                    Create Contract
-                  </RightBtn>
-                </Row>
+                )}
               </InputGroup>
-            </Form>
-          </>
-        )}
-      </Body>
+            </Row>
+            <InputGroup
+              style={{
+                textAlign: 'center',
+                justifyContent: 'space-between',
+                height: '60px'
+              }}
+            >
+              <Row style={{ justifyContent: 'center' }}>
+                {/* <LeftBtn onClick={handleSaveDraft}>Save as Draft</LeftBtn> */}
+                <RightBtn disabled={!formState?.isValid} type="submit">
+                  {buttonLabel}
+                </RightBtn>
+              </Row>
+            </InputGroup>
+          </Form>
+        </>
+      )}
     </Modal>
   );
 }

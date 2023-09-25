@@ -22,13 +22,15 @@ const WalletBalance = ({
   lmrBalance,
   lmrBalanceUSD,
   ethBalance,
-  ethBalanceUSD
+  ethBalanceUSD,
+  symbol,
+  symbolEth
 }) => (
   <BalanceContainer>
     <CoinsRow>
       <Primary data-testid="lmr-balance">
         <Balance
-          currency="LMR"
+          currency={symbol}
           value={lmrBalance}
           icon={
             <LumerinLogo style={{ height: '3.3rem', marginRight: '4px' }} />
@@ -39,7 +41,7 @@ const WalletBalance = ({
       </Primary>
       <Primary data-testid="eth-balance">
         <Balance
-          currency="ETH"
+          currency={symbolEth}
           value={ethBalance}
           icon={<EtherIcon size="3.3rem" />}
           equivalentUSD={ethBalanceUSD}
@@ -59,8 +61,11 @@ const BalanceBlock = ({
   sendDisabledReason,
   recaptchaSiteKey,
   faucetUrl,
+  showFaucet,
   walletAddress,
   onTabSwitch,
+  symbol,
+  symbolEth,
   client
 }) => {
   const handleTabSwitch = e => {
@@ -80,7 +85,14 @@ const BalanceBlock = ({
       <Container>
         <SecondaryContainer>
           <WalletBalance
-            {...{ lmrBalance, lmrBalanceUSD, ethBalance, ethBalanceUSD }}
+            {...{
+              lmrBalance,
+              lmrBalanceUSD,
+              ethBalance,
+              ethBalanceUSD,
+              symbol,
+              symbolEth
+            }}
           />
           <BtnRow>
             <BtnAccent
@@ -102,15 +114,17 @@ const BalanceBlock = ({
               Send
             </Btn>
 
-            <BtnAccent
-              data-modal="claim"
-              onClick={claimFaucet}
-              data-rh={`Payout from the faucet is 2 sLMR and 0.01 sETH per day.\n
-                Wallet addresses are limited to one request every 24 hours.`}
-              block
-            >
-              Get Tokens
-            </BtnAccent>
+            {showFaucet && (
+              <BtnAccent
+                data-modal="claim"
+                onClick={claimFaucet}
+                data-rh={`Payout from the faucet is 2 ${symbol} and 0.01 ${symbolEth} per day.\n
+          Wallet addresses are limited to one request every 24 hours.`}
+                block
+              >
+                Get Tokens
+              </BtnAccent>
+            )}
           </BtnRow>
         </SecondaryContainer>
       </Container>

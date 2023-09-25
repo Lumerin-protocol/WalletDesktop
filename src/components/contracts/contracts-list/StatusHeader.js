@@ -1,5 +1,4 @@
 import React from 'react';
-import { Title } from './ContractsList.styles';
 import { IconRefresh } from '@tabler/icons';
 import styled from 'styled-components';
 
@@ -10,9 +9,8 @@ const Container = styled.div`
   justify-content: center;
   color: ${p => p.theme.colors.primary};
   align-items: center;
-  font-weight: 100;
-  width: 185px;
-  font-size: 1.5rem;
+  font-weight: 500;
+  font-size: 1.3rem;
   cursor: pointer;
   border-radius: 12px;
 `;
@@ -25,9 +23,9 @@ export default function StatusHeader(props) {
 
   const iconStyles = {
     width: '20px',
-    marginRight: '6px',
     paddingBottom: '2px',
     paddingTop: '2px',
+    marginRight: '0.75rem',
     cursor: 'pointer'
   };
 
@@ -41,8 +39,9 @@ export default function StatusHeader(props) {
           <span>Syncing Contracts...</span>
         ) : (
           <>
-            <IconRefresh style={iconStyles} />
-            <span>Refresh Contracts</span>
+            <IconRefresh style={iconStyles} data-rh={'Refresh Contracts'} />
+            Refresh Contracts
+            {/* <span>Refresh Contracts</span> */}
           </>
         )}
       </Container>

@@ -14,6 +14,10 @@ const reducer = handleActions(
     'ip-received': (state, { payload }) => ({
       ...state,
       ip: payload
+    }),
+    'set-seller-currency': (state, { payload }) => ({
+      ...state,
+      sellerCurrency: payload
     })
   },
   initialState

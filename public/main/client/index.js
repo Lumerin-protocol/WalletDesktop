@@ -16,7 +16,6 @@ const {
 
 const {
   runProxyRouter,
-  PROXY_ROUTER_MODE,
   isProxyRouterHealthy,
 } = require("./proxyRouter");
 
@@ -107,24 +106,14 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         ...proxyRouterUserConfig,
       };
 
-      const isSellerHealthy = await isProxyRouterHealthy(
+      const isProxyHealth = await isProxyRouterHealthy(
         api,
-        config.localSellerProxyRouterUrl
+        config.localProxyRouterUrl
       );
-      if (!isSellerHealthy) {
+      if (!isProxyHealth) {
         logger.debug("Seller is not healhy, restart...");
-        await proxyRouterApi.kill(config.sellerProxyPort).catch(logger.error);
-        runProxyRouter(config, PROXY_ROUTER_MODE.Seller);
-      }
-
-      const isBuyerHealthy = await isProxyRouterHealthy(
-        api,
-        config.localBuyerProxyRouterUrl
-      );
-      if (!isBuyerHealthy) {
-        logger.debug("Buyer is not healhy, restart...");
-        await proxyRouterApi.kill(config.buyerProxyPort).catch(logger.error);
-        runProxyRouter(config, PROXY_ROUTER_MODE.Buyer);
+        await proxyRouterApi.kill(config.proxyPort).catch(logger.error);
+        runProxyRouter(config);
       }
       send("proxy-router-type-changed", {
         isLocal: true,
@@ -132,8 +121,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
 
       refreshProxyRouterConnection(
         {
-          sellerNodeUrl: config.localSellerProxyRouterUrl,
-          buyerNodeUrl: config.localBuyerProxyRouterUrl,
+          proxyNodeUrl: config.localProxyRouterUrl,
         },
         { api }
       );

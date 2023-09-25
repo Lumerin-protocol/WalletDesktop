@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import theme from '../../ui/theme';
 
 const ProgressBarWrapper = styled.div`
   width: 100%;
@@ -10,7 +11,7 @@ const ProgressBarWrapper = styled.div`
 `;
 
 const Completed = styled.div`
-  background-color: #42b983;
+  background-color: ${theme.colors.active};
   height: 30px;
   width: ${props => props.width};
   display: flex;
@@ -18,7 +19,7 @@ const Completed = styled.div`
 `;
 
 const Remaining = styled.div`
-  background-color: red;
+  background-color: ${theme.colors.cancelled};
   height: 30px;
   width: ${props => props.width};
   display: flex;

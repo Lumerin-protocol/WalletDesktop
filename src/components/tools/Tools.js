@@ -16,6 +16,7 @@ import ConfirmProxyConfigModal from './ConfirmProxyConfigModal';
 import RevealSecretPhraseModal from './RevealSecretPhraseModal';
 import { Message } from './ConfirmModal.styles';
 import ExportPrivateKeyModal from './ExportPrivateKeyModal';
+import { generatePoolUrl } from '../../utils';
 
 const Container = styled.div`
   margin-left: 2rem;
@@ -93,6 +94,10 @@ const Subtitle = styled.h3`
 
 const StyledParagraph = styled.p`
   color: ${p => p.theme.colors.dark};
+
+  span {
+    font-weight: bold;
+  }
 `;
 
 const WalletInfo = styled.h4`
@@ -108,11 +113,33 @@ export const Input = styled(TextInput)`
   margin-top: 0.25rem;
 `;
 
+const getPoolAndAccount = url => {
+  if (!url) return {};
+  const addressParts = url.replace('stratum+tcp://', '').split(':');
+  return {
+    account: decodeURIComponent(addressParts[0]),
+    pool: `${addressParts[1].slice(1)}:${addressParts[2]}`
+  };
+};
+
+const Select = styled.select`
+  width: 35%;
+  height: 40px;
+  outline: 0;
+  border: 0px;
+  background: #eaf7fc;
+  border-radius: 15px;
+  padding: 1.2rem 1.2rem;
+  margin-top: 0.25rem;
+`;
+
 const Tools = props => {
   const {
     getProxyRouterSettings,
     saveProxyRouterSettings,
-    restartProxyRouter
+    restartProxyRouter,
+    setDefaultCurrency,
+    selectedCurrency
   } = props;
 
   const RenderForm = goToReview => {
@@ -123,7 +150,8 @@ const Tools = props => {
         Show: false,
         Message: null,
         Type: 'info'
-      }
+      },
+      selectedCurrency: selectedCurrency
     };
 
     const [state, setState] = useState(defState);
@@ -132,6 +160,9 @@ const Tools = props => {
       proxyRouterEditMode: false,
       isFetching: true
     });
+    const [sellerPoolParts, setSellerPoolParts] = useState(null);
+    const [buyerPoolParts, setBuyerPoolParts] = useState(null);
+
     const context = useContext(ToastsContext);
 
     const logPath = (() => {
@@ -145,6 +176,9 @@ const Tools = props => {
     useEffect(() => {
       getProxyRouterSettings()
         .then(data => {
+          setSellerPoolParts(getPoolAndAccount(data.sellerDefaultPool));
+          setBuyerPoolParts(getPoolAndAccount(data.sellerDefaultPool));
+
           setProxyRouterSettings({
             ...data,
             isFetching: false
@@ -179,7 +213,7 @@ const Tools = props => {
       });
       return saveProxyRouterSettings({
         sellerDefaultPool: proxyRouterSettings.sellerDefaultPool,
-        buyerDefaultPool: proxyRouterSettings.buyerDefaultPool
+        buyerDefaultPool: proxyRouterSettings.sellerDefaultPool
       })
         .catch(() => {
           context.toast('error', 'Failed to save proxy-router settings');
@@ -254,6 +288,41 @@ const Tools = props => {
             </Sp>
           </form> */}
           <Sp mt={5}>
+            <Subtitle>Seller Default Currency</Subtitle>
+            <StyledParagraph>
+              This will set default currency to display prices and balances on
+              Seller Hub.
+              <div style={{ marginTop: '1rem' }}>
+                <Select
+                  onChange={e =>
+                    setState({ ...state, selectedCurrency: e.target.value })
+                  }
+                >
+                  <option
+                    selected={state.selectedCurrency === 'BTC'}
+                    key={'BTC'}
+                    value={'BTC'}
+                  >
+                    BTC
+                  </option>
+                  <option
+                    selected={state.selectedCurrency === 'LMR'}
+                    key={'LMR'}
+                    value={'LMR'}
+                  >
+                    LMR
+                  </option>
+                </Select>
+              </div>
+            </StyledParagraph>
+            <StyledBtn
+              disabled={state.selectedCurrency === selectedCurrency}
+              onClick={() => setDefaultCurrency(state.selectedCurrency)}
+            >
+              Save
+            </StyledBtn>
+          </Sp>
+          <Sp mt={5}>
             <Subtitle>Change Password</Subtitle>
             <StyledParagraph>
               This will allow you to change the password you use to access the
@@ -285,41 +354,91 @@ const Tools = props => {
             ) : !proxyRouterSettings.proxyRouterEditMode ? (
               <>
                 <StyledParagraph>
-                  Seller default pool: "{proxyRouterSettings.sellerDefaultPool}"
+                  <div>
+                    <span>Proxy Default Pool:</span> {sellerPoolParts?.pool}{' '}
+                  </div>
+                  <div>
+                    <span>Proxy Default Account:</span>{' '}
+                    {sellerPoolParts?.account}{' '}
+                  </div>
                 </StyledParagraph>
-                <StyledParagraph>
-                  Buyer default pool: "{proxyRouterSettings.buyerDefaultPool}"
-                </StyledParagraph>
+                {/* <StyledParagraph>
+                  <div>
+                    <span>Buyer Default Pool:</span> {buyerPoolParts?.pool}{' '}
+                  </div>
+                  <div>
+                    <span>Buyer Default Account:</span>{' '}
+                    {buyerPoolParts?.account}{' '}
+                  </div>
+                </StyledParagraph> */}
                 <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
               </>
             ) : (
               <>
                 <StyledParagraph>
-                  Seller default pool:{' '}
+                  Proxy Default Pool:{' '}
                   <Input
                     onChange={e =>
-                      setProxyRouterSettings({
-                        ...proxyRouterSettings,
-                        sellerDefaultPool: e.value
+                      setSellerPoolParts({
+                        ...sellerPoolParts,
+                        pool: e.value
                       })
                     }
-                    value={proxyRouterSettings.sellerDefaultPool}
+                    value={sellerPoolParts?.pool}
                   />
                 </StyledParagraph>
                 <StyledParagraph>
-                  Buyer default pool:{' '}
+                  Proxy Default Account:{' '}
                   <Input
                     onChange={e =>
-                      setProxyRouterSettings({
-                        ...proxyRouterSettings,
-                        buyerDefaultPool: e.value
+                      setSellerPoolParts({
+                        ...sellerPoolParts,
+                        account: e.value
                       })
                     }
-                    value={proxyRouterSettings.buyerDefaultPool}
+                    value={sellerPoolParts?.account}
                   />
                 </StyledParagraph>
+                <hr></hr>
+                {/* <StyledParagraph>
+                  Buyer Default Pool:{' '}
+                  <Input
+                    onChange={e =>
+                      setBuyerPoolParts({
+                        ...buyerPoolParts,
+                        pool: e.value
+                      })
+                    }
+                    value={buyerPoolParts?.pool}
+                  />
+                </StyledParagraph>
+                <StyledParagraph>
+                  Buyer Default Account:{' '}
+                  <Input
+                    onChange={e =>
+                      setBuyerPoolParts({
+                        ...buyerPoolParts,
+                        account: e.value
+                      })
+                    }
+                    value={buyerPoolParts?.account}
+                  />
+                </StyledParagraph> */}
                 <StyledBtn
-                  onClick={() => onActiveModalClick('confirm-proxy-restart')}
+                  onClick={() => {
+                    setProxyRouterSettings({
+                      ...proxyRouterSettings,
+                      sellerDefaultPool: generatePoolUrl(
+                        sellerPoolParts.account,
+                        sellerPoolParts.pool
+                      )
+                      // buyerDefaultPool: generatePoolUrl(
+                      //   buyerPoolParts.account,
+                      //   buyerPoolParts.pool
+                      // )
+                    });
+                    onActiveModalClick('confirm-proxy-restart');
+                  }}
                 >
                   Save
                 </StyledBtn>
@@ -410,21 +529,24 @@ const Tools = props => {
           </Sp>
 
           <Sp mt={5}>
-            <Subtitle>Exit</Subtitle>
-            <StyledParagraph>Logout from wallet.</StyledParagraph>
+            <Subtitle>Reset</Subtitle>
+            <StyledParagraph>Set up your wallet from scratch.</StyledParagraph>
             <StyledBtn onClick={() => onActiveModalClick('confirm-logout')}>
-              Exit
+              Reset
             </StyledBtn>
 
             <ConfirmProxyConfigModal
-              title={'Logout from wallet'}
+              title={'Reset your wallet'}
               message={
                 <>
                   <Message>
-                    You are going to restart wallet along with Proxy Router. It
-                    may affect your running contracts.
+                    Make sure you have your recovery phrase before reseting your
+                    wallet. If you don’t have your recovery phrase, we suggest
+                    you transfer all funds out of your wallet before you reset.
+                    Otherwise you will lock yourself out of your wallet, and you
+                    won’t have access to the funds in this wallet.
                   </Message>
-                  <Message>Are you sure?</Message>
+                  <Message>Continue?</Message>
                 </>
               }
               onRequestClose={onCloseModal}

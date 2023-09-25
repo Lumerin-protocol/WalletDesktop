@@ -9,7 +9,6 @@ import {
 import PriceIcon from '../../icons/PriceIcon';
 import SpeedIcon from '../../icons/SpeedIcon';
 import DurationIcon from '../../icons/DurationIcon';
-import { IconQuestionCircle } from '@tabler/icons';
 import {
   Divider,
   HeaderFlex,
@@ -19,12 +18,15 @@ import {
   ContractInfoContainer
 } from './PurchaseModal/common.styles';
 import Spinner from '../../common/Spinner';
+import { fromTokenBaseUnitsToETH } from '../../../utils/coinValue';
 
 export const CreateContractPreview = ({
   data: { address, time, speed, price },
   submit,
   isCreating,
-  close
+  close,
+  symbol,
+  marketplaceFee
 }) => (
   <>
     <TitleWrapper>
@@ -61,12 +63,14 @@ export const CreateContractPreview = ({
               key={'price'}
               style={{ marginRight: '4px', height: '1.4rem' }}
             />
-            {price} LMR
+            {price} {symbol}
           </Values>
         </div>
       </ContractInfoContainer>
       <SmallTitle style={{ marginTop: '10px' }}>
-        All proceeds are subject to a 1% marketplace fee
+        All proceeds are subject to a non-refundable{' '}
+        {fromTokenBaseUnitsToETH(marketplaceFee)} ETH marketplace fee, including
+        contract creation/updating and claiming funds
       </SmallTitle>
     </TitleWrapper>
     {isCreating ? (

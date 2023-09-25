@@ -16,8 +16,10 @@ export const initialState = {
     contract: '',
     lmrBalance: 0,
     transactions: {},
-    symbol: 'LMR'
-  }
+    symbol: 'LMR',
+    symbolEth: 'ETH'
+  },
+  fee: ''
 };
 
 /**
@@ -147,6 +149,10 @@ const reducer = handleActions(
     'allow-send-transaction': (state, { payload }) => ({
       ...state,
       allowSendTransaction: payload.allowSendTransaction
+    }),
+    'set-marketplace-fee': (state, { payload }) => ({
+      ...state,
+      marketplaceFee: payload
     })
   },
   initialState

@@ -7,7 +7,15 @@ import { useForm } from 'react-hook-form';
 import { TextInput, AltLayout, Btn, Sp, AltLayoutNarrow } from '../common';
 import SecondaryBtn from './SecondaryBtn';
 
+const Subtext = styled.span`
+  color: ${p => p.theme.colors.dark};
+`;
+
 const ProxyRouterConfigStep = props => {
+  const onCheckboxToggle = e => {
+    props.onInputChange({ id: e.target.id, value: e.target.checked });
+  };
+
   return (
     <AltLayout
       title="Configure Default Pool"
@@ -18,30 +26,60 @@ const ProxyRouterConfigStep = props => {
           onSubmit={props.onProxyRouterConfigured}
           data-testid="pr-config-form"
         >
-          <Sp mt={2}>
-            <TextInput
-              autoFocus
-              onChange={props.onInputChange}
-              noFocus
-              error={props.errors.proxyDefaultPool}
-              placeholder="stratum+tcp://{pool btc mining url}:{port}"
-              label="Pool BTC Mining Url"
-              value={props.proxyDefaultPool}
-              type="text"
-              id="proxyDefaultPool"
+          <div style={{ display: 'flex' }}>
+            <input
+              style={{ marginLeft: '0' }}
+              data-testid="use-titan-lightning"
+              onChange={onCheckboxToggle}
+              checked={props.isTitanLightning}
+              type="checkbox"
+              id="isTitanLightning"
             />
-          </Sp>
-          <Sp mt={2}>
-            <TextInput
-              onChange={props.onInputChange}
-              error={props.errors.proxyPoolUsername}
-              placeholder="username"
-              label="Pool Username"
-              value={props.proxyPoolUsername}
-              type="text"
-              id="proxyPoolUsername"
-            />
-          </Sp>
+            <Subtext>Use Titan Pool for Lightning Payouts</Subtext>
+          </div>
+          {props.isTitanLightning ? (
+            <Sp mt={2}>
+              <TextInput
+                autoFocus
+                onChange={props.onInputChange}
+                noFocus
+                error={props.errors.lightningAddress}
+                placeholder="bob@getalby.com"
+                label="Lightning Address"
+                value={props.lightningAddress}
+                type="text"
+                id="lightningAddress"
+              />
+            </Sp>
+          ) : (
+            <>
+              <Sp mt={2}>
+                <TextInput
+                  autoFocus
+                  onChange={props.onInputChange}
+                  noFocus
+                  error={props.errors.proxyDefaultPool}
+                  placeholder="stratum+tcp://{pool btc mining url}:{port}"
+                  label="Pool BTC Mining Url"
+                  value={props.proxyDefaultPool}
+                  type="text"
+                  id="proxyDefaultPool"
+                />
+              </Sp>
+              <Sp mt={2}>
+                <TextInput
+                  onChange={props.onInputChange}
+                  error={props.errors.proxyPoolUsername}
+                  placeholder="username"
+                  label="Pool Username"
+                  value={props.proxyPoolUsername}
+                  type="text"
+                  id="proxyPoolUsername"
+                />
+              </Sp>
+            </>
+          )}
+
           {/* <Sp mt={2}>
             <SecondaryBtn onClick={props.onUseHostedProxyRouter} block>
               Or use hosted proxy router

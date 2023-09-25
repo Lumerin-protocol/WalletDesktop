@@ -92,6 +92,10 @@ function cleanupDb() {
   restart(1);
 }
 
+const getDefaultCurrencySetting = () => getKey("selectedCurrency");
+
+const setDefaultCurrencySetting = (currency) => setKey("selectedCurrency", currency);
+
 module.exports = {
   getPasswordHash,
   setPasswordHash,
@@ -99,4 +103,6 @@ module.exports = {
   setProxyRouterConfig,
   getProxyRouterConfig,
   cleanupDb,
+  getDefaultCurrencySetting,
+  setDefaultCurrencySetting
 };

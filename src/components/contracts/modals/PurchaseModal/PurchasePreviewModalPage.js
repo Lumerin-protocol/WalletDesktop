@@ -27,6 +27,7 @@ import {
   ActionsGroup,
   ContractInfoContainer
 } from './common.styles';
+import { fromTokenBaseUnitsToETH } from '../../../../utils/coinValue';
 
 const calculateAddress = (address, contractId) => {
   if (!address || !contractId) return null;
@@ -41,7 +42,9 @@ export const PurchasePreviewModalPage = ({
   inputs,
   isPurchasing,
   onBackToForm,
-  onPurchase
+  onPurchase,
+  symbol,
+  marketplaceFee
 }) => (
   <>
     <TitleWrapper>
@@ -82,7 +85,10 @@ export const PurchasePreviewModalPage = ({
               key={'price'}
               style={{ marginRight: '4px', height: '1.4rem' }}
             />
-            {fromTokenBaseUnitsToLMR(contract.price) * 1.01} LMR (fees included)
+            {fromTokenBaseUnitsToLMR(contract.price)} {symbol}
+            <span style={{ fontSize: '1rem', marginLeft: '3px' }}>
+              (+ {fromTokenBaseUnitsToETH(marketplaceFee)} ETH fee)
+            </span>
           </Values>
         </div>
       </ContractInfoContainer>

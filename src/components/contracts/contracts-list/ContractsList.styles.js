@@ -18,7 +18,7 @@ export const Contracts = styled.div`
 `;
 
 export const ListContainer = styled.div`
-  height: calc(100vh - 250px);
+  height: calc(100vh - 375px);
 
   /*
   ::-webkit-scrollbar {

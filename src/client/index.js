@@ -119,6 +119,7 @@ const createClient = function(createStore) {
     onLoginSubmit: utils.forwardToMainProcess('login-submit'),
     createContract: utils.forwardToMainProcess('create-contract', 750000),
     purchaseContract: utils.forwardToMainProcess('purchase-contract', 750000),
+    editContract: utils.forwardToMainProcess('edit-contract', 750000),
     cancelContract: utils.forwardToMainProcess('cancel-contract', 750000),
     setDeleteContractStatus: utils.forwardToMainProcess(
       'set-delete-contract-status',
@@ -151,10 +152,17 @@ const createClient = function(createStore) {
     getProxyRouterSettings: utils.forwardToMainProcess(
       'get-proxy-router-settings'
     ),
+    getDefaultCurrencySetting: utils.forwardToMainProcess(
+      'get-default-currency-settings'
+    ),
+    setDefaultCurrencySetting: utils.forwardToMainProcess(
+      'set-default-currency-settings'
+    ),
     saveProxyRouterSettings: utils.forwardToMainProcess(
       'save-proxy-router-settings'
     ),
     restartProxyRouter: utils.forwardToMainProcess('restart-proxy-router'),
+    getMarketplaceFee: utils.forwardToMainProcess('get-marketplace-fee'),
     claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000)
   };
 

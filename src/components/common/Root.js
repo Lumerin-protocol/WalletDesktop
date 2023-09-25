@@ -47,8 +47,23 @@ class Root extends React.Component {
             });
         }
       })
+      .then(() => this.props.client.getDefaultCurrencySetting())
+      .then(defaultCurr => {
+        this.props.dispatch({
+          type: 'set-seller-currency',
+          payload: defaultCurr || this.props.sellerDefaultCurrency || 'BTC'
+        });
+      })
+      .then(() => this.props.client.getMarketplaceFee({}))
+      .then(fee =>
+        this.props.dispatch({
+          type: 'set-marketplace-fee',
+          payload: fee
+        })
+      )
       // eslint-disable-next-line no-console
       .catch(e => {
+        console.error(e.message);
         this.context.toast(
           'error',
           'Failed to startup wallet. Please wait a few minutes and try again'
@@ -110,7 +125,8 @@ class Root extends React.Component {
 const mapStateToProps = state => ({
   isSessionActive: selectors.isSessionActive(state),
   hasEnoughData: selectors.hasEnoughData(state),
-  isAuthBypassed: selectors.getIsAuthBypassed(state)
+  isAuthBypassed: selectors.getIsAuthBypassed(state),
+  sellerDefaultCurrency: selectors.getSellerDefaultCurrency(state)
 });
 
 export default connect(mapStateToProps)(withClient(Root));

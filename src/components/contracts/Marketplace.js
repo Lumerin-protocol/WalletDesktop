@@ -9,6 +9,8 @@ import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 import MarketplaceRow from './contracts-list/MarketplaceRow';
 import PurchaseContractModal from './modals/PurchaseModal/PurchaseContractModal';
 import { getContractEndTimestamp } from './utils';
+import Toggle from '../reports/Toggle';
+import theme from '../../ui/theme';
 
 function Marketplace({
   hasContracts,
@@ -26,20 +28,23 @@ function Marketplace({
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
+  const [showAll, setShowAll] = useState(true);
+
   const [contractToPurchase, setContractToPurchase] = useState(undefined);
   const [showSuccess, setShowSuccess] = useState(false);
   const context = useContext(ToastsContext);
+  const contractStateFilter = c =>
+    showAll ? true : Number(c.state) === 0 && c.seller !== address;
   const contractsToShow = contracts.filter(
-    x =>
-      (Number(x.state) === 0 && x.seller !== address && !x.isDead) ||
-      x.inProgress
+    x => (contractStateFilter(x) && !x.isDead) || x.inProgress
   );
 
+  const activeContracts = contracts?.filter(x => !x.isDead);
   const stats = {
-    count: contracts.length ?? 0,
-    rented: contracts?.filter(x => Number(x.state) === 1)?.length ?? 0,
+    count: activeContracts.length ?? 0,
+    rented: activeContracts?.filter(x => Number(x.state) === 1)?.length ?? 0,
     expiresInHour:
-      contracts?.filter(c => {
+      activeContracts?.filter(c => {
         const endDate = getContractEndTimestamp(c);
         const utcNow = new Date();
         const limit = utcNow.setHours(utcNow.getHours() + 1);
@@ -48,7 +53,7 @@ function Marketplace({
   };
 
   const handlePurchase = async (data, contract, url) => {
-    if (lmrBalance * 10 ** 8 < Number(contract.price * 1.01)) {
+    if (lmrBalance * 10 ** 8 < Number(contract.price)) {
       setIsModalActive(false);
       context.toast('error', 'Insufficient balance');
       return;
@@ -68,6 +73,7 @@ function Marketplace({
         speed: contract.speed,
         price: contract.price,
         length: contract.length,
+        version: contract.version,
         url
       })
       .then(d => {
@@ -138,14 +144,27 @@ function Marketplace({
       />
     </ContractsRowContainer>
   );
-
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
         title="Marketplace"
         address={address}
         copyToClipboard={copyToClipboard}
-      ></LayoutHeader>
+      >
+        <Toggle
+          backgroundColorChecked={theme.colors.primary}
+          backgroundColorUnchecked={theme.colors.cancelled}
+          labelLeft={'Show all'}
+          onChange={e => setShowAll(!showAll)}
+          checked={showAll}
+          height={25}
+          width={45}
+          sliderHeight={18}
+          sliderWidth={18}
+          translate={18}
+          labelColor={theme.colors.primary}
+        ></Toggle>
+      </LayoutHeader>
 
       <ContractsList
         stats={stats}

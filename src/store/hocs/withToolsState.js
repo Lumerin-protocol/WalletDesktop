@@ -1,9 +1,11 @@
 import * as validators from '../validators';
 import { withClient } from './clientContext';
 import * as utils from '../utils';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { ToastsContext } from '../../components/toasts';
+import selectors from '../selectors';
 
 const withToolsState = WrappedComponent => {
   class Container extends React.Component {
@@ -100,6 +102,12 @@ const withToolsState = WrappedComponent => {
       return this.props.client.logout();
     };
 
+    setDefaultCurrency = async value => {
+      await this.props.client.setDefaultCurrencySetting(value);
+      this.context.toast('success', 'Changed default currency to ' + value);
+      this.props.setSellerDefaultCurrency(value);
+    };
+
     render() {
       const isRecoverEnabled =
         utils.sanitizeMnemonic(this.state.mnemonic || '').split(' ').length ===
@@ -117,6 +125,8 @@ const withToolsState = WrappedComponent => {
           discardMnemonic={this.discardMnemonic}
           discardPrivateKey={this.discardPrivateKey}
           validate={this.validate}
+          getDefaultCurrency={this.getDefaultCurrency}
+          setDefaultCurrency={this.setDefaultCurrency}
           copyToClipboard={this.props.client.copyToClipboard}
           logout={this.logout}
           onRevealPhrase={this.props.client.revealSecretPhrase}
@@ -130,7 +140,16 @@ const withToolsState = WrappedComponent => {
     }
   }
 
-  return withClient(Container);
+  const mapStateToProps = (state, props) => ({
+    selectedCurrency: selectors.getSellerSelectedCurrency(state)
+  });
+
+  const mapDispatchToProps = dispatch => ({
+    setSellerDefaultCurrency: currency =>
+      dispatch({ type: 'set-seller-currency', payload: currency })
+  });
+
+  return withClient(connect(mapStateToProps, mapDispatchToProps)(Container));
 };
 
 export default withToolsState;

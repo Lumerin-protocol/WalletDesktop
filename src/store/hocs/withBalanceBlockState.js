@@ -12,7 +12,10 @@ const mapStateToProps = state => {
 
     recaptchaSiteKey: selectors.getRecaptchaSiteKey(state),
     faucetUrl: selectors.getFaucetUrl(state),
-    walletAddress: selectors.getWalletAddress(state)
+    showFaucet: selectors.showFaucet(state),
+    walletAddress: selectors.getWalletAddress(state),
+    symbol: selectors.getCoinSymbol(state),
+    symbolEth: selectors.getSymbolEth(state)
   };
 };
 
