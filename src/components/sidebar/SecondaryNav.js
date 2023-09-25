@@ -76,6 +76,10 @@ const Label = styled.span`
     opacity: 1;
   }
 
+  ${({ parent }) => parent}:hover & {
+    opacity: 1;
+  }
+
   @media (min-width: 800px) {
     opacity: 0.9;
 
