@@ -26,6 +26,7 @@ const listeners = {
   "set-miner-pool": handlers.setMinerPool,
   "get-lmr-transfer-gas-limit": handlers.getLmrTransferGasLimit,
   "get-local-ip": handlers.getLocalIp,
+  "is-proxy-port-public": handlers.isProxyPortPublic,
   "restart-proxy-router": handlers.restartProxyRouter,
   "claim-faucet": handlers.claimFaucet,
   'get-private-key': handlers.getAddressAndPrivateKey,
