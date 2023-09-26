@@ -85,6 +85,17 @@ export const ContractLink = styled.div`
   color: #014353;
 `;
 
+export const InstructionLink = styled.div`
+  padding-top: 5px;
+  line-height: 14px;
+  font-size: 14px;
+  font-weight: 100;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #014353;
+`;
+
 export const Form = styled.form`
   display: flex;
   height: 85%;
