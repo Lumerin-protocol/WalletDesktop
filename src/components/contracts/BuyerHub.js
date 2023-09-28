@@ -43,12 +43,9 @@ function BuyerHub({
   allowSendTransaction,
   ...props
 }) {
-  const contractsToShow = [
-    ...contracts,
-    ...contracts,
-    ...contracts,
-    ...contracts
-  ];
+  const contractsToShow = contracts.filter(
+    x => x.buyer === address && x.seller !== address
+  );
   const tabs = [
     { value: 'id', name: 'Contract', ratio: 3 },
     { value: 'timestamp', name: 'Started', ratio: 3 },
