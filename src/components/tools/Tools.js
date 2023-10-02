@@ -172,8 +172,10 @@ const Tools = props => {
     const [sellerPoolParts, setSellerPoolParts] = useState(null);
     const [buyerPoolParts, setBuyerPoolParts] = useState(null);
 
-    const [httpNodeInput, setHttpNodeInput] = useState(null);
-    const [wsNodeInput, setWsNodeInput] = useState(null);
+    const [httpNodeInput, setHttpNodeInput] = useState(
+      state.customEnvs?.httpNode || config.chain.httpApiUrls[0]
+    );
+    const [wsNodeInput, setWsNodeInput] = useState(state.customEnvs?.wsNode);
 
     const context = useContext(ToastsContext);
 
@@ -604,11 +606,7 @@ const Tools = props => {
                 <Input
                   placeholder={config.chain.httpApiUrls[0]}
                   onChange={e => setHttpNodeInput(e.value)}
-                  value={
-                    httpNodeInput ||
-                    state.customEnvs?.httpNode ||
-                    config.chain.httpApiUrls[0]
-                  }
+                  value={httpNodeInput}
                 />
                 <StyledParagraph>
                   BE CAREFULL. This may affect stable work of the wallet.
@@ -625,7 +623,7 @@ const Tools = props => {
                     'wss://arb-mainnet.g.alchemy.com/v2/API_KEY'
                   }
                   onChange={e => setWsNodeInput(e.value)}
-                  value={wsNodeInput || state.customEnvs?.wsNode}
+                  value={wsNodeInput}
                 />
                 <StyledParagraph>
                   BE CAREFULL. It may cause affect on contracts execution
