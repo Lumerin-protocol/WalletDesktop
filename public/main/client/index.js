@@ -14,10 +14,7 @@ const {
   refreshProxyRouterConnection,
 } = require("./handlers/single-core");
 
-const {
-  runProxyRouter,
-  isProxyRouterHealthy,
-} = require("./proxyRouter");
+const { runProxyRouter, isProxyRouterHealthy } = require("./proxyRouter");
 
 function startCore({ chain, core, config: coreConfig }, webContent) {
   logger.verbose(`Starting core ${chain}`);
@@ -60,9 +57,13 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         send("transactions-scan-started", {});
 
         return api.explorer
-          .syncTransactions(0, address, (number) =>
-            storage.setSyncBlock(number, chain)
-          , page, pageSize)
+          .syncTransactions(
+            0,
+            address,
+            (number) => storage.setSyncBlock(number, chain),
+            page,
+            pageSize
+          )
           .then(function() {
             send("transactions-scan-finished", { success: true });
 
@@ -80,7 +81,9 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
           success: false,
         });
 
-        emitter.once("coin-block", () => syncTransactions({ address }, page, pageSize));
+        emitter.once("coin-block", () =>
+          syncTransactions({ address }, page, pageSize)
+        );
       });
   }
 
@@ -99,6 +102,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         { password },
         { api }
       );
+
       const config = {
         privateKey,
         walletAddress: address,
@@ -148,6 +152,15 @@ function createClient(config) {
   });
 
   settings.presetDefaults();
+
+  const customEnvs = settings.getKey("customEnvs");
+
+  if (customEnvs.wsNode) {
+    config.chain.wsApiUrl = customEnvs.wsNode;
+  }
+  if (customEnvs.httpNode) {
+    config.chain.httpApiUrls.unshift(customEnvs.httpNode);
+  }
 
   let core = {
     chain: config.chain.chainId,
