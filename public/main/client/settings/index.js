@@ -104,5 +104,7 @@ module.exports = {
   getProxyRouterConfig,
   cleanupDb,
   getDefaultCurrencySetting,
-  setDefaultCurrencySetting
+  setDefaultCurrencySetting,
+  getKey,
+  setKey
 };
