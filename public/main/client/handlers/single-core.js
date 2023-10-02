@@ -13,6 +13,7 @@ const {
   cleanupDb,
   getProxyRouterConfig,
 } = require("../settings");
+const restart = require("../electron-restart");
 
 const withAuth = (fn) => (data, { api }) => {
   if (typeof data.walletId !== "string") {
@@ -334,6 +335,10 @@ const logout = async (data) => {
   return cleanupDb();
 };
 
+const restartWallet = async (data) => {
+  return restart();
+};
+
 const getPoolAddress = async (data) => {
   const config = getProxyRouterConfig();
   return config.buyerDefaultPool || config.defaultPool;
@@ -382,6 +387,7 @@ module.exports = {
   getAddressAndPrivateKey,
   refreshProxyRouterConnection,
   logout,
+  restartWallet,
   getLocalIp,
   getPoolAddress,
   restartProxyRouter,
