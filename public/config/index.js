@@ -60,5 +60,6 @@ module.exports = {
   statePersistanceDebounce: 2000,
   trackingId: process.env.TRACKING_ID,
   web3Timeout: 120000,
+  blocksUpdateMs: 10_000,
   recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
 };
