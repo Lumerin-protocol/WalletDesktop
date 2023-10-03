@@ -155,10 +155,10 @@ function createClient(config) {
 
   const customEnvs = settings.getKey("customEnvs");
 
-  if (customEnvs.wsNode) {
+  if (customEnvs?.wsNode) {
     config.chain.wsApiUrl = customEnvs.wsNode;
   }
-  if (customEnvs.httpNode) {
+  if (customEnvs?.httpNode) {
     config.chain.httpApiUrls.unshift(customEnvs.httpNode);
   }
 
