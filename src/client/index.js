@@ -142,6 +142,7 @@ const createClient = function(createStore) {
       'get-lmr-transfer-gas-limit'
     ),
     logout: utils.forwardToMainProcess('logout'),
+    restartWallet: utils.forwardToMainProcess('restart'),
     getLocalIp: utils.forwardToMainProcess('get-local-ip'),
     isProxyPortPublic: utils.forwardToMainProcess('is-proxy-port-public'),
     getPoolAddress: utils.forwardToMainProcess('get-pool-address'),
@@ -164,7 +165,9 @@ const createClient = function(createStore) {
     ),
     restartProxyRouter: utils.forwardToMainProcess('restart-proxy-router'),
     getMarketplaceFee: utils.forwardToMainProcess('get-marketplace-fee'),
-    claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000)
+    claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000),
+    getCustomEnvValues: utils.forwardToMainProcess('get-custom-env-values'),
+    setCustomEnvValues: utils.forwardToMainProcess('set-custom-env-values')
   };
 
   const api = {
