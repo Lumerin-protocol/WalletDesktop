@@ -122,7 +122,8 @@ function ContractsList({
   stats,
   edit,
   setEditContractData,
-  sellerStats
+  sellerStats,
+  offset
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   const [search, setSearch] = useState('');
@@ -285,7 +286,7 @@ function ContractsList({
                 tabs={tabsToShow}
               />
 
-              <ListContainer>
+              <ListContainer offset={offset}>
                 {!hasContracts &&
                   (syncStatus === 'syncing' ? (
                     <ScanningContractsPlaceholder />
