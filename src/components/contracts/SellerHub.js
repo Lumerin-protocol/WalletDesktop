@@ -329,7 +329,6 @@ function SellerHub({
         setEditContractData={setEditContractData}
         isSellerTab={true}
         sellerStats={sellerStats}
-        offset={394}
       />
 
       <CreateContractModal
