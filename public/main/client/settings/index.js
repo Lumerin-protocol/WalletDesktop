@@ -96,6 +96,10 @@ const getDefaultCurrencySetting = () => getKey("selectedCurrency");
 
 const setDefaultCurrencySetting = (currency) => setKey("selectedCurrency", currency);
 
+const getAppVersion = () => getKey("app.version");
+
+const setAppVersion = (value) =>  setKey("app.version", value);
+
 module.exports = {
   getPasswordHash,
   setPasswordHash,
@@ -106,5 +110,7 @@ module.exports = {
   getDefaultCurrencySetting,
   setDefaultCurrencySetting,
   getKey,
-  setKey
+  setKey,
+  getAppVersion,
+  setAppVersion,
 };

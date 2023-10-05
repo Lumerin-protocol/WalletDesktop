@@ -1,6 +1,6 @@
 "use strict";
 
-const { ipcMain } = require("electron");
+const { ipcMain, app } = require("electron");
 const createCore = require("@lumerin/wallet-core");
 const stringify = require("json-stringify-safe");
 
@@ -95,6 +95,17 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
     );
   });
 
+  const shouldRestartProxyRouterAfterWalletUpdate = () => {
+    const prevAppVersion = settings.getAppVersion();
+    const isAppVersionChanged = prevAppVersion !== app.getVersion();
+
+    if (isAppVersionChanged) {
+      settings.setAppVersion(app.getVersion());
+      return true;
+    }
+    return false;
+  };
+
   emitter.on("open-proxy-router", async ({ password }) => {
     const proxyRouterUserConfig = settings.getProxyRouterConfig();
     if (!proxyRouterUserConfig.useHostedProxyRouter) {
@@ -114,7 +125,8 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         api,
         config.localProxyRouterUrl
       );
-      if (!isProxyHealth) {
+      const shouldRestartProxy = shouldRestartProxyRouterAfterWalletUpdate();
+      if (!isProxyHealth || shouldRestartProxy) {
         logger.debug("Seller is not healhy, restart...");
         await proxyRouterApi.kill(config.proxyPort).catch(logger.error);
         runProxyRouter(config);
