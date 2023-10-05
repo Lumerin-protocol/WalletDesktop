@@ -6,14 +6,8 @@ const logger = require("../../../logger");
 const storage = require("../storage");
 const auth = require("../auth");
 const wallet = require("../wallet");
-const { 
-  setProxyRouterConfig, 
-  getProxyRouterConfig, 
-  getDefaultCurrencySetting, 
-  setDefaultCurrencySetting,
-  getKey,
-  setKey
-} = require("../settings");
+const { setProxyRouterConfig, getProxyRouterConfig, getDefaultCurrencySetting, setDefaultCurrencySetting} = require("../settings");
+
 const validatePassword = (data) => auth.isValidPassword(data);
 
 function clearCache() {
@@ -54,11 +48,6 @@ const handleClientSideError = (data) => {
 const getDefaultCurrency = async () => getDefaultCurrencySetting();
 const setDefaultCurrency = async (curr) => setDefaultCurrencySetting(curr);
 
-const getCustomEnvs = async () => getKey('customEnvs');
-const setCustomEnvs = async (value) => setKey('customEnvs', value);
-
-const restartWallet = () => restart(1);
-
 module.exports = {
   validatePassword,
   changePassword,
@@ -68,8 +57,5 @@ module.exports = {
   getProxyRouterSettings,
   handleClientSideError,
   getDefaultCurrency,
-  setDefaultCurrency,
-  getCustomEnvs,
-  setCustomEnvs,
-  restartWallet,
+  setDefaultCurrency
 };
