@@ -1,34 +1,47 @@
-'use strict';
+"use strict";
 
-const { ipcMain } = require('electron');
-const stringify = require('json-stringify-safe');
+const { ipcMain } = require("electron");
+const stringify = require("json-stringify-safe");
 
-const logger = require('../../../logger');
-const WalletError = require('../WalletError');
+const logger = require("../../../logger");
+const WalletError = require("../WalletError");
 
-function getLogData (data) {
+function getLogData(data) {
   if (!data) {
-    return '';
+    return "";
   }
   const logData = Object.assign({}, data);
 
-  const blackList = ['password'];
-  blackList.forEach(w => delete logData[w]);
+  const blackList = ["password"];
+  blackList.forEach((w) => delete logData[w]);
 
   return stringify(logData);
 }
 
-const checkIfLoggableEvent = eventName => eventName !== 'persist-state';
+const checkIfLoggableEvent = (eventName) => eventName !== "persist-state";
+
+const isPromise = (p) => {
+  if (typeof p === "object" && typeof p.then === "function") {
+    return true;
+  }
+
+  return false;
+};
 
 const ignoreChain = (chain, data) =>
-  (chain !== 'multi' && chain !== 'none' && data.chain && chain !== data.chain);
+  chain !== "multi" && chain !== "none" && data.chain && chain !== data.chain;
 
-function onRendererEvent (eventName, handler, chain) {
+function onRendererEvent(eventName, handler, chain) {
   ipcMain.on(eventName, function (event, { id, data }) {
     if (ignoreChain(chain, data)) {
       return;
     }
     const result = handler(data);
+
+    if (!isPromise(result)) {
+      logger.warn(`<-- ${eventName} result is not a promise!. ${result}`);
+      return;
+    }
 
     result
       .then(function (res) {
@@ -52,9 +65,13 @@ function onRendererEvent (eventName, handler, chain) {
 }
 
 const subscribeTo = (types, chain) =>
-  Object.keys(types).forEach(type => onRendererEvent(type, types[type], chain));
+  Object.keys(types).forEach((type) =>
+    onRendererEvent(type, types[type], chain)
+  );
 
-const unsubscribeTo = types =>
-  Object.keys(types).forEach(type => ipcMain.removeAllListeners(type, types[type]));
+const unsubscribeTo = (types) =>
+  Object.keys(types).forEach((type) =>
+    ipcMain.removeAllListeners(type, types[type])
+  );
 
 module.exports = { subscribeTo, unsubscribeTo };
