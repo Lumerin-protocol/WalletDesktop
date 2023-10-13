@@ -108,11 +108,15 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
 
   emitter.on("open-proxy-router", async ({ password }) => {
     const proxyRouterUserConfig = settings.getProxyRouterConfig();
-    if (!proxyRouterUserConfig.useHostedProxyRouter) {
+    if (!proxyRouterUserConfig.runWithoutProxyRouter) {
       const { address, privateKey } = await getAddressAndPrivateKey(
         { password },
         { api }
       );
+  
+      send("proxy-router-type-changed", {
+        isLocal: true,
+      });
 
       const config = {
         privateKey,
@@ -131,9 +135,6 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         await proxyRouterApi.kill(config.proxyPort).catch(logger.error);
         runProxyRouter(config);
       }
-      send("proxy-router-type-changed", {
-        isLocal: true,
-      });
 
       refreshProxyRouterConnection(
         {
@@ -141,8 +142,6 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         },
         { api }
       );
-    } else {
-      refreshProxyRouterConnection({}, { api });
     }
   });
 

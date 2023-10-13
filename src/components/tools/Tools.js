@@ -464,23 +464,25 @@ const Tools = props => {
               </Sp>
             </TabPanel>
 
-            <TabPanel>
-              <Sp mt={5}>
-                <Subtitle>Proxy-Router Configuration</Subtitle>
-                {proxyRouterSettings.isFetching ? (
-                  <Spinner />
-                ) : !proxyRouterSettings.proxyRouterEditMode ? (
-                  <>
-                    <StyledParagraph>
-                      <div>
-                        <span>Proxy Default Pool:</span> {sellerPoolParts?.pool}{' '}
-                      </div>
-                      <div>
-                        <span>Proxy Default Account:</span>{' '}
-                        {sellerPoolParts?.account}{' '}
-                      </div>
-                    </StyledParagraph>
-                    {/* <StyledParagraph>
+            {props.isLocalProxyRouter ? (
+              <TabPanel>
+                <Sp mt={5}>
+                  <Subtitle>Proxy-Router Configuration</Subtitle>
+                  {proxyRouterSettings.isFetching ? (
+                    <Spinner />
+                  ) : !proxyRouterSettings.proxyRouterEditMode ? (
+                    <>
+                      <StyledParagraph>
+                        <div>
+                          <span>Proxy Default Pool:</span>{' '}
+                          {sellerPoolParts?.pool}{' '}
+                        </div>
+                        <div>
+                          <span>Proxy Default Account:</span>{' '}
+                          {sellerPoolParts?.account}{' '}
+                        </div>
+                      </StyledParagraph>
+                      {/* <StyledParagraph>
                   <div>
                     <span>Buyer Default Pool:</span> {buyerPoolParts?.pool}{' '}
                   </div>
@@ -489,36 +491,36 @@ const Tools = props => {
                     {buyerPoolParts?.account}{' '}
                   </div>
                 </StyledParagraph> */}
-                    <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
-                  </>
-                ) : (
-                  <>
-                    <StyledParagraph>
-                      Proxy Default Pool:{' '}
-                      <Input
-                        onChange={e =>
-                          setSellerPoolParts({
-                            ...sellerPoolParts,
-                            pool: e.value
-                          })
-                        }
-                        value={sellerPoolParts?.pool}
-                      />
-                    </StyledParagraph>
-                    <StyledParagraph>
-                      Proxy Default Account:{' '}
-                      <Input
-                        onChange={e =>
-                          setSellerPoolParts({
-                            ...sellerPoolParts,
-                            account: e.value
-                          })
-                        }
-                        value={sellerPoolParts?.account}
-                      />
-                    </StyledParagraph>
-                    <hr></hr>
-                    {/* <StyledParagraph>
+                      <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
+                    </>
+                  ) : (
+                    <>
+                      <StyledParagraph>
+                        Proxy Default Pool:{' '}
+                        <Input
+                          onChange={e =>
+                            setSellerPoolParts({
+                              ...sellerPoolParts,
+                              pool: e.value
+                            })
+                          }
+                          value={sellerPoolParts?.pool}
+                        />
+                      </StyledParagraph>
+                      <StyledParagraph>
+                        Proxy Default Account:{' '}
+                        <Input
+                          onChange={e =>
+                            setSellerPoolParts({
+                              ...sellerPoolParts,
+                              account: e.value
+                            })
+                          }
+                          value={sellerPoolParts?.account}
+                        />
+                      </StyledParagraph>
+                      <hr></hr>
+                      {/* <StyledParagraph>
                   Buyer Default Pool:{' '}
                   <Input
                     onChange={e =>
@@ -542,63 +544,73 @@ const Tools = props => {
                     value={buyerPoolParts?.account}
                   />
                 </StyledParagraph> */}
-                    <StyledBtn
-                      onClick={() => {
-                        setProxyRouterSettings({
-                          ...proxyRouterSettings,
-                          sellerDefaultPool: generatePoolUrl(
-                            sellerPoolParts.account,
-                            sellerPoolParts.pool
-                          )
-                          // buyerDefaultPool: generatePoolUrl(
-                          //   buyerPoolParts.account,
-                          //   buyerPoolParts.pool
-                          // )
-                        });
-                        onActiveModalClick('confirm-proxy-restart');
-                      }}
-                    >
-                      Save
-                    </StyledBtn>
-                  </>
-                )}
+                      <StyledBtn
+                        onClick={() => {
+                          setProxyRouterSettings({
+                            ...proxyRouterSettings,
+                            sellerDefaultPool: generatePoolUrl(
+                              sellerPoolParts.account,
+                              sellerPoolParts.pool
+                            )
+                            // buyerDefaultPool: generatePoolUrl(
+                            //   buyerPoolParts.account,
+                            //   buyerPoolParts.pool
+                            // )
+                          });
+                          onActiveModalClick('confirm-proxy-restart');
+                        }}
+                      >
+                        Save
+                      </StyledBtn>
+                    </>
+                  )}
 
-                <ConfirmModal
-                  onRequestClose={onCloseModal}
-                  onConfirm={props.onRescanTransactions}
-                  isOpen={state.activeModal === 'confirm-rescan'}
-                />
-                <ConfirmProxyConfigModal
-                  onRequestClose={onCloseModal}
-                  onConfirm={confirmProxyRouterRestart}
-                  onLater={saveProxyRouterConfig}
-                  isOpen={state.activeModal === 'confirm-proxy-restart'}
-                />
-              </Sp>
-              <Sp mt={5}>
-                <Subtitle>Restart Proxy Router</Subtitle>
-                <StyledParagraph>
-                  Restart the connected Proxy Router.
-                </StyledParagraph>
-                {isRestarting ? (
-                  <Spinner size="20px" />
-                ) : (
-                  <StyledBtn
-                    onClick={() =>
-                      onActiveModalClick('confirm-proxy-direct-restart')
+                  <ConfirmModal
+                    onRequestClose={onCloseModal}
+                    onConfirm={props.onRescanTransactions}
+                    isOpen={state.activeModal === 'confirm-rescan'}
+                  />
+                  <ConfirmProxyConfigModal
+                    onRequestClose={onCloseModal}
+                    onConfirm={confirmProxyRouterRestart}
+                    onLater={saveProxyRouterConfig}
+                    isOpen={state.activeModal === 'confirm-proxy-restart'}
+                  />
+                </Sp>
+                <Sp mt={5}>
+                  <Subtitle>Restart Proxy Router</Subtitle>
+                  <StyledParagraph>
+                    Restart the connected Proxy Router.
+                  </StyledParagraph>
+                  {isRestarting ? (
+                    <Spinner size="20px" />
+                  ) : (
+                    <StyledBtn
+                      onClick={() =>
+                        onActiveModalClick('confirm-proxy-direct-restart')
+                      }
+                    >
+                      Restart
+                    </StyledBtn>
+                  )}
+                  <ConfirmProxyConfigModal
+                    onRequestClose={onCloseModal}
+                    onConfirm={onRestartClick}
+                    onLater={onCloseModal}
+                    isOpen={
+                      state.activeModal === 'confirm-proxy-direct-restart'
                     }
-                  >
-                    Restart
-                  </StyledBtn>
-                )}
-                <ConfirmProxyConfigModal
-                  onRequestClose={onCloseModal}
-                  onConfirm={onRestartClick}
-                  onLater={onCloseModal}
-                  isOpen={state.activeModal === 'confirm-proxy-direct-restart'}
-                />
-              </Sp>
-            </TabPanel>
+                  />
+                </Sp>
+              </TabPanel>
+            ) : (
+              <TabPanel>
+                <StyledParagraph>
+                  You are running Wallet wihout Proxy-Router. Reset wallet to
+                  setup validator node.
+                </StyledParagraph>
+              </TabPanel>
+            )}
 
             <TabPanel>
               <Subtitle>HTTP ETH Node: </Subtitle>

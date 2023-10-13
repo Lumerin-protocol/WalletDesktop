@@ -145,6 +145,7 @@ const withToolsState = WrappedComponent => {
 
   const mapStateToProps = (state, props) => ({
     selectedCurrency: selectors.getSellerSelectedCurrency(state),
+    isLocalProxyRouter: selectors.getIsLocalProxyRouter(state),
     config: state.config
   });
 

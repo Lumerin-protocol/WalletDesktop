@@ -190,10 +190,10 @@ const withOnboardingState = WrappedComponent => {
       });
     };
 
-    onUseHostedProxyRouter = e => {
+    onRunWithoutProxyRouter = e => {
       return this.props.onOnboardingCompleted({
         proxyRouterConfig: {
-          useHostedProxyRouter: true
+          runWithoutProxyRouter: true
         },
         password: this.state.password,
         mnemonic: this.state.useUserMnemonic
@@ -247,7 +247,7 @@ const withOnboardingState = WrappedComponent => {
           currentStep={this.getCurrentStep()}
           getTooltip={getTooltip}
           onProxyRouterConfigured={this.onProxyRouterConfigured}
-          onUseHostedProxyRouter={this.onUseHostedProxyRouter}
+          onRunWithoutProxyRouter={this.onRunWithoutProxyRouter}
           {...this.state}
         />
       );
