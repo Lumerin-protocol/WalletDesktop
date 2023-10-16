@@ -204,6 +204,8 @@ const Tools = props => {
 
       getCustomEnvs().then(envs => {
         setState({ ...state, customEnvs: envs });
+        setHttpNodeInput(envs?.httpNode || config.chain.httpApiUrls[0]);
+        setWsNodeInput(envs?.wsNode);
       });
     }, []);
 
@@ -319,11 +321,25 @@ const Tools = props => {
           </form> */}
           <Tabs style={{ color: 'black' }}>
             <TabList>
+              <Tab>Info</Tab>
               <Tab>Wallet</Tab>
               <Tab>Proxy Router</Tab>
               <Tab>Environment</Tab>
-              <Tab>Info</Tab>
             </TabList>
+            <TabPanel>
+              <Sp mt={5}>
+                <WalletInfo>Wallet Information</WalletInfo>
+                <WalletStatus />
+              </Sp>
+
+              <Sp mt={5}>
+                <Subtitle>Logs</Subtitle>
+                <StyledParagraph>
+                  You can find wallet logs in the file: <br />
+                  <i>{logPath}</i>
+                </StyledParagraph>
+              </Sp>
+            </TabPanel>
             <TabPanel>
               <Sp mt={5}>
                 <Subtitle>Seller Default Currency</Subtitle>
@@ -620,11 +636,6 @@ const Tools = props => {
                   onChange={e => setHttpNodeInput(e.value)}
                   value={httpNodeInput}
                 />
-                <StyledParagraph>
-                  BE CAREFULL. This may affect stable work of the wallet.
-                  Integration with blockchain may be broken. In case of
-                  unexpected behaviour try to reset to the default values.
-                </StyledParagraph>
               </StyledParagraph>
 
               <StyledParagraph>
@@ -638,7 +649,10 @@ const Tools = props => {
                   value={wsNodeInput}
                 />
                 <StyledParagraph>
-                  BE CAREFULL. It may cause affect on contracts execution
+                  Warning: Modifying these settings with incorrect values may
+                  impact the wallet's stability and disrupt blockchain
+                  integration. If you experience unexpected issues, consider
+                  resetting to the default values.
                 </StyledParagraph>
               </StyledParagraph>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -682,20 +696,6 @@ const Tools = props => {
                   isOpen={state.activeModal === 'confirm-custom-env-change'}
                 />
               </div>
-            </TabPanel>
-            <TabPanel>
-              <Sp mt={5}>
-                <WalletInfo>Wallet Information</WalletInfo>
-                <WalletStatus />
-              </Sp>
-
-              <Sp mt={5}>
-                <Subtitle>Logs</Subtitle>
-                <StyledParagraph>
-                  You can find wallet logs in the file: <br />
-                  <i>{logPath}</i>
-                </StyledParagraph>
-              </Sp>
             </TabPanel>
           </Tabs>
           {/* <Sp mt={5}>
