@@ -14,6 +14,7 @@ import { lmrDecimals } from '../../utils/coinValue';
 import { formatBtcPerTh } from './utils';
 import ArchiveModal from './modals/ArchiveModal/ArchiveModal';
 import { IconArchive } from '@tabler/icons';
+import SellerWhitelistModal from './modals/SellerWhitelistModal/SellerWhitelistModal';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -80,10 +81,12 @@ function SellerHub({
   allowSendTransaction,
   networkDifficulty,
   selectedCurrency,
+  formUrl,
   ...props
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   const [isArchiveModalActive, setIsArchiveModalActive] = useState(false);
+  const [showSellerWhitelistForm, setShowSellerWhitelistForm] = useState(false);
   const [isEditModalActive, setIsEditModalActive] = useState(false);
   const [editContractData, setEditContractData] = useState({});
   const context = useContext(ToastsContext);
@@ -240,8 +243,12 @@ function SellerHub({
         setShowSuccess(true);
       })
       .catch(error => {
-        context.toast('error', error.message || error);
         setIsModalActive(false);
+        if (error.message == 'seller is not whitelisted') {
+          setShowSellerWhitelistForm(true);
+          return;
+        }
+        context.toast('error', error.message || error);
       })
       .finally(() => {
         removeTempContract(tempContractId, contract);
@@ -351,6 +358,14 @@ function SellerHub({
         }}
         restore={handleDeleteContractStateChange}
         showSuccess={false}
+      />
+
+      <SellerWhitelistModal
+        isActive={showSellerWhitelistForm}
+        formUrl={formUrl}
+        close={() => {
+          setShowSellerWhitelistForm(false);
+        }}
       />
 
       <CreateContractModal
