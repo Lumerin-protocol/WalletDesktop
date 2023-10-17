@@ -99,7 +99,9 @@ const withToolsState = WrappedComponent => {
     };
 
     logout = () => {
-      return this.props.client.logout();
+      return this.props.client
+        .stopProxyRouter({})
+        .then(() => this.props.client.logout());
     };
 
     setDefaultCurrency = async value => {

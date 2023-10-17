@@ -162,6 +162,12 @@ const restartProxyRouter = async (data, { emitter, api }) => {
   emitter.emit("open-proxy-router", { password });
 };
 
+const stopProxyRouter = async (data, { emitter, api }) => {
+  await api["proxy-router"]
+    .kill(config.chain.proxyPort)
+    .catch(logger.error);
+};
+
 async function openWallet({ emitter }, password) {
   const { address } = wallet.getAddress();
 
@@ -399,4 +405,5 @@ module.exports = {
   editContract,
   getMarketplaceFee,
   isProxyPortPublic,
+  stopProxyRouter,
 };
