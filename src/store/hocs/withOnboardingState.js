@@ -159,7 +159,8 @@ const withOnboardingState = WrappedComponent => {
         return this.props.onOnboardingCompleted({
           proxyRouterConfig: {
             sellerDefaultPool: poolUrl,
-            buyerDefaultPool: poolUrl
+            buyerDefaultPool: poolUrl,
+            isTitanLightning: true
           },
           password: this.state.password,
           mnemonic: this.state.useUserMnemonic

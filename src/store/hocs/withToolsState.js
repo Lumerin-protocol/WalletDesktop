@@ -148,6 +148,7 @@ const withToolsState = WrappedComponent => {
   const mapStateToProps = (state, props) => ({
     selectedCurrency: selectors.getSellerSelectedCurrency(state),
     isLocalProxyRouter: selectors.getIsLocalProxyRouter(state),
+    titanLightningPool: state.config.chain.titanLightningPool,
     config: state.config
   });
 
