@@ -171,6 +171,7 @@ const Tools = props => {
     });
     const [sellerPoolParts, setSellerPoolParts] = useState(null);
     const [buyerPoolParts, setBuyerPoolParts] = useState(null);
+    const [isTitanLightning, setTitanLightning] = useState(false);
 
     const [httpNodeInput, setHttpNodeInput] = useState(
       state.customEnvs?.httpNode || config.chain.httpApiUrls[0]
@@ -197,6 +198,9 @@ const Tools = props => {
             ...data,
             isFetching: false
           });
+          if (data.isTitanLightning) {
+            setTitanLightning(true);
+          }
         })
         .catch(err => {
           context.toast('error', 'Failed to fetch proxy-router settings');
@@ -245,7 +249,8 @@ const Tools = props => {
       });
       return saveProxyRouterSettings({
         sellerDefaultPool: proxyRouterSettings.sellerDefaultPool,
-        buyerDefaultPool: proxyRouterSettings.sellerDefaultPool
+        buyerDefaultPool: proxyRouterSettings.sellerDefaultPool,
+        isTitanLightning
       })
         .catch(() => {
           context.toast('error', 'Failed to save proxy-router settings');
@@ -489,42 +494,51 @@ const Tools = props => {
                   ) : !proxyRouterSettings.proxyRouterEditMode ? (
                     <>
                       <StyledParagraph>
-                        <div>
-                          <span>Proxy Default Pool:</span>{' '}
-                          {sellerPoolParts?.pool}{' '}
-                        </div>
-                        <div>
-                          <span>Proxy Default Account:</span>{' '}
-                          {sellerPoolParts?.account}{' '}
-                        </div>
+                        {!isTitanLightning ? (
+                          <div>
+                            <span>Proxy Default Pool:</span>{' '}
+                            {sellerPoolParts?.pool}{' '}
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                        {!isTitanLightning ? (
+                          <div>
+                            <span>Proxy Default Account:</span>{' '}
+                            {sellerPoolParts?.account}{' '}
+                          </div>
+                        ) : (
+                          <div>
+                            <span>Titan Lightning Address:</span>{' '}
+                            {sellerPoolParts?.account}{' '}
+                          </div>
+                        )}
                       </StyledParagraph>
-                      {/* <StyledParagraph>
-                  <div>
-                    <span>Buyer Default Pool:</span> {buyerPoolParts?.pool}{' '}
-                  </div>
-                  <div>
-                    <span>Buyer Default Account:</span>{' '}
-                    {buyerPoolParts?.account}{' '}
-                  </div>
-                </StyledParagraph> */}
                       <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
                     </>
                   ) : (
                     <>
+                      {!isTitanLightning ? (
+                        <StyledParagraph>
+                          Proxy Default Pool:{' '}
+                          <Input
+                            onChange={e =>
+                              setSellerPoolParts({
+                                ...sellerPoolParts,
+                                pool: e.value,
+                                isTitanLightning
+                              })
+                            }
+                            value={sellerPoolParts?.pool}
+                          />
+                        </StyledParagraph>
+                      ) : (
+                        <></>
+                      )}
                       <StyledParagraph>
-                        Proxy Default Pool:{' '}
-                        <Input
-                          onChange={e =>
-                            setSellerPoolParts({
-                              ...sellerPoolParts,
-                              pool: e.value
-                            })
-                          }
-                          value={sellerPoolParts?.pool}
-                        />
-                      </StyledParagraph>
-                      <StyledParagraph>
-                        Proxy Default Account:{' '}
+                        {!isTitanLightning
+                          ? 'Proxy Default Account: '
+                          : 'Titan Lightning Address: '}
                         <Input
                           onChange={e =>
                             setSellerPoolParts({
@@ -536,42 +550,17 @@ const Tools = props => {
                         />
                       </StyledParagraph>
                       <hr></hr>
-                      {/* <StyledParagraph>
-                  Buyer Default Pool:{' '}
-                  <Input
-                    onChange={e =>
-                      setBuyerPoolParts({
-                        ...buyerPoolParts,
-                        pool: e.value
-                      })
-                    }
-                    value={buyerPoolParts?.pool}
-                  />
-                </StyledParagraph>
-                <StyledParagraph>
-                  Buyer Default Account:{' '}
-                  <Input
-                    onChange={e =>
-                      setBuyerPoolParts({
-                        ...buyerPoolParts,
-                        account: e.value
-                      })
-                    }
-                    value={buyerPoolParts?.account}
-                  />
-                </StyledParagraph> */}
                       <StyledBtn
                         onClick={() => {
                           setProxyRouterSettings({
                             ...proxyRouterSettings,
+                            isTitanLightning,
                             sellerDefaultPool: generatePoolUrl(
                               sellerPoolParts.account,
-                              sellerPoolParts.pool
+                              !isTitanLightning
+                                ? sellerPoolParts.pool
+                                : props.titanLightningPool
                             )
-                            // buyerDefaultPool: generatePoolUrl(
-                            //   buyerPoolParts.account,
-                            //   buyerPoolParts.pool
-                            // )
                           });
                           onActiveModalClick('confirm-proxy-restart');
                         }}
