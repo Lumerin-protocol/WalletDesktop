@@ -55,6 +55,7 @@ jobs:
       TITAN_LIGHTNING_POOL: ${{ secrets.TITAN_LIGHTNING_POOL }}
       PORT_CHECKER_URL: ${{ vars.PORT_CHECKER_URL }}
       PORT_CHECK_ERROR_LINK: ${{ vars.PORT_CHECK_ERROR_LINK }}
+      SELLER_WHITELIST_URL: ${{ vars.SELLER_WHITELIST_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -89,6 +90,7 @@ jobs:
           echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
           echo "PORT_CHECKER_URL=$PORT_CHECKER_URL" >> .env
           echo "PORT_CHECK_ERROR_LINK=$PORT_CHECK_ERROR_LINK" >> .env
+          echo "SELLER_WHITELIST_URL=$SELLER_WHITELIST_URL" >> .env
         shell: bash
       - name: Set env from gitlab
         run: |
