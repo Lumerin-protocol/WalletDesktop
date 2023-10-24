@@ -29,7 +29,8 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
     "transactions-scan-started",
     "transactions-scan-finished",
     "contracts-scan-started",
-    "contracts-scan-finished"
+    "contracts-scan-finished",
+    "contracts-updated",
   );
 
   function send(eventName, data) {
@@ -87,7 +88,10 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
       });
   }
 
-  emitter.on("open-wallet", syncTransactions);
+  emitter.on("open-wallet", (props) => { 
+    syncTransactions(props);
+    api.contracts.startWatching({});
+  });
 
   emitter.on("wallet-error", function(err) {
     logger.warn(

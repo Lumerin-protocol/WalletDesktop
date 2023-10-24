@@ -277,6 +277,11 @@ function refreshAllContracts({}, { api }) {
   return api.contracts.refreshContracts(null, walletId);
 }
 
+function startWatchingContracts({}, { api }) {
+  const walletId = wallet.getAddress().address;
+  return api.contracts.startWatching();
+}
+
 function refreshTransaction({ hash, address }, { api }) {
   return pTimeout(
     api.explorer.refreshTransaction(hash, address),
@@ -372,6 +377,7 @@ function getPastTransactions({ address, page, pageSize }, { api }) {
 module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
+  startWatchingContracts,
   purchaseContract,
   createContract,
   cancelContract,

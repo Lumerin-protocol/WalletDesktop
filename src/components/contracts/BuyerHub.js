@@ -87,7 +87,7 @@ function BuyerHub({
 
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
-  const contractsWithHistory = contracts.filter(c => c.history.length);
+  const contractsWithHistory = contracts.filter(c => c.history?.length);
   const showHistory = contractsWithHistory.length;
   const onHistoryOpen = () => setIsHistoryModalOpen(true);
 

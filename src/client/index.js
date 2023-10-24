@@ -111,6 +111,10 @@ const createClient = function(createStore) {
       'refresh-all-contracts',
       120000
     ),
+    startWatchingContracts: utils.forwardToMainProcess(
+      'start-watching-contracts',
+      120000
+    ),
     onOnboardingCompleted: utils.forwardToMainProcess('onboarding-completed'),
     recoverFromMnemonic: utils.forwardToMainProcess('recover-from-mnemonic'),
     getTokenGasLimit: utils.forwardToMainProcess('get-token-gas-limit'),
