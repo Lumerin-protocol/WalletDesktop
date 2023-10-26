@@ -26,6 +26,10 @@ export const initialState = {
  * Should filter transactions without receipt if we received ones
  */
 const mergeTransactions = (stateTxs, payloadTxs) => {
+  console.log(
+    '🚀 ~ file: wallet.js:29 ~ mergeTransactions ~ payloadTxs:',
+    payloadTxs
+  );
   const txWithReceipts = payloadTxs.filter(tx => tx.receipt);
   const newStateTxs = { ...stateTxs };
 
@@ -118,10 +122,7 @@ const reducer = handleActions(
       ...state,
       token: {
         ...state.token,
-        transactions: mergeTransactions(
-          state.token.transactions,
-          payload.transactions
-        )
+        transactions: mergeTransactions(state.token.transactions, payload)
       }
     }),
 

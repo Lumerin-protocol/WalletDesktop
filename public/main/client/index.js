@@ -60,10 +60,10 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         return api.explorer
           .syncTransactions(
             0,
-            address,
             (number) => storage.setSyncBlock(number, chain),
             page,
-            pageSize
+            pageSize,
+            address
           )
           .then(function() {
             send("transactions-scan-finished", { success: true });
