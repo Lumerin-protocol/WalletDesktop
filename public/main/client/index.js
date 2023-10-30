@@ -8,6 +8,7 @@ const logger = require("../../logger");
 const subscriptions = require("./subscriptions");
 const settings = require("./settings");
 const storage = require("./storage");
+const { startMonitoringHashrate } = require("./contractsHashrateSyncer");
 
 const {
   getAddressAndPrivateKey,
@@ -15,11 +16,15 @@ const {
 } = require("./handlers/single-core");
 
 const { runProxyRouter, isProxyRouterHealthy } = require("./proxyRouter");
-
+let interval;
 function startCore({ chain, core, config: coreConfig }, webContent) {
   logger.verbose(`Starting core ${chain}`);
   const { emitter, events, api } = core.start(coreConfig);
   const proxyRouterApi = api["proxy-router"];
+  if(interval)
+    clearInterval(interval);
+
+  interval = startMonitoringHashrate(coreConfig.localProxyRouterUrl, 5 * 60 * 1000);
 
   // emitter.setMaxListeners(30);
   emitter.setMaxListeners(50);

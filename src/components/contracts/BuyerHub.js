@@ -8,6 +8,7 @@ import ContractsList from './contracts-list/ContractsList';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 
 import HistoryModal from './modals/HistoryModal/HistoryModal';
+import HashrateModal from './modals/HashrateModal/HashrateModal';
 import { IconHistory } from '@tabler/icons';
 
 import styled from 'styled-components';
@@ -44,7 +45,8 @@ function BuyerHub({
   ...props
 }) {
   const contractsToShow = contracts.filter(
-    x => x.buyer === address && x.seller !== address
+    (x, i) => x.seller !== address && i == 0
+    //x => x.buyer === address && x.seller !== address
   );
   const tabs = [
     { value: 'id', name: 'Contract', ratio: 3 },
@@ -81,11 +83,17 @@ function BuyerHub({
         cancel={handleContractCancellation}
         address={address}
         ratio={ratio}
+        onGetHashrate={id => {
+          setShowHashrateModal(true);
+          setContactToShowHashrate(id);
+        }}
       />
     </ContractsRowContainer>
   );
 
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [showHashrateModal, setShowHashrateModal] = useState(false);
+  const [contactToShowHashrate, setContactToShowHashrate] = useState();
 
   const contractsWithHistory = contracts.filter(c => c.history.length);
   const showHistory = contractsWithHistory.length;
@@ -127,6 +135,15 @@ function BuyerHub({
         historyContracts={contractsWithHistory}
         close={() => {
           setIsHistoryModalOpen(false);
+        }}
+      />
+
+      <HashrateModal
+        isActive={showHashrateModal}
+        contractId={contactToShowHashrate}
+        close={() => {
+          setShowHashrateModal(false);
+          setContactToShowHashrate(null);
         }}
       />
     </View>

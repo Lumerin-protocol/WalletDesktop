@@ -57,6 +57,11 @@ const setDefaultCurrency = async (curr) => setDefaultCurrencySetting(curr);
 const getCustomEnvs = async () => getKey('customEnvs');
 const setCustomEnvs = async (value) => setKey('customEnvs', value);
 
+const getContractHashrate = async (contractId) => {
+  const collection = await dbManager.getDb().collection('hashrate').findAsync({ id : contractId });
+  return collection;
+}
+
 const restartWallet = () => restart(1);
 
 module.exports = {
@@ -72,4 +77,5 @@ module.exports = {
   getCustomEnvs,
   setCustomEnvs,
   restartWallet,
+  getContractHashrate
 };

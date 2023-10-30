@@ -168,7 +168,8 @@ const createClient = function(createStore) {
     getMarketplaceFee: utils.forwardToMainProcess('get-marketplace-fee'),
     claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000),
     getCustomEnvValues: utils.forwardToMainProcess('get-custom-env-values'),
-    setCustomEnvValues: utils.forwardToMainProcess('set-custom-env-values')
+    setCustomEnvValues: utils.forwardToMainProcess('set-custom-env-values'),
+    getContractHashrate: utils.forwardToMainProcess('get-contract-hashrate')
   };
 
   const api = {
