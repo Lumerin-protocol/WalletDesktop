@@ -6,10 +6,10 @@ const logger = require("../../../logger");
 const storage = require("../storage");
 const auth = require("../auth");
 const wallet = require("../wallet");
-const { 
-  setProxyRouterConfig, 
-  getProxyRouterConfig, 
-  getDefaultCurrencySetting, 
+const {
+  setProxyRouterConfig,
+  getProxyRouterConfig,
+  getDefaultCurrencySetting,
   setDefaultCurrencySetting,
   getKey,
   setKey
@@ -27,11 +27,11 @@ function clearCache() {
 const persistState = (data) => storage.persistState(data).then(() => true);
 
 function changePassword({ oldPassword, newPassword }) {
-  return validatePassword(oldPassword).then(function(isValid) {
+  return validatePassword(oldPassword).then(function (isValid) {
     if (!isValid) {
       return isValid;
     }
-    return auth.setPassword(newPassword).then(function() {
+    return auth.setPassword(newPassword).then(function () {
       const seed = wallet.getSeed(oldPassword);
       wallet.setSeed(seed, newPassword);
 
@@ -48,7 +48,7 @@ const getProxyRouterSettings = async () => {
 };
 
 const handleClientSideError = (data) => {
-  logger.error(data.message, data.stack);
+  logger.error("client-side error", data.message, data.stack);
 }
 
 const getDefaultCurrency = async () => getDefaultCurrencySetting();

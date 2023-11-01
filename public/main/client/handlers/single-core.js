@@ -31,7 +31,7 @@ const withAuth = (fn) => (data, { api }) => {
     .then((privateKey) => fn(privateKey, data));
 };
 
-const createContract = async function(data, { api }) {
+const createContract = async function (data, { api }) {
   data.walletId = wallet.getAddress().address;
   data.password = await auth.getSessionPassword();
 
@@ -50,7 +50,7 @@ const createContract = async function(data, { api }) {
   )(data, { api });
 };
 
-const purchaseContract = async function(data, { api }) {
+const purchaseContract = async function (data, { api }) {
   data.walletId = wallet.getAddress().address;
   data.minerPassword = data.password;
   data.password = await auth.getSessionPassword();
@@ -67,7 +67,7 @@ const purchaseContract = async function(data, { api }) {
   )(data, { api });
 };
 
-const editContract = async function(data, { api }) {
+const editContract = async function (data, { api }) {
   data.walletId = wallet.getAddress().address;
   data.password = await auth.getSessionPassword();
 
@@ -88,7 +88,7 @@ const editContract = async function(data, { api }) {
 };
 
 
-const claimFaucet = async function(data, { api }) {
+const claimFaucet = async function (data, { api }) {
   data.walletId = wallet.getAddress().address;
   data.password = await auth.getSessionPassword();
 
@@ -104,7 +104,7 @@ const claimFaucet = async function(data, { api }) {
   )(data, { api });
 };
 
-const cancelContract = async function(data, { api }) {
+const cancelContract = async function (data, { api }) {
   data.walletId = wallet.getAddress().address;
   data.password = await auth.getSessionPassword();
 
@@ -121,7 +121,7 @@ const cancelContract = async function(data, { api }) {
   )(data, { api });
 };
 
-const setContractDeleteStatus = async function(data, { api }) {
+const setContractDeleteStatus = async function (data, { api }) {
   data.walletId = wallet.getAddress().address;
   data.password = await auth.getSessionPassword();
 
@@ -157,7 +157,7 @@ const restartProxyRouter = async (data, { emitter, api }) => {
 
   await api["proxy-router"]
     .kill(config.chain.proxyPort)
-    .catch(logger.error);
+    .catch(err => logger.error("proxy router err", err));
 
   emitter.emit("open-proxy-router", { password });
 };
@@ -190,10 +190,10 @@ const onboardingCompleted = (data, core) => {
       )
     )
     .then(() => true)
-    .catch((err) => ({error: new WalletError("Onboarding unable to be completed: ", err)}));
+    .catch((err) => ({ error: new WalletError("Onboarding unable to be completed: ", err) }));
 };
 
-const recoverFromMnemonic = function(data, core) {
+const recoverFromMnemonic = function (data, core) {
   if (!auth.isValidPassword(data.password)) {
     return null;
   }
@@ -217,24 +217,24 @@ function onLoginSubmit({ password }, core) {
     ? new Promise((r) => r(true))
     : auth.isValidPassword(password);
 
-  return checkPassword.then(function(isValid) {
+  return checkPassword.then(function (isValid) {
     if (!isValid) {
       return { error: new WalletError("Invalid password") };
     }
     openWallet(core, password);
 
     return isValid;
-  }).catch(logger.error);
+  }).catch(err => logger.error("onLoginSubmit err", err));
 }
 function refreshAllSockets({ url }, { api, emitter }) {
   emitter.emit("sockets-scan-started", {});
   return api.sockets
     .getConnections()
-    .then(function() {
+    .then(function () {
       emitter.emit("sockets-scan-finished", { success: true });
       return {};
     })
-    .catch(function(error) {
+    .catch(function (error) {
       logger.warn("Could not sync sockets/connections", error.stack);
       emitter.emit("sockets-scan-finished", {
         error: error.message,
@@ -251,11 +251,11 @@ function refreshAllTransactions({ address }, { api, emitter }) {
   emitter.emit("transactions-scan-started", {});
   return api.explorer
     .refreshAllTransactions(address)
-    .then(function() {
+    .then(function () {
       emitter.emit("transactions-scan-finished", { success: true });
       return {};
     })
-    .catch(function(error) {
+    .catch(function (error) {
       logger.warn("Could not sync transactions/events", error.stack);
       emitter.emit("transactions-scan-finished", {
         error: error.message,
@@ -268,11 +268,11 @@ function refreshAllTransactions({ address }, { api, emitter }) {
     });
 }
 
-const getMarketplaceFee = async function(data, { api }) {
- return api.contracts.getMarketplaceFee(data);
+const getMarketplaceFee = async function (data, { api }) {
+  return api.contracts.getMarketplaceFee(data);
 };
 
-function refreshAllContracts({}, { api }) {
+function refreshAllContracts({ }, { api }) {
   const walletId = wallet.getAddress().address;
   return api.contracts.refreshContracts(null, walletId);
 }
@@ -333,7 +333,7 @@ const getAddressAndPrivateKey = async (data, { api }) => {
 const refreshProxyRouterConnection = async (data, { api }) =>
   api["proxy-router"].refreshConnectionsStream(data);
 
-const getLocalIp = async ({}, { api }) => api["proxy-router"].getLocalIp();
+const getLocalIp = async ({ }, { api }) => api["proxy-router"].getLocalIp();
 
 const isProxyPortPublic = async (data, { api }) => api["proxy-router"].isProxyPortPublic(data);
 
@@ -359,7 +359,7 @@ const revealSecretPhrase = async (password) => {
   if (!isValid) {
     return { error: new WalletError("Invalid password") };
   }
- 
+
   const entropy = wallet.getEntropy(password);
   const mnemonic = keys.entropyToMnemonic(entropy);
   return mnemonic;
