@@ -41,70 +41,33 @@ function HashrateModal(props) {
           return a.timestamp - b.timestamp;
         });
 
-      //const t = hr.slice(0, 22).map((x, i) => ({...x, timestamp: 1697739351623 + i * 60 * 5 * 1000}));
-
-      let data = hr;
-      // const temp = data.reduce((curr, next, i) => {
-      //     console.log(new Date(next.timestamp));
-      //     const res = [...curr, next];
-
-      //     if(data.length - 1 == i) {
-      //         return res;
-      //     }
-      //     const treshhold = next.timestamp + 1000 * 10 * 60;
-      //     if(treshhold < data[i + 1].timestamp) {
-      //         return [...res, {timestamp: next.timestamp + 1000 * 10 * 60, hashrate: null}];
-      //     }
-      //     return res;
-      // },[])
-
-      console.log(hr);
-      // .reduce((a,b, i) => {
-
-      // }, []);
-
-      //Взять точку + если в след 6 секунд нет ничего то вставить null
-
-      let markers = Array.from(' '.repeat(74)) // 288
-        .map((i, index) => ({
-          id: '0x3f3B057691Fdb136F4657F4559d16C723B3549f5',
-          hashrate: Math.floor(Math.random() * 25) + 75,
-          timestamp: 1697741415085 + index * 5 * 60 * 1000,
-          _id: 'xDwkIESXvMtRxCNB'
-        }));
-
-      markers = [
-        ...markers,
-        {
-          id: '0x3f3B057691Fdb136F4657F4559d16C723B3549f5',
-          hashrate: null,
-          timestamp: 1697798622385 - 5 * 5 * 60 * 1000,
-          _id: 'xDwkIESXvMtRxCNB'
-        },
-        ...Array.from(' '.repeat(40)) // 288
-          .map((i, index) => ({
-            id: '0x3f3B057691Fdb136F4657F4559d16C723B3549f5',
-            hashrate: Math.floor(Math.random() * 25) + 75,
-            timestamp: 1697798622385 + index * 5 * 60 * 1000,
-            _id: 'xDwkIESXvMtRxCNB'
-          }))
-      ];
-
-      // var emptyChart = Array.from(' '.repeat(288 - hr.length)).map(i => null);
-      // console.log(emptyChart);
-      // const thr = [...emptyChart, ...hr.map(x => x.hashrate)];
-
-      console.log(hr);
       setHashrate(hr);
-      // const timestamps = hr
-      // .sort(function (a, b) {
-      //     return a.timestamp - b.timestamp;
-      //   })
-      // .map(x => x.timestamp).forEach(a => {
-      //     console.log(new Date(a).toUTCString());
-      // })
-      // const hashrateData = hr.map(x => x.hashrate);
-      const chart = renderChart(markers.map(x => [x.timestamp, x.hashrate]));
+      const items = hr.reduce(
+        (curr, next) => ({ ...curr, [next.timestamp]: next.hashrate }),
+        {}
+      );
+      const keys = Object.keys(items)
+        .map(x => +x)
+        .reverse();
+
+      const dayTimeFrames = Array.from(' '.repeat(288)).map((_, index) => {
+        const time = d.getTime() + index * 300000;
+        return [time - (time % 300000), 0];
+      });
+
+      const result = [];
+      dayTimeFrames.forEach(element => {
+        let item = element;
+        keys.forEach(latest => {
+          const lt = latest - (latest % 1000) * 60;
+          if (element[0] - 300000 <= lt && lt <= element[0]) {
+            item[1] = items[latest];
+          }
+        });
+        result.push(item);
+      });
+
+      const chart = renderChart(result);
       setChart(chart);
     }
     set();
@@ -141,12 +104,7 @@ function HashrateModal(props) {
               justifyContent: 'center',
               alignItems: 'center'
             }}
-          >
-            <IconChevronsLeft></IconChevronsLeft>
-            {getCurr()}
-
-            <IconChevronsRight></IconChevronsRight>
-          </div>
+          ></div>
         </div>
         <HighchartsReact highcharts={Highcharts} options={chart} />
       </Body>

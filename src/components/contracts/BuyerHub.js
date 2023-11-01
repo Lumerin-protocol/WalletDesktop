@@ -45,8 +45,7 @@ function BuyerHub({
   ...props
 }) {
   const contractsToShow = contracts.filter(
-    (x, i) => x.seller !== address && i == 0
-    //x => x.buyer === address && x.seller !== address
+    x => x.buyer === address && x.seller !== address
   );
   const tabs = [
     { value: 'id', name: 'Contract', ratio: 3 },
