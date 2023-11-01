@@ -1,5 +1,8 @@
-import Highcharts, { color } from 'highcharts';
+import Highcharts from 'highcharts';
 
+/**
+ * @param {[number, number][]} data
+ */
 export const renderChart = data => {
   const chart = {
     chart: {

@@ -6,10 +6,10 @@ const logger = require("../../../logger");
 const storage = require("../storage");
 const auth = require("../auth");
 const wallet = require("../wallet");
-const { 
-  setProxyRouterConfig, 
-  getProxyRouterConfig, 
-  getDefaultCurrencySetting, 
+const {
+  setProxyRouterConfig,
+  getProxyRouterConfig,
+  getDefaultCurrencySetting,
   setDefaultCurrencySetting,
   getKey,
   setKey
@@ -27,11 +27,11 @@ function clearCache() {
 const persistState = (data) => storage.persistState(data).then(() => true);
 
 function changePassword({ oldPassword, newPassword }) {
-  return validatePassword(oldPassword).then(function(isValid) {
+  return validatePassword(oldPassword).then(function (isValid) {
     if (!isValid) {
       return isValid;
     }
-    return auth.setPassword(newPassword).then(function() {
+    return auth.setPassword(newPassword).then(function () {
       const seed = wallet.getSeed(oldPassword);
       wallet.setSeed(seed, newPassword);
 
@@ -57,9 +57,26 @@ const setDefaultCurrency = async (curr) => setDefaultCurrencySetting(curr);
 const getCustomEnvs = async () => getKey('customEnvs');
 const setCustomEnvs = async (value) => setKey('customEnvs', value);
 
-const getContractHashrate = async (contractId) => {
-  const collection = await dbManager.getDb().collection('hashrate').findAsync({ id : contractId });
-  return collection;
+/**
+ * 
+ * @param {string} contractId 
+ * @param {Date} fromDate
+ * @returns 
+ */
+const getContractHashrate = async (contractId, fromDate) => {
+  const collection = await dbManager.getDb().collection('hashrate').findAsync({ id: contractId });
+  // Uncomment to get a random data
+  // const data = []
+  // const now = new Date().getTime();
+  // for (let i = 10; i >= 0; i--) {
+  //   const timestamp = now - i * 1000 * 60 * 5;
+  //   const hashrate = Math.round(Math.random() * 40000) + 80000;
+  //   data.push({ timestamp, hashrate })
+  // }
+  // return data;
+  return collection
+    .filter(x => x.timestamp > fromDate.getTime())
+    .sort((a, b) => a.timestamp - b.timestamp);
 }
 
 const restartWallet = () => restart(1);
