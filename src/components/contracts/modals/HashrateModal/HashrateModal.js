@@ -20,7 +20,6 @@ import { renderChart } from './chartRenderer';
 let inteval;
 function HashrateModal(props) {
   const { isActive, close, contractId, client } = props;
-  const [hashrate, setHashrate] = useState([]);
   const [chart, setChart] = useState([]);
 
   const handleClose = e => {
@@ -32,43 +31,40 @@ function HashrateModal(props) {
     if (inteval) clearInterval(inteval);
     if (!contractId) return;
     async function set() {
-      var d = new Date();
-      d.setDate(d.getDate() - 1);
+      var previousDay = new Date();
+      previousDay.setDate(previousDay.getDate() - 1);
+      let storedHashrate = (await client.getContractHashrate(contractId))
+        .filter(x => x.timestamp > previousDay.getTime())
+        .sort((a, b) => a.timestamp - b.timestamp);
 
-      let hr = (await client.getContractHashrate(contractId))
-        .filter(x => x.timestamp > d.getTime())
-        .sort(function(a, b) {
-          return a.timestamp - b.timestamp;
-        });
-
-      setHashrate(hr);
-      const items = hr.reduce(
+      const hashratePoints = storedHashrate.reduce(
         (curr, next) => ({ ...curr, [next.timestamp]: next.hashrate }),
         {}
       );
-      const keys = Object.keys(items)
+      const hashrateTimestamps = Object.keys(hashratePoints)
         .map(x => +x)
         .reverse();
 
+      // day interval with 5 min step
+      const step = 5 * 60 * 1000;
       const dayTimeFrames = Array.from(' '.repeat(288)).map((_, index) => {
-        const time = d.getTime() + index * 300000;
-        return [time - (time % 300000), 0];
+        const time = previousDay.getTime() + index * step;
+        return [time - (time % step), 0];
       });
 
       const result = [];
-      dayTimeFrames.forEach(element => {
-        let item = element;
-        keys.forEach(latest => {
+      dayTimeFrames.forEach(frame => {
+        let item = frame;
+        hashrateTimestamps.forEach(latest => {
           const lt = latest - (latest % 1000) * 60;
-          if (element[0] - 300000 <= lt && lt <= element[0]) {
-            item[1] = items[latest];
+          if (frame[0] - 300000 <= lt && lt <= frame[0]) {
+            item[1] = hashratePoints[latest];
           }
         });
         result.push(item);
       });
 
-      const chart = renderChart(result);
-      setChart(chart);
+      setChart(renderChart(result));
     }
     set();
     inteval = setInterval(() => {
