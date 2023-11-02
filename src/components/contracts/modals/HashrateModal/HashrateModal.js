@@ -18,8 +18,7 @@ const UpdateIntervalMs = 10 * 1000; // how often data will be checked for update
 const TimeResolution = 5 * 60 * 1000; // how granular will be the chart data
 const MaxDuration = 24 * 60 * 60 * 1000; // how far back in time will be the chart data
 
-function HashrateModal(props) {
-  const { isActive, close, contractId, client } = props;
+function HashrateModal({ isActive, close, contractId, client }) {
   const [chart, setChart] = useState([]);
 
   const handleClose = e => close(e);
