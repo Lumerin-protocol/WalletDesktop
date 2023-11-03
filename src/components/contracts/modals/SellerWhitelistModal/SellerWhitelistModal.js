@@ -26,7 +26,7 @@ function SellerWhitelistModal(props) {
 
   return (
     <Modal onClick={handleClose}>
-      <Body height={'400px'} onClick={handlePropagation}>
+      <Body height={'300px'} onClick={handlePropagation}>
         {CloseModal(handleClose)}
         <TitleWrapper style={{ height: 'auto' }}>
           <Title>You are not whitelisted as Seller</Title>

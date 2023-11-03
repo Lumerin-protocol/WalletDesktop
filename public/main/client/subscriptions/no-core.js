@@ -20,6 +20,7 @@ const listeners = {
   "set-default-currency-settings": handlers.setDefaultCurrency,
   "get-custom-env-values": handlers.getCustomEnvs,
   "set-custom-env-values": handlers.setCustomEnvs,
+  "get-contract-hashrate": handlers.getContractHashrate
 };
 
 // Subscribe to messages where no core has to react
