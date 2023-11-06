@@ -70,7 +70,7 @@ const getContractHashrate = async ({contractId, fromDate}) => {
   // const now = new Date().getTime();
   // for (let i = 10; i >= 0; i--) {
   //   const timestamp = now - i * 1000 * 60 * 5;
-  //   const hashrate = Math.round(Math.random() * 40000) + 80000;
+  //   const hashrate = Math.round(Math.random() * 50000) + 70000;
   //   data.push({ timestamp, hashrate })
   // }
   // return data;
