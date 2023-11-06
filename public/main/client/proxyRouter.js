@@ -51,7 +51,6 @@ const runProxyRouter = (config) => {
       `--contract-address=${config.cloneFactoryAddress}`,
       `--eth-node-address=${config.wsApiUrl}`,
 
-      "--miner-vetting-duration=5m",
       "--miner-share-timeout=10m",
 
       "--hashrate-error-threshold=0.05",
