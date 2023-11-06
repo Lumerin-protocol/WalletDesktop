@@ -20,8 +20,8 @@ export const renderChart = data => {
       verticalAlign: 'top',
       symbolRadius: 0,
       labelFormatter: function() {
-        if (this.name === 'TH/s') {
-          return 'TH/s';
+        if (this.name === 'GH/s') {
+          return 'GH/s';
         }
         return '';
       }
@@ -46,12 +46,12 @@ export const renderChart = data => {
         return `${Highcharts.dateFormat(
           '%m/%d/%Y %H %M',
           this.x
-        )} </br> Hashrate (5min): ${this.y} TH/s`;
+        )} </br> Hashrate (5min): ${this.y} GH/s`;
       }
     },
     plotOptions: {
       series: {
-        name: 'TH/s',
+        name: 'GH/s',
         pointInterval: 1000 * 60 * 5 // data every 5 minutes SET 5
       },
       spline: {
