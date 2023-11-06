@@ -48,7 +48,7 @@ const getProxyRouterSettings = async () => {
 };
 
 const handleClientSideError = (data) => {
-  logger.error(data.message, data.stack);
+  logger.error("client-side error", data.message, data.stack);
 }
 
 const getDefaultCurrency = async () => getDefaultCurrencySetting();

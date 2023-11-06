@@ -45,12 +45,12 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
       const payload = Object.assign({}, data, { chain });
       webContent.sender.send(eventName, payload);
     } catch (err) {
-      logger.error(err);
+      logger.error("send error", err);
     }
   }
 
   events.forEach((event) =>
-    emitter.on(event, function(data) {
+    emitter.on(event, function (data) {
       send(event, data);
     })
   );
@@ -58,7 +58,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
   function syncTransactions({ address }, page = 1, pageSize = 15) {
     return storage
       .getSyncBlock(chain)
-      .then(function(from) {
+      .then(function (from) {
         send("transactions-scan-started", {});
 
         return api.explorer
@@ -69,17 +69,17 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
             page,
             pageSize
           )
-          .then(function() {
+          .then(function () {
             send("transactions-scan-finished", { success: true });
 
-            emitter.on("coin-block", function({ number }) {
-              storage.setSyncBlock(number, chain).catch(function(err) {
+            emitter.on("coin-block", function ({ number }) {
+              storage.setSyncBlock(number, chain).catch(function (err) {
                 logger.warn("Could not save new synced block", err);
               });
             });
           });
       })
-      .catch(function(err) {
+      .catch(function (err) {
         logger.warn("Could not sync transactions/events", err.stack);
         send("transactions-scan-finished", {
           error: err.message,
@@ -94,7 +94,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
 
   emitter.on("open-wallet", syncTransactions);
 
-  emitter.on("wallet-error", function(err) {
+  emitter.on("wallet-error", function (err) {
     logger.warn(
       err.inner ? `${err.message} - ${err.inner.message}` : err.message
     );
@@ -118,7 +118,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         { password },
         { api }
       );
-  
+
       send("proxy-router-type-changed", {
         isLocal: true,
       });
@@ -163,8 +163,8 @@ function stopCore({ core, chain }) {
 }
 
 function createClient(config) {
-  ipcMain.on("log.error", function(_, args) {
-    logger.error(args.message);
+  ipcMain.on("log.error", function (_, args) {
+    logger.error("ipcMain error ", args.message);
   });
 
   settings.presetDefaults();
@@ -184,16 +184,16 @@ function createClient(config) {
     config: Object.assign({}, config.chain, config),
   };
 
-  ipcMain.on("ui-ready", function(webContent, args) {
+  ipcMain.on("ui-ready", function (webContent, args) {
     const onboardingComplete = !!settings.getPasswordHash();
 
     storage
       .getState()
-      .catch(function(err) {
+      .catch(function (err) {
         logger.warn("Failed to get state", err.message);
         return {};
       })
-      .then(function(persistedState) {
+      .then(function (persistedState) {
         const payload = Object.assign({}, args, {
           data: {
             onboardingComplete,
@@ -204,17 +204,17 @@ function createClient(config) {
         webContent.sender.send("ui-ready", payload);
         // logger.verbose(`<-- ui-ready ${stringify(payload)}`);
       })
-      .catch(function(err) {
+      .catch(function (err) {
         logger.error("Could not send ui-ready message back", err.message);
       })
-      .then(function() {
+      .then(function () {
         const { emitter, events, api } = startCore(core, webContent);
         core.emitter = emitter;
         core.events = events;
         core.api = api;
         subscriptions.subscribe(core);
       })
-      .catch(function(err) {
+      .catch(function (err) {
         console.log("panic");
         console.log(err);
         console.log("Unknown chain =", err.message);
@@ -222,7 +222,7 @@ function createClient(config) {
       });
   });
 
-  ipcMain.on("ui-unload", function() {
+  ipcMain.on("ui-unload", function () {
     stopCore(core);
     subscriptions.unsubscribe(core);
   });

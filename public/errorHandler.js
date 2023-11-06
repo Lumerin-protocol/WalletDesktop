@@ -12,7 +12,7 @@ let options = {
 
 const handleError = (error) => {
 	try {
-		options.logger(error);
+		options.logger("handle error: ", error?.message, error?.stack, error);
 	} catch (loggerError) { // eslint-disable-line unicorn/catch-error-name
 		dialog.showErrorBox('The `logger` option function in electron-unhandled threw an error', loggerError.stack);
 		return;

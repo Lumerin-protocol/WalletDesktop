@@ -32,7 +32,7 @@ const isProxyRouterHealthy = async (api, url) => {
     const healthCheck = await api["proxy-router"].healthCheck(url);
     return healthCheck?.data?.status === "healthy";
   } catch (err) {
-    logger.error(err);
+    logger.error("proxy-router error", err);
     return false;
   }
 };
