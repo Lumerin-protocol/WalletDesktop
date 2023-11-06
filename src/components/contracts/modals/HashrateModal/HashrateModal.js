@@ -31,10 +31,10 @@ function HashrateModal({ isActive, close, contractId, client }) {
       const now = new Date();
       const fromDate = new Date(now.getTime() - MaxDuration);
 
-      const storedHashrate = await client.getContractHashrate(
+      const storedHashrate = await client.getContractHashrate({
         contractId,
         fromDate
-      );
+      });
       const chartData = mapInputDataToDataPoints(storedHashrate, fromDate, now);
 
       //@ts-ignore

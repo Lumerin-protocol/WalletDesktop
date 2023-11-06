@@ -63,7 +63,7 @@ const setCustomEnvs = async (value) => setKey('customEnvs', value);
  * @param {Date} fromDate
  * @returns 
  */
-const getContractHashrate = async (contractId, fromDate) => {
+const getContractHashrate = async ({contractId, fromDate}) => {
   const collection = await dbManager.getDb().collection('hashrate').findAsync({ id: contractId });
   // Uncomment to get a random data
   // const data = []
