@@ -66,11 +66,7 @@ export const getTransactions = createSelector(getWallet, walletData => {
 
   const transactions = Object.values(walletData?.token?.transactions) || [];
 
-  const sorted = sortBy(transactions, [
-    'receipt.blockNumber',
-    'receipt.transactionIndex',
-    'transaction.nonce'
-  ]).reverse();
+  const sorted = sortBy(transactions, ['blockNumber']).reverse();
 
   return sorted.map(transactionParser);
 });

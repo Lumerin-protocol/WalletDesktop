@@ -371,7 +371,7 @@ const revealSecretPhrase = async (password) => {
 }
 
 function getPastTransactions({ address, page, pageSize }, { api }) {
-  return api.explorer.getPastCoinTransactions(0, undefined, address, page, pageSize);
+  return api.explorer.syncTransactions(0, undefined, page, pageSize, address);
 }
 
 module.exports = {
