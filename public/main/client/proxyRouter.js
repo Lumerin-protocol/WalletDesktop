@@ -57,7 +57,7 @@ const runProxyRouter = (config) => {
       "--hashrate-cycle-duration=5m",
       "--hashrate-share-timeout=7m",
       "--hashrate-validation-start-timeout=15m",
-      "--hashrate-validation-grace-duration=35m",
+      "--hashrate-validation-grace-duration=50m",
 
       "--log-level-app=info",
       "--log-level-scheduler=info",
