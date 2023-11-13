@@ -13,7 +13,6 @@ const listeners = {
   'reveal-secret-phrase': handlers.revealSecretPhrase,
   'has-stored-secret-phrase': handlers.hasStoredSecretPhrase,
   "logout": handlers.logout,
-  "restart": handlers.restartWallet,
   "save-proxy-router-settings": handlers.saveProxyRouterSettings,
   "get-proxy-router-settings": handlers.getProxyRouterSettings,
   "get-default-currency-settings": handlers.getDefaultCurrency,

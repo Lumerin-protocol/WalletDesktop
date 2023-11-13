@@ -142,7 +142,6 @@ const createClient = function(createStore) {
       'get-lmr-transfer-gas-limit'
     ),
     logout: utils.forwardToMainProcess('logout'),
-    restartWallet: utils.forwardToMainProcess('restart'),
     getLocalIp: utils.forwardToMainProcess('get-local-ip'),
     isProxyPortPublic: utils.forwardToMainProcess('is-proxy-port-public'),
     getPoolAddress: utils.forwardToMainProcess('get-pool-address'),
