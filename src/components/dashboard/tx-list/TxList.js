@@ -73,7 +73,6 @@ export const TxList = ({
   syncStatus,
   client
 }) => {
-  console.log('🚀 ~ file: TxList.js:76 ~ transactions:', transactions);
   const handleClick = e => {
     if (!window.isDev || !e.shiftKey || !e.altKey) return;
 

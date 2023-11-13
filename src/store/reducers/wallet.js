@@ -26,11 +26,6 @@ export const initialState = {
  * Should filter transactions without receipt if we received ones
  */
 const mergeTransactions = (stateTxs, payloadTxs) => {
-  console.log(
-    '🚀 ~ file: wallet.js:29 ~ mergeTransactions ~ payloadTxs:',
-    payloadTxs
-  );
-
   const newStateTxs = { ...stateTxs };
   const txs = Object.values(payloadTxs).filter(x => typeof x == 'object');
 
@@ -102,11 +97,14 @@ const reducer = handleActions(
       };
     },
 
-    'transactions-next-page': (state, { payload }) => ({
-      ...state,
-      hasNextPage: payload.hasNextPage,
-      page: payload.page
-    }),
+    'transactions-next-page': (state, { payload }) => {
+      console.log(payload);
+      return {
+        ...state,
+        hasNextPage: payload.hasNextPage,
+        page: payload.page
+      };
+    },
 
     'token-state-changed': (state, { payload }) => ({
       ...state,

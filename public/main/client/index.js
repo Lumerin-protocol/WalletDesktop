@@ -91,6 +91,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
   emitter.on("open-wallet", (props) => { 
     syncTransactions(props);
     api.contracts.startWatching({});
+    //api.explorer.startWatching({});
   });
 
   emitter.on("wallet-error", function(err) {
