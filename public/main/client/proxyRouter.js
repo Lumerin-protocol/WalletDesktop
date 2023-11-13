@@ -32,7 +32,7 @@ const isProxyRouterHealthy = async (api, url) => {
     const healthCheck = await api["proxy-router"].healthCheck(url);
     return healthCheck?.data?.status === "healthy";
   } catch (err) {
-    logger.error(err);
+    logger.error("proxy-router error", err);
     return false;
   }
 };
@@ -51,13 +51,14 @@ const runProxyRouter = (config) => {
       `--contract-address=${config.cloneFactoryAddress}`,
       `--eth-node-address=${config.wsApiUrl}`,
 
-      "--miner-vetting-duration=5m",
       "--miner-share-timeout=10m",
+      "--miner-vetting-duration=5m",
 
       "--hashrate-error-threshold=0.05",
       "--hashrate-cycle-duration=5m",
       "--hashrate-share-timeout=7m",
       "--hashrate-validation-start-timeout=15m",
+      // "--hashrate-validation-grace-duration=50m",
 
       "--log-level-app=info",
       "--log-level-scheduler=info",

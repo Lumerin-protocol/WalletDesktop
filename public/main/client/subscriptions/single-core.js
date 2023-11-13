@@ -28,6 +28,7 @@ const listeners = {
   "get-local-ip": handlers.getLocalIp,
   "is-proxy-port-public": handlers.isProxyPortPublic,
   "restart-proxy-router": handlers.restartProxyRouter,
+  "stop-proxy-router": handlers.stopProxyRouter,
   "claim-faucet": handlers.claimFaucet,
   'get-private-key': handlers.getAddressAndPrivateKey,
   "get-marketplace-fee": handlers.getMarketplaceFee

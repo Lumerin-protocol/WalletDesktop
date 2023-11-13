@@ -191,7 +191,9 @@ export const PurchasePreviewModalPage = ({
             <Divider />
             <div style={{ marginTop: '20px' }}>
               <SmallTitle>Pool Address</SmallTitle>
-              <Values style={{ wordBreak: 'break-all' }}>{pool}</Values>
+              <Values style={{ wordBreak: 'break-all' }}>
+                {pool || 'Validation node default pool address'}
+              </Values>
             </div>
           </UrlContainer>
           <ActionsGroup>

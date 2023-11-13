@@ -92,7 +92,8 @@ const SocketsList = props => {
 
               <ListContainer>
                 {!props.hasConnections &&
-                  (props.syncStatus === 'syncing' ? (
+                  (props.syncStatus === 'syncing' &&
+                  props.isLocalProxyRouter ? (
                     <ScanningSocketsPlaceholder />
                   ) : (
                     <NoSocketsPlaceholder />

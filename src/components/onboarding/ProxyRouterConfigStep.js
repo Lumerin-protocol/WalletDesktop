@@ -80,11 +80,11 @@ const ProxyRouterConfigStep = props => {
             </>
           )}
 
-          {/* <Sp mt={2}>
-            <SecondaryBtn onClick={props.onUseHostedProxyRouter} block>
-              Or use hosted proxy router
+          <Sp mt={2}>
+            <SecondaryBtn onClick={props.onRunWithoutProxyRouter} block>
+              Or run wallet without validator node
             </SecondaryBtn>
-          </Sp> */}
+          </Sp>
           <Sp mt={6}>
             <Btn block submit>
               Continue
@@ -98,7 +98,7 @@ const ProxyRouterConfigStep = props => {
 
 ProxyRouterConfigStep.propTypes = {
   onProxyRouterConfigured: PropTypes.func.isRequired,
-  onUseHostedProxyRouter: PropTypes.func.isRequired,
+  onRunWithoutProxyRouter: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
   proxyDefaultPool: PropTypes.string,
   errors: utils.errorPropTypes('proxyDefaultPool')

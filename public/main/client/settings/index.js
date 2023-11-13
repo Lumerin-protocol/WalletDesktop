@@ -38,7 +38,7 @@ const getProxyRouterConfig = () => {
     }
     return data;
   } catch (e) {
-    console.error(e);
+    console.error("error getting proxyrouter config", e);
     cleanupDb();
   }
 };
@@ -86,7 +86,7 @@ function cleanupDb() {
   // Overwrite old settings and clear db if settings file version changed
   upgradeSettings(defaultSettings, currentSettings);
   const db = getDb();
-  db.dropDatabase().catch(function(err) {
+  db.dropDatabase().catch(function (err) {
     logger.error("Possible database corruption", err.message);
   });
   restart(1);
@@ -96,6 +96,10 @@ const getDefaultCurrencySetting = () => getKey("selectedCurrency");
 
 const setDefaultCurrencySetting = (currency) => setKey("selectedCurrency", currency);
 
+const getAppVersion = () => getKey("app.version");
+
+const setAppVersion = (value) => setKey("app.version", value);
+
 module.exports = {
   getPasswordHash,
   setPasswordHash,
@@ -104,5 +108,9 @@ module.exports = {
   getProxyRouterConfig,
   cleanupDb,
   getDefaultCurrencySetting,
-  setDefaultCurrencySetting
+  setDefaultCurrencySetting,
+  getKey,
+  setKey,
+  getAppVersion,
+  setAppVersion,
 };

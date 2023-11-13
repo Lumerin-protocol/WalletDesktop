@@ -163,8 +163,12 @@ const createClient = function(createStore) {
       'save-proxy-router-settings'
     ),
     restartProxyRouter: utils.forwardToMainProcess('restart-proxy-router'),
+    stopProxyRouter: utils.forwardToMainProcess('stop-proxy-router'),
     getMarketplaceFee: utils.forwardToMainProcess('get-marketplace-fee'),
-    claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000)
+    claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000),
+    getCustomEnvValues: utils.forwardToMainProcess('get-custom-env-values'),
+    setCustomEnvValues: utils.forwardToMainProcess('set-custom-env-values'),
+    getContractHashrate: utils.forwardToMainProcess('get-contract-hashrate')
   };
 
   const api = {

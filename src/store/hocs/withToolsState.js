@@ -99,7 +99,9 @@ const withToolsState = WrappedComponent => {
     };
 
     logout = () => {
-      return this.props.client.logout();
+      return this.props.client
+        .stopProxyRouter({})
+        .then(() => this.props.client.logout());
     };
 
     setDefaultCurrency = async value => {
@@ -129,10 +131,13 @@ const withToolsState = WrappedComponent => {
           setDefaultCurrency={this.setDefaultCurrency}
           copyToClipboard={this.props.client.copyToClipboard}
           logout={this.logout}
+          restartWallet={this.props.client.restartWallet}
           onRevealPhrase={this.props.client.revealSecretPhrase}
           getProxyRouterSettings={this.props.client.getProxyRouterSettings}
           saveProxyRouterSettings={this.props.client.saveProxyRouterSettings}
           restartProxyRouter={this.props.client.restartProxyRouter}
+          getCustomEnvs={this.props.client.getCustomEnvValues}
+          setCustomEnvs={this.props.client.setCustomEnvValues}
           {...this.state}
           {...this.props}
         />
@@ -141,7 +146,10 @@ const withToolsState = WrappedComponent => {
   }
 
   const mapStateToProps = (state, props) => ({
-    selectedCurrency: selectors.getSellerSelectedCurrency(state)
+    selectedCurrency: selectors.getSellerSelectedCurrency(state),
+    isLocalProxyRouter: selectors.getIsLocalProxyRouter(state),
+    titanLightningPool: state.config.chain.titanLightningPool,
+    config: state.config
   });
 
   const mapDispatchToProps = dispatch => ({

@@ -46,6 +46,7 @@ const chain = {
   defaultSellerCurrency: process.env.DEFAULT_SELLER_CURRENCY || 'BTC',
 
   bypassAuth: process.env.BYPASS_AUTH === "true",
+  sellerWhitelistUrl: process.env.SELLER_WHITELIST_URL || 'https://forms.gle/wEcAgppfK2p9YZ3g7'
 };
 
 module.exports = {

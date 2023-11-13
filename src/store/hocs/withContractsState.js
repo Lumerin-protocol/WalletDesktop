@@ -84,7 +84,8 @@ const withContractsState = WrappedComponent => {
     lmrCoinPrice: selectors.getRate(state),
     ethCoinPrice: selectors.getRateEth(state),
     btcCoinPrice: selectors.getRateBtc(state),
-    selectedCurrency: selectors.getSellerSelectedCurrency(state)
+    selectedCurrency: selectors.getSellerSelectedCurrency(state),
+    formUrl: selectors.getSellerWhitelistForm(state)
   });
 
   const mapDispatchToProps = dispatch => ({
