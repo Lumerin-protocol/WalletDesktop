@@ -34,7 +34,8 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
     "transactions-scan-started",
     "transactions-scan-finished",
     "contracts-scan-started",
-    "contracts-scan-finished"
+    "contracts-scan-finished",
+    'contract-updated',
   );
 
   function send(eventName, data) {

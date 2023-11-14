@@ -44,6 +44,16 @@ const reducer = handleActions(
       };
     },
 
+    'contract-updated': (state, { payload }) => {
+      const idContractMap = keyBy(payload.actives, 'id');
+
+      return {
+        ...state,
+        actives: { ...state.actives, ...idContractMap },
+        lastUpdated: parseInt(Date.now() / 1000, 10)
+      };
+    },
+
     'remove-draft': (state, { payload }) => ({
       ...state,
       drafts: Object.assign(state.drafts, []).filter(
