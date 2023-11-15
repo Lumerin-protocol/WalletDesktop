@@ -6,11 +6,12 @@ import styled from 'styled-components';
 import { formatDuration, formatSpeed, formatPrice } from '../../utils';
 import withContractsRowState from '../../../../store/hocs/withContractsRowState';
 import Spinner from '../../../common/Spinner';
+import { fromTokenBaseUnitsToLMR } from '../../../../utils/coinValue';
 
 const RowContainer = styled.div`
   padding: 1.2rem 0;
   display: grid;
-  grid-template-columns: 1fr 4fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 0.5fr 1fr;
   text-align: center;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   color: ${p => p.theme.colors.primary}
@@ -48,7 +49,7 @@ const FlexCenter = styled.div`
 `;
 
 function ArchiveRow(props) {
-  const { explorerUrl, contract, handleRestore, symbol } = props;
+  const { explorerUrl, contract, handleClaim, handleRestore, symbol } = props;
 
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -65,9 +66,13 @@ function ArchiveRow(props) {
           {abbreviateAddress(contract.id, 4)}
         </ContractValue>
       </FlexCenter>
-      <FlexCenter style={{ justifyContent: 'space-between', padding: '0 5px' }}>
-        {formatPrice(contract.price, symbol)} <span>|</span>
-        {formatDuration(contract.length)} <span>|</span>
+      <FlexCenter style={{ padding: '0 5px' }}>
+        {formatPrice(contract.price, symbol)}
+      </FlexCenter>
+      <FlexCenter style={{ padding: '0 5px' }}>
+        {formatDuration(contract.length)}
+      </FlexCenter>
+      <FlexCenter style={{ padding: '0 5px' }}>
         {formatSpeed(contract.speed)}
       </FlexCenter>
       <FlexCenter style={{ justifyContent: 'space-evenly' }}>
@@ -84,15 +89,30 @@ function ArchiveRow(props) {
           {contract?.stats?.failCount || 0}
         </Circle>
       </FlexCenter>
-      <FlexCenter>
+      <FlexCenter
+        style={{
+          justifyContent: contract.balance !== '0' ? 'space-evenly' : null
+        }}
+      >
         {isProcessing ? (
           <Spinner size="18px" />
         ) : (
-          <IconTrashOff
-            data-rh={`Restore contract`}
-            onClick={wrapRestoreContract}
-            style={{ cursor: 'pointer' }}
-          />
+          <>
+            {contract.balance !== '0' && (
+              <div
+                data-rh={fromTokenBaseUnitsToLMR(contract.balance) + ' LMR'}
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleClaim(contract.id)}
+              >
+                Claim
+              </div>
+            )}
+            <IconTrashOff
+              data-rh={`Restore contract`}
+              onClick={wrapRestoreContract}
+              style={{ cursor: 'pointer' }}
+            />
+          </>
         )}
       </FlexCenter>
     </RowContainer>

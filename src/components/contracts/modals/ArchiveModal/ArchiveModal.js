@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { List as RVList, AutoSizer } from 'react-virtualized';
 import {
   Modal,
@@ -10,10 +10,12 @@ import {
 } from '../CreateContractModal.styles';
 import ArchiveRow from './ArchiveRow';
 import { withClient } from '../../../../store/hocs/clientContext';
+import { CLOSEOUT_TYPE } from '../../../../enums';
+import { ToastsContext } from '../../../../components/toasts';
 
 function ArchiveModal(props) {
-  const { isActive, close, deletedContracts, client } = props;
-
+  const { isActive, close, address, deletedContracts, client } = props;
+  const context = useContext(ToastsContext);
   const handleClose = e => {
     close(e);
   };
@@ -22,6 +24,22 @@ function ArchiveModal(props) {
   if (!isActive) {
     return <></>;
   }
+
+  const handleClaim = contractId => {
+    client.lockSendTransaction();
+    return client
+      .cancelContract({
+        contractId: contractId,
+        walletAddress: address,
+        closeOutType: CLOSEOUT_TYPE.Claim
+      })
+      .catch(e => {
+        context.toast('error', `Failed to claim funds: ${e.message}`);
+      })
+      .finally(() => {
+        client.unlockSendTransaction();
+      });
+  };
 
   const handleRestore = contract => {
     client.lockSendTransaction();
@@ -37,16 +55,25 @@ function ArchiveModal(props) {
   };
 
   const rowRenderer = deletedContracts => ({ key, index, style }) => (
-    <ArchiveRow
-      key={deletedContracts[index].id}
-      contract={deletedContracts[index]}
-      handleRestore={handleRestore}
-    />
+    <div style={style}>
+      <ArchiveRow
+        style={style}
+        key={deletedContracts[index].id}
+        contract={deletedContracts[index]}
+        handleRestore={handleRestore}
+        handleClaim={handleClaim}
+      />
+    </div>
   );
 
   return (
     <Modal onClick={handleClose}>
-      <Body height={'400px'} onClick={handlePropagation}>
+      <Body
+        height={'500px'}
+        width={'70%'}
+        maxWidth={'100%'}
+        onClick={handlePropagation}
+      >
         {CloseModal(handleClose)}
         <TitleWrapper>
           <Title>Archived contracts</Title>
