@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useTimer } from 'react-timer-hook';
 import { IconCircle } from '@tabler/icons';
 import { ToastsContext } from '../../toasts';
 import styled from 'styled-components';
@@ -126,7 +125,6 @@ function Row({
   };
 
   const contractEndTimestamp = getContractEndTimestamp(contract);
-  const timer = useTimer({ expiryTimestamp: new Date(contractEndTimestamp) });
 
   const isContractExpired = () => {
     return (

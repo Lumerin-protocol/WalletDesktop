@@ -289,7 +289,9 @@ function SellerHub({
     c => c.seller === address && !c.isDead
   );
 
-  const deadContracts = contracts.filter(c => c.seller === address && c.isDead);
+  const deadContracts = contracts
+    .filter(c => c.seller === address && c.isDead)
+    .sort((a, b) => b.balance - a.balance);
 
   const rentedContracts =
     contractsToShow?.filter(x => Number(x.state) === 1) ?? [];
@@ -357,6 +359,7 @@ function SellerHub({
           setIsArchiveModalActive(false);
         }}
         restore={handleDeleteContractStateChange}
+        address={address}
         showSuccess={false}
       />
 

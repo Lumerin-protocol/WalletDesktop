@@ -59,8 +59,8 @@ const ProxyRouterConfigStep = props => {
                   onChange={props.onInputChange}
                   noFocus
                   error={props.errors.proxyDefaultPool}
-                  placeholder="stratum+tcp://{pool btc mining url}:{port}"
-                  label="Pool BTC Mining Url"
+                  placeholder="example: btc.global.luxor.tech:8888"
+                  label="Pool BTC Mining Host & Port"
                   value={props.proxyDefaultPool}
                   type="text"
                   id="proxyDefaultPool"
@@ -70,7 +70,7 @@ const ProxyRouterConfigStep = props => {
                 <TextInput
                   onChange={props.onInputChange}
                   error={props.errors.proxyPoolUsername}
-                  placeholder="username"
+                  placeholder="account.worker"
                   label="Pool Username"
                   value={props.proxyPoolUsername}
                   type="text"

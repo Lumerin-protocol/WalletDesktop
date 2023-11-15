@@ -147,7 +147,8 @@ const Tools = props => {
     getCustomEnvs,
     setCustomEnvs,
     config,
-    restartWallet
+    restartWallet,
+    titanLightningDashboard
   } = props;
 
   const RenderForm = goToReview => {
@@ -269,6 +270,16 @@ const Tools = props => {
         restartProxyRouter({}).catch(err => {
           context.toast('error', 'Failed to restart proxy-router');
         });
+      });
+    };
+
+    const toggleIsLightning = () => {
+      setTitanLightning(!isTitanLightning);
+      setSellerPoolParts({
+        ...sellerPoolParts,
+        pool: '',
+        account: '',
+        isTitanLightning: !isTitanLightning
       });
     };
 
@@ -513,15 +524,43 @@ const Tools = props => {
                             {sellerPoolParts?.account}{' '}
                           </div>
                         )}
+                        {isTitanLightning && (
+                          <p
+                            style={{
+                              textDecoration: 'underline',
+                              cursor: 'pointer'
+                            }}
+                            data-tooltip={titanLightningDashboard}
+                            onClick={() => {
+                              window.open(titanLightningDashboard, '_blank');
+                            }}
+                          >
+                            Dashboard for Lightning users
+                          </p>
+                        )}
                       </StyledParagraph>
                       <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
                     </>
                   ) : (
                     <>
+                      <div style={{ display: 'flex' }}>
+                        <span>Use Titan Pool for Lightning Payouts</span>
+                        <input
+                          style={{ marginLeft: '10px' }}
+                          data-testid="use-titan-lightning"
+                          onChange={() => {
+                            toggleIsLightning();
+                          }}
+                          checked={isTitanLightning}
+                          type="checkbox"
+                          id="isTitanLightning"
+                        />
+                      </div>
                       {!isTitanLightning ? (
                         <StyledParagraph>
-                          Proxy Default Pool:{' '}
+                          Proxy Default Pool Host & Port:{' '}
                           <Input
+                            placeholder="example: btc.global.luxor.tech:8888"
                             onChange={e =>
                               setSellerPoolParts({
                                 ...sellerPoolParts,
@@ -540,6 +579,11 @@ const Tools = props => {
                           ? 'Proxy Default Account: '
                           : 'Titan Lightning Address: '}
                         <Input
+                          placeholder={
+                            !isTitanLightning
+                              ? 'account.worker'
+                              : 'bob@getalby.com'
+                          }
                           onChange={e =>
                             setSellerPoolParts({
                               ...sellerPoolParts,
