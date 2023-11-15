@@ -137,7 +137,7 @@ export function validateUseMinimum(useMinimum, estimate, errors = {}) {
 }
 
 export const validatePoolAddress = (address, errors = {}) => {
-  const defaultPoolFormat = 'stratum+tcp://{host}:{port}';
+  const defaultPoolFormat = '{host}:{port}';
   const expectedFormat = `Expected format: ${defaultPoolFormat}`;
 
   if (!address) {
@@ -145,7 +145,7 @@ export const validatePoolAddress = (address, errors = {}) => {
     return errors;
   }
 
-  const pattern = /^stratum\+tcp:\/\/([\w.-]+):(\d+)$/;
+  const pattern = /([\w.-]+):(\d+)$/;
   const result = pattern.test(address);
 
   if (!result) {

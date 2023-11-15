@@ -50,10 +50,8 @@ export const PurchaseFormModalPage = ({
   const [isEditPool, setIsEditPool] = useState(false);
 
   const validateAddress = address => {
-    if (!address.includes('stratum+tcp://')) return false;
-    const credsPart = address.replace('stratum+tcp://', '');
     const regexPortNumber = /:\d+/;
-    const portMatch = credsPart.match(regexPortNumber);
+    const portMatch = address.match(regexPortNumber);
     if (!portMatch) return false;
 
     const port = portMatch[0].replace(':', '');
@@ -61,6 +59,8 @@ export const PurchaseFormModalPage = ({
 
     return true;
   };
+
+  const poolParts = pool ? pool.replace('stratum+tcp://', '').split(':@') : [];
 
   const handleClose = e => {
     e.preventDefault();
@@ -122,16 +122,14 @@ export const PurchaseFormModalPage = ({
                     required: true,
                     validate: validateAddress
                   })}
-                  placeholder={'stratum+tcp://IP_ADDRESS:PORT'}
+                  placeholder={'HOST_IP:PORT'}
                   type="text"
                   name="address"
                   key="address"
                   id="address"
                 />
                 {formState?.errors?.address?.type === 'validate' && (
-                  <ErrorLabel>
-                    Address should match stratum+tcp://IP_ADDRESS:PORT
-                  </ErrorLabel>
+                  <ErrorLabel>Address should match HOST_IP:PORT</ErrorLabel>
                 )}
               </InputGroup>
             </Row>
@@ -155,9 +153,19 @@ export const PurchaseFormModalPage = ({
           <UpperCaseTitle>Forwarding to (mining pool)</UpperCaseTitle>
           <Divider />
           <PoolInfoContainer>
-            <Values style={{ width: '85%', wordBreak: 'break-all' }}>
-              {pool || 'Validation node default pool address'}
-            </Values>
+            <div>
+              <SmallTitle>Pool Address</SmallTitle>
+              <Values style={{ wordBreak: 'break-all' }}>
+                {decodeURIComponent(
+                  poolParts[1] || 'Validation node default pool address'
+                )}
+              </Values>
+              <br />
+              <SmallTitle>Account</SmallTitle>
+              <Values style={{ wordBreak: 'break-all' }}>
+                {decodeURIComponent(poolParts[0] || '')}
+              </Values>
+            </div>
             <EditBtn onClick={() => onEditPool()}>Edit</EditBtn>
           </PoolInfoContainer>
         </UrlContainer>

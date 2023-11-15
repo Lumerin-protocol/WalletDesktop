@@ -50,6 +50,7 @@ jobs:
       PORT_CHECKER_URL: ${{ vars.PORT_CHECKER_URL }}
       PORT_CHECK_ERROR_LINK: ${{ vars.PORT_CHECK_ERROR_LINK }}
       SELLER_WHITELIST_URL: ${{ vars.SELLER_WHITELIST_URL }}
+      TITAN_LIGHTNING_DASHBOARD: ${{ vars.TITAN_LIGHTNING_DASHBOARD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -80,6 +81,7 @@ jobs:
           echo "SHOW_FAUCET=$SHOW_FAUCET" >> .env 
           echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
           echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
+          echo "TITAN_LIGHTNING_DASHBOARD=$TITAN_LIGHTNING_DASHBOARD" >> .env
           echo "NODE_ENV=production" >> .env
           echo "PORT_CHECKER_URL=$PORT_CHECKER_URL" >> .env
           echo "PORT_CHECK_ERROR_LINK=$PORT_CHECK_ERROR_LINK" >> .env

@@ -43,6 +43,7 @@ const chain = {
   showFaucet: process.env.SHOW_FAUCET === "true",
 
   titanLightningPool: process.env.TITAN_LIGHTNING_POOL,
+  titanLightningDashboard: process.env.TITAN_LIGHTNING_DASHBOARD || "https://lightning.titan.io",
   defaultSellerCurrency: process.env.DEFAULT_SELLER_CURRENCY || 'BTC',
 
   bypassAuth: process.env.BYPASS_AUTH === "true",
