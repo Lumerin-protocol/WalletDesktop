@@ -41,6 +41,7 @@ jobs:
       DEFAULT_GAS_PRICE: ${{ vars.DEFAULT_GAS_PRICE }}
       DISPLAY_NAME: ${{ vars.DISPLAY_NAME }}
       ETH_NODE_ADDRESS_HTTP: ${{ vars.ETH_NODE_ADDRESS_HTTP }}
+      EXPLORER_API_URLS: ${{ vars.EXPLORER_API_URLS }}
       EXPLORER_URL: ${{ vars.EXPLORER_URL }}
       FAUCET_URL: ${{ vars.FAUCET_URL }}
       LMR_DEFAULT_GAS_LIMIT: ${{ secrets.LMR_DEFAULT_GAS_LIMIT }}
@@ -73,6 +74,7 @@ jobs:
           echo "DEV_TOOLS=true" >> .env
           echo "DISPLAY_NAME=$DISPLAY_NAME" >> .env
           echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
+          echo "EXPLORER_API_URLS=$EXPLORER_API_URLS" >> .env
           echo "EXPLORER_URL=$EXPLORER_URL" >> .env
           echo "FAUCET_URL=$FAUCET_URL" >> .env
           echo "LMR_DEFAULT_GAS_LIMIT=$LMR_DEFAULT_GAS_LIMIT" >> .env

@@ -1,11 +1,17 @@
 const { parseJSONArray } = require('./utils')
 
-let httpApiUrls
+let httpApiUrls, explorerApiURLs
 
 try {
   httpApiUrls = parseJSONArray(process.env.ETH_NODE_ADDRESS_HTTP)
 } catch (err) {
   throw new Error(`Invalid ETH_NODE_ADDRESS_HTTP: ${err?.message}`);
+}
+
+try {
+  explorerApiURLs = parseJSONArray(process.env.EXPLORER_API_URLS)
+} catch (err) {
+  throw new Error(`Invalid EXPLORER_API_URLS: ${err?.message}`);
 }
 
 
@@ -20,6 +26,8 @@ const chain = {
 
   proxyRouterUrl: process.env.PROXY_ROUTER_URL,
   explorerUrl: process.env.EXPLORER_URL,
+  explorerApiURLs: explorerApiURLs,
+
   wsApiUrl: process.env.ETH_NODE_ADDRESS,
   httpApiUrls: httpApiUrls,
   ipLookupUrl: process.env.IP_LOOKUP_URL,
