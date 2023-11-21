@@ -12,12 +12,11 @@ try {
 const chain = {
   displayName: process.env.DISPLAY_NAME,
   chainId: process.env.CHAIN_ID,
-  symbol: process.env.SYMBOL_LMR || process.env.SYMBOL || 'LMR',
+  symbol: process.env.SYMBOL_LMR || 'LMR',
   symbolEth: process.env.SYMBOL_ETH || 'ETH',
 
   lmrTokenAddress: process.env.LUMERIN_TOKEN_ADDRESS,
   cloneFactoryAddress: process.env.CLONE_FACTORY_ADDRESS,
-  faucetAddress: process.env.FAUCET_ADDRESS || '0xFE64cAE7Ca5166c8bb0e014e2D402f8d22764f24',
 
   proxyRouterUrl: process.env.PROXY_ROUTER_URL,
   explorerUrl: process.env.EXPLORER_URL,
@@ -37,7 +36,7 @@ const chain = {
   portCheckErrorLink: process.env.PORT_CHECK_ERROR_LINK || 'https://gitbook.lumerin.io/lumerin-hashpower-marketplace/buyer/2.-network-changes-for-receiving-hashrate',
 
   localProxyRouterUrl: `http://localhost:${process.env
-    .SPROXY_WEB_DEFAULT_PORT || 8081}`,
+    .PROXY_WEB_DEFAULT_PORT || 8081}`,
 
   faucetUrl: process.env.FAUCET_URL,
   showFaucet: process.env.SHOW_FAUCET === "true",
