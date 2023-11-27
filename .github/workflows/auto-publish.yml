@@ -30,27 +30,25 @@ jobs:
     runs-on: ${{ matrix.os }}
     environment: ${{ matrix.environment }}
     env:
-      CHAIN_ID: ${{ secrets.CHAIN_ID }}
-      COIN_DEFAULT_GAS_LIMIT: ${{ secrets.COIN_DEFAULT_GAS_LIMIT }}
-      DEFAULT_GAS_PRICE: ${{ secrets.DEFAULT_GAS_PRICE }}
-      DISPLAY_NAME: ${{ secrets.DISPLAY_NAME }}
+      CHAIN_ID: ${{ vars.CHAIN_ID }}
+      COIN_DEFAULT_GAS_LIMIT: ${{ vars.COIN_DEFAULT_GAS_LIMIT }}
+      DEFAULT_GAS_PRICE: ${{ vars.DEFAULT_GAS_PRICE }}
+      DISPLAY_NAME: ${{ vars.DISPLAY_NAME }}
       ETH_NODE_ADDRESS_HTTP: ${{ vars.ETH_NODE_ADDRESS_HTTP }}
-      EXPLORER_URL: ${{ secrets.EXPLORER_URL }}
-      FAUCET_URL: ${{ secrets.FAUCET_URL }}
+      EXPLORER_API_URLS: ${{ vars.EXPLORER_API_URLS }}
+      EXPLORER_URL: ${{ vars.EXPLORER_URL }}
+      FAUCET_URL: ${{ vars.FAUCET_URL }}
       LMR_DEFAULT_GAS_LIMIT: ${{ secrets.LMR_DEFAULT_GAS_LIMIT }}
       MAX_GAS_PRICE: ${{ secrets.MAX_GAS_PRICE }}
       PORT_CHECK_ERROR_LINK: ${{ vars.PORT_CHECK_ERROR_LINK }}
       PORT_CHECKER_URL: ${{ vars.PORT_CHECKER_URL }}
-      PROXY_ROUTER_URL: ${{ secrets.PROXY_ROUTER_URL }}
       RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
-      REQUIRED_PASSWORD_ENTROPY: ${{ secrets.REQUIRED_PASSWORD_ENTROPY }}
       SELLER_WHITELIST_URL: ${{ vars.SELLER_WHITELIST_URL }}
-      SHOW_FAUCET: ${{ secrets.SHOW_FAUCET }}
-      SYMBOL_ETH: ${{ secrets.SYMBOL_ETH }}
-      SYMBOL_LMR: ${{ secrets.SYMBOL_LMR }}
-      SYMBOL: ${{ secrets.SYMBOL }}
+      SHOW_FAUCET: ${{ vars.SHOW_FAUCET }}
+      SYMBOL_ETH: ${{ vars.SYMBOL_ETH }}
+      SYMBOL_LMR: ${{ vars.SYMBOL_LMR }}
       TITAN_LIGHTNING_DASHBOARD: ${{ vars.TITAN_LIGHTNING_DASHBOARD }}
-      TITAN_LIGHTNING_POOL: ${{ secrets.TITAN_LIGHTNING_POOL }}
+      TITAN_LIGHTNING_POOL: ${{ vars.TITAN_LIGHTNING_POOL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -67,6 +65,7 @@ jobs:
           echo "CHAIN_ID=$CHAIN_ID" >> .env
           echo "COIN_DEFAULT_GAS_LIMIT=$COIN_DEFAULT_GAS_LIMIT" >> .env
           echo "DEFAULT_GAS_PRICE=$DEFAULT_GAS_PRICE" >> .env
+          echo "DEV_TOOLS=true" >> .env
           echo "DISPLAY_NAME=$DISPLAY_NAME" >> .env
           echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
           echo "EXPLORER_API_URLS=$EXPLORER_API_URLS" >> .env
@@ -81,7 +80,7 @@ jobs:
           echo "RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY" >> .env
           echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
           echo "SELLER_WHITELIST_URL=$SELLER_WHITELIST_URL" >> .env
-          echo "SHOW_FAUCET=$SHOW_FAUCET" >> .env 
+          echo "SHOW_FAUCET=$SHOW_FAUCET" >> .env
           echo "SYMBOL_ETH=$SYMBOL_ETH" >> .env
           echo "SYMBOL_LMR=$SYMBOL_LMR" >> .env
           echo "SYMBOL=$SYMBOL" >> .env
