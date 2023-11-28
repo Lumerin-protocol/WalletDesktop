@@ -140,6 +140,7 @@ jobs:
                 fi
               fi
             done
+            cat .env
         shell: bash
       - name: Fetch latest Proxy Router
         run: |
