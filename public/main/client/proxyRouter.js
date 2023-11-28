@@ -51,18 +51,18 @@ const runProxyRouter = (config) => {
       `--contract-address=${config.cloneFactoryAddress}`,
       `--eth-node-address=${config.wsApiUrl}`,
 
-      "--miner-share-timeout=10m",
+      `--miner-share-timeout=${process.env.MINER_SHARE_TIMEOUT}`,
 
-      "--hashrate-error-threshold=0.05",
-      "--hashrate-cycle-duration=5m",
-      "--hashrate-share-timeout=7m",
-      "--hashrate-validation-start-timeout=15m",
-      "--hashrate-validation-grace-duration=50m",
+      `--hashrate-error-threshold=${process.env.HASHRATE_ERROR_THRESHOLD}`,
+      `--hashrate-cycle-duration=${process.env.HASHRATE_CYCLE_DURATION}`,
+      `--hashrate-share-timeout=${process.env.HASHRATE_SHARE_TIMEOUT}`,
+      `--hashrate-validation-start-timeout=${process.env.HASHRATE_VALIDATION_START_TIMEOUT}`,
+      `--hashrate-validation-grace-duration=${process.env.HASHRATE_VALIDATION_GRACE_DURATION}`,
 
-      "--log-level-app=info",
-      "--log-level-scheduler=info",
-      "--log-level-proxy=info",
-      "--log-level-connection=info",
+      `--log-level-app=${process.env.LOG_LEVEL_APP}`,
+      `--log-level-scheduler=${process.env.LOG_LEVEL_SCHEDULER}`,
+      `--log-level-proxy=${process.env.LOG_LEVEL_PROXY}`,
+      `--log-level-connection=${process.env.LOG_LEVEL_CONNECTION}`,
 
       `--wallet-private-key=${config.privateKey}`,
       `--proxy-address=0.0.0.0:${config.proxyPort}`,
