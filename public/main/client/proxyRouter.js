@@ -63,6 +63,7 @@ const runProxyRouter = (config) => {
       "--log-level-scheduler=info",
       "--log-level-proxy=info",
       "--log-level-connection=info",
+      `--log-folder-path=${app.getPath("logs")}/`,
 
       `--wallet-private-key=${config.privateKey}`,
       `--proxy-address=0.0.0.0:${config.proxyPort}`,
