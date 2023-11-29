@@ -56,14 +56,14 @@ const runProxyRouter = (config) => {
 
       "--hashrate-error-threshold=0.05",
       "--hashrate-cycle-duration=5m",
-      "--hashrate-share-timeout=7m",
-      "--hashrate-validation-start-timeout=15m",
-      // "--hashrate-validation-grace-duration=50m",
+
+      "--hashrate-share-timeout=120m",
 
       "--log-level-app=info",
       "--log-level-scheduler=info",
       "--log-level-proxy=info",
       "--log-level-connection=info",
+      `--log-folder-path=${app.getPath("logs")}/`,
 
       `--wallet-private-key=${config.privateKey}`,
       `--proxy-address=0.0.0.0:${config.proxyPort}`,

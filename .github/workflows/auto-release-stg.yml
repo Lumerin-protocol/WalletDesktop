@@ -36,27 +36,25 @@ jobs:
     runs-on: ${{ matrix.os }}
     environment: ${{ matrix.environment }}
     env:
-      CHAIN_ID: ${{ secrets.CHAIN_ID }}
-      EXPLORER_URL: ${{ secrets.EXPLORER_URL }}
-      DISPLAY_NAME: ${{ secrets.DISPLAY_NAME }}
-      SYMBOL: ${{ secrets.SYMBOL }}
-      SYMBOL_ETH: ${{ secrets.SYMBOL_ETH }}
-      SYMBOL_LMR: ${{ secrets.SYMBOL_LMR }}
-      PROXY_ROUTER_URL: ${{ secrets.PROXY_ROUTER_URL }}
-      COIN_DEFAULT_GAS_LIMIT: ${{ secrets.COIN_DEFAULT_GAS_LIMIT }}
-      MAX_GAS_PRICE: ${{ secrets.MAX_GAS_PRICE }}
-      LMR_DEFAULT_GAS_LIMIT: ${{ secrets.LMR_DEFAULT_GAS_LIMIT }}
-      DEFAULT_GAS_PRICE: ${{ secrets.DEFAULT_GAS_PRICE }}
-      REQUIRED_PASSWORD_ENTROPY: ${{ secrets.REQUIRED_PASSWORD_ENTROPY }}
-      RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
-      FAUCET_URL: ${{ secrets.FAUCET_URL }}
-      SHOW_FAUCET: ${{ secrets.SHOW_FAUCET }}
+      CHAIN_ID: ${{ vars.CHAIN_ID }}
+      COIN_DEFAULT_GAS_LIMIT: ${{ vars.COIN_DEFAULT_GAS_LIMIT }}
+      DEFAULT_GAS_PRICE: ${{ vars.DEFAULT_GAS_PRICE }}
+      DISPLAY_NAME: ${{ vars.DISPLAY_NAME }}
       ETH_NODE_ADDRESS_HTTP: ${{ vars.ETH_NODE_ADDRESS_HTTP }}
-      TITAN_LIGHTNING_POOL: ${{ secrets.TITAN_LIGHTNING_POOL }}
-      PORT_CHECKER_URL: ${{ vars.PORT_CHECKER_URL }}
+      EXPLORER_API_URLS: ${{ vars.EXPLORER_API_URLS }}
+      EXPLORER_URL: ${{ vars.EXPLORER_URL }}
+      FAUCET_URL: ${{ vars.FAUCET_URL }}
+      LMR_DEFAULT_GAS_LIMIT: ${{ secrets.LMR_DEFAULT_GAS_LIMIT }}
+      MAX_GAS_PRICE: ${{ secrets.MAX_GAS_PRICE }}
       PORT_CHECK_ERROR_LINK: ${{ vars.PORT_CHECK_ERROR_LINK }}
+      PORT_CHECKER_URL: ${{ vars.PORT_CHECKER_URL }}
+      RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
       SELLER_WHITELIST_URL: ${{ vars.SELLER_WHITELIST_URL }}
+      SHOW_FAUCET: ${{ vars.SHOW_FAUCET }}
+      SYMBOL_ETH: ${{ vars.SYMBOL_ETH }}
+      SYMBOL_LMR: ${{ vars.SYMBOL_LMR }}
       TITAN_LIGHTNING_DASHBOARD: ${{ vars.TITAN_LIGHTNING_DASHBOARD }}
+      TITAN_LIGHTNING_POOL: ${{ vars.TITAN_LIGHTNING_POOL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -71,27 +69,29 @@ jobs:
       - name: Set env from github
         run: |
           echo "CHAIN_ID=$CHAIN_ID" >> .env
-          echo "EXPLORER_URL=$EXPLORER_URL" >> .env
+          echo "COIN_DEFAULT_GAS_LIMIT=$COIN_DEFAULT_GAS_LIMIT" >> .env
+          echo "DEFAULT_GAS_PRICE=$DEFAULT_GAS_PRICE" >> .env
+          echo "DEV_TOOLS=true" >> .env
           echo "DISPLAY_NAME=$DISPLAY_NAME" >> .env
-          echo "SYMBOL=$SYMBOL" >> .env
+          echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
+          echo "EXPLORER_API_URLS=$EXPLORER_API_URLS" >> .env
+          echo "EXPLORER_URL=$EXPLORER_URL" >> .env
+          echo "FAUCET_URL=$FAUCET_URL" >> .env
+          echo "LMR_DEFAULT_GAS_LIMIT=$LMR_DEFAULT_GAS_LIMIT" >> .env
+          echo "MAX_GAS_PRICE=$MAX_GAS_PRICE" >> .env
+          echo "NODE_ENV=production" >> .env
+          echo "PORT_CHECK_ERROR_LINK=$PORT_CHECK_ERROR_LINK" >> .env
+          echo "PORT_CHECKER_URL=$PORT_CHECKER_URL" >> .env
+          echo "PROXY_ROUTER_URL=$PROXY_ROUTER_URL" >> .env
+          echo "RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY" >> .env
+          echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
+          echo "SELLER_WHITELIST_URL=$SELLER_WHITELIST_URL" >> .env
+          echo "SHOW_FAUCET=$SHOW_FAUCET" >> .env
           echo "SYMBOL_ETH=$SYMBOL_ETH" >> .env
           echo "SYMBOL_LMR=$SYMBOL_LMR" >> .env
-          echo "PROXY_ROUTER_URL=$PROXY_ROUTER_URL" >> .env
-          echo "COIN_DEFAULT_GAS_LIMIT=$COIN_DEFAULT_GAS_LIMIT" >> .env
-          echo "MAX_GAS_PRICE=$MAX_GAS_PRICE" >> .env
-          echo "LMR_DEFAULT_GAS_LIMIT=$LMR_DEFAULT_GAS_LIMIT" >> .env
-          echo "DEFAULT_GAS_PRICE=$DEFAULT_GAS_PRICE" >> .env
-          echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
-          echo "RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY" >> .env
-          echo "FAUCET_URL=$FAUCET_URL" >> .env
-          echo "SHOW_FAUCET=$SHOW_FAUCET" >> .env
-          echo "NODE_ENV=production" >> .env
-          echo "ETH_NODE_ADDRESS_HTTP=$ETH_NODE_ADDRESS_HTTP" >> .env
-          echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
+          echo "SYMBOL=$SYMBOL" >> .env
           echo "TITAN_LIGHTNING_DASHBOARD=$TITAN_LIGHTNING_DASHBOARD" >> .env
-          echo "PORT_CHECKER_URL=$PORT_CHECKER_URL" >> .env
-          echo "PORT_CHECK_ERROR_LINK=$PORT_CHECK_ERROR_LINK" >> .env
-          echo "SELLER_WHITELIST_URL=$SELLER_WHITELIST_URL" >> .env
+          echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
         shell: bash
       - name: Set env from gitlab
         run: |
