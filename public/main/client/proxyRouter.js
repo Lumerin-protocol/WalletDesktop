@@ -52,9 +52,11 @@ const runProxyRouter = (config) => {
       `--eth-node-address=${config.wsApiUrl}`,
 
       "--miner-share-timeout=10m",
+      // "--miner-vetting-duration=5m",
 
       "--hashrate-error-threshold=0.05",
       "--hashrate-cycle-duration=5m",
+
       "--hashrate-share-timeout=120m",
 
       "--log-level-app=info",
