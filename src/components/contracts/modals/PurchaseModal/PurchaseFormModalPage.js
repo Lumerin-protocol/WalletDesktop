@@ -50,6 +50,9 @@ export const PurchaseFormModalPage = ({
   const [isEditPool, setIsEditPool] = useState(false);
 
   const validateAddress = address => {
+    const regexP = /^[a-zA-Z0-9.-]+:\d+$/;
+    if (!regexP.test(address)) return false;
+
     const regexPortNumber = /:\d+/;
     const portMatch = address.match(regexPortNumber);
     if (!portMatch) return false;

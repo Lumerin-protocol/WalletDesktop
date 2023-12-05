@@ -47,6 +47,7 @@ function BuyerHub({
   const contractsToShow = contracts.filter(
     x => x.buyer === address && x.seller !== address
   );
+
   const tabs = [
     { value: 'id', name: 'Contract', ratio: 3 },
     { value: 'timestamp', name: 'Started', ratio: 3 },
@@ -75,9 +76,9 @@ function BuyerHub({
   const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <BuyerHubRow
+        key={contractsList[index].id}
         data-testid="BuyerHub-row"
         allowSendTransaction={allowSendTransaction}
-        onClick={console.log}
         contract={contractsList[index]}
         cancel={handleContractCancellation}
         address={address}
