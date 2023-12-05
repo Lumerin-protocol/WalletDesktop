@@ -29,7 +29,7 @@ jobs:
             os: macos-latest
     runs-on: ${{ matrix.os }}
     environment: ${{ matrix.environment }}
-    env:
+    env: # keep alphabetical order
       CHAIN_ID: ${{ vars.CHAIN_ID }}
       COIN_DEFAULT_GAS_LIMIT: ${{ vars.COIN_DEFAULT_GAS_LIMIT }}
       DEFAULT_GAS_PRICE: ${{ vars.DEFAULT_GAS_PRICE }}
@@ -38,8 +38,8 @@ jobs:
       EXPLORER_API_URLS: ${{ vars.EXPLORER_API_URLS }}
       EXPLORER_URL: ${{ vars.EXPLORER_URL }}
       FAUCET_URL: ${{ vars.FAUCET_URL }}
-      LMR_DEFAULT_GAS_LIMIT: ${{ secrets.LMR_DEFAULT_GAS_LIMIT }}
-      MAX_GAS_PRICE: ${{ secrets.MAX_GAS_PRICE }}
+      LMR_DEFAULT_GAS_LIMIT: ${{ vars.LMR_DEFAULT_GAS_LIMIT }}
+      MAX_GAS_PRICE: ${{ vars.MAX_GAS_PRICE }}
       PORT_CHECK_ERROR_LINK: ${{ vars.PORT_CHECK_ERROR_LINK }}
       PORT_CHECKER_URL: ${{ vars.PORT_CHECKER_URL }}
       RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
@@ -60,8 +60,9 @@ jobs:
       - name: Post install
         if: matrix.target == 'macos-arm'
         run: npm run postinstallMacDist
-      - name: Set env from github
-        run: |
+      - name: Set env from github 
+        # keep alphabetical order
+        run: | 
           echo "CHAIN_ID=$CHAIN_ID" >> .env
           echo "COIN_DEFAULT_GAS_LIMIT=$COIN_DEFAULT_GAS_LIMIT" >> .env
           echo "DEFAULT_GAS_PRICE=$DEFAULT_GAS_PRICE" >> .env
