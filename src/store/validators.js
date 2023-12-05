@@ -145,7 +145,7 @@ export const validatePoolAddress = (address, errors = {}) => {
     return errors;
   }
 
-  const pattern = /([\w.-]+):(\d+)$/;
+  const pattern = /^[a-zA-Z0-9.-]+:\d+$/;
   const result = pattern.test(address);
 
   if (!result) {
