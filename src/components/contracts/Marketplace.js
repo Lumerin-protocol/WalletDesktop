@@ -132,7 +132,6 @@ function Marketplace({
   const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <MarketplaceRow
-        key={contractsList[index].id}
         data-testid="Marketplace-row"
         onPurchase={data => {
           setContractToPurchase(data);

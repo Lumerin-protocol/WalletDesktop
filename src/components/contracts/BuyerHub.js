@@ -79,7 +79,6 @@ function BuyerHub({
         key={contractsList[index].id}
         data-testid="BuyerHub-row"
         allowSendTransaction={allowSendTransaction}
-        onClick={console.log}
         contract={contractsList[index]}
         cancel={handleContractCancellation}
         address={address}
