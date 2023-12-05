@@ -147,7 +147,7 @@ export const PurchasePreviewModalPage = ({
                 {calculateAddress(inputs.address, contract.id)}
               </Values>
             </PoolInfoContainer>
-            {isPortPublic !== null && !isPortPublic ? (
+            {!isPortPublic ? (
               <>
                 <InstructionLink
                   onClick={() => window.openLink(portCheckErrorLink)}
