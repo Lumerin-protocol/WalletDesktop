@@ -59,8 +59,8 @@ const ProxyRouterConfigStep = props => {
                   onChange={props.onInputChange}
                   noFocus
                   error={props.errors.proxyDefaultPool}
-                  placeholder="stratum+tcp://{pool btc mining url}:{port}"
-                  label="Pool BTC Mining Url"
+                  placeholder="example: btc.global.luxor.tech:8888"
+                  label="Pool BTC Mining Host & Port"
                   value={props.proxyDefaultPool}
                   type="text"
                   id="proxyDefaultPool"
@@ -70,7 +70,7 @@ const ProxyRouterConfigStep = props => {
                 <TextInput
                   onChange={props.onInputChange}
                   error={props.errors.proxyPoolUsername}
-                  placeholder="username"
+                  placeholder="account.worker"
                   label="Pool Username"
                   value={props.proxyPoolUsername}
                   type="text"
@@ -80,11 +80,11 @@ const ProxyRouterConfigStep = props => {
             </>
           )}
 
-          {/* <Sp mt={2}>
-            <SecondaryBtn onClick={props.onUseHostedProxyRouter} block>
-              Or use hosted proxy router
+          <Sp mt={2}>
+            <SecondaryBtn onClick={props.onRunWithoutProxyRouter} block>
+              Or run wallet without validator node
             </SecondaryBtn>
-          </Sp> */}
+          </Sp>
           <Sp mt={6}>
             <Btn block submit>
               Continue
@@ -98,7 +98,7 @@ const ProxyRouterConfigStep = props => {
 
 ProxyRouterConfigStep.propTypes = {
   onProxyRouterConfigured: PropTypes.func.isRequired,
-  onUseHostedProxyRouter: PropTypes.func.isRequired,
+  onRunWithoutProxyRouter: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
   proxyDefaultPool: PropTypes.string,
   errors: utils.errorPropTypes('proxyDefaultPool')

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTimer } from 'react-timer-hook';
-import { IconExternalLink } from '@tabler/icons';
+import { IconExternalLink, IconChartLine } from '@tabler/icons';
 import { ToastsContext } from '../../toasts';
 import styled from 'styled-components';
 import withContractsRowState from '../../../store/hocs/withContractsRowState';
@@ -62,7 +62,8 @@ function BuyerHubRow({
   explorerUrl,
   cancel,
   allowSendTransaction,
-  symbol
+  symbol,
+  onGetHashrate
 }) {
   const context = useContext(ToastsContext);
   const [isPending, setIsPending] = useState(false);
@@ -97,7 +98,15 @@ function BuyerHubRow({
         {abbreviateAddress(contract.id)} <IconExternalLink width={'1.4rem'} />
       </ContractValue>
       <Value>
-        {formatTimestamp(contract.timestamp, timer, contract.state)}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {formatTimestamp(contract.timestamp, timer, contract.state)}
+          <IconChartLine
+            width={'3.4rem'}
+            onClick={() => {
+              onGetHashrate(contract.id);
+            }}
+          />
+        </div>
       </Value>
       {contract.inProgress ? (
         <Value>

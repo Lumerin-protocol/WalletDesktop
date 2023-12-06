@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.2.25",
+  "version": "1.2.46",
   "engines": {
     "node": ">=14"
   },
@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@electron/remote": "2.0.9",
-    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.73",
+    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.83",
     "@reach/menu-button": "0.17.0",
     "@tabler/icons": "1.119.0",
     "axios": "0.27.2",
@@ -63,6 +63,8 @@
     "electron-settings": "4.0.2",
     "electron-updater": "6.1.4",
     "electron-window-state": "5.0.3",
+    "highcharts": "11.1.0",
+    "highcharts-react-official": "3.2.1",
     "json-stringify-safe": "5.0.1",
     "keytar": "7.9.0",
     "lodash": "4.17.21",
@@ -88,7 +90,9 @@
     "react-script-hook": "1.7.2",
     "react-scripts": "3.4.1",
     "react-select": "5.7.2",
+    "react-tabs": "4.3.0",
     "react-timer-hook": "3.0.5",
+    "react-tabs": "4.3.0",
     "react-virtualized": "9.20.1",
     "redux": "4.2.0",
     "redux-actions": "2.3.0",

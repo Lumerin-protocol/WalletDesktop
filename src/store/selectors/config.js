@@ -29,3 +29,6 @@ export const getSellerSelectedCurrency = state => state.config.sellerCurrency;
 
 export const getSellerDefaultCurrency = state =>
   state.config.chain.defaultSellerCurrency;
+
+export const getSellerWhitelistForm = state =>
+  state.config.chain.sellerWhitelistUrl;

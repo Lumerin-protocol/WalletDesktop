@@ -6,8 +6,14 @@ const logger = require("../../../logger");
 const storage = require("../storage");
 const auth = require("../auth");
 const wallet = require("../wallet");
-const { setProxyRouterConfig, getProxyRouterConfig, getDefaultCurrencySetting, setDefaultCurrencySetting} = require("../settings");
-
+const {
+  setProxyRouterConfig,
+  getProxyRouterConfig,
+  getDefaultCurrencySetting,
+  setDefaultCurrencySetting,
+  getKey,
+  setKey
+} = require("../settings");
 const validatePassword = (data) => auth.isValidPassword(data);
 
 function clearCache() {
@@ -21,11 +27,11 @@ function clearCache() {
 const persistState = (data) => storage.persistState(data).then(() => true);
 
 function changePassword({ oldPassword, newPassword }) {
-  return validatePassword(oldPassword).then(function(isValid) {
+  return validatePassword(oldPassword).then(function (isValid) {
     if (!isValid) {
       return isValid;
     }
-    return auth.setPassword(newPassword).then(function() {
+    return auth.setPassword(newPassword).then(function () {
       const seed = wallet.getSeed(oldPassword);
       wallet.setSeed(seed, newPassword);
 
@@ -42,11 +48,38 @@ const getProxyRouterSettings = async () => {
 };
 
 const handleClientSideError = (data) => {
-  logger.error(data.message, data.stack);
+  logger.error("client-side error", data.message, data.stack);
 }
 
 const getDefaultCurrency = async () => getDefaultCurrencySetting();
 const setDefaultCurrency = async (curr) => setDefaultCurrencySetting(curr);
+
+const getCustomEnvs = async () => getKey('customEnvs');
+const setCustomEnvs = async (value) => setKey('customEnvs', value);
+
+/**
+ * 
+ * @param {string} contractId 
+ * @param {Date} fromDate
+ * @returns 
+ */
+const getContractHashrate = async ({contractId, fromDate}) => {
+  const collection = await dbManager.getDb().collection('hashrate').findAsync({ id: contractId });
+  // Uncomment to get a random data
+  // const data = []
+  // const now = new Date().getTime();
+  // for (let i = 10; i >= 0; i--) {
+  //   const timestamp = now - i * 1000 * 60 * 5;
+  //   const hashrate = Math.round(Math.random() * 50000) + 70000;
+  //   data.push({ timestamp, hashrate })
+  // }
+  // return data;
+  return collection
+    .filter(x => x.timestamp > fromDate.getTime())
+    .sort((a, b) => a.timestamp - b.timestamp);
+}
+
+const restartWallet = () => restart(1);
 
 module.exports = {
   validatePassword,
@@ -57,5 +90,9 @@ module.exports = {
   getProxyRouterSettings,
   handleClientSideError,
   getDefaultCurrency,
-  setDefaultCurrency
+  setDefaultCurrency,
+  getCustomEnvs,
+  setCustomEnvs,
+  restartWallet,
+  getContractHashrate
 };

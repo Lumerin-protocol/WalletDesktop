@@ -10,6 +10,7 @@ export const subscribeToMainProcessMessages = function(store) {
     'transactions-scan-finished',
     'transactions-scan-started',
     'contracts-scan-finished',
+    'contract-updated',
     'contracts-scan-started',
     'wallet-state-changed',
     'coin-price-updated',

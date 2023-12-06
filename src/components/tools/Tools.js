@@ -18,6 +18,10 @@ import { Message } from './ConfirmModal.styles';
 import ExportPrivateKeyModal from './ExportPrivateKeyModal';
 import { generatePoolUrl } from '../../utils';
 
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import './styles.css';
+
 const Container = styled.div`
   margin-left: 2rem;
   height: 85vh;
@@ -139,7 +143,12 @@ const Tools = props => {
     saveProxyRouterSettings,
     restartProxyRouter,
     setDefaultCurrency,
-    selectedCurrency
+    selectedCurrency,
+    getCustomEnvs,
+    setCustomEnvs,
+    config,
+    restartWallet,
+    titanLightningDashboard
   } = props;
 
   const RenderForm = goToReview => {
@@ -151,7 +160,8 @@ const Tools = props => {
         Message: null,
         Type: 'info'
       },
-      selectedCurrency: selectedCurrency
+      selectedCurrency: selectedCurrency,
+      customEnvs: {}
     };
 
     const [state, setState] = useState(defState);
@@ -162,6 +172,12 @@ const Tools = props => {
     });
     const [sellerPoolParts, setSellerPoolParts] = useState(null);
     const [buyerPoolParts, setBuyerPoolParts] = useState(null);
+    const [isTitanLightning, setTitanLightning] = useState(false);
+
+    const [httpNodeInput, setHttpNodeInput] = useState(
+      state.customEnvs?.httpNode || config.chain.httpApiUrls[0]
+    );
+    const [wsNodeInput, setWsNodeInput] = useState(state.customEnvs?.wsNode);
 
     const context = useContext(ToastsContext);
 
@@ -183,10 +199,19 @@ const Tools = props => {
             ...data,
             isFetching: false
           });
+          if (data.isTitanLightning) {
+            setTitanLightning(true);
+          }
         })
         .catch(err => {
           context.toast('error', 'Failed to fetch proxy-router settings');
         });
+
+      getCustomEnvs().then(envs => {
+        setState({ ...state, customEnvs: envs });
+        setHttpNodeInput(envs?.httpNode || config.chain.httpApiUrls[0]);
+        setWsNodeInput(envs?.wsNode);
+      });
     }, []);
 
     const onCloseModal = () => {
@@ -195,6 +220,18 @@ const Tools = props => {
 
     const onActiveModalClick = modal => {
       setState({ ...state, activeModal: modal });
+    };
+
+    const resetCustomEnv = () => {
+      setState({ ...state, customEnvs: {} });
+      setHttpNodeInput(null);
+      setWsNodeInput(null);
+      setCustomEnvs({});
+    };
+
+    const setCustomEnvHandler = envs => {
+      setCustomEnvs(envs);
+      setState({ ...state, customEnvs: envs });
     };
 
     const proxyRouterEditClick = () => {
@@ -213,7 +250,8 @@ const Tools = props => {
       });
       return saveProxyRouterSettings({
         sellerDefaultPool: proxyRouterSettings.sellerDefaultPool,
-        buyerDefaultPool: proxyRouterSettings.sellerDefaultPool
+        buyerDefaultPool: proxyRouterSettings.sellerDefaultPool,
+        isTitanLightning
       })
         .catch(() => {
           context.toast('error', 'Failed to save proxy-router settings');
@@ -232,6 +270,16 @@ const Tools = props => {
         restartProxyRouter({}).catch(err => {
           context.toast('error', 'Failed to restart proxy-router');
         });
+      });
+    };
+
+    const toggleIsLightning = () => {
+      setTitanLightning(!isTitanLightning);
+      setSellerPoolParts({
+        ...sellerPoolParts,
+        pool: '',
+        account: '',
+        isTitanLightning: !isTitanLightning
       });
     };
 
@@ -287,283 +335,402 @@ const Tools = props => {
               </Flex.Row>
             </Sp>
           </form> */}
-          <Sp mt={5}>
-            <Subtitle>Seller Default Currency</Subtitle>
-            <StyledParagraph>
-              This will set default currency to display prices and balances on
-              Seller Hub.
-              <div style={{ marginTop: '1rem' }}>
-                <Select
-                  onChange={e =>
-                    setState({ ...state, selectedCurrency: e.target.value })
-                  }
+          <Tabs style={{ color: 'black' }}>
+            <TabList>
+              <Tab>Info</Tab>
+              <Tab>Wallet</Tab>
+              <Tab>Proxy Router</Tab>
+              <Tab>Environment</Tab>
+            </TabList>
+            <TabPanel>
+              <Sp mt={5}>
+                <WalletInfo>Wallet Information</WalletInfo>
+                <WalletStatus />
+              </Sp>
+
+              <Sp mt={5}>
+                <Subtitle>Logs</Subtitle>
+                <StyledParagraph>
+                  You can find wallet logs in the file: <br />
+                  <i>{logPath}</i>
+                </StyledParagraph>
+              </Sp>
+            </TabPanel>
+            <TabPanel>
+              <Sp mt={5}>
+                <Subtitle>Seller Default Currency</Subtitle>
+                <StyledParagraph>
+                  This will set default currency to display prices and balances
+                  on Seller Hub.
+                  <div style={{ marginTop: '1rem' }}>
+                    <Select
+                      onChange={e =>
+                        setState({ ...state, selectedCurrency: e.target.value })
+                      }
+                    >
+                      <option
+                        selected={state.selectedCurrency === 'BTC'}
+                        key={'BTC'}
+                        value={'BTC'}
+                      >
+                        BTC
+                      </option>
+                      <option
+                        selected={state.selectedCurrency === 'LMR'}
+                        key={'LMR'}
+                        value={'LMR'}
+                      >
+                        LMR
+                      </option>
+                    </Select>
+                  </div>
+                </StyledParagraph>
+                <StyledBtn
+                  disabled={state.selectedCurrency === selectedCurrency}
+                  onClick={() => setDefaultCurrency(state.selectedCurrency)}
                 >
-                  <option
-                    selected={state.selectedCurrency === 'BTC'}
-                    key={'BTC'}
-                    value={'BTC'}
-                  >
-                    BTC
-                  </option>
-                  <option
-                    selected={state.selectedCurrency === 'LMR'}
-                    key={'LMR'}
-                    value={'LMR'}
-                  >
-                    LMR
-                  </option>
-                </Select>
-              </div>
-            </StyledParagraph>
-            <StyledBtn
-              disabled={state.selectedCurrency === selectedCurrency}
-              onClick={() => setDefaultCurrency(state.selectedCurrency)}
-            >
-              Save
-            </StyledBtn>
-          </Sp>
-          <Sp mt={5}>
-            <Subtitle>Change Password</Subtitle>
-            <StyledParagraph>
-              This will allow you to change the password you use to access the
-              wallet.
-            </StyledParagraph>
-            <NavLink data-testid="change-password-btn" to="/change-pass">
-              <StyledBtn>Change Password</StyledBtn>
-            </NavLink>
-          </Sp>
-          <Sp mt={5}>
-            <Subtitle>Rescan Transactions List</Subtitle>
-            <StyledParagraph>
-              This will clear your local cache and rescan all your wallet
-              transactions.
-            </StyledParagraph>
-            <StyledBtn onClick={() => onActiveModalClick('confirm-rescan')}>
-              Rescan Transactions
-            </StyledBtn>
-            <ConfirmModal
-              onRequestClose={onCloseModal}
-              onConfirm={props.onRescanTransactions}
-              isOpen={state.activeModal === 'confirm-rescan'}
-            />
-          </Sp>
-          <Sp mt={5}>
-            <Subtitle>Proxy-Router Configuration</Subtitle>
-            {proxyRouterSettings.isFetching ? (
-              <Spinner />
-            ) : !proxyRouterSettings.proxyRouterEditMode ? (
-              <>
+                  Save
+                </StyledBtn>
+              </Sp>
+              <Sp mt={5}>
+                <Subtitle>Change Password</Subtitle>
                 <StyledParagraph>
-                  <div>
-                    <span>Proxy Default Pool:</span> {sellerPoolParts?.pool}{' '}
-                  </div>
-                  <div>
-                    <span>Proxy Default Account:</span>{' '}
-                    {sellerPoolParts?.account}{' '}
-                  </div>
+                  This will allow you to change the password you use to access
+                  the wallet.
                 </StyledParagraph>
-                {/* <StyledParagraph>
-                  <div>
-                    <span>Buyer Default Pool:</span> {buyerPoolParts?.pool}{' '}
-                  </div>
-                  <div>
-                    <span>Buyer Default Account:</span>{' '}
-                    {buyerPoolParts?.account}{' '}
-                  </div>
-                </StyledParagraph> */}
-                <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
-              </>
+                <NavLink data-testid="change-password-btn" to="/change-pass">
+                  <StyledBtn>Change Password</StyledBtn>
+                </NavLink>
+              </Sp>
+              <Sp mt={5}>
+                <Subtitle>Rescan Transactions List</Subtitle>
+                <StyledParagraph>
+                  This will clear your local cache and rescan all your wallet
+                  transactions.
+                </StyledParagraph>
+                <StyledBtn onClick={() => onActiveModalClick('confirm-rescan')}>
+                  Rescan Transactions
+                </StyledBtn>
+                <ConfirmModal
+                  onRequestClose={onCloseModal}
+                  onConfirm={props.onRescanTransactions}
+                  isOpen={state.activeModal === 'confirm-rescan'}
+                />
+              </Sp>
+              <Sp mt={5}>
+                <Subtitle>Sensitive Info</Subtitle>
+                {!props.hasStoredSecretPhrase && (
+                  <StyledParagraph>
+                    To enable this feature you need to re-login to your wallet
+                  </StyledParagraph>
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <StyledBtn
+                    disabled={!props.hasStoredSecretPhrase}
+                    onClick={() => onActiveModalClick('reveal-secret-phrase')}
+                  >
+                    Reveal Secret Recovery Phrase
+                  </StyledBtn>
+                  <StyledBtn
+                    style={{ marginTop: '1.6rem' }}
+                    onClick={() => onActiveModalClick('export-private-key')}
+                  >
+                    Export private key
+                  </StyledBtn>
+                </div>
+                <ExportPrivateKeyModal
+                  onRequestClose={() => {
+                    props.discardPrivateKey();
+                    onCloseModal();
+                  }}
+                  onLater={onCloseModal}
+                  onExportPrivateKey={props.onExportPrivateKey}
+                  privateKey={props.privateKey}
+                  copyToClipboard={props.copyToClipboard}
+                  onRevealPhrase={props.onRevealPhrase}
+                  isOpen={state.activeModal === 'export-private-key'}
+                />
+                <RevealSecretPhraseModal
+                  onRequestClose={() => {
+                    props.discardMnemonic();
+                    onCloseModal();
+                  }}
+                  onLater={onCloseModal}
+                  onShowMnemonic={props.onShowMnemonic}
+                  mnemonic={props.mnemonic}
+                  copyToClipboard={props.copyToClipboard}
+                  onRevealPhrase={props.onRevealPhrase}
+                  isOpen={state.activeModal === 'reveal-secret-phrase'}
+                />
+              </Sp>
+
+              <Sp mt={5}>
+                <Subtitle>Reset</Subtitle>
+                <StyledParagraph>
+                  Set up your wallet from scratch.
+                </StyledParagraph>
+                <StyledBtn onClick={() => onActiveModalClick('confirm-logout')}>
+                  Reset
+                </StyledBtn>
+
+                <ConfirmProxyConfigModal
+                  title={'Reset your wallet'}
+                  message={
+                    <>
+                      <Message>
+                        Make sure you have your recovery phrase before reseting
+                        your wallet. If you don’t have your recovery phrase, we
+                        suggest you transfer all funds out of your wallet before
+                        you reset. Otherwise you will lock yourself out of your
+                        wallet, and you won’t have access to the funds in this
+                        wallet.
+                      </Message>
+                      <Message>Continue?</Message>
+                    </>
+                  }
+                  onRequestClose={onCloseModal}
+                  onConfirm={props.logout}
+                  onLater={onCloseModal}
+                  isOpen={state.activeModal === 'confirm-logout'}
+                />
+              </Sp>
+            </TabPanel>
+
+            {props.isLocalProxyRouter ? (
+              <TabPanel>
+                <Sp mt={5}>
+                  <Subtitle>Proxy-Router Configuration</Subtitle>
+                  {proxyRouterSettings.isFetching ? (
+                    <Spinner />
+                  ) : !proxyRouterSettings.proxyRouterEditMode ? (
+                    <>
+                      <StyledParagraph>
+                        {!isTitanLightning ? (
+                          <div>
+                            <span>Proxy Default Pool:</span>{' '}
+                            {sellerPoolParts?.pool}{' '}
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                        {!isTitanLightning ? (
+                          <div>
+                            <span>Proxy Default Account:</span>{' '}
+                            {sellerPoolParts?.account}{' '}
+                          </div>
+                        ) : (
+                          <div>
+                            <span>Titan Lightning Address:</span>{' '}
+                            {sellerPoolParts?.account}{' '}
+                          </div>
+                        )}
+                        {isTitanLightning && (
+                          <p
+                            style={{
+                              textDecoration: 'underline',
+                              cursor: 'pointer'
+                            }}
+                            data-tooltip={titanLightningDashboard}
+                            onClick={() => {
+                              window.open(titanLightningDashboard, '_blank');
+                            }}
+                          >
+                            Dashboard for Lightning users
+                          </p>
+                        )}
+                      </StyledParagraph>
+                      <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ display: 'flex' }}>
+                        <span>Use Titan Pool for Lightning Payouts</span>
+                        <input
+                          style={{ marginLeft: '10px' }}
+                          data-testid="use-titan-lightning"
+                          onChange={() => {
+                            toggleIsLightning();
+                          }}
+                          checked={isTitanLightning}
+                          type="checkbox"
+                          id="isTitanLightning"
+                        />
+                      </div>
+                      {!isTitanLightning ? (
+                        <StyledParagraph>
+                          Proxy Default Pool Host & Port:{' '}
+                          <Input
+                            placeholder="example: btc.global.luxor.tech:8888"
+                            onChange={e =>
+                              setSellerPoolParts({
+                                ...sellerPoolParts,
+                                pool: e.value,
+                                isTitanLightning
+                              })
+                            }
+                            value={sellerPoolParts?.pool}
+                          />
+                        </StyledParagraph>
+                      ) : (
+                        <></>
+                      )}
+                      <StyledParagraph>
+                        {!isTitanLightning
+                          ? 'Proxy Default Account: '
+                          : 'Titan Lightning Address: '}
+                        <Input
+                          placeholder={
+                            !isTitanLightning
+                              ? 'account.worker'
+                              : 'bob@getalby.com'
+                          }
+                          onChange={e =>
+                            setSellerPoolParts({
+                              ...sellerPoolParts,
+                              account: e.value
+                            })
+                          }
+                          value={sellerPoolParts?.account}
+                        />
+                      </StyledParagraph>
+                      <hr></hr>
+                      <StyledBtn
+                        onClick={() => {
+                          setProxyRouterSettings({
+                            ...proxyRouterSettings,
+                            isTitanLightning,
+                            sellerDefaultPool: generatePoolUrl(
+                              sellerPoolParts.account,
+                              !isTitanLightning
+                                ? sellerPoolParts.pool
+                                : props.titanLightningPool
+                            )
+                          });
+                          onActiveModalClick('confirm-proxy-restart');
+                        }}
+                      >
+                        Save
+                      </StyledBtn>
+                    </>
+                  )}
+
+                  <ConfirmModal
+                    onRequestClose={onCloseModal}
+                    onConfirm={props.onRescanTransactions}
+                    isOpen={state.activeModal === 'confirm-rescan'}
+                  />
+                  <ConfirmProxyConfigModal
+                    onRequestClose={onCloseModal}
+                    onConfirm={confirmProxyRouterRestart}
+                    onLater={saveProxyRouterConfig}
+                    isOpen={state.activeModal === 'confirm-proxy-restart'}
+                  />
+                </Sp>
+                <Sp mt={5}>
+                  <Subtitle>Restart Proxy Router</Subtitle>
+                  <StyledParagraph>
+                    Restart the connected Proxy Router.
+                  </StyledParagraph>
+                  {isRestarting ? (
+                    <Spinner size="20px" />
+                  ) : (
+                    <StyledBtn
+                      onClick={() =>
+                        onActiveModalClick('confirm-proxy-direct-restart')
+                      }
+                    >
+                      Restart
+                    </StyledBtn>
+                  )}
+                  <ConfirmProxyConfigModal
+                    onRequestClose={onCloseModal}
+                    onConfirm={onRestartClick}
+                    onLater={onCloseModal}
+                    isOpen={
+                      state.activeModal === 'confirm-proxy-direct-restart'
+                    }
+                  />
+                </Sp>
+              </TabPanel>
             ) : (
-              <>
+              <TabPanel>
                 <StyledParagraph>
-                  Proxy Default Pool:{' '}
-                  <Input
-                    onChange={e =>
-                      setSellerPoolParts({
-                        ...sellerPoolParts,
-                        pool: e.value
-                      })
-                    }
-                    value={sellerPoolParts?.pool}
-                  />
+                  You are running Wallet wihout Proxy-Router. Reset wallet to
+                  setup validator node.
                 </StyledParagraph>
+              </TabPanel>
+            )}
+
+            <TabPanel>
+              <Subtitle>HTTP ETH Node: </Subtitle>
+              <StyledParagraph>
+                <Input
+                  placeholder={config.chain.httpApiUrls[0]}
+                  onChange={e => setHttpNodeInput(e.value)}
+                  value={httpNodeInput}
+                />
+              </StyledParagraph>
+
+              <StyledParagraph>
+                <Subtitle>Web Socket ETH Node: </Subtitle>
+                <Input
+                  placeholder={
+                    state.customEnvs?.wsNode ||
+                    'wss://arb-mainnet.g.alchemy.com/v2/API_KEY'
+                  }
+                  onChange={e => setWsNodeInput(e.value)}
+                  value={wsNodeInput}
+                />
                 <StyledParagraph>
-                  Proxy Default Account:{' '}
-                  <Input
-                    onChange={e =>
-                      setSellerPoolParts({
-                        ...sellerPoolParts,
-                        account: e.value
-                      })
-                    }
-                    value={sellerPoolParts?.account}
-                  />
+                  Warning: Modifying these settings with incorrect values may
+                  impact the wallet's stability and disrupt blockchain
+                  integration. If you experience unexpected issues, consider
+                  resetting to the default values.
                 </StyledParagraph>
-                <hr></hr>
-                {/* <StyledParagraph>
-                  Buyer Default Pool:{' '}
-                  <Input
-                    onChange={e =>
-                      setBuyerPoolParts({
-                        ...buyerPoolParts,
-                        pool: e.value
-                      })
-                    }
-                    value={buyerPoolParts?.pool}
-                  />
-                </StyledParagraph>
-                <StyledParagraph>
-                  Buyer Default Account:{' '}
-                  <Input
-                    onChange={e =>
-                      setBuyerPoolParts({
-                        ...buyerPoolParts,
-                        account: e.value
-                      })
-                    }
-                    value={buyerPoolParts?.account}
-                  />
-                </StyledParagraph> */}
+              </StyledParagraph>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <StyledBtn
                   onClick={() => {
-                    setProxyRouterSettings({
-                      ...proxyRouterSettings,
-                      sellerDefaultPool: generatePoolUrl(
-                        sellerPoolParts.account,
-                        sellerPoolParts.pool
-                      )
-                      // buyerDefaultPool: generatePoolUrl(
-                      //   buyerPoolParts.account,
-                      //   buyerPoolParts.pool
-                      // )
+                    setCustomEnvHandler({
+                      httpNode: httpNodeInput,
+                      wsNode: wsNodeInput
                     });
-                    onActiveModalClick('confirm-proxy-restart');
+                    onActiveModalClick('confirm-custom-env-change');
                   }}
                 >
                   Save
                 </StyledBtn>
-              </>
-            )}
+                <StyledBtn
+                  onClick={() => {
+                    resetCustomEnv();
+                    onActiveModalClick('confirm-custom-env-change');
+                  }}
+                >
+                  Reset
+                </StyledBtn>
 
-            <ConfirmModal
-              onRequestClose={onCloseModal}
-              onConfirm={props.onRescanTransactions}
-              isOpen={state.activeModal === 'confirm-rescan'}
-            />
-            <ConfirmProxyConfigModal
-              onRequestClose={onCloseModal}
-              onConfirm={confirmProxyRouterRestart}
-              onLater={saveProxyRouterConfig}
-              isOpen={state.activeModal === 'confirm-proxy-restart'}
-            />
-          </Sp>
-          <Sp mt={5}>
-            <Subtitle>Restart Proxy Router</Subtitle>
-            <StyledParagraph>
-              Restart the connected Proxy Router.
-            </StyledParagraph>
-            {isRestarting ? (
-              <Spinner size="20px" />
-            ) : (
-              <StyledBtn
-                onClick={() =>
-                  onActiveModalClick('confirm-proxy-direct-restart')
-                }
-              >
-                Restart
-              </StyledBtn>
-            )}
-            <ConfirmProxyConfigModal
-              onRequestClose={onCloseModal}
-              onConfirm={onRestartClick}
-              onLater={onCloseModal}
-              isOpen={state.activeModal === 'confirm-proxy-direct-restart'}
-            />
-          </Sp>
-
-          <Sp mt={5}>
-            <Subtitle>Sensitive Info</Subtitle>
-            {!props.hasStoredSecretPhrase && (
-              <StyledParagraph>
-                To enable this feature you need to re-login to your wallet
-              </StyledParagraph>
-            )}
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <StyledBtn
-                disabled={!props.hasStoredSecretPhrase}
-                onClick={() => onActiveModalClick('reveal-secret-phrase')}
-              >
-                Reveal Secret Recovery Phrase
-              </StyledBtn>
-              <StyledBtn
-                style={{ marginTop: '1.6rem' }}
-                onClick={() => onActiveModalClick('export-private-key')}
-              >
-                Export private key
-              </StyledBtn>
-            </div>
-            <ExportPrivateKeyModal
-              onRequestClose={() => {
-                props.discardPrivateKey();
-                onCloseModal();
-              }}
-              onLater={onCloseModal}
-              onExportPrivateKey={props.onExportPrivateKey}
-              privateKey={props.privateKey}
-              copyToClipboard={props.copyToClipboard}
-              onRevealPhrase={props.onRevealPhrase}
-              isOpen={state.activeModal === 'export-private-key'}
-            />
-            <RevealSecretPhraseModal
-              onRequestClose={() => {
-                props.discardMnemonic();
-                onCloseModal();
-              }}
-              onLater={onCloseModal}
-              onShowMnemonic={props.onShowMnemonic}
-              mnemonic={props.mnemonic}
-              copyToClipboard={props.copyToClipboard}
-              onRevealPhrase={props.onRevealPhrase}
-              isOpen={state.activeModal === 'reveal-secret-phrase'}
-            />
-          </Sp>
-
-          <Sp mt={5}>
-            <Subtitle>Reset</Subtitle>
-            <StyledParagraph>Set up your wallet from scratch.</StyledParagraph>
-            <StyledBtn onClick={() => onActiveModalClick('confirm-logout')}>
-              Reset
-            </StyledBtn>
-
-            <ConfirmProxyConfigModal
-              title={'Reset your wallet'}
-              message={
-                <>
-                  <Message>
-                    Make sure you have your recovery phrase before reseting your
-                    wallet. If you don’t have your recovery phrase, we suggest
-                    you transfer all funds out of your wallet before you reset.
-                    Otherwise you will lock yourself out of your wallet, and you
-                    won’t have access to the funds in this wallet.
-                  </Message>
-                  <Message>Continue?</Message>
-                </>
-              }
-              onRequestClose={onCloseModal}
-              onConfirm={props.logout}
-              onLater={onCloseModal}
-              isOpen={state.activeModal === 'confirm-logout'}
-            />
-          </Sp>
-
-          <Sp mt={5}>
-            <Subtitle>Logs</Subtitle>
-            <StyledParagraph>
-              You can find wallet logs in the file: <br />
-              <i>{logPath}</i>
-            </StyledParagraph>
-          </Sp>
-
+                <ConfirmProxyConfigModal
+                  title={'Wallet and Proxy restart'}
+                  message={
+                    <>
+                      <Message>
+                        You need to restart Wallet and Proxy Router to apply
+                        changes.
+                      </Message>
+                    </>
+                  }
+                  onRequestClose={onCloseModal}
+                  onConfirm={() => {
+                    restartProxyRouter({})
+                      .then(() => restartWallet())
+                      .catch(err => console.log(err));
+                  }}
+                  onLater={onCloseModal}
+                  isOpen={state.activeModal === 'confirm-custom-env-change'}
+                />
+              </div>
+            </TabPanel>
+          </Tabs>
           {/* <Sp mt={5}>
             <hr />
             <Subtitle>Run End-to-End Test</Subtitle>
@@ -591,10 +758,6 @@ const Tools = props => {
               isOpen={state.activeModal === 'confirm-test'}
             />
           </Sp> */}
-          <Sp mt={5}>
-            <WalletInfo>Wallet Information</WalletInfo>
-            <WalletStatus />
-          </Sp>
         </Sp>
       </Container>
     );

@@ -39,12 +39,12 @@ export const Body = styled.div`
   position: fixed;
   z-index: 20;
   background-color: ${p => p.theme.colors.light};
-  width: 45%;
+  width: ${p => p.width || '45%'};
   height: ${p => p.height || 'fit-content'};
   border-radius: 15px;
   padding: 3rem 5%;
-  max-width: 600px;
-  max-height: 800px;
+  max-width: ${p => p.maxWidth || '600px'};
+  max-height: ${p => p.maxHeight || '800px'};
 
   @media (min-height: 700px) {
     padding: 5rem;

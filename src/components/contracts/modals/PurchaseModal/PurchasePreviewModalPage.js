@@ -65,6 +65,7 @@ export const PurchasePreviewModalPage = ({
   const [loading, setLoading] = useState(true);
 
   const [ip, port] = inputs.address.replace('stratum+tcp://', '').split(':');
+  const poolParts = pool ? pool.replace('stratum+tcp://', '').split(':@') : [];
 
   useEffect(() => {
     isProxyPortPublic({
@@ -146,7 +147,7 @@ export const PurchasePreviewModalPage = ({
                 {calculateAddress(inputs.address, contract.id)}
               </Values>
             </PoolInfoContainer>
-            {isPortPublic !== null && !isPortPublic ? (
+            {!isPortPublic ? (
               <>
                 <InstructionLink
                   onClick={() => window.openLink(portCheckErrorLink)}
@@ -189,9 +190,18 @@ export const PurchasePreviewModalPage = ({
           <UrlContainer>
             <UpperCaseTitle>forwarding to (mining pool)</UpperCaseTitle>
             <Divider />
-            <div style={{ marginTop: '20px' }}>
+            <div style={{ marginTop: '10px' }}>
               <SmallTitle>Pool Address</SmallTitle>
-              <Values style={{ wordBreak: 'break-all' }}>{pool}</Values>
+              <Values style={{ wordBreak: 'break-all' }}>
+                {decodeURIComponent(
+                  poolParts[1] || 'Validation node default pool address'
+                )}
+              </Values>
+              <br />
+              <SmallTitle>Account</SmallTitle>
+              <Values style={{ wordBreak: 'break-all' }}>
+                {decodeURIComponent(poolParts[0] || '')}
+              </Values>
             </div>
           </UrlContainer>
           <ActionsGroup>
