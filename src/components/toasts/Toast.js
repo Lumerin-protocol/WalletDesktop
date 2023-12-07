@@ -130,7 +130,6 @@ export default class Toast extends React.Component {
               key: msg,
               data: msg,
               style: {
-                maxHeight: spring(50, { stiffness: 150, damping: 20 }),
                 opacity: spring(1, { stiffness: 60, damping: 5 })
               }
             }))}
