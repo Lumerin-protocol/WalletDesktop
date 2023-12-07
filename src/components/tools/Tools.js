@@ -3,10 +3,8 @@ import withToolsState from '../../store/hocs/withToolsState';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React, { useState, useContext, useEffect } from 'react';
-import axios from 'axios';
 
 import ConfirmModal from './ConfirmModal';
-import TestModal from './TestModal';
 import WalletStatus from './WalletStatus';
 import { ConfirmationWizard, TextInput, Flex, BaseBtn, Sp } from '../common';
 import Spinner from '../common/Spinner';
@@ -16,9 +14,11 @@ import ConfirmProxyConfigModal from './ConfirmProxyConfigModal';
 import RevealSecretPhraseModal from './RevealSecretPhraseModal';
 import { Message } from './ConfirmModal.styles';
 import ExportPrivateKeyModal from './ExportPrivateKeyModal';
-import { generatePoolUrl } from '../../utils';
+import { ProxyConfigPanel } from './ProxyConfigPanel';
 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { StyledBtn, Subtitle, StyledParagraph, Input } from './common';
+
 import 'react-tabs/style/react-tabs.css';
 import './styles.css';
 
@@ -75,46 +75,8 @@ const ValidationMsg = styled.div`
   opacity: 0.75;
 `;
 
-const StyledBtn = styled(BaseBtn)`
-  width: 40%;
-  height: 40px;
-  font-size: 1.5rem;
-  border-radius: 5px;
-  padding: 0 0.6rem;
-  background-color: ${p => p.theme.colors.primary};
-  color: ${p => p.theme.colors.light};
-
-  @media (min-width: 1040px) {
-    width: 35%;
-    height: 40px;
-    margin-left: 0;
-    margin-top: 1.6rem;
-  }
-`;
-
-const Subtitle = styled.h3`
-  color: ${p => p.theme.colors.dark};
-`;
-
-const StyledParagraph = styled.p`
-  color: ${p => p.theme.colors.dark};
-
-  span {
-    font-weight: bold;
-  }
-`;
-
 const WalletInfo = styled.h4`
   color: ${p => p.theme.colors.dark};
-`;
-
-export const Input = styled(TextInput)`
-  outline: 0;
-  border: 0px;
-  background: #eaf7fc;
-  border-radius: 15px;
-  padding: 1.2rem 1.2rem;
-  margin-top: 0.25rem;
 `;
 
 const getPoolAndAccount = url => {
@@ -171,7 +133,6 @@ const Tools = props => {
       isFetching: true
     });
     const [sellerPoolParts, setSellerPoolParts] = useState(null);
-    const [buyerPoolParts, setBuyerPoolParts] = useState(null);
     const [isTitanLightning, setTitanLightning] = useState(false);
 
     const [httpNodeInput, setHttpNodeInput] = useState(
@@ -193,7 +154,6 @@ const Tools = props => {
       getProxyRouterSettings()
         .then(data => {
           setSellerPoolParts(getPoolAndAccount(data.sellerDefaultPool));
-          setBuyerPoolParts(getPoolAndAccount(data.sellerDefaultPool));
 
           setProxyRouterSettings({
             ...data,
@@ -496,170 +456,25 @@ const Tools = props => {
               </Sp>
             </TabPanel>
 
-            {props.isLocalProxyRouter ? (
-              <TabPanel>
-                <Sp mt={5}>
-                  <Subtitle>Proxy-Router Configuration</Subtitle>
-                  {proxyRouterSettings.isFetching ? (
-                    <Spinner />
-                  ) : !proxyRouterSettings.proxyRouterEditMode ? (
-                    <>
-                      <StyledParagraph>
-                        {!isTitanLightning ? (
-                          <div>
-                            <span>Proxy Default Pool:</span>{' '}
-                            {sellerPoolParts?.pool}{' '}
-                          </div>
-                        ) : (
-                          <></>
-                        )}
-                        {!isTitanLightning ? (
-                          <div>
-                            <span>Proxy Default Account:</span>{' '}
-                            {sellerPoolParts?.account}{' '}
-                          </div>
-                        ) : (
-                          <div>
-                            <span>Titan Lightning Address:</span>{' '}
-                            {sellerPoolParts?.account}{' '}
-                          </div>
-                        )}
-                        {isTitanLightning && (
-                          <p
-                            style={{
-                              textDecoration: 'underline',
-                              cursor: 'pointer'
-                            }}
-                            data-tooltip={titanLightningDashboard}
-                            onClick={() => {
-                              window.open(titanLightningDashboard, '_blank');
-                            }}
-                          >
-                            Dashboard for Lightning users
-                          </p>
-                        )}
-                      </StyledParagraph>
-                      <StyledBtn onClick={proxyRouterEditClick}>Edit</StyledBtn>
-                    </>
-                  ) : (
-                    <>
-                      <div style={{ display: 'flex' }}>
-                        <span>Use Titan Pool for Lightning Payouts</span>
-                        <input
-                          style={{ marginLeft: '10px' }}
-                          data-testid="use-titan-lightning"
-                          onChange={() => {
-                            toggleIsLightning();
-                          }}
-                          checked={isTitanLightning}
-                          type="checkbox"
-                          id="isTitanLightning"
-                        />
-                      </div>
-                      {!isTitanLightning ? (
-                        <StyledParagraph>
-                          Proxy Default Pool Host & Port:{' '}
-                          <Input
-                            placeholder="example: btc.global.luxor.tech:8888"
-                            onChange={e =>
-                              setSellerPoolParts({
-                                ...sellerPoolParts,
-                                pool: e.value,
-                                isTitanLightning
-                              })
-                            }
-                            value={sellerPoolParts?.pool}
-                          />
-                        </StyledParagraph>
-                      ) : (
-                        <></>
-                      )}
-                      <StyledParagraph>
-                        {!isTitanLightning
-                          ? 'Proxy Default Account: '
-                          : 'Titan Lightning Address: '}
-                        <Input
-                          placeholder={
-                            !isTitanLightning
-                              ? 'account.worker'
-                              : 'bob@getalby.com'
-                          }
-                          onChange={e =>
-                            setSellerPoolParts({
-                              ...sellerPoolParts,
-                              account: e.value
-                            })
-                          }
-                          value={sellerPoolParts?.account}
-                        />
-                      </StyledParagraph>
-                      <hr></hr>
-                      <StyledBtn
-                        onClick={() => {
-                          setProxyRouterSettings({
-                            ...proxyRouterSettings,
-                            isTitanLightning,
-                            sellerDefaultPool: generatePoolUrl(
-                              sellerPoolParts.account,
-                              !isTitanLightning
-                                ? sellerPoolParts.pool
-                                : props.titanLightningPool
-                            )
-                          });
-                          onActiveModalClick('confirm-proxy-restart');
-                        }}
-                      >
-                        Save
-                      </StyledBtn>
-                    </>
-                  )}
-
-                  <ConfirmModal
-                    onRequestClose={onCloseModal}
-                    onConfirm={props.onRescanTransactions}
-                    isOpen={state.activeModal === 'confirm-rescan'}
-                  />
-                  <ConfirmProxyConfigModal
-                    onRequestClose={onCloseModal}
-                    onConfirm={confirmProxyRouterRestart}
-                    onLater={saveProxyRouterConfig}
-                    isOpen={state.activeModal === 'confirm-proxy-restart'}
-                  />
-                </Sp>
-                <Sp mt={5}>
-                  <Subtitle>Restart Proxy Router</Subtitle>
-                  <StyledParagraph>
-                    Restart the connected Proxy Router.
-                  </StyledParagraph>
-                  {isRestarting ? (
-                    <Spinner size="20px" />
-                  ) : (
-                    <StyledBtn
-                      onClick={() =>
-                        onActiveModalClick('confirm-proxy-direct-restart')
-                      }
-                    >
-                      Restart
-                    </StyledBtn>
-                  )}
-                  <ConfirmProxyConfigModal
-                    onRequestClose={onCloseModal}
-                    onConfirm={onRestartClick}
-                    onLater={onCloseModal}
-                    isOpen={
-                      state.activeModal === 'confirm-proxy-direct-restart'
-                    }
-                  />
-                </Sp>
-              </TabPanel>
-            ) : (
-              <TabPanel>
-                <StyledParagraph>
-                  You are running Wallet wihout Proxy-Router. Reset wallet to
-                  setup validator node.
-                </StyledParagraph>
-              </TabPanel>
-            )}
+            <TabPanel>
+              <ProxyConfigPanel
+                {...props}
+                onCloseModal={onCloseModal}
+                onRestartClick={onRestartClick}
+                state={state}
+                saveProxyRouterConfig={saveProxyRouterConfig}
+                saveProxyRouterSettings={saveProxyRouterSettings}
+                confirmProxyRouterRestart={confirmProxyRouterRestart}
+                toggleIsLightning={toggleIsLightning}
+                setProxyRouterSettings={setProxyRouterSettings}
+                proxyRouterSettings={proxyRouterSettings}
+                setSellerPoolParts={setSellerPoolParts}
+                sellerPoolParts={sellerPoolParts}
+                proxyRouterEditClick={proxyRouterEditClick}
+                onActiveModalClick={onActiveModalClick}
+                isTitanLightning={isTitanLightning}
+              />
+            </TabPanel>
 
             <TabPanel>
               <Subtitle>HTTP ETH Node: </Subtitle>
