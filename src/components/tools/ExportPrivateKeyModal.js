@@ -10,8 +10,8 @@ import {
   ConfirmBtn,
   Row
 } from './ConfirmModal.styles';
-import { Input } from './Tools';
 import { useState } from 'react';
+import { Input } from './common';
 
 const PrivateKey = styled.div`
   word-break: break-word;
