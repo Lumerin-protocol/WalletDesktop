@@ -32,6 +32,9 @@ const withContractsState = WrappedComponent => {
     contractsRefresh = (force = false) => {
       const now = parseInt(Date.now() / 1000, 10);
       const timeout = 15; // seconds
+      if (this.props.syncStatus === 'syncing') {
+        return;
+      }
       if (
         this.props.contractsLastUpdatedAt &&
         now - this.props.contractsLastUpdatedAt < timeout &&
@@ -84,7 +87,8 @@ const withContractsState = WrappedComponent => {
     lmrCoinPrice: selectors.getRate(state),
     ethCoinPrice: selectors.getRateEth(state),
     btcCoinPrice: selectors.getRateBtc(state),
-    selectedCurrency: selectors.getSellerSelectedCurrency(state)
+    selectedCurrency: selectors.getSellerSelectedCurrency(state),
+    formUrl: selectors.getSellerWhitelistForm(state)
   });
 
   const mapDispatchToProps = dispatch => ({

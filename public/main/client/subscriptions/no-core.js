@@ -13,13 +13,13 @@ const listeners = {
   'reveal-secret-phrase': handlers.revealSecretPhrase,
   'has-stored-secret-phrase': handlers.hasStoredSecretPhrase,
   "logout": handlers.logout,
-  "restart": handlers.restartWallet,
   "save-proxy-router-settings": handlers.saveProxyRouterSettings,
   "get-proxy-router-settings": handlers.getProxyRouterSettings,
   "get-default-currency-settings": handlers.getDefaultCurrency,
   "set-default-currency-settings": handlers.setDefaultCurrency,
   "get-custom-env-values": handlers.getCustomEnvs,
   "set-custom-env-values": handlers.setCustomEnvs,
+  "get-contract-hashrate": handlers.getContractHashrate
 };
 
 // Subscribe to messages where no core has to react

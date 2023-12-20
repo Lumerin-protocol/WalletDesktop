@@ -63,7 +63,7 @@ class Root extends React.Component {
       )
       // eslint-disable-next-line no-console
       .catch(e => {
-        console.error(e.message);
+        console.error('root component error', e.message);
         this.context.toast(
           'error',
           'Failed to startup wallet. Please wait a few minutes and try again'

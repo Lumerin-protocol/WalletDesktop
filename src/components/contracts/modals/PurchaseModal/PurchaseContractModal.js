@@ -40,7 +40,7 @@ function PurchaseContractModal(props) {
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
-    setValue('address', `stratum+tcp://${props.ip}:${props.buyerPort}`);
+    setValue('address', `${props.ip}:${props.buyerPort}`);
     trigger('address');
 
     setValue('worker', contract?.id);
@@ -48,7 +48,7 @@ function PurchaseContractModal(props) {
   }, [contract]);
 
   useEffect(() => {
-    setValue('address', `stratum+tcp://${props.ip}:${props.buyerPort}`);
+    setValue('address', `${props.ip}:${props.buyerPort}`);
     trigger('address');
   }, [isActive]);
 

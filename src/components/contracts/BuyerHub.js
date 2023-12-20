@@ -8,6 +8,7 @@ import ContractsList from './contracts-list/ContractsList';
 import { ContractsRowContainer } from './contracts-list/ContractsRow.styles';
 
 import HistoryModal from './modals/HistoryModal/HistoryModal';
+import HashrateModal from './modals/HashrateModal/HashrateModal';
 import { IconHistory } from '@tabler/icons';
 
 import styled from 'styled-components';
@@ -46,6 +47,7 @@ function BuyerHub({
   const contractsToShow = contracts.filter(
     x => x.buyer === address && x.seller !== address
   );
+
   const tabs = [
     { value: 'id', name: 'Contract', ratio: 3 },
     { value: 'timestamp', name: 'Started', ratio: 3 },
@@ -74,18 +76,24 @@ function BuyerHub({
   const rowRenderer = (contractsList, ratio) => ({ key, index, style }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <BuyerHubRow
+        key={contractsList[index].id}
         data-testid="BuyerHub-row"
         allowSendTransaction={allowSendTransaction}
-        onClick={console.log}
         contract={contractsList[index]}
         cancel={handleContractCancellation}
         address={address}
         ratio={ratio}
+        onGetHashrate={id => {
+          setShowHashrateModal(true);
+          setContactToShowHashrate(id);
+        }}
       />
     </ContractsRowContainer>
   );
 
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [showHashrateModal, setShowHashrateModal] = useState(false);
+  const [contactToShowHashrate, setContactToShowHashrate] = useState();
 
   const contractsWithHistory = contracts.filter(c => c.history?.length);
   const showHistory = contractsWithHistory.length;
@@ -127,6 +135,15 @@ function BuyerHub({
         historyContracts={contractsWithHistory}
         close={() => {
           setIsHistoryModalOpen(false);
+        }}
+      />
+
+      <HashrateModal
+        isActive={showHashrateModal}
+        contractId={contactToShowHashrate}
+        close={() => {
+          setShowHashrateModal(false);
+          setContactToShowHashrate(null);
         }}
       />
     </View>

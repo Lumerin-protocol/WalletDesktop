@@ -19,6 +19,7 @@ const promisifyMethods = methods =>
 
 const promisifyCollection = promisifyMethods([
   'find',
+  'insert',
   'findOne',
   'remove',
   'update'
