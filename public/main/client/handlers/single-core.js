@@ -271,13 +271,11 @@ const getMarketplaceFee = async function (data, { api }) {
   return api.contracts.getMarketplaceFee(data);
 };
 
-function refreshAllContracts({ }, { api }) {
-  const walletId = wallet.getAddress().address;
-  return api.contracts.refreshContracts(null, walletId);
+function refreshAllContracts({}, { api }) {
+  return api.contracts.refreshContracts();
 }
 
 function startWatchingContracts({}, { api }) {
-  const walletId = wallet.getAddress().address;
   return api.contracts.startWatching();
 }
 
@@ -370,7 +368,7 @@ function getPastTransactions({ address, page, pageSize }, { api }) {
 }
 
 module.exports = {
-  // refreshAllSockets,
+  refreshAllSockets,
   refreshAllContracts,
   startWatchingContracts,
   purchaseContract,

@@ -98,7 +98,6 @@ const reducer = handleActions(
     },
 
     'transactions-next-page': (state, { payload }) => {
-      console.log(payload);
       return {
         ...state,
         hasNextPage: payload.hasNextPage,

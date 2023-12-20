@@ -7,13 +7,13 @@ import {
 } from '../../utils/coinValue';
 
 function isSendTransaction(transaction, myAddress) {
-  const from = transaction.from;
-  return from.toLowerCase() === myAddress.toLowerCase();
+  const from = transaction?.from;
+  return from?.toLowerCase() === myAddress?.toLowerCase();
 }
 
 function isReceiveTransaction(transaction, myAddress) {
-  const to = transaction.to;
-  return to?.toLowerCase() === myAddress.toLowerCase();
+  const to = transaction?.to;
+  return to?.toLowerCase() === myAddress?.toLowerCase();
 }
 
 function getTxType(rawTx, tokenData, myAddress) {
