@@ -32,7 +32,8 @@ const listeners = {
   "stop-proxy-router": handlers.stopProxyRouter,
   "claim-faucet": handlers.claimFaucet,
   'get-private-key': handlers.getAddressAndPrivateKey,
-  "get-marketplace-fee": handlers.getMarketplaceFee
+  "get-marketplace-fee": handlers.getMarketplaceFee,
+  "get-contract-history": handlers.getContractHistory,
 };
 
 let coreListeners = {};

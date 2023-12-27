@@ -16,7 +16,9 @@ const {
 } = require("./handlers/single-core");
 
 const { runProxyRouter, isProxyRouterHealthy } = require("./proxyRouter");
+
 let interval;
+
 function startCore({ chain, core, config: coreConfig }, webContent) {
   logger.verbose(`Starting core ${chain}`);
   const { emitter, events, api } = core.start(coreConfig);

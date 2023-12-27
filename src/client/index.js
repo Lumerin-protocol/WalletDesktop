@@ -172,7 +172,8 @@ const createClient = function(createStore) {
     claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000),
     getCustomEnvValues: utils.forwardToMainProcess('get-custom-env-values'),
     setCustomEnvValues: utils.forwardToMainProcess('set-custom-env-values'),
-    getContractHashrate: utils.forwardToMainProcess('get-contract-hashrate')
+    getContractHashrate: utils.forwardToMainProcess('get-contract-hashrate'),
+    getContractHistory: utils.forwardToMainProcess('get-contract-history')
   };
 
   const api = {
