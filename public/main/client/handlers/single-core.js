@@ -271,9 +271,12 @@ const getMarketplaceFee = async function (data, { api }) {
   return api.contracts.getMarketplaceFee(data);
 };
 
-function refreshAllContracts({ }, { api }) {
-  const walletId = wallet.getAddress().address;
-  return api.contracts.refreshContracts(null, walletId);
+function refreshAllContracts({}, { api }) {
+  return api.contracts.refreshContracts();
+}
+
+function startWatchingContracts({}, { api }) {
+  return api.contracts.startWatching();
 }
 
 function refreshTransaction({ hash, address }, { api }) {
@@ -336,6 +339,10 @@ const getLocalIp = async ({ }, { api }) => api["proxy-router"].getLocalIp();
 
 const isProxyPortPublic = async (data, { api }) => api["proxy-router"].isProxyPortPublic(data);
 
+const getContractHistory = async (data, { api }) => { 
+  return api.contracts.getContractHistory(data);
+}
+
 const logout = async (data) => {
   return cleanupDb();
 };
@@ -361,12 +368,13 @@ const revealSecretPhrase = async (password) => {
 }
 
 function getPastTransactions({ address, page, pageSize }, { api }) {
-  return api.explorer.getPastCoinTransactions(0, undefined, address, page, pageSize);
+  return api.explorer.syncTransactions(0, undefined, page, pageSize, address);
 }
 
 module.exports = {
-  // refreshAllSockets,
+  refreshAllSockets,
   refreshAllContracts,
+  startWatchingContracts,
   purchaseContract,
   createContract,
   cancelContract,
@@ -400,4 +408,5 @@ module.exports = {
   getMarketplaceFee,
   isProxyPortPublic,
   stopProxyRouter,
+  getContractHistory,
 };

@@ -41,8 +41,7 @@ function BuyerHub({
   address,
   client,
   contractsRefresh,
-  allowSendTransaction,
-  ...props
+  allowSendTransaction
 }) {
   const contractsToShow = contracts.filter(
     x => x.buyer === address && x.seller !== address
@@ -95,8 +94,7 @@ function BuyerHub({
   const [showHashrateModal, setShowHashrateModal] = useState(false);
   const [contactToShowHashrate, setContactToShowHashrate] = useState();
 
-  const contractsWithHistory = contracts.filter(c => c.history.length);
-  const showHistory = contractsWithHistory.length;
+  const hasContractsWithHistory = true;
   const onHistoryOpen = () => setIsHistoryModalOpen(true);
 
   return (
@@ -106,10 +104,12 @@ function BuyerHub({
         address={address}
         copyToClipboard={copyToClipboard}
       >
-        <HistoryBtn disabled={!showHistory} onClick={onHistoryOpen}>
+        <HistoryBtn disabled={!hasContractsWithHistory} onClick={onHistoryOpen}>
           <span
             style={{ display: 'flex' }}
-            data-rh={showHistory ? null : `You have no purchase history`}
+            data-rh={
+              hasContractsWithHistory ? null : `You have no purchase history`
+            }
           >
             <IconHistory style={{ display: 'inline-block' }} /> History
           </span>
@@ -132,7 +132,8 @@ function BuyerHub({
 
       <HistoryModal
         isActive={isHistoryModalOpen}
-        historyContracts={contractsWithHistory}
+        contracts={contracts}
+        address={address}
         close={() => {
           setIsHistoryModalOpen(false);
         }}

@@ -10,18 +10,49 @@ import {
 } from '../CreateContractModal.styles';
 import HistoryRow from './HistoryRow';
 import { withClient } from '../../../../store/hocs/clientContext';
-import { lmrDecimals } from '../../../../utils/coinValue';
+import Spinner from '../../../common/Spinner';
 
 function HistroyModal(props) {
-  const { isActive, close, historyContracts, client } = props;
+  const { isActive, close, client, contracts, address } = props;
+
+  const [historyContracts, setHistory] = useState({});
+  const [isLoading, setLoading] = useState(false);
+  useEffect(() => {
+    if (!isActive) {
+      return;
+    }
+    if (contracts.length) {
+      setLoading(true);
+    }
+    let loaded = 0;
+    for (let i = 0; i < contracts.length; i += 1) {
+      const c = contracts[i];
+      client
+        .getContractHistory({ contractAddr: c.id, walletAddress: address })
+        .then(history => {
+          if (history.length > 0) {
+            setHistory(prev => ({
+              ...prev,
+              [c.id]: history
+            }));
+          }
+        })
+        .catch(err => {})
+        .finally(() => {
+          loaded += 1;
+          if (loaded === contracts.length) {
+            setLoading(false);
+          }
+        });
+    }
+  }, [isActive]);
 
   const handleClose = e => {
     close(e);
   };
   const handlePropagation = e => e.stopPropagation();
 
-  const history = historyContracts
-    .map(hc => hc.history)
+  const history = Object.values(historyContracts)
     .flat()
     .map(h => {
       return {
@@ -48,10 +79,7 @@ function HistroyModal(props) {
   }
 
   const rowRenderer = historyContracts => ({ key, index, style }) => (
-    <HistoryRow
-      key={historyContracts[index].id}
-      contract={historyContracts[index]}
-    />
+    <HistoryRow key={`${index}`} contract={historyContracts[index]} />
   );
 
   return (
@@ -61,6 +89,12 @@ function HistroyModal(props) {
         <TitleWrapper>
           <Title>Purchase history</Title>
         </TitleWrapper>
+        {isLoading && !history.length && (
+          <Subtitle>
+            Loading... <Spinner size="16px"></Spinner>
+          </Subtitle>
+        )}
+        {!isLoading && !history.length && <Subtitle>No history found</Subtitle>}
         <AutoSizer width={400}>
           {({ width, height }) => (
             <RVList

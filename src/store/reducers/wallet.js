@@ -26,51 +26,24 @@ export const initialState = {
  * Should filter transactions without receipt if we received ones
  */
 const mergeTransactions = (stateTxs, payloadTxs) => {
-  const txWithReceipts = payloadTxs.filter(tx => tx.receipt);
   const newStateTxs = { ...stateTxs };
+  const txs = Object.values(payloadTxs).filter(x => typeof x == 'object');
 
-  for (const tx of txWithReceipts) {
-    const key = `${tx.transaction.hash}_${tx.receipt.tokenSymbol || 'ETH'}`;
-    const oldStateTx = stateTxs[key];
-
-    const isDifferentLogIndex =
-      oldStateTx?.transaction?.logIndex &&
-      tx?.transaction?.logIndex &&
-      oldStateTx?.transaction?.logIndex !== tx?.transaction?.logIndex; // means that this is a second transaction within the same hash
-
-    if (oldStateTx && !isDifferentLogIndex) {
-      continue;
-    }
-    newStateTxs[key] = tx;
-    // contract purchase emits 2 transactions with the same hash
-    // as of now we merge corresponding amount values. Temporary fix, until refactoring trasactions totally
-
-    // we sum transaction value if it is transfers within the same transaction, but with different logIndex
-    // TODO: display both transactions in the UI either separately or as a single one with two outputs
-    if (oldStateTx && isDifferentLogIndex) {
-      if (
-        newStateTxs[key].transaction.value &&
-        oldStateTx.transaction.logIndex !== tx.transaction.logIndex
-      ) {
-        newStateTxs[key].transaction.value = String(
-          Number(oldStateTx.transaction.value) + Number(tx.transaction.value)
-        );
+  for (const tx of txs) {
+    const flattenObjects = tx.transfers.map(x => ({
+      ...tx,
+      ...x,
+      transfers: undefined
+    }));
+    for (const obj of flattenObjects) {
+      if (obj.amount == 0) {
+        continue;
       }
-
-      if (newStateTxs[key].transaction.input.amount) {
-        newStateTxs[key].transaction.input.amount = String(
-          Number(oldStateTx.transaction.input.amount) +
-            Number(tx.transaction.input.amount)
-        );
-      }
-
-      if (newStateTxs[key].receipt.value) {
-        newStateTxs[key].receipt.value = String(
-          Number(oldStateTx.receipt.value) + Number(tx.receipt.value)
-        );
-      }
+      const key = `${obj.txhash}_${obj.token || 'ETH'}`;
+      newStateTxs[key] = obj;
     }
   }
+
   return newStateTxs;
 };
 
@@ -114,22 +87,23 @@ const reducer = handleActions(
       }
     }),
 
-    'token-transactions-changed': (state, { payload }) => ({
-      ...state,
-      token: {
-        ...state.token,
-        transactions: mergeTransactions(
-          state.token.transactions,
-          payload.transactions
-        )
-      }
-    }),
+    'token-transactions-changed': (state, { payload }) => {
+      return {
+        ...state,
+        token: {
+          ...state.token,
+          transactions: mergeTransactions(state.token.transactions, payload)
+        }
+      };
+    },
 
-    'transactions-next-page': (state, { payload }) => ({
-      ...state,
-      hasNextPage: payload.hasNextPage,
-      page: payload.page
-    }),
+    'transactions-next-page': (state, { payload }) => {
+      return {
+        ...state,
+        hasNextPage: payload.hasNextPage,
+        page: payload.page
+      };
+    },
 
     'token-state-changed': (state, { payload }) => ({
       ...state,

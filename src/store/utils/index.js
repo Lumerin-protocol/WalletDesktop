@@ -42,10 +42,6 @@ export function isGreaterThanZero(client, amount) {
   return weiAmount.gt(client.toBN(0));
 }
 
-// export function isFailed(tx, confirmations) {
-//   return confirmations > 0 || tx.contractCallFailed
-// }
-
 export function isPending(tx, confirmations) {
   // return !isFailed(tx, confirmations) && confirmations < 6
   return false;

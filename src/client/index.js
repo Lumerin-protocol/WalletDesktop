@@ -111,6 +111,10 @@ const createClient = function(createStore) {
       'refresh-all-contracts',
       120000
     ),
+    startWatchingContracts: utils.forwardToMainProcess(
+      'start-watching-contracts',
+      120000
+    ),
     onOnboardingCompleted: utils.forwardToMainProcess('onboarding-completed'),
     recoverFromMnemonic: utils.forwardToMainProcess('recover-from-mnemonic'),
     getTokenGasLimit: utils.forwardToMainProcess('get-token-gas-limit'),
@@ -168,7 +172,8 @@ const createClient = function(createStore) {
     claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000),
     getCustomEnvValues: utils.forwardToMainProcess('get-custom-env-values'),
     setCustomEnvValues: utils.forwardToMainProcess('set-custom-env-values'),
-    getContractHashrate: utils.forwardToMainProcess('get-contract-hashrate')
+    getContractHashrate: utils.forwardToMainProcess('get-contract-hashrate'),
+    getContractHistory: utils.forwardToMainProcess('get-contract-history')
   };
 
   const api = {

@@ -9,6 +9,7 @@ const listeners = {
   "login-submit": handlers.onLoginSubmit,
   // 'refresh-all-sockets': handlers.refreshAllSockets,
   "refresh-all-contracts": handlers.refreshAllContracts,
+  "start-watching-contracts": handlers.startWatchingContracts,
   "refresh-all-transactions": handlers.refreshAllTransactions,
   "refresh-transaction": handlers.refreshTransaction,
   "get-gas-limit": handlers.getGasLimit,
@@ -31,7 +32,8 @@ const listeners = {
   "stop-proxy-router": handlers.stopProxyRouter,
   "claim-faucet": handlers.claimFaucet,
   'get-private-key': handlers.getAddressAndPrivateKey,
-  "get-marketplace-fee": handlers.getMarketplaceFee
+  "get-marketplace-fee": handlers.getMarketplaceFee,
+  "get-contract-history": handlers.getContractHistory,
 };
 
 let coreListeners = {};

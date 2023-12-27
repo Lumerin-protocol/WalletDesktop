@@ -16,7 +16,9 @@ const {
 } = require("./handlers/single-core");
 
 const { runProxyRouter, isProxyRouterHealthy } = require("./proxyRouter");
+
 let interval;
+
 function startCore({ chain, core, config: coreConfig }, webContent) {
   logger.verbose(`Starting core ${chain}`);
   const { emitter, events, api } = core.start(coreConfig);
@@ -35,6 +37,7 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
     "transactions-scan-finished",
     "contracts-scan-started",
     "contracts-scan-finished",
+    "contracts-updated",
     'contract-updated',
   );
 
@@ -65,10 +68,10 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
         return api.explorer
           .syncTransactions(
             0,
-            address,
-            (number) => storage.setSyncBlock(number, chain),
+            'latest',
             page,
-            pageSize
+            pageSize,
+            address
           )
           .then(function () {
             send("transactions-scan-finished", { success: true });
@@ -91,7 +94,11 @@ function startCore({ chain, core, config: coreConfig }, webContent) {
       });
   }
 
-  emitter.on("open-wallet", syncTransactions);
+  emitter.on("open-wallet", (props) => { 
+    syncTransactions(props);
+    api.contracts.startWatching({});
+    api.explorer.startWatching({ walletAddress: props.address });
+  });
 
   emitter.on("wallet-error", function (err) {
     logger.warn(

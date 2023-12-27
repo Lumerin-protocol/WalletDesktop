@@ -131,6 +131,7 @@ function CreateContractModal(props) {
   if (!isActive) {
     return <></>;
   }
+
   const timeField = register('time', {
     required: true,
     min: 24,
