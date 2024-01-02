@@ -21,6 +21,8 @@
     "dev:link": "./scripts/dev_link_repos.sh",
     "debug": "concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . --inspect\"",
     "dev": "npm run clear-electron-cache && concurrently \"BROWSER=none react-scripts start\" \"wait-on $npm_package_config_cra_dev_serv && DEBUG=true ELECTRON_START_URL=$npm_package_config_cra_dev_serv electron . \"",
+    "dev-win": "set BROWSER=none && concurrently \"react-scripts start\" \"npm run dev-win:window\"",
+    "dev-win:window": "set DEBUG=true && set ELECTRON_START_URL=http://localhost:3000 && electron .",
     "web-build": "npm run clear-cache:eslint && react-scripts build",
     "desktop-build": "PYTHON_PATH=/usr/local/bin/python electron-builder -wlm --c.extraMetadata.main=build/electron.js --publish=never",
     "desktop-build-mac": "electron-builder -m --c.extraMetadata.main=build/electron.js --publish=never",
