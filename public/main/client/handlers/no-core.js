@@ -57,6 +57,9 @@ const setDefaultCurrency = async (curr) => setDefaultCurrencySetting(curr);
 const getCustomEnvs = async () => getKey('customEnvs');
 const setCustomEnvs = async (value) => setKey('customEnvs', value);
 
+const getProfitSettings = async () => getKey('profitSettings');
+const setProfitSettings = async (value) => setKey('profitSettings', value);
+
 /**
  * 
  * @param {string} contractId 
@@ -94,5 +97,7 @@ module.exports = {
   getCustomEnvs,
   setCustomEnvs,
   restartWallet,
-  getContractHashrate
+  getContractHashrate,
+  getProfitSettings,
+  setProfitSettings
 };

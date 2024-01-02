@@ -43,7 +43,6 @@
   },
   "dependencies": {
     "@electron/remote": "2.0.9",
-    "@lumerin/wallet-core": "git+ssh://git@github.com:Lumerin-protocol/WalletCore.git#1.0.83",
     "@reach/menu-button": "0.17.0",
     "@tabler/icons": "1.119.0",
     "axios": "0.27.2",
@@ -90,7 +89,6 @@
     "react-script-hook": "1.7.2",
     "react-scripts": "3.4.1",
     "react-select": "5.7.2",
-    "react-tabs": "4.3.0",
     "react-timer-hook": "3.0.5",
     "react-tabs": "4.3.0",
     "react-virtualized": "9.20.1",

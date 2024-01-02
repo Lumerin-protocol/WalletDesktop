@@ -17,7 +17,7 @@ import RevealSecretPhraseModal from './RevealSecretPhraseModal';
 import { Message } from './ConfirmModal.styles';
 import ExportPrivateKeyModal from './ExportPrivateKeyModal';
 import { generatePoolUrl } from '../../utils';
-
+import { ContractsTab } from './featureTabs/ContractsTab';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import './styles.css';
@@ -146,6 +146,8 @@ const Tools = props => {
     selectedCurrency,
     getCustomEnvs,
     setCustomEnvs,
+    getProfitSettings,
+    setProfitSettings,
     config,
     restartWallet,
     titanLightningDashboard
@@ -161,7 +163,8 @@ const Tools = props => {
         Type: 'info'
       },
       selectedCurrency: selectedCurrency,
-      customEnvs: {}
+      customEnvs: {},
+      profitSettings: {}
     };
 
     const [state, setState] = useState(defState);
@@ -211,6 +214,9 @@ const Tools = props => {
         setState({ ...state, customEnvs: envs });
         setHttpNodeInput(envs?.httpNode || config.chain.httpApiUrls[0]);
         setWsNodeInput(envs?.wsNode);
+      });
+      getProfitSettings().then(settings => {
+        setState({ ...state, profitSettings: settings });
       });
     }, []);
 
@@ -339,6 +345,7 @@ const Tools = props => {
             <TabList>
               <Tab>Info</Tab>
               <Tab>Wallet</Tab>
+              <Tab>Contracts</Tab>
               <Tab>Proxy Router</Tab>
               <Tab>Environment</Tab>
             </TabList>
@@ -495,7 +502,15 @@ const Tools = props => {
                 />
               </Sp>
             </TabPanel>
-
+            <TabPanel>
+              <ContractsTab
+                settings={state.profitSettings}
+                onCommit={settings => {
+                  setState({ ...state, profitSettings: settings });
+                  setProfitSettings(settings);
+                }}
+              />
+            </TabPanel>
             {props.isLocalProxyRouter ? (
               <TabPanel>
                 <Sp mt={5}>

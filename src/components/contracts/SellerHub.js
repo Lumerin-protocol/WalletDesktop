@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { uniqueId } from 'lodash';
+import { uniqueId, debounce } from 'lodash';
 
 import withContractsState from '../../store/hocs/withContractsState';
 import { Btn } from '../common';
@@ -11,10 +11,11 @@ import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
 import { lmrDecimals } from '../../utils/coinValue';
-import { formatBtcPerTh } from './utils';
+import { formatBtcPerTh, calculateSuggestedPrice } from './utils';
 import ArchiveModal from './modals/ArchiveModal/ArchiveModal';
 import { IconArchive } from '@tabler/icons';
 import SellerWhitelistModal from './modals/SellerWhitelistModal/SellerWhitelistModal';
+import AdjustProfitModal from './modals/AdjustProfitModal/AdjustProfitModal';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -87,10 +88,115 @@ function SellerHub({
   const [isModalActive, setIsModalActive] = useState(false);
   const [isArchiveModalActive, setIsArchiveModalActive] = useState(false);
   const [showSellerWhitelistForm, setShowSellerWhitelistForm] = useState(false);
+  const [showAdjustForm, setShowAdjustForm] = useState(false);
   const [isEditModalActive, setIsEditModalActive] = useState(false);
   const [editContractData, setEditContractData] = useState({});
   const context = useContext(ToastsContext);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [
+    underProfitContracts,
+    setUnderProfitContractsunderProfitContracts
+  ] = useState([]);
+  const [profitSettings, setProfitSettings] = useState({});
+
+  useEffect(() => {
+    client.getProfitSettings().then(settings => {
+      setProfitSettings(settings);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (contracts.length) {
+      verify(
+        contracts,
+        props.lmrCoinPrice,
+        props.btcCoinPrice,
+        address,
+        networkDifficulty
+      );
+    }
+  }, [contracts]);
+
+  const verify = useCallback(
+    debounce((...param) => {
+      client.getProfitSettings().then(settings => {
+        const contracts = param[0].filter(
+          c => c.seller === param[3] && !c.isDead
+        );
+        const lmrCoinPrice = param[1];
+        const btcCoinPrice = param[2];
+        const reward = formatBtcPerTh(param[4]);
+        const deviation = +settings.deviation;
+        const result = contracts.reduce((curr, next) => {
+          let profitTarget = settings?.adaptExisted
+            ? +settings?.target
+            : +next.profitTarget;
+          if (profitTarget == 0) {
+            return curr;
+          }
+
+          const left = 1 + deviation / 100 - profitTarget / 100;
+          const right = 1 + deviation / 100 + profitTarget / 100;
+
+          const estimatedLeft = calculateSuggestedPrice(
+            next.length / 3600,
+            next.speed / 10 ** 12,
+            btcCoinPrice,
+            lmrCoinPrice,
+            reward,
+            left
+          );
+          const estimatedRight = calculateSuggestedPrice(
+            next.length / 3600,
+            next.speed / 10 ** 12,
+            btcCoinPrice,
+            lmrCoinPrice,
+            reward,
+            right
+          );
+          const targetEstimate = calculateSuggestedPrice(
+            next.length / 3600,
+            next.speed / 10 ** 12,
+            btcCoinPrice,
+            lmrCoinPrice,
+            reward,
+            1 + profitTarget / 100
+          );
+
+          const zeroBasedEstimate = calculateSuggestedPrice(
+            next.length / 3600,
+            next.speed / 10 ** 12,
+            btcCoinPrice,
+            lmrCoinPrice,
+            reward,
+            1
+          );
+
+          const currPrice = next.price / 10 ** 8;
+
+          if (!(estimatedLeft <= currPrice && estimatedRight >= currPrice)) {
+            return [
+              ...curr,
+              {
+                id: next.id,
+                profit: next.profitTarget,
+                zeroBasedEstimate: zeroBasedEstimate,
+                zeroRate: (next.price / 10 ** 8 / zeroBasedEstimate).toFixed(2),
+                currentRate: (next.price / 10 ** 8 / targetEstimate).toFixed(2),
+                estimatedPrice: targetEstimate,
+                price: next.price / 10 ** 8
+              }
+            ];
+          }
+          return curr;
+        }, []);
+
+        console.log(result);
+        setUnderProfitContractsunderProfitContracts(result);
+      });
+    }, 300),
+    []
+  );
 
   const tabs = [
     { name: 'Status', ratio: 1 },
@@ -203,7 +309,8 @@ function SellerHub({
       price: (contractDetails.price * lmrDecimals).toString(),
       speed: (contractDetails.speed * 10 ** 12).toString(), // THs
       duration: (contractDetails.time * 3600).toString(), // Hours to seconds
-      sellerAddress: contractDetails.address
+      sellerAddress: contractDetails.address,
+      profit: contractDetails.profitTarget
     };
 
     await client.lockSendTransaction();
@@ -230,7 +337,8 @@ function SellerHub({
       price: contractDetails.price * lmrDecimals,
       speed: contractDetails.speed * 10 ** 12, // THs
       duration: contractDetails.time * 3600, // Hours to seconds
-      sellerAddress: contractDetails.address
+      sellerAddress: contractDetails.address,
+      profit: contractDetails.profitTarget || profitSettings.target
     };
 
     const tempContractId = uniqueId();
@@ -339,6 +447,8 @@ function SellerHub({
         isSellerTab={true}
         sellerStats={sellerStats}
         offset={394}
+        underProfitContracts={underProfitContracts}
+        onAdjustFormOpen={() => setShowAdjustForm(true)}
       />
 
       <CreateContractModal
@@ -349,6 +459,7 @@ function SellerHub({
         showSuccess={showSuccess}
         networkReward={sellerStats.networkReward}
         editContractData={{}}
+        profitSettings={profitSettings}
       />
 
       <ArchiveModal
@@ -368,6 +479,44 @@ function SellerHub({
         formUrl={formUrl}
         close={() => {
           setShowSellerWhitelistForm(false);
+        }}
+      />
+
+      <AdjustProfitModal
+        isActive={showAdjustForm}
+        contracts={[...underProfitContracts]}
+        close={() => {
+          setShowAdjustForm(false);
+        }}
+        onAdjust={data => {
+          const c = contracts.find(x => x.id == data.id);
+          handleContractUpdate(
+            { preventDefault: () => {} },
+            {
+              price: data.price,
+              speed: c.speed / 10 ** 12,
+              time: c.length / 3600,
+              address: c.address,
+              profitTarget: c.profitTarget
+            },
+            data.id
+          );
+        }}
+        onApplySuggested={contracts => {
+          contracts.forEach(item => {
+            const c = contracts.find(x => x.id == item.id);
+            handleContractUpdate(
+              { preventDefault: () => {} },
+              {
+                price: item.price,
+                speed: c.speed / 10 ** 12,
+                time: c.length / 3600,
+                address: c.address,
+                profitTarget: c.profitTarget
+              },
+              item.id
+            );
+          });
         }}
       />
 

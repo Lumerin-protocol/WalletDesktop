@@ -148,3 +148,18 @@ export const convertLmrToBtc = (value, btcRate, lmrRate) => {
 
 export const formatExpNumber = value =>
   value.toFixed(10).replace(/(?<=\.\d*[1-9])0+$|\.0*$/, '');
+
+export const calculateSuggestedPrice = (
+  time,
+  speed,
+  btcRate,
+  lmrRate,
+  profit,
+  multiplier
+) => {
+  const lengthDays = time / 24;
+  return (
+    (multiplier * profit * lengthDays * speed * btcRate) /
+    lmrRate
+  ).toFixed(0);
+};
