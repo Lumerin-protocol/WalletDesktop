@@ -171,6 +171,7 @@ function ContractsList({
   }) => (
     <ContractsRowContainer style={style} key={`${key}-${index}`}>
       <ContractsRow
+        key={contractsList[index].id}
         data-testid="Contracts-row"
         onClick={onContractsClicked}
         contract={contractsList[index]}

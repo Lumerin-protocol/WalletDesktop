@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 
-import { Modal, BaseBtn } from '../common';
+import { Modal } from '../common';
 import {
   Container,
   Message,
@@ -10,8 +10,7 @@ import {
   DismissBtn,
   ConfirmBtn
 } from './ConfirmModal.styles';
-import { Input } from './Tools';
-import { useState } from 'react';
+import { Input } from './common';
 
 const Mnemonic = styled.div`
   padding: 10px 0;
