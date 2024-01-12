@@ -43,7 +43,7 @@ const Subtitle = styled.h3`
 
 export const ContractsTab = ({ settings, onCommit }) => {
   const [profitSettings, setProfitSettings] = useState(settings);
-  const [adaptExisted, setAdaptExisted] = useState(settings?.adaptExisted);
+  const [adaptExisting, setAdaptExisting] = useState(settings?.adaptExisting);
   return (
     <div>
       <Subtitle>Profit Targets</Subtitle>
@@ -83,13 +83,13 @@ export const ContractsTab = ({ settings, onCommit }) => {
           style={{ marginLeft: '10px' }}
           data-testid="use-titan-lightning"
           onChange={() => {
-            setAdaptExisted(!adaptExisted);
+            setAdaptExisting(!adaptExisting);
             setProfitSettings({
               ...profitSettings,
-              adaptExisted: !adaptExisted
+              adaptExisting: !adaptExisting
             });
           }}
-          checked={adaptExisted}
+          checked={adaptExisting}
           type="checkbox"
           id="isTitanLightning"
         />

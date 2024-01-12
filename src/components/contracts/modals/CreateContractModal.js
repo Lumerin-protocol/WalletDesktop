@@ -55,7 +55,8 @@ function CreateContractModal(props) {
     editContractData,
     networkReward,
     marketplaceFee,
-    profitSettings
+    profitSettings,
+    autoAdjustPriceData
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
@@ -69,6 +70,13 @@ function CreateContractModal(props) {
   const [showSuggested, setShowSuggested] = useState(false);
   const [persent, setPersent] = useState(
     editContractData?.profitTarget || profitSettings?.target
+  );
+
+  const hasEnabledAutoAdjust =
+    autoAdjustPriceData &&
+    autoAdjustPriceData[editContractData?.id?.toLowerCase()]?.enabled;
+  const [isAutoAdjustEnabled, setIsAutoAdjustEnabled] = useState(
+    hasEnabledAutoAdjust
   );
   const underProfit = networkReward > (estimatedReward || 0);
 
@@ -97,7 +105,7 @@ function CreateContractModal(props) {
   const wrapHandleDeploy = async e => {
     e.preventDefault();
     setIsCreating(true);
-    await deploy(e, getValues());
+    await deploy(e, getValues(), isAutoAdjustEnabled);
     resetValues();
     setIsCreating(false);
     setIsPreview(false);
@@ -106,7 +114,13 @@ function CreateContractModal(props) {
   const wrapHandleUpdate = async e => {
     e.preventDefault();
     setIsCreating(true);
-    await edit(e, getValues(), editContractData.id, editContractData);
+    await edit(
+      e,
+      getValues(),
+      editContractData.id,
+      editContractData,
+      isAutoAdjustEnabled
+    );
     resetValues();
     setIsCreating(false);
     setIsPreview(false);
@@ -255,23 +269,6 @@ function CreateContractModal(props) {
           <TitleWrapper>
             <Title>{title}</Title>
             <Subtitle>{subtitle}</Subtitle>
-            {!isEditMode && (
-              <div
-                style={{
-                  display: 'block',
-                  fontSize: '1.5rem',
-                  fontWeight: '400',
-                  marginBottom: '10px'
-                }}
-              >
-                <input
-                  data-testid="show-overprofit"
-                  type="checkbox"
-                  id="overprofit"
-                />
-                Split Hashrate Into Multiple Contacts
-              </div>
-            )}
           </TitleWrapper>
           <Form onSubmit={() => setIsPreview(true)}>
             {/* <Row>
@@ -503,7 +500,7 @@ function CreateContractModal(props) {
                     setProfit(e.target.value);
                     profitField.onChange(e);
                   }}
-                  placeholder={`${profitSettings?.target}%`}
+                  placeholder={`${profitSettings?.target || 10}%`}
                   min={0}
                   max={30}
                   type="number"
@@ -514,6 +511,30 @@ function CreateContractModal(props) {
                   Desired profit margin. Contacts with price below that value
                   will be highlighted for adjustments based on current rates
                 </Sublabel>
+
+                {editContractData.profitTarget ? (
+                  <div
+                    style={{
+                      paddingTop: '5px',
+                      display: 'block',
+                      fontSize: '1.3rem',
+                      fontWeight: '400'
+                    }}
+                  >
+                    <input
+                      data-testid="show-overprofit"
+                      type="checkbox"
+                      id="overprofit"
+                      defaultChecked={hasEnabledAutoAdjust}
+                      onChange={e => {
+                        setIsAutoAdjustEnabled(e.target.checked);
+                      }}
+                    />
+                    <span> Auto adjust price</span>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </InputGroup>
             </Row>
             <InputGroup

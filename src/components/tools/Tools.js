@@ -508,6 +508,7 @@ const Tools = props => {
                 onCommit={settings => {
                   setState({ ...state, profitSettings: settings });
                   setProfitSettings(settings);
+                  context.toast('success', 'Updated');
                 }}
               />
             </TabPanel>

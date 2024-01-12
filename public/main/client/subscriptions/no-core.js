@@ -21,7 +21,9 @@ const listeners = {
   "set-custom-env-values": handlers.setCustomEnvs,
   "get-profit-settings": handlers.getProfitSettings,
   "set-profit-settings": handlers.setProfitSettings,
-  "get-contract-hashrate": handlers.getContractHashrate
+  "get-contract-hashrate": handlers.getContractHashrate,
+  "get-auto-adjust-price": handlers.getAutoAdjustPriceData,
+  "set-auto-adjust-price": handlers.setAutoAdjustPriceData,
 };
 
 // Subscribe to messages where no core has to react

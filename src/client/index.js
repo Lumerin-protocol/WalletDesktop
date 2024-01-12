@@ -170,6 +170,8 @@ const createClient = function(createStore) {
     setCustomEnvValues: utils.forwardToMainProcess('set-custom-env-values'),
     getProfitSettings: utils.forwardToMainProcess('get-profit-settings'),
     setProfitSettings: utils.forwardToMainProcess('set-profit-settings'),
+    getAutoAdjustPriceData: utils.forwardToMainProcess('get-auto-adjust-price'),
+    setAutoAdjustPriceData: utils.forwardToMainProcess('set-auto-adjust-price'),
     getContractHashrate: utils.forwardToMainProcess('get-contract-hashrate')
   };
 

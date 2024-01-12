@@ -19,9 +19,9 @@ const TableHeader = styled.div`
   display: grid;
   grid-template-columns: 0.5fr 1fr 1fr 1fr;
   text-align: center;
-  font-weight: bold
+  font-weight: bold;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
-  color: ${p => p.theme.colors.primary}
+  color: ${p => p.theme.colors.primary};
   height: 50px;
 `;
 
@@ -106,8 +106,7 @@ function AdjustProfitModal(props) {
           </AutoSizer>
         </div>
         <div style={{ margin: '1.2rem' }}>
-          NOTE: You will be charged marketplace fee and gas fee per updated
-          contract.
+          NOTE: You will be charged gas fee per updated contract.
         </div>
         <Row style={{ justifyContent: 'center' }}>
           <RightBtn

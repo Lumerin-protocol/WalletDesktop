@@ -81,6 +81,8 @@ function Row({
   const length = contract.futureTerms?.length || contract.length;
   const price = contract.futureTerms?.price || contract.price;
   const limit = contract.futureTerms?.limit || contract.limit;
+  const profitTarget =
+    contract.futureTerms?.profitTarget || contract.profitTarget;
   const underProfit = underProfitContracts.find(x => x.id == contract.id);
 
   useEffect(() => {
@@ -112,7 +114,8 @@ function Row({
       price,
       length,
       speed,
-      limit
+      limit,
+      profitTarget
     });
   };
 
@@ -235,9 +238,7 @@ function Row({
             )}
           </div>
         ) : (
-          <div>
-            <IconAlertTriangle style={{ width: '14px' }}></IconAlertTriangle>
-          </div>
+          <></>
         )}
       </Value>
       <Value

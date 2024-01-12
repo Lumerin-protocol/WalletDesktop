@@ -142,10 +142,6 @@ function ContractsList({
     : contracts;
 
   contractsToShow = sorting(contractsToShow, sort, underProfitContracts);
-  console.log(
-    '🚀 ~ file: ContractsList.js:143 ~ contractsToShow:',
-    contractsToShow
-  );
 
   const hasContracts = contractsToShow.length;
   const defaultTabs = [
