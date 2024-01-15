@@ -50,6 +50,10 @@ const rangeSelectOptions = [
   {
     label: 'State: Running First',
     value: 'RunningFirst'
+  },
+  {
+    label: 'Profit: Below Target First',
+    value: 'UnderProfit'
   }
 ];
 
