@@ -13,6 +13,7 @@ import {
 import { withClient } from '../../../../store/hocs/clientContext';
 import AdjustContractRow from './AdjustContractRow';
 import styled from 'styled-components';
+import Spinner from '../../../common/Spinner';
 
 const TableHeader = styled.div`
   padding: 1.2rem 0;
@@ -39,6 +40,7 @@ function AdjustProfitModal(props) {
     ? contracts
     : contracts.filter(x => x.currentRate < 1);
   const [settings, setSettings] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     client.getProfitSettings().then(settings => {
       setSettings(settings);
@@ -49,6 +51,24 @@ function AdjustProfitModal(props) {
     close(e);
   };
   const handlePropagation = e => e.stopPropagation();
+
+  const handleAdjust = async data => {
+    setIsLoading(true);
+    return onAdjust(data)
+      .catch(() => {})
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const handleApplySuggested = async data => {
+    setIsLoading(true);
+    return onApplySuggested(data)
+      .catch(() => {})
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   if (!isActive) {
     return <></>;
@@ -61,7 +81,7 @@ function AdjustProfitModal(props) {
         key={contracts[index].id}
         item={contracts[index]}
         settings={settings}
-        onAdjust={onAdjust}
+        onAdjust={handleAdjust}
       />
     </div>
   );
@@ -92,19 +112,32 @@ function AdjustProfitModal(props) {
           <div>Current Price / Suggested Price</div>
           <div>Action</div>
         </TableHeader>
-        <div style={{ height: '300px' }}>
-          <AutoSizer>
-            {({ width, height }) => (
-              <RVList
-                rowRenderer={rowRenderer(contractsToShow)}
-                rowHeight={50}
-                rowCount={contractsToShow.length}
-                height={height || 500} // defaults for tests
-                width={width || 500} // defaults for tests
-              />
-            )}
-          </AutoSizer>
-        </div>
+        {isLoading ? (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '20px'
+            }}
+          >
+            <Spinner size="25px" />
+          </div>
+        ) : (
+          <div style={{ height: '300px' }}>
+            <AutoSizer>
+              {({ width, height }) => (
+                <RVList
+                  rowRenderer={rowRenderer(contractsToShow)}
+                  rowHeight={50}
+                  rowCount={contractsToShow.length}
+                  height={height || 500} // defaults for tests
+                  width={width || 500} // defaults for tests
+                />
+              )}
+            </AutoSizer>
+          </div>
+        )}
         <div style={{ margin: '1.2rem' }}>
           NOTE: You will be charged gas fee per updated contract.
         </div>
@@ -116,7 +149,7 @@ function AdjustProfitModal(props) {
                 id: x.id,
                 price: x.estimatedPrice
               }));
-              onApplySuggested(data);
+              handleApplySuggested(data);
             }}
           >
             Apply Suggested Prices
