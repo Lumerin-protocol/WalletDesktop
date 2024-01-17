@@ -105,7 +105,7 @@ function AdjustProfitModal(props) {
             type="checkbox"
             id="overprofit"
           />
-          Show excess profit contacts
+          Show excess profit contracts
         </div>
         <TableHeader>
           <div>Id</div>
