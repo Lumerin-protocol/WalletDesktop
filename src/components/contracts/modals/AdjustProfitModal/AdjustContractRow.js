@@ -11,6 +11,7 @@ const RowContainer = styled.div`
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   color: ${p => p.theme.colors.primary};
   height: 50px;
+  font-size: 1.4rem;
 `;
 
 const ContractValue = styled.label`
@@ -24,6 +25,7 @@ const ContractValue = styled.label`
   text-decoration: underline;
   flex-direction: row;
   gap: 5px;
+  font-size: 1.4rem;
 `;
 
 const Circle = styled.div`
@@ -44,6 +46,7 @@ const FlexCenter = styled.div`
 `;
 
 export const Input = styled.input`
+  font-size: 1.4rem;
   padding: 4px 8px;
   outline: 0;
   border: 0px;
@@ -53,7 +56,7 @@ export const Input = styled.input`
   font-size: 16px;
   font-weight: 400;
   color: #0e4353;
-
+  min-width: 60px;
   ::placeholder {
     color: rgba(1, 67, 83, 0.56);
   }
@@ -89,7 +92,7 @@ function AdjustContractRow({ item, onAdjust }) {
       </FlexCenter>
       <FlexCenter>
         <RightBtn
-          style={{ height: '90%' }}
+          style={{ height: '90%', 'font-size': '1.4rem' }}
           onClick={() => onAdjust({ id: item.id, price })}
         >
           Apply

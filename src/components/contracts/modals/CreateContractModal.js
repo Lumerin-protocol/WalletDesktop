@@ -69,7 +69,7 @@ function CreateContractModal(props) {
   const [suggestedPrice, setSuggestedPrice] = useState(null);
   const [showSuggested, setShowSuggested] = useState(false);
   const [persent, setPersent] = useState(
-    editContractData?.profitTarget || profitSettings?.target
+    editContractData?.profitTarget || profitSettings?.target || 0
   );
 
   const hasEnabledAutoAdjust =
@@ -219,8 +219,8 @@ function CreateContractModal(props) {
 
   const profitField = register('profitTarget', {
     required: false,
-    min: 0,
-    max: 30,
+    min: -99,
+    max: 99,
     value: editContractData.profitTarget
       ? editContractData.profitTarget
       : undefined
@@ -441,8 +441,8 @@ function CreateContractModal(props) {
                                 );
                                 setSuggestedPrice(result);
                               }}
-                              min={0}
-                              max={30}
+                              min={-99}
+                              max={99}
                             ></Slider>
                           </div>
                           <div>
@@ -501,14 +501,12 @@ function CreateContractModal(props) {
                     profitField.onChange(e);
                   }}
                   placeholder={`${profitSettings?.target || 10}%`}
-                  min={0}
-                  max={30}
                   type="number"
                   name="profitTarget"
                   id="profitTargetv"
                 />
                 <Sublabel>
-                  Desired profit margin. Contacts with price below that value
+                  Desired profit margin. Contract with price below that value
                   will be highlighted for adjustments based on current rates
                 </Sublabel>
 

@@ -148,8 +148,13 @@ function SellerHub({
             return acc;
           }
 
-          const left = 1 + deviation / 100 - profitTarget / 100;
-          const right = 1 + deviation / 100 + profitTarget / 100;
+          const left =
+            1 +
+            (+profitTarget > 0
+              ? deviation - profitTarget
+              : profitTarget - deviation) /
+              100;
+          const right = 1 + (deviation + profitTarget) / 100;
 
           const length =
             (contract.futureTerms?.length || contract.length) / 3600;
@@ -189,7 +194,6 @@ function SellerHub({
             reward,
             1
           );
-
           const currPrice =
             (contract.futureTerms?.price || contract.price) / lmrDecimals;
           const isPriceWithinRange =

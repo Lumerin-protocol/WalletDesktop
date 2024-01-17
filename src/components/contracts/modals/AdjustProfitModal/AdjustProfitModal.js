@@ -24,6 +24,7 @@ const TableHeader = styled.div`
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   color: ${p => p.theme.colors.primary};
   height: 50px;
+  font-size: 1.4rem;
 `;
 
 function AdjustProfitModal(props) {
