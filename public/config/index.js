@@ -69,5 +69,7 @@ module.exports = {
   statePersistanceDebounce: 2000,
   trackingId: process.env.TRACKING_ID,
   web3Timeout: 120000,
+  autoAdjustPriceInterval: +process.env.AUTO_ADJUST_PRICE_INTERVAL || 15 * 60 * 1000,
+  autoAdjustContractPriceTimeout: +process.env.AUTO_ADJUST_CONTRACT_PRICE_TIMEOUT || 24 * 60 * 60 * 1000,
   recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
 };

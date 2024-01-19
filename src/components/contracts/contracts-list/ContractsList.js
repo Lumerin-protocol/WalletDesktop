@@ -83,7 +83,7 @@ const SearchSortWrapper = styled.div`
   display: flex;
 `;
 
-const sorting = (contracts, sortBy) => {
+const sorting = (contracts, sortBy, underProfitContracts) => {
   switch (sortBy?.value) {
     case 'AscPrice':
       return contracts.sort((a, b) => a.price - b.price);
@@ -101,6 +101,10 @@ const sorting = (contracts, sortBy) => {
       return contracts.sort((a, b) => (+b.state > +a.state ? -1 : 1));
     case 'RunningFirst':
       return contracts.sort((a, b) => (+b.state > +a.state ? 1 : -1));
+    case 'UnderProfit':
+      return contracts.sort((a, b) =>
+        underProfitContracts.find(x => x.id == a.id) ? -1 : 1
+      );
     default:
       return contracts.sort((a, b) => (+b.state > +a.state ? -1 : 1));
   }
@@ -123,7 +127,9 @@ function ContractsList({
   edit,
   setEditContractData,
   sellerStats,
-  offset
+  offset,
+  underProfitContracts,
+  onAdjustFormOpen
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   const [search, setSearch] = useState('');
@@ -135,7 +141,7 @@ function ContractsList({
     ? contracts.filter(c => c.id.toLowerCase().includes(search.toLowerCase()))
     : contracts;
 
-  contractsToShow = sorting(contractsToShow, sort);
+  contractsToShow = sorting(contractsToShow, sort, underProfitContracts);
 
   const hasContracts = contractsToShow.length;
   const defaultTabs = [
@@ -177,6 +183,7 @@ function ContractsList({
         edit={edit}
         setEditContractData={setEditContractData}
         allowSendTransaction={allowSendTransaction}
+        underProfitContracts={underProfitContracts}
       />
     </ContractsRowContainer>
   );
@@ -264,6 +271,17 @@ function ContractsList({
           )}
           {/* <Sort sort={sort} setSort={setSort} /> */}
           <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} />
+          {isSellerTab && underProfitContracts?.length ? (
+            <ContractBtn
+              onClick={() => {
+                onAdjustFormOpen();
+              }}
+            >
+              Adjust prices
+            </ContractBtn>
+          ) : (
+            <></>
+          )}
         </div>
         <SearchSortWrapper>
           <Sort sort={sort} setSort={setSort} />

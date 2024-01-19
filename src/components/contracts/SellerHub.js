@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { uniqueId } from 'lodash';
+import { uniqueId, debounce } from 'lodash';
 
 import withContractsState from '../../store/hocs/withContractsState';
 import { Btn } from '../common';
@@ -11,10 +11,11 @@ import { View } from '../common/View';
 import { ToastsContext } from '../toasts';
 import { CONTRACT_STATE } from '../../enums';
 import { lmrDecimals } from '../../utils/coinValue';
-import { formatBtcPerTh } from './utils';
+import { formatBtcPerTh, calculateSuggestedPrice } from './utils';
 import ArchiveModal from './modals/ArchiveModal/ArchiveModal';
 import { IconArchive } from '@tabler/icons';
 import SellerWhitelistModal from './modals/SellerWhitelistModal/SellerWhitelistModal';
+import AdjustProfitModal from './modals/AdjustProfitModal/AdjustProfitModal';
 
 const Container = styled.div`
   background-color: ${p => p.theme.colors.light};
@@ -87,10 +88,139 @@ function SellerHub({
   const [isModalActive, setIsModalActive] = useState(false);
   const [isArchiveModalActive, setIsArchiveModalActive] = useState(false);
   const [showSellerWhitelistForm, setShowSellerWhitelistForm] = useState(false);
+  const [showAdjustForm, setShowAdjustForm] = useState(false);
   const [isEditModalActive, setIsEditModalActive] = useState(false);
   const [editContractData, setEditContractData] = useState({});
   const context = useContext(ToastsContext);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [underProfitContracts, setUnderProfitContracts] = useState([]);
+  const [profitSettings, setProfitSettings] = useState({});
+  const [autoAdjustPriceData, setAutoAdjustPriceData] = useState({});
+
+  const refreshAutoAdjustPriceData = () => {
+    client.getAutoAdjustPriceData().then(data => {
+      setAutoAdjustPriceData(data);
+    });
+  };
+
+  useEffect(() => {
+    client.getProfitSettings().then(settings => {
+      setProfitSettings(settings);
+    });
+    refreshAutoAdjustPriceData();
+  }, []);
+
+  useEffect(() => {
+    if (contracts.length) {
+      verify(
+        contracts,
+        props.lmrCoinPrice,
+        props.btcCoinPrice,
+        address,
+        networkDifficulty
+      );
+    }
+  }, [contracts]);
+
+  const verify = useCallback(
+    debounce((...param) => {
+      client.getProfitSettings().then(settings => {
+        if (!settings) {
+          return;
+        }
+        const contracts = param[0].filter(
+          c => c.seller === param[3] && !c.isDead
+        );
+        const lmrCoinPrice = param[1];
+        const btcCoinPrice = param[2];
+        const reward = formatBtcPerTh(param[4]);
+        const deviation = +settings.deviation;
+        const result = contracts.reduce((acc, contract) => {
+          const contractProfitTarget =
+            +contract.futureTerms?.profitTarget || +contract.profitTarget;
+          const profitTarget =
+            contractProfitTarget !== 0
+              ? contractProfitTarget
+              : settings?.adaptExisting
+              ? +settings?.target
+              : 0;
+          if (+profitTarget === 0) {
+            return acc;
+          }
+
+          const left =
+            1 +
+            (+profitTarget > 0
+              ? deviation - profitTarget
+              : profitTarget - deviation) /
+              100;
+          const right = 1 + (deviation + profitTarget) / 100;
+
+          const length =
+            (contract.futureTerms?.length || contract.length) / 3600;
+          const speed =
+            (contract.futureTerms?.speed || contract.speed) / 10 ** 12;
+
+          const estimatedLeft = calculateSuggestedPrice(
+            length,
+            speed,
+            btcCoinPrice,
+            lmrCoinPrice,
+            reward,
+            left
+          );
+          const estimatedRight = calculateSuggestedPrice(
+            length,
+            speed,
+            btcCoinPrice,
+            lmrCoinPrice,
+            reward,
+            right
+          );
+          const targetEstimate = calculateSuggestedPrice(
+            length,
+            speed,
+            btcCoinPrice,
+            lmrCoinPrice,
+            reward,
+            1 + profitTarget / 100
+          );
+
+          const zeroBasedEstimate = calculateSuggestedPrice(
+            length,
+            speed,
+            btcCoinPrice,
+            lmrCoinPrice,
+            reward,
+            1
+          );
+          const currPrice =
+            (contract.futureTerms?.price || contract.price) / lmrDecimals;
+          const isPriceWithinRange =
+            estimatedLeft <= currPrice && estimatedRight >= currPrice;
+
+          if (!isPriceWithinRange) {
+            return [
+              ...acc,
+              {
+                id: contract.id,
+                profit: profitTarget,
+                zeroBasedEstimate: zeroBasedEstimate,
+                zeroRate: (currPrice / zeroBasedEstimate).toFixed(2),
+                currentRate: (currPrice / targetEstimate).toFixed(2),
+                estimatedPrice: targetEstimate,
+                price: currPrice
+              }
+            ];
+          }
+          return acc;
+        }, []);
+
+        setUnderProfitContracts(result);
+      });
+    }, 300),
+    []
+  );
 
   const tabs = [
     { name: 'Status', ratio: 1 },
@@ -117,16 +247,16 @@ function SellerHub({
     { value: 'history', name: 'History', ratio: 1 },
     {
       value: 'claimable',
-      name: 'Сlaimable',
+      name: 'Claimable',
       ratio: 1,
       options: [
         {
-          label: 'Сlaimable (BTC)',
+          label: 'Claimable (BTC)',
           value: 'BTC',
           selected: selectedCurrency === 'BTC'
         },
         {
-          label: 'Сlaimable (LMR)',
+          label: 'Claimable (LMR)',
           value: 'LMR',
           selected: selectedCurrency === 'LMR'
         }
@@ -134,15 +264,6 @@ function SellerHub({
     },
     { value: 'action', name: 'Actions', ratio: 1 }
   ];
-
-  // static propTypes = {
-  //   sendDisabledReason: PropTypes.string,
-  //   hasContracts: PropTypes.bool.isRequired,
-  //   copyToClipboard: PropTypes.func.isRequired,
-  //   sendDisabled: PropTypes.bool.isRequired,
-  //   syncStatus: PropTypes.oneOf(['up-to-date', 'syncing', 'failed']).isRequired,
-  //   address: PropTypes.string.isRequired
-  // };
 
   const handleOpenModal = () => setIsModalActive(true);
 
@@ -156,6 +277,20 @@ function SellerHub({
     setEditContractData(contract);
     setIsEditModalActive(true);
     setShowSuccess(false);
+  };
+
+  const updateContractAutoAdjustSettings = (address, profit, isEnabled) => {
+    if (isEnabled === undefined) {
+      return;
+    }
+    return client
+      .setAutoAdjustPriceData({
+        [address?.toLowerCase()]: {
+          enabled: isEnabled,
+          profitTarget: profit
+        }
+      })
+      .then(() => refreshAutoAdjustPriceData());
   };
 
   const createTempContract = (id, contract) => {
@@ -195,42 +330,81 @@ function SellerHub({
     });
   };
 
-  const handleContractUpdate = async (e, contractDetails, contractId) => {
+  const handleContractUpdate = async (
+    e,
+    contractDetails,
+    contractId,
+    initialContractData,
+    autoAdjustPrice
+  ) => {
     e.preventDefault();
+
+    const newPrice = contractDetails.price * lmrDecimals;
+    const newSpeed = contractDetails.speed * 10 ** 12;
+    const newDuration = contractDetails.time * 3600;
 
     const contract = {
       id: contractId,
-      price: (contractDetails.price * lmrDecimals).toString(),
-      speed: (contractDetails.speed * 10 ** 12).toString(), // THs
-      duration: (contractDetails.time * 3600).toString(), // Hours to seconds
-      sellerAddress: contractDetails.address
+      price: newPrice,
+      speed: newSpeed, // THs
+      duration: newDuration, // Hours to seconds
+      sellerAddress: contractDetails.address,
+      profit: contractDetails.profitTarget
     };
 
-    await client.lockSendTransaction();
-    await client
-      .editContract(contract)
-      .then(() => {
+    const shouldCallBlockchain =
+      !initialContractData ||
+      initialContractData.price != newPrice ||
+      initialContractData.speed != newSpeed ||
+      initialContractData.length != newDuration ||
+      initialContractData.profitTarget != contractDetails.profitTarget;
+
+    if (shouldCallBlockchain) {
+      await client.lockSendTransaction();
+      await client
+        .editContract(contract)
+        .then(() => {
+          setShowSuccess(true);
+          contractsRefresh(true);
+          updateContractAutoAdjustSettings(
+            contractId,
+            contractDetails.profitTarget,
+            autoAdjustPrice
+          );
+          // dispatchEditContract(contract.id, contract); // TODO: investigate rows are not rerendering
+        })
+        .catch(error => {
+          context.toast('error', error.message || error);
+          setIsModalActive(false);
+        })
+        .finally(() => {
+          client.unlockSendTransaction();
+        });
+    } else {
+      updateContractAutoAdjustSettings(
+        contractId,
+        contractDetails.profitTarget,
+        autoAdjustPrice
+      ).then(() => {
         setShowSuccess(true);
-        contractsRefresh(true);
-        // dispatchEditContract(contract.id, contract); // TODO: investigate rows are not rerendering
-      })
-      .catch(error => {
-        context.toast('error', error.message || error);
         setIsModalActive(false);
-      })
-      .finally(() => {
-        client.unlockSendTransaction();
       });
+    }
   };
 
-  const handleContractDeploy = async (e, contractDetails) => {
+  const handleContractDeploy = async (
+    e,
+    contractDetails,
+    autoAdjustPrice = false
+  ) => {
     e.preventDefault();
 
     const contract = {
       price: contractDetails.price * lmrDecimals,
       speed: contractDetails.speed * 10 ** 12, // THs
       duration: contractDetails.time * 3600, // Hours to seconds
-      sellerAddress: contractDetails.address
+      sellerAddress: contractDetails.address,
+      profit: contractDetails.profitTarget || profitSettings?.target
     };
 
     const tempContractId = uniqueId();
@@ -239,7 +413,15 @@ function SellerHub({
     await client.lockSendTransaction();
     await client
       .createContract(contract)
-      .then(() => {
+      .then(result => {
+        const contractAddress = result?.events && result?.events[0]?.address;
+        if (autoAdjustPrice) {
+          updateContractAutoAdjustSettings(
+            contractAddress,
+            contract.profit,
+            true
+          );
+        }
         setShowSuccess(true);
       })
       .catch(error => {
@@ -305,6 +487,33 @@ function SellerHub({
   const showArchive = deadContracts?.length;
   const onArchiveOpen = () => setIsArchiveModalActive(true);
 
+  const adjustPrice = data => {
+    const c = contracts.find(x => x.id == data.id);
+    return handleContractUpdate(
+      { preventDefault: () => {} },
+      {
+        price: data.price,
+        speed: c.speed / 10 ** 12,
+        time: c.length / 3600,
+        address: c.address,
+        profitTarget: c.profitTarget
+      },
+      data.id
+    );
+  };
+
+  const applyAllSuggested = async contractsToUpdate => {
+    try {
+      for (let i = 0; i < contractsToUpdate.length; i++) {
+        const item = contractsToUpdate[i];
+        await adjustPrice(item);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    } catch (err) {
+      context.toast('error', err.message || err);
+    }
+  };
+
   return (
     <View data-testid="contracts-container">
       <LayoutHeader
@@ -339,6 +548,8 @@ function SellerHub({
         isSellerTab={true}
         sellerStats={sellerStats}
         offset={394}
+        underProfitContracts={underProfitContracts}
+        onAdjustFormOpen={() => setShowAdjustForm(true)}
       />
 
       <CreateContractModal
@@ -349,6 +560,7 @@ function SellerHub({
         showSuccess={showSuccess}
         networkReward={sellerStats.networkReward}
         editContractData={{}}
+        profitSettings={profitSettings}
       />
 
       <ArchiveModal
@@ -371,10 +583,21 @@ function SellerHub({
         }}
       />
 
+      <AdjustProfitModal
+        isActive={showAdjustForm}
+        contracts={[...underProfitContracts]}
+        close={() => {
+          setShowAdjustForm(false);
+        }}
+        onAdjust={adjustPrice}
+        onApplySuggested={applyAllSuggested}
+      />
+
       <CreateContractModal
         isActive={isEditModalActive}
         isEditMode={true}
         editContractData={editContractData}
+        autoAdjustPriceData={autoAdjustPriceData}
         edit={handleContractUpdate}
         showSuccess={showSuccess}
         close={() => {

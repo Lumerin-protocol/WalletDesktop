@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { IconCircle } from '@tabler/icons';
+import {
+  IconTriangleInverted,
+  IconTriangle,
+  IconAlertTriangle
+} from '@tabler/icons';
 import { ToastsContext } from '../../toasts';
 import styled from 'styled-components';
 
@@ -66,7 +71,8 @@ function Row({
   btcRate,
   symbol,
   converters,
-  selectedCurrency
+  selectedCurrency,
+  underProfitContracts
 }) {
   // TODO: Add better padding
   const context = useContext(ToastsContext);
@@ -75,6 +81,9 @@ function Row({
   const length = contract.futureTerms?.length || contract.length;
   const price = contract.futureTerms?.price || contract.price;
   const limit = contract.futureTerms?.limit || contract.limit;
+  const profitTarget =
+    contract.futureTerms?.profitTarget || contract.profitTarget;
+  const underProfit = underProfitContracts.find(x => x.id == contract.id);
 
   useEffect(() => {
     setIsPending(false);
@@ -105,7 +114,8 @@ function Row({
       price,
       length,
       speed,
-      limit
+      limit,
+      profitTarget
     });
   };
 
@@ -197,12 +207,39 @@ function Row({
         </SmallAssetContainer>
       )}
 
-      <Value>
-        {isLmrSelected(converters.price, selectedCurrency)
-          ? `${formatPrice(contract.price, 'LMR')}`
-          : `${convertLmrToBtc(contract.price, btcRate, lmrRate).toFixed(
-              10
-            )} BTC`}{' '}
+      <Value style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <div style={{ height: '18px', marginRight: '3px' }}>
+          {isLmrSelected(converters.price, selectedCurrency)
+            ? `${formatPrice(contract.price, 'LMR')}`
+            : `${convertLmrToBtc(contract.price, btcRate, lmrRate).toFixed(
+                10
+              )} BTC`}
+        </div>
+        {underProfit ? (
+          <div>
+            {+underProfit.zeroRate < 1 ? (
+              <IconTriangleInverted
+                data-rh={
+                  'Negative profit is ' +
+                  ((1 - underProfit.zeroRate) * 100).toFixed(0) +
+                  '%'
+                }
+                style={{ width: '14px', color: 'darkred', fill: 'darkred' }}
+              ></IconTriangleInverted>
+            ) : (
+              <IconTriangle
+                data-rh={
+                  'Excess profit is ' +
+                  ((+underProfit.zeroRate - 1) * 100).toFixed(0) +
+                  '%'
+                }
+                style={{ width: '14px', color: 'darkgreen', fill: 'darkgreen' }}
+              ></IconTriangle>
+            )}
+          </div>
+        ) : (
+          <></>
+        )}
       </Value>
       <Value
       // data-rh={`${formatExpNumber(btcPerThReward)} BTC/TH/day`}

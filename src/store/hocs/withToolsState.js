@@ -138,6 +138,8 @@ const withToolsState = WrappedComponent => {
           restartProxyRouter={this.props.client.restartProxyRouter}
           getCustomEnvs={this.props.client.getCustomEnvValues}
           setCustomEnvs={this.props.client.setCustomEnvValues}
+          getProfitSettings={this.props.client.getProfitSettings}
+          setProfitSettings={this.props.client.setProfitSettings}
           {...this.state}
           {...this.props}
         />
