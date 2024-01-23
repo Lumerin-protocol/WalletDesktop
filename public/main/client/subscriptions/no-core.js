@@ -11,6 +11,7 @@ const listeners = {
   'handle-client-error': handlers.handleClientSideError,
   'get-pool-address': handlers.getPoolAddress,
   'reveal-secret-phrase': handlers.revealSecretPhrase,
+  'restart-wallet': handlers.restartWallet,
   'has-stored-secret-phrase': handlers.hasStoredSecretPhrase,
   "logout": handlers.logout,
   "save-proxy-router-settings": handlers.saveProxyRouterSettings,

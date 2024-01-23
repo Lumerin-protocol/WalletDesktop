@@ -147,6 +147,7 @@ const createClient = function(createStore) {
     getPoolAddress: utils.forwardToMainProcess('get-pool-address'),
     revealSecretPhrase: utils.forwardToMainProcess('reveal-secret-phrase'),
     getPrivateKey: utils.forwardToMainProcess('get-private-key'),
+    restartWallet: utils.forwardToMainProcess('restart-wallet'),
     hasStoredSecretPhrase: utils.forwardToMainProcess(
       'has-stored-secret-phrase'
     ),
