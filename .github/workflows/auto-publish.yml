@@ -51,6 +51,17 @@ jobs:
       SYMBOL_LMR: ${{ vars.SYMBOL_LMR }}
       TITAN_LIGHTNING_DASHBOARD: ${{ vars.TITAN_LIGHTNING_DASHBOARD }}
       TITAN_LIGHTNING_POOL: ${{ vars.TITAN_LIGHTNING_POOL }}
+
+      HASHRATE_ERROR_THRESHOLD: ${{vars.HASHRATE_ERROR_THRESHOLD}}
+      HASHRATE_CYCLE_DURATION: ${{vars.HASHRATE_CYCLE_DURATION}}
+      HASHRATE_SHARE_TIMEOUT: ${{vars.HASHRATE_SHARE_TIMEOUT}}
+      HASHRATE_VALIDATION_START_TIMEOUT: ${{vars.HASHRATE_VALIDATION_START_TIMEOUT}}
+      HASHRATE_VALIDATION_GRACE_DURATION: ${{vars.HASHRATE_VALIDATION_GRACE_DURATION}}
+      
+      LOG_LEVEL_APP: ${{vars.LOG_LEVEL_APP}}
+      LOG_LEVEL_SCHEDULER: ${{vars.LOG_LEVEL_SCHEDULER}}
+      LOG_LEVEL_PROXY: ${{vars.LOG_LEVEL_PROXY}}
+      LOG_LEVEL_CONNECTION: ${{vars.LOG_LEVEL_CONNECTION}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -128,6 +139,7 @@ jobs:
                 fi
               fi
             done
+            cat .env
         shell: bash
       - name: Fetch latest Proxy Router
         run: |
