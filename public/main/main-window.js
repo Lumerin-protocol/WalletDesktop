@@ -78,7 +78,7 @@ function loadWindow(config) {
 
   const mainWindowState = windowStateKeeper({
     // defaultWidth: 660,
-    defaultWidth: 820,
+    defaultWidth: 1170,
     defaultHeight: 800,
   });
 
@@ -102,6 +102,7 @@ function loadWindow(config) {
     x: mainWindowState.x,
     y: mainWindowState.y,
   });
+  mainWindow.center();
 
   require("@electron/remote/main").enable(mainWindow.webContents);
 
