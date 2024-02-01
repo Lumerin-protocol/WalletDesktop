@@ -78,7 +78,7 @@ function loadWindow(config) {
 
   const mainWindowState = windowStateKeeper({
     // defaultWidth: 660,
-    defaultWidth: 1170,
+    defaultWidth: 1200,
     defaultHeight: 800,
   });
 
