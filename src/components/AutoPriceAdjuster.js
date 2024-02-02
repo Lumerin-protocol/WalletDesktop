@@ -65,8 +65,7 @@ function AutoPriceAdjuster({
         1 +
         (+profitTarget > 0
           ? deviationPercent - profitTargetPercent
-          : profitTargetPercent - deviationPercent) /
-          100;
+          : profitTargetPercent - deviationPercent);
       const right = 1 + deviationPercent + profitTargetPercent;
 
       const estimatedLeft = calculateSuggestedPrice(
