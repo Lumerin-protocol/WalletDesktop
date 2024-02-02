@@ -78,7 +78,7 @@ export const ContractsTab = ({ settings, onCommit }) => {
         />
       </StyledParagraph>
       <div style={{ display: 'flex' }}>
-        <span>Apply Target Profit For Existed Contracts</span>
+        <span>Apply Target Profit for Existing Contracts</span>
         <input
           style={{ marginLeft: '10px' }}
           data-testid="use-titan-lightning"

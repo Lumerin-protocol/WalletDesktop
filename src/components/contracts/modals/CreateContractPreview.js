@@ -24,6 +24,7 @@ export const CreateContractPreview = ({
   data: { address, time, speed, price },
   submit,
   isCreating,
+  isEditMode,
   close,
   symbol,
   marketplaceFee
@@ -67,11 +68,15 @@ export const CreateContractPreview = ({
           </Values>
         </div>
       </ContractInfoContainer>
-      <SmallTitle style={{ marginTop: '10px' }}>
-        All proceeds are subject to a non-refundable{' '}
-        {fromTokenBaseUnitsToETH(marketplaceFee)} ETH marketplace fee, including
-        contract creation/updating and claiming funds
-      </SmallTitle>
+      {!isEditMode ? (
+        <SmallTitle style={{ marginTop: '10px' }}>
+          All proceeds are subject to a non-refundable{' '}
+          {fromTokenBaseUnitsToETH(marketplaceFee)} ETH marketplace fee,
+          including contract creation and claiming funds
+        </SmallTitle>
+      ) : (
+        <></>
+      )}
     </TitleWrapper>
     {isCreating ? (
       <Row style={{ justifyContent: 'center', marginTop: '3rem' }}>
