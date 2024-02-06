@@ -365,7 +365,6 @@ function SellerHub({
         .editContract(contract)
         .then(() => {
           setShowSuccess(true);
-          contractsRefresh(true);
           updateContractAutoAdjustSettings(
             contractId,
             contractDetails.profitTarget,
