@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.2.50",
+  "version": "1.2.52",
   "engines": {
     "node": ">=14"
   },
