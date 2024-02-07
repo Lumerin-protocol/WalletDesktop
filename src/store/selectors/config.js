@@ -22,6 +22,12 @@ export const getBuyerPool = state => state.config.buyerDefaultPool;
 
 export const getRecaptchaSiteKey = state => state.config.recaptchaSiteKey;
 
+export const getAutoAdjustPriceInterval = state =>
+  state.config.autoAdjustPriceInterval;
+
+export const getAutoAdjustContractPriceTimeout = state =>
+  state.config.autoAdjustContractPriceTimeout;
+
 export const getFaucetUrl = state => state.config.chain.faucetUrl;
 export const showFaucet = state => state.config.chain.showFaucet;
 

@@ -14,6 +14,7 @@ import ConfirmProxyConfigModal from './ConfirmProxyConfigModal';
 import RevealSecretPhraseModal from './RevealSecretPhraseModal';
 import { Message } from './ConfirmModal.styles';
 import ExportPrivateKeyModal from './ExportPrivateKeyModal';
+import { ContractsTab } from './featureTabs/ContractsTab';
 import { ProxyConfigPanel } from './ProxyConfigPanel';
 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -108,6 +109,8 @@ const Tools = props => {
     selectedCurrency,
     getCustomEnvs,
     setCustomEnvs,
+    getProfitSettings,
+    setProfitSettings,
     config,
     restartWallet,
     titanLightningDashboard
@@ -123,7 +126,8 @@ const Tools = props => {
         Type: 'info'
       },
       selectedCurrency: selectedCurrency,
-      customEnvs: {}
+      customEnvs: {},
+      profitSettings: {}
     };
 
     const [state, setState] = useState(defState);
@@ -171,6 +175,9 @@ const Tools = props => {
         setState({ ...state, customEnvs: envs });
         setHttpNodeInput(envs?.httpNode || config.chain.httpApiUrls[0]);
         setWsNodeInput(envs?.wsNode);
+      });
+      getProfitSettings().then(settings => {
+        setState({ ...state, profitSettings: settings });
       });
     }, []);
 
@@ -299,6 +306,7 @@ const Tools = props => {
             <TabList>
               <Tab>Info</Tab>
               <Tab>Wallet</Tab>
+              <Tab>Contracts</Tab>
               <Tab>Proxy Router</Tab>
               <Tab>Environment</Tab>
             </TabList>
@@ -455,7 +463,16 @@ const Tools = props => {
                 />
               </Sp>
             </TabPanel>
-
+            <TabPanel>
+              <ContractsTab
+                settings={state.profitSettings}
+                onCommit={settings => {
+                  setState({ ...state, profitSettings: settings });
+                  setProfitSettings(settings);
+                  context.toast('success', 'Updated');
+                }}
+              />
+            </TabPanel>
             <TabPanel>
               <ProxyConfigPanel
                 {...props}
@@ -475,7 +492,6 @@ const Tools = props => {
                 isTitanLightning={isTitanLightning}
               />
             </TabPanel>
-
             <TabPanel>
               <Subtitle>HTTP ETH Node: </Subtitle>
               <StyledParagraph>

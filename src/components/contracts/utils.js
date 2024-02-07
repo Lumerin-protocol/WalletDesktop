@@ -68,8 +68,15 @@ export const formatPrice = (price, symbol) => {
 };
 
 export const formatBtcPerTh = networkDifficulty => {
-  const networkHashrate = (networkDifficulty * Math.pow(2, 32)) / 600;
-  const profitPerTh = (1000000000000 / networkHashrate) * (8 * 144);
+  const networkHashrate =
+    (networkDifficulty * Math.pow(2, 32)) / 600 / Math.pow(10, 12);
+
+  const miningHours = 24;
+  const blockReward = 6.25;
+  const hashrate = 1; // TH/s
+  const blocksExpected = 1 / 0.1667; // 1 block every 10 minutes
+  const profitPerTh =
+    (hashrate / networkHashrate) * (blockReward * miningHours * blocksExpected);
 
   const fixedValue = Number(profitPerTh).toFixed(8);
   return fixedValue;
@@ -148,3 +155,18 @@ export const convertLmrToBtc = (value, btcRate, lmrRate) => {
 
 export const formatExpNumber = value =>
   value.toFixed(10).replace(/(?<=\.\d*[1-9])0+$|\.0*$/, '');
+
+export const calculateSuggestedPrice = (
+  time,
+  speed,
+  btcRate,
+  lmrRate,
+  profit,
+  multiplier
+) => {
+  const lengthDays = time / 24;
+  return (
+    (multiplier * profit * lengthDays * speed * btcRate) /
+    lmrRate
+  ).toFixed(0);
+};

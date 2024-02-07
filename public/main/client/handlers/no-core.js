@@ -57,6 +57,22 @@ const setDefaultCurrency = async (curr) => setDefaultCurrencySetting(curr);
 const getCustomEnvs = async () => getKey('customEnvs');
 const setCustomEnvs = async (value) => setKey('customEnvs', value);
 
+const getProfitSettings = async () => getKey('profitSettings') || {
+  deviation: 2,
+  target: 10,
+  adaptExisting: false,
+};
+const setProfitSettings = async (value) => setKey('profitSettings', value);
+
+const getAutoAdjustPriceData = async () => getKey('autoAdjustPriceData') || {};
+const setAutoAdjustPriceData = async (value) => {
+  const oldData = await getAutoAdjustPriceData();
+  setKey('autoAdjustPriceData', {
+    ...oldData,
+    ...value,
+  });
+}
+
 /**
  * 
  * @param {string} contractId 
@@ -94,5 +110,9 @@ module.exports = {
   getCustomEnvs,
   setCustomEnvs,
   restartWallet,
-  getContractHashrate
+  getContractHashrate,
+  getProfitSettings,
+  setProfitSettings,
+  getAutoAdjustPriceData,
+  setAutoAdjustPriceData,
 };

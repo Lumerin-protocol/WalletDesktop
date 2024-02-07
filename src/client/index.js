@@ -147,6 +147,7 @@ const createClient = function(createStore) {
     getPoolAddress: utils.forwardToMainProcess('get-pool-address'),
     revealSecretPhrase: utils.forwardToMainProcess('reveal-secret-phrase'),
     getPrivateKey: utils.forwardToMainProcess('get-private-key'),
+    restartWallet: utils.forwardToMainProcess('restart-wallet'),
     hasStoredSecretPhrase: utils.forwardToMainProcess(
       'has-stored-secret-phrase'
     ),
@@ -168,6 +169,10 @@ const createClient = function(createStore) {
     claimFaucet: utils.forwardToMainProcess('claim-faucet', 750000),
     getCustomEnvValues: utils.forwardToMainProcess('get-custom-env-values'),
     setCustomEnvValues: utils.forwardToMainProcess('set-custom-env-values'),
+    getProfitSettings: utils.forwardToMainProcess('get-profit-settings'),
+    setProfitSettings: utils.forwardToMainProcess('set-profit-settings'),
+    getAutoAdjustPriceData: utils.forwardToMainProcess('get-auto-adjust-price'),
+    setAutoAdjustPriceData: utils.forwardToMainProcess('set-auto-adjust-price'),
     getContractHashrate: utils.forwardToMainProcess('get-contract-hashrate')
   };
 

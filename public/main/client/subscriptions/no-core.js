@@ -11,6 +11,7 @@ const listeners = {
   'handle-client-error': handlers.handleClientSideError,
   'get-pool-address': handlers.getPoolAddress,
   'reveal-secret-phrase': handlers.revealSecretPhrase,
+  'restart-wallet': handlers.restartWallet,
   'has-stored-secret-phrase': handlers.hasStoredSecretPhrase,
   "logout": handlers.logout,
   "save-proxy-router-settings": handlers.saveProxyRouterSettings,
@@ -19,7 +20,11 @@ const listeners = {
   "set-default-currency-settings": handlers.setDefaultCurrency,
   "get-custom-env-values": handlers.getCustomEnvs,
   "set-custom-env-values": handlers.setCustomEnvs,
-  "get-contract-hashrate": handlers.getContractHashrate
+  "get-profit-settings": handlers.getProfitSettings,
+  "set-profit-settings": handlers.setProfitSettings,
+  "get-contract-hashrate": handlers.getContractHashrate,
+  "get-auto-adjust-price": handlers.getAutoAdjustPriceData,
+  "set-auto-adjust-price": handlers.setAutoAdjustPriceData,
 };
 
 // Subscribe to messages where no core has to react

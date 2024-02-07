@@ -23,6 +23,7 @@ import { lmrDecimals } from '../../../utils/coinValue';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { IconChevronUp, IconChevronDown } from '@tabler/icons';
+import { calculateSuggestedPrice } from '../utils';
 
 import Modal from './Modal';
 
@@ -35,21 +36,6 @@ const getContractRewardBtcPerTh = (price, time, speed, btcRate, lmrRate) => {
   const contractBtcPrice = contractUsdPrice / btcRate;
   const result = contractBtcPrice / speed / lengthDays;
   return result.toFixed(10);
-};
-
-const calculateSuggestedPrice = (
-  time,
-  speed,
-  btcRate,
-  lmrRate,
-  profit,
-  multiplier
-) => {
-  const lengthDays = time / 24;
-  return (
-    (multiplier * profit * lengthDays * speed * btcRate) /
-    lmrRate
-  ).toFixed(0);
 };
 
 function CreateContractModal(props) {
@@ -68,7 +54,9 @@ function CreateContractModal(props) {
     isEditMode,
     editContractData,
     networkReward,
-    marketplaceFee
+    marketplaceFee,
+    profitSettings,
+    autoAdjustPriceData
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
@@ -76,10 +64,20 @@ function CreateContractModal(props) {
   const [price, setPrice] = useState(+editContractData.price);
   const [speed, setSpeed] = useState(editContractData.speed);
   const [length, setTime] = useState(editContractData.length);
+  const [profit, setProfit] = useState(+editContractData.profitTarget);
   const [estimatedReward, setEstimatedReward] = useState(null);
   const [suggestedPrice, setSuggestedPrice] = useState(null);
   const [showSuggested, setShowSuggested] = useState(false);
-  const [persent, setPersent] = useState(0);
+  const [persent, setPersent] = useState(
+    editContractData?.profitTarget || profitSettings?.target || 0
+  );
+
+  const hasEnabledAutoAdjust =
+    autoAdjustPriceData &&
+    autoAdjustPriceData[editContractData?.id?.toLowerCase()]?.enabled;
+  const [isAutoAdjustEnabled, setIsAutoAdjustEnabled] = useState(
+    hasEnabledAutoAdjust
+  );
   const underProfit = networkReward > (estimatedReward || 0);
 
   const {
@@ -107,7 +105,7 @@ function CreateContractModal(props) {
   const wrapHandleDeploy = async e => {
     e.preventDefault();
     setIsCreating(true);
-    await deploy(e, getValues());
+    await deploy(e, getValues(), isAutoAdjustEnabled);
     resetValues();
     setIsCreating(false);
     setIsPreview(false);
@@ -116,7 +114,13 @@ function CreateContractModal(props) {
   const wrapHandleUpdate = async e => {
     e.preventDefault();
     setIsCreating(true);
-    await edit(e, getValues(), editContractData.id, editContractData);
+    await edit(
+      e,
+      getValues(),
+      editContractData.id,
+      editContractData,
+      isAutoAdjustEnabled
+    );
     resetValues();
     setIsCreating(false);
     setIsPreview(false);
@@ -200,7 +204,6 @@ function CreateContractModal(props) {
       ? editContractData.price / lmrDecimals
       : undefined,
     onChange: e => {
-      console.log(e.target.value);
       const reward = getContractRewardBtcPerTh(
         e.target.value,
         length,
@@ -212,6 +215,27 @@ function CreateContractModal(props) {
         setEstimatedReward(reward);
       }
     }
+  });
+
+  const profitField = register('profitTarget', {
+    required: false,
+    min: -99,
+    max: 99,
+    value: editContractData.profitTarget
+      ? editContractData.profitTarget
+      : undefined
+    // onChange: e => {
+    //   setProfit(e.target.value)
+    //   const result = calculateSuggestedPrice(
+    //     length,
+    //     speed,
+    //     btcRate,
+    //     lmrRate,
+    //     networkReward,
+    //     (100 + e.target.value) / 100
+    //   );
+    //   setPrice(result);
+    // }
   });
 
   function percentFormatter(v) {
@@ -417,8 +441,8 @@ function CreateContractModal(props) {
                                 );
                                 setSuggestedPrice(result);
                               }}
-                              min={0}
-                              max={30}
+                              min={-99}
+                              max={99}
                             ></Slider>
                           </div>
                           <div>
@@ -444,6 +468,8 @@ function CreateContractModal(props) {
                             onClick={() => {
                               setValue('price', suggestedPrice);
                               setPrice(suggestedPrice);
+                              setProfit(persent);
+                              setValue('profitTarget', persent);
                               const reward = getContractRewardBtcPerTh(
                                 suggestedPrice,
                                 length,
@@ -462,6 +488,50 @@ function CreateContractModal(props) {
                       )}
                     </ProfitLabel>
                   </div>
+                )}
+              </InputGroup>
+            </Row>
+            <Row>
+              <InputGroup>
+                <Label htmlFor="profitTarget">Profit</Label>
+                <Input
+                  {...profitField}
+                  onChange={e => {
+                    setProfit(e.target.value);
+                    profitField.onChange(e);
+                  }}
+                  placeholder={`${profitSettings?.target || 10}%`}
+                  type="number"
+                  name="profitTarget"
+                  id="profitTargetv"
+                />
+                <Sublabel>
+                  Desired profit margin. Contract with price below that value
+                  will be highlighted for adjustments based on current rates
+                </Sublabel>
+
+                {editContractData.profitTarget ? (
+                  <div
+                    style={{
+                      paddingTop: '5px',
+                      display: 'block',
+                      fontSize: '1.3rem',
+                      fontWeight: '400'
+                    }}
+                  >
+                    <input
+                      data-testid="show-overprofit"
+                      type="checkbox"
+                      id="overprofit"
+                      defaultChecked={hasEnabledAutoAdjust}
+                      onChange={e => {
+                        setIsAutoAdjustEnabled(e.target.checked);
+                      }}
+                    />
+                    <span> Auto adjust price</span>
+                  </div>
+                ) : (
+                  <></>
                 )}
               </InputGroup>
             </Row>
