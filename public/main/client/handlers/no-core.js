@@ -64,7 +64,7 @@ const getProfitSettings = async () => getKey('profitSettings') || {
 };
 const setProfitSettings = async (value) => setKey('profitSettings', value);
 
-const getAutoAdjustPriceData = async () => getKey('autoAdjustPriceData');
+const getAutoAdjustPriceData = async () => getKey('autoAdjustPriceData') || {};
 const setAutoAdjustPriceData = async (value) => {
   const oldData = await getAutoAdjustPriceData();
   setKey('autoAdjustPriceData', {
