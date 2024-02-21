@@ -17,7 +17,7 @@ import ProgressBarWithLabels from '../../common/ProgressBar';
 const Container = styled.div`
   padding: 1.2rem 0;
   display: grid;
-  grid-template-columns: ${p => p.ratio.map(x => `${x}fr`).join(' ')};
+  grid-template-columns: ${p => p.ratio.map(x => `${x}`).join(' ')};
   text-align: center;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   cursor: ${p => p.cursor || 'pointer'};

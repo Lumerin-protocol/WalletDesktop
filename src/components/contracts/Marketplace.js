@@ -111,12 +111,12 @@ function Marketplace({
   }, []);
 
   const tabs = [
-    { value: 'contract', name: 'Contract', ratio: 2 },
-    { value: 'price', name: 'Price', ratio: 1 },
-    { value: 'length', name: 'Duration', ratio: 1 },
-    { value: 'speed', name: 'Speed', ratio: 1 },
-    { value: 'history', name: 'History', ratio: 1 },
-    { value: 'action', name: 'Actions', ratio: 2 }
+    { value: 'contract', name: 'Contract', ratio: '2fr' },
+    { value: 'price', name: 'Price', ratio: '1fr' },
+    { value: 'length', name: 'Duration', ratio: '1fr' },
+    { value: 'speed', name: 'Speed', ratio: '1fr' },
+    { value: 'history', name: 'History', ratio: '1fr' },
+    { value: 'action', name: 'Actions', ratio: '2fr' }
   ];
 
   const handleContractCancellation = (e, data) => {

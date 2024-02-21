@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: ${p => p.ratio.map(x => `${x}fr`).join(' ')};
+  grid-template-columns: ${p => p.ratio.map(x => `${x}`).join(' ')};
   width: 100%;
 `;
 

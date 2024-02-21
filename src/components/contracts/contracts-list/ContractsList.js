@@ -18,6 +18,8 @@ import Search from './Search';
 import styled from 'styled-components';
 import Sort from './Sort';
 import { Btn } from '../../common';
+import Select from 'react-select';
+import { withRouter } from 'react-router-dom';
 
 const Stats = styled.div`
   color: #0e4353;
@@ -129,7 +131,8 @@ function ContractsList({
   sellerStats,
   offset,
   underProfitContracts,
-  onAdjustFormOpen
+  onAdjustFormOpen,
+  history
 }) {
   const [selectedContracts, setSelectedContracts] = useState([]);
   const [search, setSearch] = useState('');
@@ -160,8 +163,19 @@ function ContractsList({
     contractsRefresh();
   }, []);
 
-  const onContractsClicked = ({ currentTarget }) => {
-    setSelectedContracts(currentTarget.dataset.hash);
+  const onSelectRow = ({ id, selected }) => {
+    const lastState = selected
+      ? [...selectedContracts, id]
+      : selectedContracts.filter(c => c != id);
+    setSelectedContracts(lastState);
+  };
+
+  const onSelectAll = value => {
+    if (value) {
+      setSelectedContracts(contractsToShow.map(x => x.id));
+      return;
+    }
+    setSelectedContracts([]);
   };
 
   const rowRenderer = (contractsList, ratio, converters) => ({
@@ -173,7 +187,6 @@ function ContractsList({
       <ContractsRow
         key={contractsList[index].id}
         data-testid="Contracts-row"
-        onClick={onContractsClicked}
         contract={contractsList[index]}
         cancel={cancel}
         deleteContract={deleteContract}
@@ -184,6 +197,8 @@ function ContractsList({
         setEditContractData={setEditContractData}
         allowSendTransaction={allowSendTransaction}
         underProfitContracts={underProfitContracts}
+        onSelect={onSelectRow}
+        selectedContracts={selectedContracts}
       />
     </ContractsRowContainer>
   );
@@ -260,12 +275,94 @@ function ContractsList({
       <Flex.Row style={{ justifyContent: 'space-between', margin: '10px 0' }}>
         <div style={{ display: 'flex', gap: '10px' }}>
           {isSellerTab ? (
-            <ContractBtn
-              data-disabled={!allowSendTransaction}
-              onClick={allowSendTransaction ? createContract : () => {}}
-            >
-              Create Contract
-            </ContractBtn>
+            <>
+              <div>
+                <Select
+                  data-disabled={!allowSendTransaction}
+                  onClick={allowSendTransaction ? createContract : () => {}}
+                  placeholder={'Create Contract'}
+                  className="sorting"
+                  classNamePrefix="select"
+                  name="sorting"
+                  styles={{
+                    control: (base, state) => ({
+                      ...base,
+                      width: 'auto',
+                      minWidth: '150px',
+                      textAlign: 'right',
+                      cursor: 'pointer',
+                      color: 'white',
+                      border: state.isFocused ? 0 : 0,
+                      borderRadius: '12px',
+                      boxShadow: state.isFocused ? 0 : 0,
+                      '&:hover': {
+                        border: state.isFocused ? 0 : 0
+                      },
+                      borderColor: state.isFocused ? '#0E4353' : undefined,
+                      background: '#0E4353'
+                    }),
+                    placeholder: base => ({
+                      ...base,
+                      color: 'white',
+                      fontSize: '1.3rem',
+                      fontWeight: 500
+                    }),
+                    singleValue: base => ({
+                      ...base,
+                      color: '#0E4353',
+                      fontWeight: 600,
+                      fontSize: '1.4rem'
+                    }),
+                    indicatorsContainer: base => ({
+                      ...base,
+                      color: 'white'
+                    }),
+                    indicatorSeparator: base => ({ ...base, display: 'none' }),
+                    dropdownIndicator: base => ({
+                      ...base,
+                      color: 'white',
+                      marginLeft: -5
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      cursor: 'pointer',
+                      backgroundColor: state.isSelected ? '#0E4353' : undefined,
+                      fontSize: '1.5rem',
+                      color: '#0E4353',
+                      fontWeight: 500,
+                      lineHeight: '1.6rem',
+                      ':active': {
+                        ...base[':active'],
+                        backgroundColor: '#0E435380',
+                        color: '#0E4353'
+                      },
+                      ':hover': {
+                        backgroundColor: '#5ADCE2'
+                      }
+                    })
+                  }}
+                  onChange={e => {
+                    if (e.value === 'single') {
+                      createContract();
+                    } else {
+                      history.replace('/bulk-create');
+                    }
+                  }}
+                  isSearchable={false}
+                  value={'single'}
+                  options={[
+                    {
+                      label: 'Single',
+                      value: 'single'
+                    },
+                    {
+                      label: 'Multiple',
+                      value: 'multiple'
+                    }
+                  ]}
+                />
+              </div>
+            </>
           ) : (
             <></>
           )}
@@ -294,6 +391,7 @@ function ContractsList({
           {({ filteredItems }) => (
             <React.Fragment>
               <Header
+                selectedItems={selectedContracts}
                 onFilterChange={() => {}}
                 onColumnOptionChange={e =>
                   setHeaderOptions({
@@ -302,6 +400,7 @@ function ContractsList({
                   })
                 }
                 activeFilter={null}
+                onSelectAll={onSelectAll}
                 tabs={tabsToShow}
               />
 
@@ -347,4 +446,4 @@ function ContractsList({
   );
 }
 
-export default withContractsListState(ContractsList);
+export default withRouter(withContractsListState(ContractsList));

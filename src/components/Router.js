@@ -15,6 +15,8 @@ import Marketplace from './contracts/Marketplace';
 import Devices from './devices/Devices';
 import BuyerHub from './contracts/BuyerHub';
 import AutoPriceAdjuster from './AutoPriceAdjuster';
+import BulkCreationPage from './contracts/BulkCreationPage';
+import BulkUpdatePage from './contracts/BulkUpdatePage';
 
 const bgImage = 'images/MainBackground.png';
 
@@ -70,6 +72,8 @@ export const Layout = () => (
         <Route path="/seller-hub" component={SellerHub} />
         <Route path="/buyer-hub" component={BuyerHub} />
         <Route path="/marketplace" component={Marketplace} />
+        <Route path="/bulk-create" component={BulkCreationPage} />
+        <Route path="/bulk-update" component={BulkUpdatePage} />
         {/* TODO - Finish up reports */}
         <Route path="/reports" component={Reports} />
         <Route path="/indicies" component={Indicies} />

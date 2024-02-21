@@ -36,7 +36,7 @@ import ProgressBarWithLabels from '../../common/ProgressBar';
 const Container = styled.div`
   padding: 1.2rem 0;
   display: grid;
-  grid-template-columns: ${p => p.ratio.map(x => `${x}fr`).join(' ')};
+  grid-template-columns: ${p => p.ratio.map(x => `${x}`).join(' ')};
   text-align: center;
   box-shadow: 0 -1px 0 0 ${p => p.theme.colors.lightShade} inset;
   cursor: pointer;
@@ -72,7 +72,9 @@ function Row({
   symbol,
   converters,
   selectedCurrency,
-  underProfitContracts
+  underProfitContracts,
+  onSelect,
+  selectedContracts
 }) {
   // TODO: Add better padding
   const context = useContext(ToastsContext);
@@ -84,6 +86,7 @@ function Row({
   const profitTarget =
     contract.futureTerms?.profitTarget || contract.profitTarget;
   const underProfit = underProfitContracts.find(x => x.id == contract.id);
+  const isSelected = selectedContracts.find(x => x == contract.id);
 
   useEffect(() => {
     setIsPending(false);
@@ -192,6 +195,25 @@ function Row({
       {/* <Value>
         {formatTimestamp(contract.timestamp, timer, contract.state)}
       </Value> */}
+
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <input
+          style={{ marginRight: '10px', width: '16px', height: '16px' }}
+          data-testid={`selector-${contract.id}`}
+          onChange={() => {
+            onSelect({ id: contract.id, selected: !isSelected });
+          }}
+          checked={isSelected}
+          type="checkbox"
+          id={`selector-${contract.id}`}
+        />
+      </div>
       {contract.state === CONTRACT_STATE.Avaliable ? (
         <SmallAssetContainer data-rh={getContractState(contract)}>
           <IconCircle

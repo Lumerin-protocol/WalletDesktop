@@ -223,11 +223,12 @@ function SellerHub({
   );
 
   const tabs = [
-    { name: 'Status', ratio: 1 },
+    { name: '', ratio: '50px' },
+    { name: 'Status', ratio: '0.5fr' },
     {
       value: 'price',
       name: 'Price',
-      ratio: 1,
+      ratio: '1fr',
       options: [
         {
           label: 'Price (BTC)',
@@ -241,14 +242,14 @@ function SellerHub({
         }
       ]
     },
-    { value: 'btc-th', name: 'BTC/TH/day', ratio: 1 },
-    { value: 'length', name: 'Duration', ratio: 1 },
-    { value: 'speed', name: 'Speed', ratio: 1 },
-    { value: 'history', name: 'History', ratio: 1 },
+    { value: 'btc-th', name: 'BTC/TH/day', ratio: '1fr' },
+    { value: 'length', name: 'Duration', ratio: '1fr' },
+    { value: 'speed', name: 'Speed', ratio: '1fr' },
+    { value: 'history', name: 'History', ratio: '1fr' },
     {
       value: 'claimable',
       name: 'Claimable',
-      ratio: 1,
+      ratio: '1fr',
       options: [
         {
           label: 'Claimable (BTC)',
@@ -262,7 +263,7 @@ function SellerHub({
         }
       ]
     },
-    { value: 'action', name: 'Actions', ratio: 1 }
+    { value: 'action', name: 'Actions', ratio: '1fr' }
   ];
 
   const handleOpenModal = () => setIsModalActive(true);

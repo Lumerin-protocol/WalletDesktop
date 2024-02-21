@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 
 import ScanIndicator from './ScanIndicator';
 import Filter from './Filter';
+import SelectedHeader from './SelectedHeader';
 
 const responsiveHeader = width => css`
   @media (min-width: ${width}) {
@@ -27,12 +28,19 @@ export default function Header(props) {
   return (
     <>
       <Container>
-        <Filter
-          onFilterChange={props.onFilterChange}
-          onColumnOptionChange={props.onColumnOptionChange}
-          activeFilter={false}
-          tabs={props.tabs}
-        />
+        {props.selectedItems?.length ? (
+          <SelectedHeader
+            onSelectAll={props.onSelectAll}
+            selectedItems={props.selectedItems}
+          />
+        ) : (
+          <Filter
+            onFilterChange={props.onFilterChange}
+            onColumnOptionChange={props.onColumnOptionChange}
+            activeFilter={false}
+            tabs={props.tabs}
+          />
+        )}
       </Container>
     </>
   );
