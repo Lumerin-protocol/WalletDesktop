@@ -85,30 +85,27 @@ const SearchSortWrapper = styled.div`
   display: flex;
 `;
 
-const sorting = (contracts, sortBy, underProfitContracts) => {
+const sorting = (source, sortBy) => {
+  const contracts = [...source];
+  const sortProperty = (collection, prop, direction) => {
+    return direction === 'asc'
+      ? collection.sort((a, b) => Number(a[prop]) - Number(b[prop]))
+      : collection.sort((a, b) => Number(b[prop]) - Number(a[prop]));
+  };
+
   switch (sortBy?.value) {
-    case 'AscPrice':
-      return contracts.sort((a, b) => a.price - b.price);
-    case 'DescPrice':
-      return contracts.sort((a, b) => b.price - a.price);
-    case 'AscDuration':
-      return contracts.sort((a, b) => a.length - b.length);
-    case 'DescDuration':
-      return contracts.sort((a, b) => b.length - a.length);
-    case 'AscSpeed':
-      return contracts.sort((a, b) => a.speed - b.speed);
-    case 'DescSpeed':
-      return contracts.sort((a, b) => b.speed - a.speed);
-    case 'AvailableFirst':
-      return contracts.sort((a, b) => (+b.state > +a.state ? -1 : 1));
-    case 'RunningFirst':
-      return contracts.sort((a, b) => (+b.state > +a.state ? 1 : -1));
-    case 'UnderProfit':
-      return contracts.sort((a, b) =>
-        underProfitContracts.find(x => x.id == a.id) ? -1 : 1
-      );
+    case 'price':
+      return sortProperty(contracts, 'price', sortBy.direction);
+    case 'length':
+      return sortProperty(contracts, 'length', sortBy.direction);
+    case 'speed':
+      return sortProperty(contracts, 'speed', sortBy.direction);
+    case 'status':
+      return sortProperty(contracts, 'state', sortBy.direction);
+    case 'claimable':
+      return sortProperty(contracts, 'balance', sortBy.direction);
     default:
-      return contracts.sort((a, b) => (+b.state > +a.state ? -1 : 1));
+      return contracts;
   }
 };
 
@@ -144,7 +141,7 @@ function ContractsList({
     ? contracts.filter(c => c.id.toLowerCase().includes(search.toLowerCase()))
     : contracts;
 
-  contractsToShow = sorting(contractsToShow, sort, underProfitContracts);
+  contractsToShow = sorting(contractsToShow, sort);
 
   const hasContracts = contractsToShow.length;
   const defaultTabs = [
@@ -203,7 +200,6 @@ function ContractsList({
     </ContractsRowContainer>
   );
 
-  const filterExtractValue = ({ status }) => status;
   return (
     <Container data-testid="Contracts-list">
       <Flex.Row grow="1" style={{ flexDirection: 'column' }}>
@@ -381,66 +377,60 @@ function ContractsList({
           )}
         </div>
         <SearchSortWrapper>
-          <Sort sort={sort} setSort={setSort} />
+          {/* <Sort sort={sort} setSort={setSort} /> */}
           <Search onSearch={setSearch} />
         </SearchSortWrapper>
         {/* <StatusHeader refresh={contractsRefresh} syncStatus={syncStatus} /> */}
       </Flex.Row>
       <Contracts>
-        <ItemFilter extractValue={filterExtractValue} items={contractsToShow}>
-          {({ filteredItems }) => (
-            <React.Fragment>
-              <Header
-                selectedItems={selectedContracts}
-                onFilterChange={() => {}}
-                onColumnOptionChange={e =>
-                  setHeaderOptions({
-                    ...headerOptions,
-                    [e.type]: e.value
-                  })
-                }
-                activeFilter={null}
-                onSelectAll={onSelectAll}
-                tabs={tabsToShow}
-              />
+        <React.Fragment>
+          <Header
+            selectedItems={selectedContracts}
+            onSortChange={e =>
+              setSort(e ? { value: e.value, direction: e.direction } : null)
+            }
+            onColumnOptionChange={e => {
+              setHeaderOptions({
+                ...headerOptions,
+                [e.type]: e.value
+              });
+            }}
+            activeSort={sort}
+            onSelectAll={onSelectAll}
+            tabs={tabsToShow}
+          />
 
-              <ListContainer offset={offset}>
-                {!hasContracts &&
-                  (syncStatus === 'syncing' ? (
-                    <ScanningContractsPlaceholder />
-                  ) : (
-                    <NoContractsPlaceholder
-                      message={
-                        syncStatus === 'failed'
-                          ? 'Failed to retrieve contracts'
-                          : noContractsMessage
-                      }
-                    />
-                  ))}
-                <AutoSizer>
-                  {({ width, height }) => (
-                    <RVList
-                      rowRenderer={
-                        customRowRenderer
-                          ? customRowRenderer(
-                              filteredItems,
-                              ratio,
-                              headerOptions
-                            )
-                          : rowRenderer(filteredItems, ratio, headerOptions)
-                      }
-                      rowHeight={66}
-                      rowCount={contractsToShow.length}
-                      height={height || 500} // defaults for tests
-                      width={width || 500} // defaults for tests
-                    />
-                  )}
-                </AutoSizer>
-                <FooterLogo></FooterLogo>
-              </ListContainer>
-            </React.Fragment>
-          )}
-        </ItemFilter>
+          <ListContainer offset={offset}>
+            {!hasContracts &&
+              (syncStatus === 'syncing' ? (
+                <ScanningContractsPlaceholder />
+              ) : (
+                <NoContractsPlaceholder
+                  message={
+                    syncStatus === 'failed'
+                      ? 'Failed to retrieve contracts'
+                      : noContractsMessage
+                  }
+                />
+              ))}
+            <AutoSizer>
+              {({ width, height }) => (
+                <RVList
+                  rowRenderer={
+                    customRowRenderer
+                      ? customRowRenderer(contractsToShow, ratio, headerOptions)
+                      : rowRenderer(contractsToShow, ratio, headerOptions)
+                  }
+                  rowHeight={66}
+                  rowCount={contractsToShow.length}
+                  height={height || 500} // defaults for tests
+                  width={width || 500} // defaults for tests
+                />
+              )}
+            </AutoSizer>
+            <FooterLogo></FooterLogo>
+          </ListContainer>
+        </React.Fragment>
       </Contracts>
     </Container>
   );

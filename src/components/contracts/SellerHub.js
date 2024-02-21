@@ -224,44 +224,22 @@ function SellerHub({
 
   const tabs = [
     { name: '', ratio: '50px' },
-    { name: 'Status', ratio: '0.5fr' },
+    { name: 'Status', value: 'status', ratio: '0.5fr', sortable: true },
     {
       value: 'price',
       name: 'Price',
       ratio: '1fr',
-      options: [
-        {
-          label: 'Price (BTC)',
-          value: 'BTC',
-          selected: selectedCurrency === 'BTC'
-        },
-        {
-          label: 'Price (LMR)',
-          value: 'LMR',
-          selected: selectedCurrency === 'LMR'
-        }
-      ]
+      sortable: true
     },
     { value: 'btc-th', name: 'BTC/TH/day', ratio: '1fr' },
-    { value: 'length', name: 'Duration', ratio: '1fr' },
-    { value: 'speed', name: 'Speed', ratio: '1fr' },
+    { value: 'length', name: 'Duration', ratio: '1fr', sortable: true },
+    { value: 'speed', name: 'Speed', ratio: '1fr', sortable: true },
     { value: 'history', name: 'History', ratio: '1fr' },
     {
       value: 'claimable',
       name: 'Claimable',
       ratio: '1fr',
-      options: [
-        {
-          label: 'Claimable (BTC)',
-          value: 'BTC',
-          selected: selectedCurrency === 'BTC'
-        },
-        {
-          label: 'Claimable (LMR)',
-          value: 'LMR',
-          selected: selectedCurrency === 'LMR'
-        }
-      ]
+      sortable: true
     },
     { value: 'action', name: 'Actions', ratio: '1fr' }
   ];

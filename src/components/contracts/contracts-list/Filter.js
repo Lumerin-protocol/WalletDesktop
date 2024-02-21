@@ -1,6 +1,7 @@
 import React from 'react';
 import { uniqueId } from 'lodash';
 import styled from 'styled-components';
+import { IconTriangleInverted, IconTriangle } from '@tabler/icons';
 
 const Container = styled.div`
   display: grid;
@@ -26,9 +27,14 @@ const Tab = styled.button`
   border-bottom: 2px solid ${p => (p.isActive ? 'white' : 'transparent')};
   margin-bottom: 1px;
   transition: 0.3s;
+  cursor: ${p => (p.sortable ? 'pointer' : 'auto')};
 
   &:focus {
     outline: none;
+  }
+
+  &:hover {
+    opacity: ${p => (p.sortable ? '1' : '0.75')};
   }
 
   @media (min-width: 800px) {
@@ -50,42 +56,76 @@ const Select = styled.select`
 `;
 
 export default function Filter({
-  onFilterChange,
-  activeFilter,
+  onSortChange,
+  activeSort,
   tabs,
   onColumnOptionChange
 }) {
+  const iconStyles = {
+    marginLeft: '3px',
+    width: '12px',
+    height: '12px',
+    color: '#0E4353',
+    fill: '#0E4353'
+  };
+
+  const selectedTab = t => {
+    return (
+      <Tab key={t.value || uniqueId()}>
+        <Select
+          name={t.name}
+          onChange={e => {
+            onColumnOptionChange({
+              value: e.target.value,
+              type: t.value
+            });
+          }}
+        >
+          {t.options.map(o => (
+            <option key={o.value} value={o.value} selected={o.selected}>
+              {o.label}
+            </option>
+          ))}
+        </Select>
+      </Tab>
+    );
+  };
+
+  const onSortChangeHandler = value => {
+    if (activeSort?.value === value && activeSort?.direction === 'desc') {
+      onSortChange(null);
+      return;
+    }
+    if (activeSort?.value === value && activeSort?.direction === 'asc') {
+      onSortChange({ value, direction: 'desc' });
+      return;
+    }
+    onSortChange({ value, direction: 'asc' });
+  };
+
   return (
     <Container ratio={tabs.map(x => x.ratio)}>
       {tabs &&
         tabs.map(t =>
           t.options ? (
-            <Tab
-              key={t.value || uniqueId()}
-              isActive={activeFilter === t.value}
-            >
-              <Select
-                name={t.name}
-                onChange={e => {
-                  onColumnOptionChange({
-                    value: e.target.value,
-                    type: t.value
-                  });
-                }}
-              >
-                {t.options.map(o => (
-                  <option key={o.value} value={o.value} selected={o.selected}>
-                    {o.label}
-                  </option>
-                ))}
-              </Select>
-            </Tab>
+            selectedTab(t)
           ) : (
             <Tab
+              sortable={t.sortable}
+              onClick={() => t.sortable && onSortChangeHandler(t.value)}
               key={t.value || uniqueId()}
-              isActive={activeFilter === t.value}
+              isActive={activeSort && activeSort?.value === t.value}
             >
               {t.name}
+              {activeSort && activeSort?.value === t.value ? (
+                activeSort.direction === 'asc' ? (
+                  <IconTriangle style={iconStyles}></IconTriangle>
+                ) : (
+                  <IconTriangleInverted
+                    style={iconStyles}
+                  ></IconTriangleInverted>
+                )
+              ) : null}
             </Tab>
           )
         )}

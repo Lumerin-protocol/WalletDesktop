@@ -35,9 +35,9 @@ export default function Header(props) {
           />
         ) : (
           <Filter
-            onFilterChange={props.onFilterChange}
+            onSortChange={props.onSortChange}
             onColumnOptionChange={props.onColumnOptionChange}
-            activeFilter={false}
+            activeSort={props.activeSort}
             tabs={props.tabs}
           />
         )}
