@@ -1,7 +1,11 @@
 import React from 'react';
 import { uniqueId } from 'lodash';
 import styled from 'styled-components';
-import { IconTriangleInverted, IconTriangle } from '@tabler/icons';
+import {
+  IconArrowNarrowUp,
+  IconArrowNarrowDown,
+  IconArrowsSort
+} from '@tabler/icons';
 
 const Container = styled.div`
   display: grid;
@@ -20,7 +24,7 @@ const Tab = styled.button`
   color: ${p => p.theme.colors.primary};
   letter-spacing: 1.4px;
   text-align: center;
-  opacity: ${p => (p.isActive ? '1' : '0.75')};
+  opacity: ${p => (p.isActive ? '1' : '1')};
   padding: 1.6rem 0;
   background: transparent;
   border: none;
@@ -119,12 +123,12 @@ export default function Filter({
               {t.name}
               {activeSort && activeSort?.value === t.value ? (
                 activeSort.direction === 'asc' ? (
-                  <IconTriangle style={iconStyles}></IconTriangle>
+                  <IconArrowNarrowUp style={iconStyles}></IconArrowNarrowUp>
                 ) : (
-                  <IconTriangleInverted
-                    style={iconStyles}
-                  ></IconTriangleInverted>
+                  <IconArrowNarrowDown style={iconStyles}></IconArrowNarrowDown>
                 )
+              ) : t.sortable ? (
+                <IconArrowsSort style={iconStyles}></IconArrowsSort>
               ) : null}
             </Tab>
           )
