@@ -55,6 +55,7 @@ const getDefaultCurrency = async () => getDefaultCurrencySetting();
 const setDefaultCurrency = async (curr) => setDefaultCurrencySetting(curr);
 
 const getCustomEnvs = async () => getKey('customEnvs');
+const getCustomEnvsSync = () => getKey('customEnvs');
 const setCustomEnvs = async (value) => setKey('customEnvs', value);
 
 const getProfitSettings = async () => getKey('profitSettings') || {
@@ -115,4 +116,5 @@ module.exports = {
   setProfitSettings,
   getAutoAdjustPriceData,
   setAutoAdjustPriceData,
+  getCustomEnvsSync,
 };
