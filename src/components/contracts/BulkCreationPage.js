@@ -101,43 +101,20 @@ const BulkCreationPage = props => {
     setShowSpinner(true);
     await props.client.lockSendTransaction();
 
-    const speed = (totalHashrate / totalContracts).toFixed(0);
-
-    for (let i = 0; i < totalContracts; i++) {
-      await handleContractDeploy({
-        address: props.address,
-        price: priceState,
-        time: durationState,
-        profitTarget: profitState,
-        speed
-      });
-    }
-
-    await props.client.unlockSendTransaction();
-    setShowSpinner(false);
-  };
-
-  const handleContractDeploy = async contractDetails => {
-    const contract = {
-      price: contractDetails.price * lmrDecimals,
-      speed: contractDetails.speed * 10 ** 12, // THs
-      duration: contractDetails.time * 3600, // Hours to seconds
-      sellerAddress: contractDetails.address,
-      profit: contractDetails.profitTarget
+    const totalHashrateValue = Number(getValues('totalHashrate'));
+    const totalContractsValue = Number(getValues('totalContracts'));
+    const data = {
+      count: totalHashrateValue,
+      address: props.address,
+      price: priceState * lmrDecimals,
+      time: durationState * 3600,
+      profitTarget: profitState,
+      speed: (totalHashrateValue / totalContractsValue).toFixed(0) * 10 ** 12
     };
 
-    return props.client
-      .createContract(contract)
-      .then(result => {
-        const contractAddress = result?.events && result?.events[0]?.address;
-        console.log('successfully created', contractAddress);
-      })
-      .catch(error => {
-        props.context.toast('error', error.message || error);
-      })
-      .finally(() => {
-        console.log('finished');
-      });
+    await props.client.createBulkContracts(data);
+    await props.client.unlockSendTransaction();
+    setShowSpinner(false);
   };
 
   const totalHashrate = register('totalHashrate', {

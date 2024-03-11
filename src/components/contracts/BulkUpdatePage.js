@@ -84,7 +84,7 @@ const BulkUpdatePage = props => {
 
   const [priceState, setPriceState] = useState();
   const [profitState, setProfitState] = useState();
-  const [constracts] = useState(2);
+  const [contracts] = useState(2);
 
   const {
     register,
@@ -117,7 +117,7 @@ const BulkUpdatePage = props => {
           <hr style={{ marginBlockStart: '1em', marginBlockEnd: '2em' }} />
 
           <SubHeader>Selected Contracts</SubHeader>
-          <Info>You are updating {constracts} contracts</Info>
+          <Info>You are updating {contracts} contracts</Info>
 
           <div
             style={{
@@ -132,8 +132,8 @@ const BulkUpdatePage = props => {
               width={'12rem'}
             ></IconAlertTriangle>
             <div style={{ opacity: '0.6' }}>
-              Changes made here will apply uniformly to all {constracts}{' '}
-              selected contracts. Please review your selections carefully.
+              Changes made here will apply uniformly to all {contracts} selected
+              contracts. Please review your selections carefully.
             </div>
           </div>
 
