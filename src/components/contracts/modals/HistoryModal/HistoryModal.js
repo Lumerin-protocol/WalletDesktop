@@ -26,13 +26,13 @@ function HistroyModal(props) {
     .map(h => {
       return {
         id: h.id,
-        isSuccess: h[0],
-        price: +h[3],
-        startedAt: +h[1],
-        finishedAt: +h[2],
-        speed: +h[4],
-        duration: +h[5],
-        actualDuration: +h[2] - +h[1]
+        isSuccess: h.isGoodCloseout,
+        price: +h.price,
+        startedAt: +h.purchaseTime,
+        finishedAt: +h.endTime,
+        speed: +h.speed,
+        duration: +h.length,
+        actualDuration: +h.endTime - +h.purchaseTime
       };
     })
     .map(h => {
