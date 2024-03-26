@@ -48,6 +48,7 @@ jobs:
       FAUCET_URL: ${{ vars.FAUCET_URL }}
       LMR_DEFAULT_GAS_LIMIT: ${{ vars.LMR_DEFAULT_GAS_LIMIT }}
       MAX_GAS_PRICE: ${{ vars.MAX_GAS_PRICE }}
+      POLLING_INTERVAL: ${{ vars.POLLING_INTERVAL }}
       PORT_CHECK_ERROR_LINK: ${{ vars.PORT_CHECK_ERROR_LINK }}
       PORT_CHECKER_URL: ${{ vars.PORT_CHECKER_URL }}
       RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
@@ -85,6 +86,7 @@ jobs:
           echo "LMR_DEFAULT_GAS_LIMIT=$LMR_DEFAULT_GAS_LIMIT" >> .env
           echo "MAX_GAS_PRICE=$MAX_GAS_PRICE" >> .env
           echo "NODE_ENV=production" >> .env
+          echo "POLLING_INTERVAL=$POLLING_INTERVAL" >> .env
           echo "PORT_CHECK_ERROR_LINK=$PORT_CHECK_ERROR_LINK" >> .env
           echo "PORT_CHECKER_URL=$PORT_CHECKER_URL" >> .env
           echo "PROXY_ROUTER_URL=$PROXY_ROUTER_URL" >> .env
@@ -100,7 +102,7 @@ jobs:
         shell: bash
       - name: Set env from gitlab
         run: |
-          variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "WALLET_ETH_NODE_ADDRESS" "PROXY_ROUTER_URL")
+          variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "WALLET_ETH_NODE_ADDRESS" "PROXY_ROUTER_URL" "INDEXER_URL")
           gitlabVars=$(curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables?per_page=1000")
           echo $gitlabVars | jq -c '.[]' | 
             while IFS= read -r line; do

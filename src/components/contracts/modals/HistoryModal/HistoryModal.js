@@ -24,17 +24,37 @@ function HistroyModal(props) {
     .map(hc => hc.history)
     .flat()
     .map(h => {
+      const price = parseInt(h.price);
+      const speed = parseInt(h.speed);
+      const duration = parseInt(h.length);
+      const startedAt = parseInt(h.purchaseTime);
+      const finishedAt = parseInt(h.endTime);
+      const actualDuration = finishedAt - startedAt;
+      if (
+        [
+          price,
+          speed,
+          duration,
+          startedAt,
+          finishedAt,
+          actualDuration
+        ].some(x => isNaN(x))
+      ) {
+        return null;
+      }
+
       return {
         id: h.id,
-        isSuccess: h[0],
-        price: +h[3],
-        startedAt: +h[1],
-        finishedAt: +h[2],
-        speed: +h[4],
-        duration: +h[5],
-        actualDuration: +h[2] - +h[1]
+        isSuccess: h.isGoodCloseout,
+        price,
+        startedAt,
+        finishedAt,
+        speed,
+        duration,
+        actualDuration
       };
     })
+    .filter(h => h !== null)
     .map(h => {
       return {
         ...h,
