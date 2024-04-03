@@ -13,6 +13,7 @@ import { IconHistory } from '@tabler/icons';
 
 import styled from 'styled-components';
 import { Btn } from '../common';
+import { CONTRACT_STATE } from '../../enums';
 
 const HistoryBtn = styled(Btn)`
   margin: 0 0 0 auto;
@@ -45,7 +46,10 @@ function BuyerHub({
   ...props
 }) {
   const contractsToShow = contracts.filter(
-    x => x.buyer === address && x.seller !== address
+    x =>
+      x.buyer === address &&
+      x.seller !== address &&
+      x.state === CONTRACT_STATE.Running
   );
 
   const tabs = [
