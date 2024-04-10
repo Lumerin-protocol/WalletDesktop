@@ -28,6 +28,9 @@ const chain = {
   explorerUrl: process.env.EXPLORER_URL,
   explorerApiURLs: explorerApiURLs,
 
+  indexerUrl: process.env.INDEXER_URL,
+  pollingInterval: process.env.POLLING_INTERVAL || 30000,
+
   wsApiUrl: process.env.ETH_NODE_ADDRESS,
   httpApiUrls: httpApiUrls,
   ipLookupUrl: process.env.IP_LOOKUP_URL,
