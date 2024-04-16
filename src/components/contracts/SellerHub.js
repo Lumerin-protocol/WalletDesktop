@@ -127,7 +127,6 @@ function SellerHub({
   const verify = useCallback(
     debounce((...param) => {
       client.getProfitSettings().then(settings => {
-        console.log(param);
         if (!settings) {
           return;
         }
