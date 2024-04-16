@@ -81,6 +81,7 @@ const withContractsState = WrappedComponent => {
     allowSendTransaction: selectors.isAllowSendTransaction(state),
     contractsLastUpdatedAt: selectors.getContractsLastUpdated(state),
     networkDifficulty: selectors.getNetworkDifficulty(state),
+    blockReward: selectors.getBlockReward(state),
     lmrCoinPrice: selectors.getRate(state),
     ethCoinPrice: selectors.getRateEth(state),
     btcCoinPrice: selectors.getRateBtc(state),

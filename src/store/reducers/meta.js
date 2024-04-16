@@ -66,7 +66,8 @@ const reducer = handleActions(
     'network-difficulty-updated': (state, { payload }) => {
       return {
         ...state,
-        networkDifficulty: payload.difficulty
+        networkDifficulty: payload.difficulty,
+        blockReward: payload.reward
       };
     },
 

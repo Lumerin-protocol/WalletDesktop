@@ -81,6 +81,7 @@ function SellerHub({
   contractsRefresh,
   allowSendTransaction,
   networkDifficulty,
+  blockReward,
   selectedCurrency,
   formUrl,
   ...props
@@ -117,7 +118,8 @@ function SellerHub({
         props.lmrCoinPrice,
         props.btcCoinPrice,
         address,
-        networkDifficulty
+        networkDifficulty,
+        blockReward
       );
     }
   }, [contracts]);
@@ -133,7 +135,10 @@ function SellerHub({
         );
         const lmrCoinPrice = param[1];
         const btcCoinPrice = param[2];
-        const reward = formatBtcPerTh(param[4]);
+
+        const networkDifficulty = param[4];
+        const blockReward = param[5];
+        const reward = formatBtcPerTh(networkDifficulty, blockReward);
         const deviation = +settings.deviation;
         const result = contracts.reduce((acc, contract) => {
           const contractProfitTarget =
@@ -481,7 +486,7 @@ function SellerHub({
     count: contractsToShow.length ?? 0,
     rented: rentedContracts.reduce(speedReducer, 0),
     totalPosted: contractsToShow.reduce(speedReducer, 0),
-    networkReward: formatBtcPerTh(networkDifficulty)
+    networkReward: formatBtcPerTh(networkDifficulty, blockReward)
   };
   const showArchive = deadContracts?.length;
   const onArchiveOpen = () => setIsArchiveModalActive(true);
