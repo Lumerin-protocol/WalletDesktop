@@ -67,12 +67,11 @@ export const formatPrice = (price, symbol) => {
   return `${Math.round(value * 100) / 100} ${symbol}`;
 };
 
-export const formatBtcPerTh = networkDifficulty => {
+export const formatBtcPerTh = (networkDifficulty, blockReward) => {
   const networkHashrate =
     (networkDifficulty * Math.pow(2, 32)) / 600 / Math.pow(10, 12);
 
   const miningHours = 24;
-  const blockReward = 3.125;
   const hashrate = 1; // TH/s
   const blocksExpected = 1 / 0.1667; // 1 block every 10 minutes
   const profitPerTh =

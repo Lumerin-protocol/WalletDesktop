@@ -107,6 +107,12 @@ export const getNetworkDifficulty = createSelector(
     chainData ? chainMetaData.networkDifficulty : null
 );
 
+export const getBlockReward = createSelector(
+  getChain,
+  getChainMeta,
+  (chainData, chainMetaData) => (chainData ? chainMetaData.blockReward : null)
+);
+
 export const getRateEth = createSelector(
   getChain,
   getChainMeta,
