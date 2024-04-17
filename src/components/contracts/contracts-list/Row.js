@@ -210,10 +210,8 @@ function Row({
       <Value style={{ flexDirection: 'row', alignItems: 'center' }}>
         <div style={{ height: '18px', marginRight: '3px' }}>
           {isLmrSelected(converters.price, selectedCurrency)
-            ? `${formatPrice(contract.price, 'LMR')}`
-            : `${convertLmrToBtc(contract.price, btcRate, lmrRate).toFixed(
-                10
-              )} BTC`}
+            ? `${formatPrice(price, 'LMR')}`
+            : `${convertLmrToBtc(price, btcRate, lmrRate).toFixed(10)} BTC`}
         </div>
         {underProfit ? (
           <div>
