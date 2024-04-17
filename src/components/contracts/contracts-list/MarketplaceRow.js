@@ -70,6 +70,11 @@ function MarketplaceRow({
   const isRunning = Number(contract.state) !== 0;
   const iAmSeller = contract.seller === address;
 
+  const speed = contract.futureTerms?.speed || contract.speed;
+  const length = contract.futureTerms?.length || contract.length;
+  const price = contract.futureTerms?.price || contract.price;
+  const version = contract.futureTerms?.version || contract.version;
+
   return (
     <Container
       ratio={ratio}
@@ -79,9 +84,9 @@ function MarketplaceRow({
       <ContractValue onClick={() => window.openLink(explorerUrl)}>
         {abbreviateAddress(contract.id)} <IconExternalLink width={'1.4rem'} />
       </ContractValue>
-      <Value>{formatPrice(contract.price, symbol)}</Value>
-      <Value>{formatDuration(contract.length)}</Value>
-      <Value>{formatSpeed(contract.speed)}</Value>
+      <Value>{formatPrice(price, symbol)}</Value>
+      <Value>{formatDuration(length)}</Value>
+      <Value>{formatSpeed(speed)}</Value>
       <Value>
         <ProgressBarWithLabels
           key={'stats'}
@@ -100,7 +105,13 @@ function MarketplaceRow({
             data-rh={iAmSeller ? 'You are seller' : null}
             onClick={e => {
               e.stopPropagation();
-              onPurchase(contract);
+              onPurchase({
+                ...contract,
+                version,
+                price,
+                speed,
+                length
+              });
             }}
           >
             Purchase
