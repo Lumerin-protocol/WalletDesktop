@@ -46,7 +46,6 @@ jobs:
       PORT_CHECK_ERROR_LINK: ${{ vars.PORT_CHECK_ERROR_LINK }}
       PORT_CHECKER_URL: ${{ vars.PORT_CHECKER_URL }}
       RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
-      SELLER_WHITELIST_URL: ${{ vars.SELLER_WHITELIST_URL }}
       SHOW_FAUCET: ${{ vars.SHOW_FAUCET }}
       SYMBOL_ETH: ${{ vars.SYMBOL_ETH }}
       SYMBOL_LMR: ${{ vars.SYMBOL_LMR }}
@@ -86,7 +85,6 @@ jobs:
           echo "PROXY_ROUTER_URL=$PROXY_ROUTER_URL" >> .env
           echo "RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY" >> .env
           echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
-          echo "SELLER_WHITELIST_URL=$SELLER_WHITELIST_URL" >> .env
           echo "SHOW_FAUCET=$SHOW_FAUCET" >> .env
           echo "SYMBOL_ETH=$SYMBOL_ETH" >> .env
           echo "SYMBOL_LMR=$SYMBOL_LMR" >> .env

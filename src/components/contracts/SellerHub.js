@@ -14,7 +14,6 @@ import { lmrDecimals } from '../../utils/coinValue';
 import { formatBtcPerTh, calculateSuggestedPrice } from './utils';
 import ArchiveModal from './modals/ArchiveModal/ArchiveModal';
 import { IconArchive } from '@tabler/icons';
-import SellerWhitelistModal from './modals/SellerWhitelistModal/SellerWhitelistModal';
 import AdjustProfitModal from './modals/AdjustProfitModal/AdjustProfitModal';
 
 const Container = styled.div`
@@ -88,7 +87,6 @@ function SellerHub({
 }) {
   const [isModalActive, setIsModalActive] = useState(false);
   const [isArchiveModalActive, setIsArchiveModalActive] = useState(false);
-  const [showSellerWhitelistForm, setShowSellerWhitelistForm] = useState(false);
   const [showAdjustForm, setShowAdjustForm] = useState(false);
   const [isEditModalActive, setIsEditModalActive] = useState(false);
   const [editContractData, setEditContractData] = useState({});
@@ -430,10 +428,6 @@ function SellerHub({
       })
       .catch(error => {
         setIsModalActive(false);
-        if (error.message == 'seller is not whitelisted') {
-          setShowSellerWhitelistForm(true);
-          return;
-        }
         context.toast('error', error.message || error);
       })
       .finally(() => {
@@ -577,14 +571,6 @@ function SellerHub({
         restore={handleDeleteContractStateChange}
         address={address}
         showSuccess={false}
-      />
-
-      <SellerWhitelistModal
-        isActive={showSellerWhitelistForm}
-        formUrl={formUrl}
-        close={() => {
-          setShowSellerWhitelistForm(false);
-        }}
       />
 
       <AdjustProfitModal
