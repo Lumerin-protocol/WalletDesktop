@@ -1,6 +1,6 @@
 {
   "name": "lumerin-wallet-desktop",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "engines": {
     "node": ">=14"
   },
@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@electron/remote": "2.0.9",
-    "@lumerin/wallet-core": "github:Lumerin-protocol/WalletCore#1.1.1",
+    "@lumerin/wallet-core": "github:Lumerin-protocol/WalletCore#1.1.2",
     "@reach/menu-button": "0.17.0",
     "@tabler/icons": "1.119.0",
     "axios": "0.27.2",

@@ -56,8 +56,7 @@ const chain = {
   titanLightningDashboard: process.env.TITAN_LIGHTNING_DASHBOARD || "https://lightning.titan.io",
   defaultSellerCurrency: process.env.DEFAULT_SELLER_CURRENCY || 'BTC',
 
-  bypassAuth: process.env.BYPASS_AUTH === "true",
-  sellerWhitelistUrl: process.env.SELLER_WHITELIST_URL || 'https://forms.gle/wEcAgppfK2p9YZ3g7'
+  bypassAuth: process.env.BYPASS_AUTH === "true"
 };
 
 module.exports = {
