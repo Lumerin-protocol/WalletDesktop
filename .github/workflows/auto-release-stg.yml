@@ -57,6 +57,7 @@ jobs:
       SYMBOL_LMR: ${{ vars.SYMBOL_LMR }}
       TITAN_LIGHTNING_DASHBOARD: ${{ vars.TITAN_LIGHTNING_DASHBOARD }}
       TITAN_LIGHTNING_POOL: ${{ vars.TITAN_LIGHTNING_POOL }}
+      VALIDATOR_REGISTRY_ADDRESS: ${{ vars.VALIDATOR_REGISTRY_ADDRESS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -97,6 +98,7 @@ jobs:
           echo "SYMBOL=$SYMBOL" >> .env
           echo "TITAN_LIGHTNING_DASHBOARD=$TITAN_LIGHTNING_DASHBOARD" >> .env
           echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
+          echo "VALIDATOR_REGISTRY_ADDRESS=$VALIDATOR_REGISTRY_ADDRESS" >> .env
         shell: bash
       - name: Set env from gitlab
         run: |
