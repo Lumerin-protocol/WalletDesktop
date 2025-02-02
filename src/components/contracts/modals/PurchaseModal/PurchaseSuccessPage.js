@@ -101,9 +101,9 @@ export function PurchaseSuccessPage(props) {
 
       <Footer>
         <FooterLabel>
-          You have successfully purchased {abbreviateAddress(props.contractId)}{' '}
-          contract with {fromTokenBaseUnitsToLMR(props.price)} {props.symbol}
-          {/* {abbreviateAddress(props.toAddress)} */}
+          You have successfully purchased contract{' '}
+          {abbreviateAddress(props.contractId)} for{' '}
+          {fromTokenBaseUnitsToLMR(props.price)} {props.symbol}
         </FooterLabel>
         <DoneBtn data-modal={null} onClick={onDone}>
           Done

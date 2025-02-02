@@ -23,6 +23,7 @@ const chain = {
 
   lmrTokenAddress: process.env.LUMERIN_TOKEN_ADDRESS,
   cloneFactoryAddress: process.env.CLONE_FACTORY_ADDRESS,
+  validatorRegistryAddress: process.env.VALIDATOR_REGISTRY_ADDRESS,
 
   proxyRouterUrl: process.env.PROXY_ROUTER_URL,
   explorerUrl: process.env.EXPLORER_URL,

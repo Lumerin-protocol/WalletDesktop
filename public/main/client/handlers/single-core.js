@@ -366,6 +366,50 @@ function getPastTransactions({ address, page, pageSize }, { api }) {
   return api.explorer.getPastCoinTransactions(0, undefined, address, page, pageSize);
 }
 
+const getValidator = async ({ address }, { api }) => {
+  return await api["validator-registry"].getValidator(address);
+}
+
+const getValidators = async ({ offset, limit } = {}, { api }) => {
+  return await api["validator-registry"].getValidators(offset, limit);
+}
+
+const getValidatorsMinimalStake = async (_, { api }) => {
+  return await api["validator-registry"].getValidatorsMinimalStake();
+}
+
+const getValidatorsRegisterStake = async (_, { api }) => {
+  return await api["validator-registry"].getValidatorsRegisterStake();
+}
+
+const registerValidator = async (data, { api }) => {
+  data.walletId = wallet.getAddress().address;
+  data.password = await auth.getSessionPassword();
+
+  if (typeof data.walletId !== "string") {
+    throw new WalletError("WalletId is not defined");
+  }
+  return withAuth((privateKey) =>
+    api["validator-registry"].registerValidator({
+      ...data,
+      walletAddress: data.walletAddress,
+      privateKey,
+    })
+  )(data, { api });
+};
+
+const deregisterValidator = async (data, { api }) => {
+  data.walletId = wallet.getAddress().address;
+  data.password = await auth.getSessionPassword();
+
+  return withAuth((privateKey) =>
+    api["validator-registry"].deregisterValidator({
+      ...data,
+      privateKey,
+    })
+  )(data, { api });
+}
+
 module.exports = {
   // refreshAllSockets,
   refreshAllContracts,
@@ -402,4 +446,10 @@ module.exports = {
   getMarketplaceFee,
   isProxyPortPublic,
   stopProxyRouter,
+  getValidator,
+  getValidators,
+  registerValidator,
+  getValidatorsMinimalStake,
+  getValidatorsRegisterStake,
+  deregisterValidator,
 };
