@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@electron/remote": "2.0.9",
-    "@lumerin/wallet-core": "github:Lumerin-protocol/WalletCore#1.1.4",
+    "@lumerin/wallet-core": "github:Lumerin-protocol/WalletCore#1.1.5",
     "@reach/menu-button": "0.17.0",
     "@tabler/icons": "1.119.0",
     "axios": "0.27.2",

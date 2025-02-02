@@ -1,3 +1,5 @@
+import styled from 'styled-components';
+
 export const DefinitionList = styled.dl`
   display: grid;
   grid-template-columns: auto auto;
