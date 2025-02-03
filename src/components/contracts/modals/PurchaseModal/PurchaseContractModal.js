@@ -8,6 +8,7 @@ import { PurchasePreviewModalPage } from './PurchasePreviewModalPage';
 import { toRfc2396 } from '../../../../utils';
 import { PurchaseSuccessPage } from './PurchaseSuccessPage';
 import Modal from '../Modal';
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 function PurchaseContractModal(props) {
   const {
@@ -23,11 +24,13 @@ function PurchaseContractModal(props) {
     showSuccess,
     symbol,
     marketplaceFee,
-    isProxyPortPublic
+    isProxyPortPublic,
+    getValidators
   } = props;
 
   const [isPreview, setIsPreview] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
+  const [validators, setValidators] = useState([]);
 
   const {
     register,
@@ -36,8 +39,15 @@ function PurchaseContractModal(props) {
     setValue,
     getValues,
     reset,
-    trigger
-  } = useForm({ mode: 'onChange' });
+    trigger,
+    watch
+  } = useForm({
+    mode: 'onChange'
+  });
+
+  useState(() => {
+    getValidators().then(setValidators);
+  }, []);
 
   useEffect(() => {
     setValue('address', `${props.ip}:${props.buyerPort}`);
@@ -45,12 +55,19 @@ function PurchaseContractModal(props) {
 
     setValue('worker', contract?.id);
     trigger('worker');
-  }, [contract]);
 
-  useEffect(() => {
-    setValue('address', `${props.ip}:${props.buyerPort}`);
-    trigger('address');
-  }, [isActive]);
+    const poolParts = pool
+      ? pool.replace('stratum+tcp://', '').split(':@')
+      : [];
+
+    const poolAddress = decodeURIComponent(poolParts[1] || '');
+    setValue('pool', poolAddress);
+    trigger('pool');
+
+    const username = decodeURIComponent(poolParts[0] || '');
+    setValue('username', username);
+    trigger('username');
+  }, [contract, isActive]);
 
   const handleClose = e => {
     reset();
@@ -58,14 +75,48 @@ function PurchaseContractModal(props) {
     close(e);
   };
 
-  const wrapHandlePurchase = async () => {
+  const wrapHandlePurchase = async validatorHost => {
     setIsPurchasing(true);
     const inputs = getValues();
-    await handlePurchase(
-      inputs,
-      contract,
-      toRfc2396(inputs.address, inputs.worker)
-    );
+
+    // TODO: move this to parent component
+    const validatorMap = validators.reduce((acc, validator) => {
+      acc[validator.addr] = validator;
+      return acc;
+    }, {});
+
+    if (inputs.usePublicValidator) {
+      // using third party validator
+      const validator = validatorMap[inputs.publicValidator];
+      if (!validator) {
+        throw new Error('Validator not found');
+      }
+      console.log('validator', validator);
+
+      await handlePurchase({
+        validatorUrl: toRfc2396(validator.host),
+        destUrl: toRfc2396(inputs.pool, inputs.username),
+        validatorAddr: inputs.publicValidator,
+        validatorPubKeyYparity: validator.pubKeyYParity,
+        validatorPubKeyX: validator.pubKeyX,
+        contractAddr: contract.id,
+        price: contract.price,
+        version: contract.version
+      });
+    } else {
+      // using local validator
+      await handlePurchase({
+        validatorUrl: toRfc2396(inputs.address, inputs.worker),
+        destUrl: toRfc2396(inputs.pool, inputs.username),
+        validatorAddr: ZERO_ADDRESS,
+        validatorPubKeyYparity: false,
+        validatorPubKeyX: '0x' + '0'.repeat(64), // 32 bytes of zeros
+        contractAddr: contract.id,
+        price: contract.price,
+        version: contract.version
+      });
+    }
+
     setIsPurchasing(false);
   };
 
@@ -84,7 +135,9 @@ function PurchaseContractModal(props) {
     pool,
     contract,
     rate: lmrRate,
-    marketplaceFee
+    marketplaceFee,
+    history,
+    validators
   };
 
   return (
@@ -115,6 +168,7 @@ function PurchaseContractModal(props) {
           formState={formState}
           onFinished={() => setIsPreview(true)}
           symbol={symbol}
+          watch={watch}
         />
       )}
     </Modal>

@@ -29,7 +29,7 @@ const isPromise = (p) => {
 };
 
 const ignoreChain = (chain, data) =>
-  chain !== "multi" && chain !== "none" && data.chain && chain !== data.chain;
+  chain !== "multi" && chain !== "none" && data?.chain && chain !== data.chain;
 
 function onRendererEvent(eventName, handler, chain) {
   ipcMain.on(eventName, function (event, { id, data }) {

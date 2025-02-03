@@ -122,6 +122,18 @@ export default function PrimaryNav({ parent, activeIndex, setActiveIndex }) {
         <Label parent={parent}>Seller Hub</Label>
       </Button>
 
+      <Button
+        onClick={() => setActiveIndex(4)}
+        activeClassName="active"
+        data-testid="auction-nav-btn"
+        to="/validators"
+      >
+        <IconWrapper>
+          <IconChecklist width={iconSize} />
+        </IconWrapper>
+        <Label parent={parent}>Validator Hub</Label>
+      </Button>
+
       {/* <Button
         onClick={() => setActiveIndex(3)}
         activeClassName="active"

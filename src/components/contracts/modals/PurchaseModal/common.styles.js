@@ -74,3 +74,13 @@ export const PoolInfoContainer = styled.div`
   margin-top: 10px;
   width: 100%;
 `;
+
+export const UseValidatorContainer = styled.div`
+  margin: 10px 0px;
+  line-height: 1.4rem;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`;

@@ -57,15 +57,23 @@ export const PurchasePreviewModalPage = ({
   symbol,
   marketplaceFee,
   isProxyPortPublic,
-  portCheckErrorLink
+  portCheckErrorLink,
+  validators
 }) => {
   const context = useContext(ToastsContext);
 
   const [isPortPublic, setPortPublic] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [ip, port] = inputs.address.replace('stratum+tcp://', '').split(':');
   const poolParts = pool ? pool.replace('stratum+tcp://', '').split(':@') : [];
+  const validatorMap = validators.reduce((acc, validator) => {
+    acc[validator.addr] = validator;
+    return acc;
+  }, {});
+  const validatorHost = inputs.usePublicValidator
+    ? validatorMap[inputs.publicValidator].host
+    : inputs.address;
+  const [ip, port] = validatorHost.replace('stratum+tcp://', '').split(':');
 
   useEffect(() => {
     isProxyPortPublic({
@@ -80,7 +88,7 @@ export const PurchasePreviewModalPage = ({
         logger.error(
           `Failed to check port availability: ${err.message || err}`
         );
-        context.toast('error', 'Failed to check port availability');
+        context.toast('error', 'Validator host is not reachable');
         setLoading(false);
       });
   }, []);
@@ -144,32 +152,42 @@ export const PurchasePreviewModalPage = ({
             <Divider />
             <PoolInfoContainer>
               <Values style={{ wordBreak: 'break-all' }}>
-                {calculateAddress(inputs.address, contract.id)}
+                {calculateAddress(validatorHost, contract.id)}
               </Values>
             </PoolInfoContainer>
             {!isPortPublic ? (
               <>
-                <InstructionLink
-                  onClick={() => window.openLink(portCheckErrorLink)}
-                >
+                <InstructionLink>
                   <IconAlertTriangle
                     width={'18px'}
                     color={theme.colors.warning}
                     overflow={'visible'}
                   />
                   <span style={{ marginRight: '4px' }}>
-                    Your node cannot receive inbound hashrate.
+                    {inputs.usePublicValidator
+                      ? 'Validator node cannot receive inbound hashrate.'
+                      : 'Your local node cannot receive inbound hashrate.'}
                   </span>{' '}
                 </InstructionLink>
-                <InstructionLink
-                  onClick={() => window.openLink(portCheckErrorLink)}
-                >
-                  <span>
-                    {' '}
-                    Please check your network before confirming purchase!
-                  </span>
-                  <IconExternalLink width={'14px'} overflow={'visible'} />
-                </InstructionLink>
+                {inputs.usePublicValidator ? (
+                  <InstructionLink>
+                    Please go back and select a different validator node
+                  </InstructionLink>
+                ) : (
+                  <a
+                    href={portCheckErrorLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#014353', display: 'block' }}
+                  >
+                    <InstructionLink>
+                      <IconExternalLink width={'18px'} overflow={'visible'} />
+                      <div>
+                        Please check your network before confirming purchase!
+                      </div>
+                    </InstructionLink>
+                  </a>
+                )}
               </>
             ) : (
               <>
@@ -180,8 +198,11 @@ export const PurchasePreviewModalPage = ({
                     overflow={'visible'}
                   />
                   <span>
-                    Your node is configured properly to receive inbound
-                    hashrate, please confirm your purchase!
+                    {inputs.usePublicValidator
+                      ? 'Validator node'
+                      : 'Your local node'}{' '}
+                    is configured properly to receive inbound hashrate, please
+                    confirm your purchase!
                   </span>
                 </InstructionLink>
               </>
@@ -214,7 +235,9 @@ export const PurchasePreviewModalPage = ({
                 style={{ justifyContent: 'space-between', marginTop: '3rem' }}
               >
                 <LeftBtn onClick={onBackToForm}>Edit Order</LeftBtn>
-                <RightBtn onClick={onPurchase}>Confirm Purchase</RightBtn>
+                <RightBtn onClick={() => onPurchase(validatorHost)}>
+                  Confirm Purchase
+                </RightBtn>
               </Row>
             )}
           </ActionsGroup>
