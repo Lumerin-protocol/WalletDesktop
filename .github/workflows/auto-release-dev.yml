@@ -26,7 +26,7 @@ jobs:
             artifact_name: lumerin-wallet-desktop.exe
             asset_name: lumerin_v${{github.ref_name}}.exe
           - target: macos
-            os: macos-latest
+            os: macos-13
             artifact_name: lumerin-wallet-desktop-x64.dmg
             asset_name: lumerin_v${{github.ref_name}}.dmg
           - target: macos-arm
