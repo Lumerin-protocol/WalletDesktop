@@ -1,18 +1,10 @@
 import { withClient } from './clientContext';
 import selectors from '../selectors';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 const withCreateContractModalState = WrappedComponent => {
   class Container extends React.Component {
-    // static propTypes = {
-    //   address: PropTypes.string.isRequired,
-    //   client: PropTypes.shape({
-    //     copyToClipboard: PropTypes.func.isRequired
-    //   }).isRequired
-    // }
-
     static displayName = `withCreateContractModalState(${WrappedComponent.displayName ||
       WrappedComponent.name})`;
 
@@ -25,6 +17,7 @@ const withCreateContractModalState = WrappedComponent => {
         <WrappedComponent
           copyToClipboard={this.props.client.copyToClipboard}
           isProxyPortPublic={this.props.client.isProxyPortPublic}
+          getValidators={this.props.client.getValidators}
           {...this.props}
           {...this.state}
         />

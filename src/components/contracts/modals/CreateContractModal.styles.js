@@ -86,12 +86,12 @@ export const ContractLink = styled.div`
 `;
 
 export const InstructionLink = styled.div`
-  padding-top: 5px;
+  padding-top: 7px;
   line-height: 14px;
   font-size: 14px;
   font-weight: 100;
-  cursor: pointer;
   display: flex;
+  column-gap: 4px;
   align-items: center;
   color: #014353;
 `;

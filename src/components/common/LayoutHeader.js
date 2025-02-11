@@ -43,7 +43,11 @@ const Title = styled.label`
   }
 `;
 
-export const LayoutHeader = ({ title, children }) => (
+/**
+ * @param {{title: string, children?: React.ReactNode}} props - The children of the layout header
+ * @returns {React.ReactNode} - The layout header
+ */
+export const LayoutHeader = ({ title, children = null }) => (
   <>
     <Container>
       <TitleRow>

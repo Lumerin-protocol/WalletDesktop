@@ -52,12 +52,12 @@ jobs:
       PORT_CHECK_ERROR_LINK: ${{ vars.PORT_CHECK_ERROR_LINK }}
       PORT_CHECKER_URL: ${{ vars.PORT_CHECKER_URL }}
       RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
-      SELLER_WHITELIST_URL: ${{ vars.SELLER_WHITELIST_URL }}
       SHOW_FAUCET: ${{ vars.SHOW_FAUCET }}
       SYMBOL_ETH: ${{ vars.SYMBOL_ETH }}
       SYMBOL_LMR: ${{ vars.SYMBOL_LMR }}
       TITAN_LIGHTNING_DASHBOARD: ${{ vars.TITAN_LIGHTNING_DASHBOARD }}
       TITAN_LIGHTNING_POOL: ${{ vars.TITAN_LIGHTNING_POOL }}
+      VALIDATOR_REGISTRY_ADDRESS: ${{ vars.VALIDATOR_REGISTRY_ADDRESS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -92,7 +92,6 @@ jobs:
           echo "PROXY_ROUTER_URL=$PROXY_ROUTER_URL" >> .env
           echo "RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY" >> .env
           echo "REQUIRED_PASSWORD_ENTROPY=$REQUIRED_PASSWORD_ENTROPY" >> .env
-          echo "SELLER_WHITELIST_URL=$SELLER_WHITELIST_URL" >> .env
           echo "SHOW_FAUCET=$SHOW_FAUCET" >> .env
           echo "SYMBOL_ETH=$SYMBOL_ETH" >> .env
           echo "SYMBOL_LMR=$SYMBOL_LMR" >> .env
@@ -102,7 +101,7 @@ jobs:
         shell: bash
       - name: Set env from gitlab
         run: |
-          variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "WALLET_ETH_NODE_ADDRESS" "PROXY_ROUTER_URL" "INDEXER_URL")
+          variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "WALLET_ETH_NODE_ADDRESS" "PROXY_ROUTER_URL" "INDEXER_URL" "VALIDATOR_REGISTRY_ADDRESS")
           gitlabVars=$(curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables?per_page=1000")
           echo $gitlabVars | jq -c '.[]' | 
             while IFS= read -r line; do

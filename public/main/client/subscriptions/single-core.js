@@ -31,7 +31,13 @@ const listeners = {
   "stop-proxy-router": handlers.stopProxyRouter,
   "claim-faucet": handlers.claimFaucet,
   'get-private-key': handlers.getAddressAndPrivateKey,
-  "get-marketplace-fee": handlers.getMarketplaceFee
+  "get-marketplace-fee": handlers.getMarketplaceFee,
+  'get-validators': handlers.getValidators,
+  'get-validators-minimal-stake': handlers.getValidatorsMinimalStake,
+  'get-validators-register-stake': handlers.getValidatorsRegisterStake,
+  'get-validator': handlers.getValidator,
+  'register-validator': handlers.registerValidator,
+  'deregister-validator': handlers.deregisterValidator,
 };
 
 let coreListeners = {};
@@ -39,7 +45,7 @@ let coreListeners = {};
 // Subscribe to messages where only one particular core has to react
 function subscribeSingleCore(core) {
   coreListeners[core.chain] = {};
-  Object.keys(listeners).forEach(function(key) {
+  Object.keys(listeners).forEach(function (key) {
     coreListeners[core.chain][key] = withCore(core)(listeners[key]);
   });
 

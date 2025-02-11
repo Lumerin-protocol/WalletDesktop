@@ -15,6 +15,7 @@ import Marketplace from './contracts/Marketplace';
 import Devices from './devices/Devices';
 import BuyerHub from './contracts/BuyerHub';
 import AutoPriceAdjuster from './AutoPriceAdjuster';
+import ValidatorsPage from './validators/ValidatorsPage';
 
 const bgImage = 'images/MainBackground.png';
 
@@ -76,6 +77,7 @@ export const Layout = () => (
         <Route path="/tools" component={Tools} />
         <Route path="/change-pass" component={ChangePassword} />
         <Route path="/devices" component={Devices} />
+        <Route path="/validators" component={ValidatorsPage} />
       </Switch>
     </Main>
     <AutoPriceAdjuster />

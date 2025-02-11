@@ -23,6 +23,7 @@ const chain = {
 
   lmrTokenAddress: process.env.LUMERIN_TOKEN_ADDRESS,
   cloneFactoryAddress: process.env.CLONE_FACTORY_ADDRESS,
+  validatorRegistryAddress: process.env.VALIDATOR_REGISTRY_ADDRESS,
 
   proxyRouterUrl: process.env.PROXY_ROUTER_URL,
   explorerUrl: process.env.EXPLORER_URL,
@@ -56,8 +57,7 @@ const chain = {
   titanLightningDashboard: process.env.TITAN_LIGHTNING_DASHBOARD || "https://lightning.titan.io",
   defaultSellerCurrency: process.env.DEFAULT_SELLER_CURRENCY || 'BTC',
 
-  bypassAuth: process.env.BYPASS_AUTH === "true",
-  sellerWhitelistUrl: process.env.SELLER_WHITELIST_URL || 'https://forms.gle/wEcAgppfK2p9YZ3g7'
+  bypassAuth: process.env.BYPASS_AUTH === "true"
 };
 
 module.exports = {

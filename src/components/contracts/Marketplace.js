@@ -1,3 +1,4 @@
+//@ts-check
 import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import withContractsState from '../../store/hocs/withContractsState';
@@ -52,29 +53,36 @@ function Marketplace({
       })?.length ?? 0
   };
 
-  const handlePurchase = async (data, contract, url) => {
-    if (lmrBalance * 10 ** 8 < Number(contract.price)) {
-      setIsModalActive(false);
-      context.toast('error', 'Insufficient balance');
-      return;
-    }
+  const handlePurchase = async params => {
+    const {
+      contractAddr,
+      validatorPubKeyYparity,
+      validatorPubKeyX,
+      validatorUrl,
+      validatorAddr,
+      destUrl,
+      version,
+      price
+    } = params;
+
     await client.store.dispatch({
       type: 'purchase-temp-contract',
       payload: {
-        id: contract.id,
+        id: contractAddr,
         address
       }
     });
     await client.lockSendTransaction();
     await client
       .purchaseContract({
-        ...data,
-        contractId: contract.id,
-        speed: contract.speed,
-        price: contract.price,
-        length: contract.length,
-        version: contract.version,
-        url
+        contractAddr: contractAddr,
+        validatorUrl: validatorUrl,
+        destUrl: destUrl,
+        price: price,
+        version: version,
+        validatorAddr: validatorAddr,
+        validatorPubKeyYparity: validatorPubKeyYparity,
+        validatorPubKeyX: validatorPubKeyX
       })
       .then(d => {
         setShowSuccess(true);
@@ -84,13 +92,13 @@ function Marketplace({
         );
         client.store.dispatch({
           type: 'purchase-contract-success',
-          payload: { id: contract.id }
+          payload: { id: contractAddr }
         });
       })
       .catch(e => {
         client.store.dispatch({
           type: 'purchase-contract-failed',
-          payload: { id: contract.id }
+          payload: { id: contractAddr }
         });
         context.toast('error', `Failed to purchase with error: ${e.message}`);
         setIsModalActive(false);
@@ -164,7 +172,10 @@ function Marketplace({
           sliderWidth={18}
           translate={18}
           labelColor={theme.colors.primary}
-        ></Toggle>
+          disabled={false}
+          name="showAll"
+          value="showAll"
+        />
       </LayoutHeader>
 
       <ContractsList
