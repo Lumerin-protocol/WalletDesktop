@@ -173,7 +173,17 @@ const createClient = function(createStore) {
     setProfitSettings: utils.forwardToMainProcess('set-profit-settings'),
     getAutoAdjustPriceData: utils.forwardToMainProcess('get-auto-adjust-price'),
     setAutoAdjustPriceData: utils.forwardToMainProcess('set-auto-adjust-price'),
-    getContractHashrate: utils.forwardToMainProcess('get-contract-hashrate')
+    getContractHashrate: utils.forwardToMainProcess('get-contract-hashrate'),
+    getValidators: utils.forwardToMainProcess('get-validators'),
+    getValidatorsMinimalStake: utils.forwardToMainProcess(
+      'get-validators-minimal-stake'
+    ),
+    getValidatorsRegisterStake: utils.forwardToMainProcess(
+      'get-validators-register-stake'
+    ),
+    getValidator: utils.forwardToMainProcess('get-validator'),
+    registerValidator: utils.forwardToMainProcess('register-validator'),
+    deregisterValidator: utils.forwardToMainProcess('deregister-validator')
   };
 
   const api = {
