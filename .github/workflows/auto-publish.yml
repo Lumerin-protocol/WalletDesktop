@@ -24,7 +24,7 @@ jobs:
           - target: windows
             os: windows-latest
           - target: macos
-            os: macos-latest
+            os: macos-13
           - target: macos-arm
             os: macos-latest
     runs-on: ${{ matrix.os }}
