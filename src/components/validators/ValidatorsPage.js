@@ -247,12 +247,12 @@ const ValidatorsPage = ({
               </p>
             )}
             <div style={{ display: 'flex', gap: '1em' }}>
-              <RightBtn
+              {/* TODO: <RightBtn
                 onClick={() => {}}
                 disabled={isHostError || isStakeError}
               >
                 Update validator
-              </RightBtn>
+              </RightBtn> */}
               <RightBtn onClick={() => onDeregister()}>Deregister</RightBtn>
             </div>
           </div>
