@@ -72,8 +72,8 @@ jobs:
       - name: Set env from github
         # keep alphabetical order
         run: |
-          echo "AUTO_ADJUST_CONTRACT_PRICE_TIMEOUT"=$AUTO_ADJUST_CONTRACT_PRICE_TIMEOUT >> .env
-          echo "AUTO_ADJUST_PRICE_INTERVAL"=$AUTO_ADJUST_PRICE_INTERVAL >> .env
+          echo "AUTO_ADJUST_CONTRACT_PRICE_TIMEOUT=$AUTO_ADJUST_CONTRACT_PRICE_TIMEOUT" >> .env
+          echo "AUTO_ADJUST_PRICE_INTERVAL=$AUTO_ADJUST_PRICE_INTERVAL" >> .env
           echo "CHAIN_ID=$CHAIN_ID" >> .env
           echo "COIN_DEFAULT_GAS_LIMIT=$COIN_DEFAULT_GAS_LIMIT" >> .env
           echo "DEFAULT_GAS_PRICE=$DEFAULT_GAS_PRICE" >> .env
