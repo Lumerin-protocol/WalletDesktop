@@ -92,11 +92,10 @@ jobs:
           echo "SYMBOL=$SYMBOL" >> .env
           echo "TITAN_LIGHTNING_DASHBOARD=$TITAN_LIGHTNING_DASHBOARD" >> .env
           echo "TITAN_LIGHTNING_POOL=$TITAN_LIGHTNING_POOL" >> .env
-          echo "VALIDATOR_REGISTRY_ADDRESS=$VALIDATOR_REGISTRY_ADDRESS" >> .env
         shell: bash
       - name: Set env from gitlab
         run: |
-          variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "WALLET_ETH_NODE_ADDRESS" "PROXY_ROUTER_URL" "INDEXER_URL")
+          variables=("LUMERIN_TOKEN_ADDRESS" "CLONE_FACTORY_ADDRESS" "WALLET_ETH_NODE_ADDRESS" "PROXY_ROUTER_URL" "INDEXER_URL" "VALIDATOR_REGISTRY_ADDRESS")
           gitlabVars=$(curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_GROUP_TOKEN }}" "https://gitlab.com/api/v4/groups/${{ secrets.GITLAB_GROUP_ID }}/variables?per_page=1000")
           echo $gitlabVars | jq -c '.[]' | 
             while IFS= read -r line; do
